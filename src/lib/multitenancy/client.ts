@@ -1,4 +1,5 @@
 export const MAIN_APP_DOMAIN = `app.${process.env.NEXT_PUBLIC_DOMAIN}`
+export const TENANT_DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
 
 export function isMainAppDomain(domain: string): boolean {
   return MAIN_APP_DOMAIN === domain
@@ -13,8 +14,8 @@ export function isMainAppDomain(domain: string): boolean {
  */
 export function getSubdomain(domain: string): string {
   domain = domain.toLocaleLowerCase() // convert to lower case
-  if (domain.endsWith('.' + process.env.NEXT_PUBLIC_DOMAIN)) {
-    return domain.replace('.' + process.env.NEXT_PUBLIC_DOMAIN, '')
+  if (domain.endsWith('.' + TENANT_DOMAIN)) {
+    return domain.replace('.' + TENANT_DOMAIN, '')
   }
   return null
 }
@@ -24,8 +25,8 @@ export function getSiteDomain(
   preferParkedDomain: boolean = true
 ): string {
   if (preferParkedDomain && site.parkedDomain) {
-    return site.parkedDomain || `${site.subdomain}.${MAIN_APP_DOMAIN}`
+    return site.parkedDomain || `${site.subdomain}.${TENANT_DOMAIN}`
   } else {
-    return `${site.subdomain}.${MAIN_APP_DOMAIN}`
+    return `${site.subdomain}.${TENANT_DOMAIN}`
   }
 }

@@ -8,7 +8,7 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { useAddSiteMutation } from '~/graphql/types.generated'
-import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
+import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
 function CreateYourWebsitePage() {
   const router = useRouter()
@@ -58,7 +58,7 @@ function CreateYourWebsitePage() {
                   autoComplete="disabled"
                 />
                 <span className="inline-flex items-center rounded-r-md border border-r-0 border-gray-300 px-3 text-sm text-gray-500 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 border-gray-200 dark:border-gray-700">
-                  .{MAIN_APP_DOMAIN}
+                  .{TENANT_DOMAIN}
                 </span>
               </div>
             </div>

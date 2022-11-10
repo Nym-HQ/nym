@@ -31,7 +31,7 @@ function UserSitesList({ sites }) {
             }
           >
             <a href={`//${getSiteDomain(site.site)}`}>
-              <h4>{getSiteDomain(site, false)}</h4>
+              <h4>{getSiteDomain(site.site, false)}</h4>
               {site.site.parkedDomain && <h4>{site.site.parkedDomain}</h4>}
               <span className="text-gray-400 text-xs font-light">
                 {site.siteRole}
