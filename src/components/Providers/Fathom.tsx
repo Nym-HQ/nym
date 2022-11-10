@@ -1,0 +1,27 @@
+import * as Fathom from 'fathom-client'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+
+export function FathomProvider() {
+  const router = useRouter()
+  useEffect(() => {
+    Fathom.load(process.env.NEXT_PUBLIC_FATHOM_SITE_ID, {
+      includedDomains: ['nym-xyz.vercel.app'],
+      excludedDomains: ['vercel.app,localhost'],
+      url: process.env.NEXT_PUBLIC_FATHOM_CUSTOM_URL,
+      spa: 'auto',
+    })
+
+    function onRouteChangeComplete() {
+      Fathom.trackPageview()
+    }
+
+    router.events.on('routeChangeComplete', onRouteChangeComplete)
+
+    return () => {
+      router.events.off('routeChangeComplete', onRouteChangeComplete)
+    }
+  }, [])
+
+  return null
+}

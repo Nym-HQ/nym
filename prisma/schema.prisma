@@ -1,0 +1,397 @@
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+//
+// Enums
+//
+
+enum SitePlan {
+  FREE
+  BASIC
+}
+
+enum Role {
+  BLOCKED
+  USER
+  ADMIN
+}
+
+enum SiteRole {
+  BLOCKED
+  USER
+  ADMIN
+  OWNER
+}
+
+enum EmailSubscriptionType {
+  HACKER_NEWS
+}
+
+//
+// NextAuth.js
+//
+
+// Each different accounts (or external OAuth providers) connected to a User
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  // For OAuth v1 (Twitter)
+  oauth_token        String? @db.Text
+  oauth_token_secret String? @db.Text
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  // default required by NextAuth.js
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  // custom attributes
+  createdAt   DateTime @default(now())
+  username    String   @unique @db.VarChar(16)
+  role        Role     @default(USER)
+  avatar      String?
+  description String?  @db.VarChar(256)
+  location    String?  @db.VarChar(32)
+
+  social_twitter String? @db.Text
+  social_youtube String? @db.Text
+  social_github  String? @db.Text
+
+  comments     Comment[]
+  questions    Question[]
+  reactions    Reaction[]
+  posts        Post[]
+  stacks       Stack[]
+  // only used during the email changing process
+  pendingEmail String?
+
+  // multi-tenancy
+  userSites UserSite[]
+  Page      Page[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+//
+// Multi-tenancy
+//
+
+model Site {
+  id              String   @id @default(cuid())
+  subdomain       String   @unique @db.VarChar(128)
+  parkedDomain    String?  @unique @db.VarChar(255)
+  plan            SitePlan @default(FREE)
+  name            String?  @db.VarChar(255)
+  description     String?  @db.Text
+  logo            String?  @db.Text
+  banner          String?  @db.Text
+  attach_css      String?  @db.Text
+  attach_js       String?  @db.Text
+  mailgun_region  String?  @db.VarChar(2)
+  mailgun_domain  String?  @db.VarChar(255)
+  mailgun_api_key String?  @db.VarChar(255)
+  social_twitter  String?  @db.Text
+  social_youtube  String?  @db.Text
+  social_github   String?  @db.Text
+
+  userSites         UserSite[]
+  Bookmark          Bookmark[]
+  Question          Question[]
+  Comment           Comment[]
+  Audio             Audio[]
+  Post              Post[]
+  Tag               Tag[]
+  Stack             Stack[]
+  Reaction          Reaction[]
+  EmailSubscription EmailSubscription[]
+  Page              Page[]
+  PageEdit          PageEdit[]
+}
+
+// relationship between users and sites
+model UserSite {
+  id       String   @id @default(cuid())
+  userId   String
+  siteId   String
+  siteRole SiteRole @default(USER)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  site     Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+}
+
+//
+// Other models
+//
+
+model Bookmark {
+  id            String     @id @default(cuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  url           String     @unique @db.VarChar(512)
+  host          String?
+  title         String?    @db.VarChar(280)
+  image         String?    @db.VarChar(512)
+  description   String?    @db.VarChar(2048)
+  twitterHandle String?
+  faviconUrl    String?
+  comments      Comment[]
+  reactions     Reaction[]
+  tags          Tag[]
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([host])
+}
+
+model Question {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  author      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String     @db.VarChar(256)
+  description String?    @db.VarChar(1024)
+  userId      String
+  comments    Comment[]
+  reactions   Reaction[]
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  text       String     @db.Text
+  audio      Audio?
+  reactions  Reaction[]
+  author     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  bookmark   Bookmark?  @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  question   Question?  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  post       Post?      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  stack      Stack?     @relation(fields: [stackId], references: [id], onDelete: Cascade)
+  bookmarkId String?
+  questionId String?
+  postId     String?
+  stackId    String?
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([bookmarkId])
+  @@index([questionId])
+  @@index([postId])
+  @@index([stackId])
+}
+
+model Audio {
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  plays         Int
+  waveform      Json
+  url           String
+  transcription String
+  comment       Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId     String   @unique
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  publishedAt  DateTime?
+  author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug         String
+  title        String     @db.VarChar(280)
+  text         String     @db.Text
+  excerpt      String     @db.VarChar(280)
+  featureImage String?
+  comments     Comment[]
+  reactions    Reaction[]
+  history      PostEdit[]
+  userId       String
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([slug, siteId])
+  @@index([publishedAt])
+}
+
+model PostEdit {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  text         String   @db.Text
+  title        String   @db.VarChar(280)
+  excerpt      String   @db.VarChar(280)
+  featureImage String?
+  post         Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId       String?
+
+  @@index([postId])
+}
+
+model Tag {
+  id        String     @id @default(cuid())
+  name      String
+  stacks    Stack[]
+  bookmarks Bookmark[]
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([name, siteId])
+}
+
+model Stack {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String
+  slug        String?
+  description String     @db.VarChar(280)
+  image       String
+  url         String
+  tags        Tag[]
+  comments    Comment[]
+  reactions   Reaction[]
+  users       User[]
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([slug, siteId])
+}
+
+model Reaction {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  bookmark   Bookmark? @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  comment    Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  post       Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  stack      Stack?    @relation(fields: [stackId], references: [id], onDelete: Cascade)
+  commentId  String?
+  bookmarkId String?
+  questionId String?
+  postId     String?
+  stackId    String?
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([commentId])
+  @@index([bookmarkId])
+  @@index([questionId])
+  @@index([postId])
+  @@index([stackId])
+}
+
+model EmailSubscription {
+  email String
+  type  EmailSubscriptionType
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique(fields: [email, type, siteId], name: "emailAndType")
+  @@index([email])
+}
+
+model Page {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  publishedAt  DateTime?
+  author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  path         String
+  slug         String
+  title        String     @db.VarChar(280)
+  text         String     @db.Text
+  excerpt      String     @db.VarChar(280)
+  featureImage String?
+  userId       String
+  featured     Boolean    @default(false)
+  history      PageEdit[]
+
+  // multi-tenancy
+  siteId String
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@unique([slug, siteId])
+  @@index([publishedAt])
+}
+
+model PageEdit {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  text         String   @db.Text
+  title        String   @db.VarChar(280)
+  excerpt      String   @db.VarChar(280)
+  featureImage String?
+  page         Page?    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageId       String?
+  Site         Site?    @relation(fields: [siteId], references: [id])
+  siteId       String?
+
+  @@index([pageId])
+}

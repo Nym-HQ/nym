@@ -1,0 +1,74 @@
+import * as React from 'react'
+
+import { ListDetailView, SiteLayout } from '~/components/Layouts'
+import { PostEditor } from '~/components/Writing/Editor/PostEditor'
+import { PostDetail } from '~/components/Writing/PostDetail'
+import { PostsList } from '~/components/Writing/PostsList'
+import { getContext } from '~/graphql/context'
+import { GET_COMMENTS } from '~/graphql/queries/comments'
+import { GET_POST, GET_POSTS } from '~/graphql/queries/posts'
+import { CommentType, useGetPostQuery } from '~/graphql/types.generated'
+import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { getCommonQueries } from '~/lib/apollo/common'
+import { getCommonPageProps } from '~/lib/commonProps'
+
+function WritingPostPage(props) {
+  const { slug } = props
+  const { data } = useGetPostQuery({ variables: { slug } })
+  if (data?.post && !data.post.publishedAt) return <PostEditor slug={slug} />
+  return <PostDetail slug={slug} />
+}
+
+export async function getServerSideProps(ctx) {
+  const {
+    params: { slug },
+    req,
+    res,
+  } = ctx
+
+  const commonProps = await getCommonPageProps(ctx)
+  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
+    return {
+      redirect: {
+        destination: '/create-your-site',
+        permanent: false,
+      },
+    }
+  }
+
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+
+  const { data } = await apolloClient.query({
+    query: GET_POST,
+    variables: { slug },
+  })
+
+  await Promise.all([
+    ...getCommonQueries(apolloClient),
+    apolloClient.query({ query: GET_POSTS }),
+
+    data?.post?.id &&
+      apolloClient.query({
+        query: GET_COMMENTS,
+        variables: { refId: data.post.id, type: CommentType.Bookmark },
+      }),
+  ])
+
+  return addApolloState(apolloClient, {
+    props: {
+      slug,
+      ...commonProps,
+    },
+  })
+}
+
+WritingPostPage.getLayout = function getLayout(page) {
+  return (
+    <SiteLayout>
+      <ListDetailView list={<PostsList />} hasDetail detail={page} />
+    </SiteLayout>
+  )
+}
+
+export default WritingPostPage
