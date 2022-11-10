@@ -26,6 +26,6 @@ export function getSiteDomain(
   if (preferParkedDomain && site.parkedDomain) {
     return site.parkedDomain || `${site.subdomain}.${MAIN_APP_DOMAIN}`
   } else {
-    return `${site.subdomain}.{MAIN_APP_DOMAIN}`
+    return `${site.subdomain}.${MAIN_APP_DOMAIN}`
   }
 }
