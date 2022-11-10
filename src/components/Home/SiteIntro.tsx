@@ -32,10 +32,7 @@ export function SiteIntro() {
             {data.homepage.publishedAt.formatted}
           </span>
 
-          <MarkdownRenderer
-            children={data.homepage.text}
-            className="prose"
-          />
+          <MarkdownRenderer children={data.homepage.text} className="prose" />
         </div>
       </Detail.ContentContainer>
     </Detail.Container>
