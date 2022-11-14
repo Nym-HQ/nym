@@ -104,3 +104,6 @@ yarn prisma migrate dev
 - Create a `dev` branch from `main` branch
 - Make sure you connect to the `dev` branch only, not to the `main` branch directly.
 - When you want to deploy changes from `dev` to `main`, go to https://app.planetscale.com/sov-ventures/nymhq/deploy-requests and create deployment request from `dev` branch to `main` branch.
+
+### Nym is a fork of the briOS project
+https://github.com/brianlovin/briOS
