@@ -1,6 +1,5 @@
 ## Nym
 An open source solution for personal blogs, bookmarks, newsletters & notes.
-
 ## App Domain structure
 
 The system will consist of 3 different apps hosted separately.
