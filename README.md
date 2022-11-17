@@ -23,6 +23,7 @@ This is for registered users and sites to show contents and manage contents.
 - `VERCEL_URL` (https://{nym-xyz}.vercel.app) Set automatically
 - `NEXT_PUBLIC_VERCEL_URL` (https://{nym-xyz}.vercel.app) Set automatically
 - `PUBLIC_URL` (https://nymhq.com)
+- `VERCEL_TEAM_ID` Vercel Team ID
 - `VERCEL_PROJECT_ID` Vercel Project ID
 - `VERCEL_API_TOKEN` (https://vercel.com/docs/rest-api#introduction/api-basics/authentication) Token to access Vercel's API
 
