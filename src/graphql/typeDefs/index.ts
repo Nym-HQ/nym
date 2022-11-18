@@ -98,35 +98,17 @@ const typeDefs = gql`
   enum CommentType {
     BOOKMARK
     QUESTION
-    STACK
     POST
   }
 
   enum ReactionType {
     BOOKMARK
     QUESTION
-    STACK
     POST
   }
 
   type Tag {
     name: String!
-  }
-
-  type Stack {
-    id: ID!
-    createdAt: Date!
-    updatedAt: Date
-    name: String!
-    description: String
-    image: String
-    url: String!
-    slug: String!
-    tags: [Tag]!
-    usedBy: [User]!
-    usedByViewer: Boolean
-    reactionCount: Int
-    viewerHasReacted: Boolean
   }
 
   enum UserRole {
@@ -236,11 +218,6 @@ const typeDefs = gql`
     cursor: String
   }
 
-  type StackEdge {
-    node: Stack
-    cursor: String
-  }
-
   type PageInfo {
     hasNextPage: Boolean
     totalCount: Int
@@ -257,11 +234,6 @@ const typeDefs = gql`
     edges: [QuestionEdge]!
   }
 
-  type StacksConnection {
-    pageInfo: PageInfo
-    edges: [StackEdge]!
-  }
-
   type Query {
     userSites: [UserSite!]
     viewSite: Site
@@ -273,8 +245,6 @@ const typeDefs = gql`
       after: String
       filter: BookmarkFilter
     ): BookmarksConnection!
-    stack(slug: String!): Stack
-    stacks(first: Int, after: String): StacksConnection!
     comment(id: ID!): Comment
     comments(refId: ID!, type: CommentType!): [Comment]!
     pages(filter: PagesFilter): [Page]!
@@ -302,22 +272,6 @@ const typeDefs = gql`
     type: EmailSubscriptionType!
     subscribed: Boolean!
     email: String
-  }
-
-  input AddStackInput {
-    name: String!
-    url: String!
-    image: String!
-    description: String!
-    tag: String
-  }
-
-  input EditStackInput {
-    name: String!
-    url: String!
-    image: String!
-    description: String!
-    tag: String
   }
 
   input AddBookmarkInput {
@@ -399,16 +353,12 @@ const typeDefs = gql`
     social_github: String
   }
 
-  union Reactable = Bookmark | Question | Post | Stack
+  union Reactable = Bookmark | Question | Post
 
   type Mutation {
     addBookmark(data: AddBookmarkInput!): Bookmark
     editBookmark(id: ID!, data: EditBookmarkInput!): Bookmark
     deleteBookmark(id: ID!): Boolean
-    addStack(data: AddStackInput!): Stack
-    editStack(id: ID!, data: EditStackInput!): Stack
-    deleteStack(id: ID!): Boolean
-    toggleStackUser(id: ID!): Stack
     addQuestion(data: AddQuestionInput!): Question
     editQuestion(id: ID!, data: EditQuestionInput!): Question
     deleteQuestion(id: ID!): Boolean

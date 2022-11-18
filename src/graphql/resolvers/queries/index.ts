@@ -7,7 +7,6 @@ import { getHomePage, getPage, getPages } from './pages'
 import { getPost, getPosts } from './posts'
 import { getQuestion, getQuestions } from './questions'
 import { getUserSites, viewSite } from './site'
-import { getStack, getStacks } from './stack'
 import { getTags } from './tags'
 import { getUser } from './user'
 import { viewer } from './viewer'
@@ -28,8 +27,6 @@ export default {
   questions: getQuestions,
   comment: getComment,
   comments: getComments,
-  stacks: getStacks,
-  stack: getStack,
   tags: getTags,
   hackerNewsPosts: getHackerNewsPosts,
   hackerNewsPost: getHackerNewsPost,

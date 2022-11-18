@@ -19,8 +19,6 @@ const resolvers = {
       switch (obj.reactableType) {
         case 'question':
           return 'Question'
-        case 'stack':
-          return 'Stack'
         case 'page':
           return 'Page'
         case 'post':
@@ -189,57 +187,6 @@ const resolvers = {
         .reactions()
 
       return reactions.length
-    },
-  },
-  Stack: {
-    viewerHasReacted: async ({ id }, _, { viewer, prisma }: Context) => {
-      if (!viewer) return false
-
-      const reactions = await prisma.stack
-        .findUnique({
-          where: { id },
-        })
-        .reactions()
-
-      return reactions.some(({ userId }) => userId === viewer.id)
-    },
-    reactionCount: async ({ id, _count }, _, { prisma }: Context) => {
-      if (_count?.reactions) return _count.reactions
-
-      const reactions = await prisma.stack
-        .findUnique({
-          where: { id },
-        })
-        .reactions()
-
-      return reactions.length
-    },
-    usedBy: async ({ id, users }, _, ctx: Context) => {
-      const { prisma } = ctx
-      if (users) return users
-
-      const data = await prisma.stack.findUnique({
-        where: { id },
-        include: {
-          users: true,
-        },
-      })
-
-      return data.users || []
-    },
-    usedByViewer: async ({ id, users }, _, ctx: Context) => {
-      const { prisma, viewer } = ctx
-      if (!viewer?.id) return false
-      if (users) return users.some((s) => s.id === viewer.id)
-
-      const data = await prisma.stack.findUnique({
-        where: { id },
-        include: {
-          users: true,
-        },
-      })
-
-      return data.users.some((s) => s.id === viewer.id)
     },
   },
 }

@@ -82,12 +82,6 @@ export async function addComment(
       route = `${CLIENT_URL}/ama/${refId}`
       break
     }
-    case CommentType.Stack: {
-      field = 'stackId'
-      table = 'stack'
-      route = `${CLIENT_URL}/stack/${refId}`
-      break
-    }
     default: {
       throw new UserInputError('Invalid comment type')
     }

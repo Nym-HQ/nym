@@ -34,22 +34,12 @@ import {
   editSite,
   editSiteDomain,
 } from '~/graphql/resolvers/mutations/site'
-import {
-  addStack,
-  deleteStack,
-  editStack,
-  toggleStackUser,
-} from '~/graphql/resolvers/mutations/stack'
 import { deleteUser, editUser } from '~/graphql/resolvers/mutations/user'
 
 export default {
   addBookmark: requiresAdmin(addBookmark),
   editBookmark: requiresAdmin(editBookmark),
   deleteBookmark: requiresAdmin(deleteBookmark),
-  addStack: requiresAdmin(addStack),
-  editStack: requiresAdmin(editStack),
-  deleteStack: requiresAdmin(deleteStack),
-  toggleStackUser: requiresUser(toggleStackUser),
   addQuestion: requiresUser(addQuestion),
   editQuestion: requiresUser(editQuestion),
   deleteQuestion: requiresUser(deleteQuestion),

@@ -54,16 +54,6 @@ const routes = {
       url: 'writing',
     }),
   },
-  stack: {
-    label: 'Stack',
-    path: '/stack',
-    seo: extendSEO({
-      title: 'Stack',
-      description: 'My favorite tools and software.',
-      image: 'og/stack.png',
-      url: 'stack',
-    }),
-  },
   settings: {
     label: 'Settings',
     path: '/settings',
