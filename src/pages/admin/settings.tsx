@@ -379,10 +379,6 @@ function AdminSettingsPage(props) {
   )
 }
 
-AdminSettingsPage.getLayout = function getLayout(page) {
-  return <SiteLayout>{page}</SiteLayout>
-}
-
 export async function getServerSideProps(ctx) {
   const { req, res } = ctx
   const commonProps = await getCommonPageProps(ctx)
