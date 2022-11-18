@@ -21,7 +21,7 @@ export function TagPicker({ filter, onChange, defaultValue = undefined }) {
     <Listbox value={selected} onChange={handleChange}>
       <div className="relative z-10 mt-1">
         <Listbox.Button
-          className={`relative w-full cursor-pointer rounded-md border border-gray-200 bg-white bg-opacity-5 py-2.5 pl-4 pr-10 text-left shadow-sm dark:border-gray-700 dark:bg-white ${
+          className={`relative w-full cursor-pointer rounded-md border border-gray-200 bg-white bg-opacity-5 py-2.5 pl-4 pr-10 text-left shadow-sm dark:border-gray-700 dark:bg-gray-700 ${
             selected ? 'text-primary' : 'text-quaternary'
           }`}
         >
