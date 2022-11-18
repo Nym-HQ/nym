@@ -13,7 +13,7 @@ export default function Settings() {
         description={routes.settings.seo.description}
         openGraph={routes.settings.seo.openGraph}
       />
-      <ListDetailView list={null} hasDetail detail={<UserSettings />} />
+      <UserSettings />
     </>
   )
 }
