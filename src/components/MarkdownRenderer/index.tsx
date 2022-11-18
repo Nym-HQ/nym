@@ -130,6 +130,7 @@ export function MarkdownRenderer(props: any) {
         rehypeSlug,
         [rehypeAutolinkHeadings, { behavior: 'wrap' }],
       ]}
+      linkTarget="_blank"
       components={components}
     >
       {children}
