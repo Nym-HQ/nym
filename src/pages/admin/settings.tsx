@@ -409,4 +409,8 @@ export async function getServerSideProps(ctx) {
   })
 }
 
+AdminSettingsPage.getLayout = function getLayout(page) {
+  return <SiteLayout>{page}</SiteLayout>
+}
+
 export default AdminSettingsPage
