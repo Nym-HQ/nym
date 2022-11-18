@@ -32,10 +32,6 @@ export const graphcdn = {
     return await handleFetch(`mutation { purgePost(id: [${id}]) }`)
   },
 
-  async purgeStack(id) {
-    return await handleFetch(`mutation { purgeStack(id: [${id}]) }`)
-  },
-
   async purgeQuestion(id) {
     return await handleFetch(`mutation { purgeQuestion(id: [${id}]) }`)
   },

@@ -32,11 +32,6 @@ export async function toggleReaction(
       table = 'question'
       break
     }
-    case ReactionType.Stack: {
-      field = 'stackId'
-      table = 'stack'
-      break
-    }
     default: {
       throw new UserInputError('Invalid reaction type')
     }

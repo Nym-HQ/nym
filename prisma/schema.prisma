@@ -98,7 +98,6 @@ model User {
   questions    Question[]
   reactions    Reaction[]
   posts        Post[]
-  stacks       Stack[]
   // only used during the email changing process
   pendingEmail String?
 
@@ -144,7 +143,6 @@ model Site {
   Audio             Audio[]
   Post              Post[]
   Tag               Tag[]
-  Stack             Stack[]
   Reaction          Reaction[]
   EmailSubscription EmailSubscription[]
   Page              Page[]
@@ -215,7 +213,6 @@ model Comment {
   bookmark   Bookmark?  @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
   question   Question?  @relation(fields: [questionId], references: [id], onDelete: Cascade)
   post       Post?      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  stack      Stack?     @relation(fields: [stackId], references: [id], onDelete: Cascade)
   bookmarkId String?
   questionId String?
   postId     String?
@@ -287,7 +284,6 @@ model PostEdit {
 model Tag {
   id        String     @id @default(cuid())
   name      String
-  stacks    Stack[]
   bookmarks Bookmark[]
 
   // multi-tenancy
@@ -295,27 +291,6 @@ model Tag {
   site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
 
   @@unique([name, siteId])
-}
-
-model Stack {
-  id          String     @id @default(cuid())
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  name        String
-  slug        String?
-  description String     @db.VarChar(280)
-  image       String
-  url         String
-  tags        Tag[]
-  comments    Comment[]
-  reactions   Reaction[]
-  users       User[]
-
-  // multi-tenancy
-  siteId String
-  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
-
-  @@unique([slug, siteId])
 }
 
 model Reaction {
@@ -327,7 +302,6 @@ model Reaction {
   question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
   comment    Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
   post       Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  stack      Stack?    @relation(fields: [stackId], references: [id], onDelete: Cascade)
   commentId  String?
   bookmarkId String?
   questionId String?

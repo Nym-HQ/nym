@@ -20,7 +20,7 @@ export function DeleteUserDialog({ trigger }) {
       title={'Delete account'}
       modalContent={() => (
         <div className="text-primary flex flex-col space-y-4 p-4 text-left">
-          <p>All comments, reactions, and AMA questions will be deleted.</p>
+          <p>All comments, reactions, and Q&A questions will be deleted.</p>
 
           <DeleteButton
             onClick={async () => {

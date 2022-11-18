@@ -35,11 +35,11 @@ const routes = {
     }),
   },
   ama: {
-    label: 'AMA',
-    path: '/ama',
+    label: 'Q&A',
+    path: '/qa',
     seo: extendSEO({
-      title: 'AMA',
-      description: 'Ask me anything.',
+      title: 'Q&A',
+      description: 'Q&A',
       image: 'og/ama.png',
       url: 'ama',
     }),
@@ -52,16 +52,6 @@ const routes = {
       description: 'Navigate to published pages',
       image: 'og/writing.png',
       url: 'writing',
-    }),
-  },
-  stack: {
-    label: 'Stack',
-    path: '/stack',
-    seo: extendSEO({
-      title: 'Stack',
-      description: 'My favorite tools and software.',
-      image: 'og/stack.png',
-      url: 'stack',
     }),
   },
   settings: {

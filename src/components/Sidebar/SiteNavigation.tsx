@@ -88,13 +88,13 @@ export function SiteSidebarNavigation() {
         },
 
         {
-          href: '/ama',
-          label: 'AMA',
+          href: '/qa',
+          label: 'Q&A',
           icon: AMAIcon,
           trailingAccessory: null,
           isActive:
-            router.asPath.indexOf('/ama') >= 0 &&
-            !router.asPath.startsWith('/ama/pending'),
+            router.asPath.indexOf('/qa') >= 0 &&
+            !router.asPath.startsWith('/qa/pending'),
           trailingAction: null,
           isExternal: false,
         },

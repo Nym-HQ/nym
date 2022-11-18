@@ -56,14 +56,6 @@ export type AddSiteInput = {
   subdomain: Scalars['String']
 }
 
-export type AddStackInput = {
-  description: Scalars['String']
-  image: Scalars['String']
-  name: Scalars['String']
-  tag?: InputMaybe<Scalars['String']>
-  url: Scalars['String']
-}
-
 export type Bookmark = {
   __typename?: 'Bookmark'
   createdAt: Scalars['Date']
@@ -112,7 +104,6 @@ export enum CommentType {
   Bookmark = 'BOOKMARK',
   Post = 'POST',
   Question = 'QUESTION',
-  Stack = 'STACK',
 }
 
 export type EditBookmarkInput = {
@@ -162,14 +153,6 @@ export type EditSiteInput = {
   social_github?: InputMaybe<Scalars['String']>
   social_twitter?: InputMaybe<Scalars['String']>
   social_youtube?: InputMaybe<Scalars['String']>
-}
-
-export type EditStackInput = {
-  description: Scalars['String']
-  image: Scalars['String']
-  name: Scalars['String']
-  tag?: InputMaybe<Scalars['String']>
-  url: Scalars['String']
 }
 
 export type EditUserInput = {
@@ -228,14 +211,12 @@ export type Mutation = {
   addPost?: Maybe<Post>
   addQuestion?: Maybe<Question>
   addSite?: Maybe<Site>
-  addStack?: Maybe<Stack>
   deleteBookmark?: Maybe<Scalars['Boolean']>
   deleteComment?: Maybe<Scalars['Boolean']>
   deletePage?: Maybe<Scalars['Boolean']>
   deletePost?: Maybe<Scalars['Boolean']>
   deleteQuestion?: Maybe<Scalars['Boolean']>
   deleteSite?: Maybe<Scalars['Boolean']>
-  deleteStack?: Maybe<Scalars['Boolean']>
   deleteUser?: Maybe<Scalars['Boolean']>
   editBookmark?: Maybe<Bookmark>
   editComment?: Maybe<Comment>
@@ -245,10 +226,8 @@ export type Mutation = {
   editQuestion?: Maybe<Question>
   editSite?: Maybe<Site>
   editSiteDomain?: Maybe<Site>
-  editStack?: Maybe<Stack>
   editUser?: Maybe<User>
   toggleReaction?: Maybe<Reactable>
-  toggleStackUser?: Maybe<Stack>
 }
 
 export type MutationAddBookmarkArgs = {
@@ -277,10 +256,6 @@ export type MutationAddSiteArgs = {
   data: AddSiteInput
 }
 
-export type MutationAddStackArgs = {
-  data: AddStackInput
-}
-
 export type MutationDeleteBookmarkArgs = {
   id: Scalars['ID']
 }
@@ -303,10 +278,6 @@ export type MutationDeleteQuestionArgs = {
 
 export type MutationDeleteSiteArgs = {
   subdomain: Scalars['String']
-}
-
-export type MutationDeleteStackArgs = {
-  id: Scalars['ID']
 }
 
 export type MutationEditBookmarkArgs = {
@@ -348,11 +319,6 @@ export type MutationEditSiteDomainArgs = {
   subdomain: Scalars['String']
 }
 
-export type MutationEditStackArgs = {
-  data: EditStackInput
-  id: Scalars['ID']
-}
-
 export type MutationEditUserArgs = {
   data?: InputMaybe<EditUserInput>
 }
@@ -360,10 +326,6 @@ export type MutationEditUserArgs = {
 export type MutationToggleReactionArgs = {
   refId: Scalars['ID']
   type: ReactionType
-}
-
-export type MutationToggleStackUserArgs = {
-  id: Scalars['ID']
 }
 
 export type Page = {
@@ -426,8 +388,6 @@ export type Query = {
   posts: Array<Maybe<Post>>
   question?: Maybe<Question>
   questions: QuestionsConnection
-  stack?: Maybe<Stack>
-  stacks: StacksConnection
   tags: Array<Maybe<Tag>>
   user?: Maybe<User>
   userSites?: Maybe<Array<UserSite>>
@@ -484,15 +444,6 @@ export type QueryQuestionsArgs = {
   first?: InputMaybe<Scalars['Int']>
 }
 
-export type QueryStackArgs = {
-  slug: Scalars['String']
-}
-
-export type QueryStacksArgs = {
-  after?: InputMaybe<Scalars['String']>
-  first?: InputMaybe<Scalars['Int']>
-}
-
 export type QueryUserArgs = {
   username: Scalars['String']
 }
@@ -533,13 +484,12 @@ export type QuestionsConnection = {
   pageInfo?: Maybe<PageInfo>
 }
 
-export type Reactable = Bookmark | Post | Question | Stack
+export type Reactable = Bookmark | Post | Question
 
 export enum ReactionType {
   Bookmark = 'BOOKMARK',
   Post = 'POST',
   Question = 'QUESTION',
-  Stack = 'STACK',
 }
 
 export type Site = {
@@ -567,35 +517,6 @@ export enum SiteRole {
   Blocked = 'BLOCKED',
   Owner = 'OWNER',
   User = 'USER',
-}
-
-export type Stack = {
-  __typename?: 'Stack'
-  createdAt: Scalars['Date']
-  description?: Maybe<Scalars['String']>
-  id: Scalars['ID']
-  image?: Maybe<Scalars['String']>
-  name: Scalars['String']
-  reactionCount?: Maybe<Scalars['Int']>
-  slug: Scalars['String']
-  tags: Array<Maybe<Tag>>
-  updatedAt?: Maybe<Scalars['Date']>
-  url: Scalars['String']
-  usedBy: Array<Maybe<User>>
-  usedByViewer?: Maybe<Scalars['Boolean']>
-  viewerHasReacted?: Maybe<Scalars['Boolean']>
-}
-
-export type StackEdge = {
-  __typename?: 'StackEdge'
-  cursor?: Maybe<Scalars['String']>
-  node?: Maybe<Stack>
-}
-
-export type StacksConnection = {
-  __typename?: 'StacksConnection'
-  edges: Array<Maybe<StackEdge>>
-  pageInfo?: Maybe<PageInfo>
 }
 
 export type Tag = {
@@ -1049,85 +970,6 @@ export type UserSiteInfoFragment = {
   }
 }
 
-export type StackCoreFragment = {
-  __typename: 'Stack'
-  id: string
-  name: string
-  image?: string | null | undefined
-  url: string
-  slug: string
-}
-
-export type StackListItemFragment = {
-  __typename: 'Stack'
-  id: string
-  name: string
-  image?: string | null | undefined
-  url: string
-  slug: string
-}
-
-export type StackDetailFragment = {
-  __typename: 'Stack'
-  createdAt: any
-  description?: string | null | undefined
-  reactionCount?: number | null | undefined
-  viewerHasReacted?: boolean | null | undefined
-  usedByViewer?: boolean | null | undefined
-  id: string
-  name: string
-  image?: string | null | undefined
-  url: string
-  slug: string
-  usedBy: Array<
-    | {
-        __typename: 'User'
-        id: string
-        username?: string | null | undefined
-        avatar?: string | null | undefined
-        name?: string | null | undefined
-        role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
-        isAdmin?: boolean | null | undefined
-      }
-    | null
-    | undefined
-  >
-  tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
-}
-
-export type StacksConnectionFragment = {
-  __typename?: 'StacksConnection'
-  pageInfo?:
-    | {
-        __typename?: 'PageInfo'
-        hasNextPage?: boolean | null | undefined
-        totalCount?: number | null | undefined
-        endCursor?: string | null | undefined
-      }
-    | null
-    | undefined
-  edges: Array<
-    | {
-        __typename?: 'StackEdge'
-        cursor?: string | null | undefined
-        node?:
-          | {
-              __typename: 'Stack'
-              id: string
-              name: string
-              image?: string | null | undefined
-              url: string
-              slug: string
-            }
-          | null
-          | undefined
-      }
-    | null
-    | undefined
-  >
-}
-
 export type UserInfoFragment = {
   __typename: 'User'
   id: string
@@ -1552,12 +1394,6 @@ export type ToggleReactionMutation = {
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
       }
-    | {
-        __typename?: 'Stack'
-        id: string
-        reactionCount?: number | null | undefined
-        viewerHasReacted?: boolean | null | undefined
-      }
     | null
     | undefined
 }
@@ -1658,127 +1494,6 @@ export type AddSiteMutation = {
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
-      }
-    | null
-    | undefined
-}
-
-export type EditStackMutationVariables = Exact<{
-  id: Scalars['ID']
-  data: EditStackInput
-}>
-
-export type EditStackMutation = {
-  __typename?: 'Mutation'
-  editStack?:
-    | {
-        __typename: 'Stack'
-        createdAt: any
-        description?: string | null | undefined
-        reactionCount?: number | null | undefined
-        viewerHasReacted?: boolean | null | undefined
-        usedByViewer?: boolean | null | undefined
-        id: string
-        name: string
-        image?: string | null | undefined
-        url: string
-        slug: string
-        usedBy: Array<
-          | {
-              __typename: 'User'
-              id: string
-              username?: string | null | undefined
-              avatar?: string | null | undefined
-              name?: string | null | undefined
-              role?: UserRole | null | undefined
-              isViewer?: boolean | null | undefined
-              isAdmin?: boolean | null | undefined
-            }
-          | null
-          | undefined
-        >
-        tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
-      }
-    | null
-    | undefined
-}
-
-export type DeleteStackMutationVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type DeleteStackMutation = {
-  __typename?: 'Mutation'
-  deleteStack?: boolean | null | undefined
-}
-
-export type AddStackMutationVariables = Exact<{
-  data: AddStackInput
-}>
-
-export type AddStackMutation = {
-  __typename?: 'Mutation'
-  addStack?:
-    | {
-        __typename: 'Stack'
-        createdAt: any
-        description?: string | null | undefined
-        reactionCount?: number | null | undefined
-        viewerHasReacted?: boolean | null | undefined
-        usedByViewer?: boolean | null | undefined
-        id: string
-        name: string
-        image?: string | null | undefined
-        url: string
-        slug: string
-        usedBy: Array<
-          | {
-              __typename: 'User'
-              id: string
-              username?: string | null | undefined
-              avatar?: string | null | undefined
-              name?: string | null | undefined
-              role?: UserRole | null | undefined
-              isViewer?: boolean | null | undefined
-              isAdmin?: boolean | null | undefined
-            }
-          | null
-          | undefined
-        >
-        tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
-      }
-    | null
-    | undefined
-}
-
-export type ToggleStackUserMutationVariables = Exact<{
-  id: Scalars['ID']
-}>
-
-export type ToggleStackUserMutation = {
-  __typename?: 'Mutation'
-  toggleStackUser?:
-    | {
-        __typename: 'Stack'
-        id: string
-        name: string
-        image?: string | null | undefined
-        url: string
-        slug: string
-        usedBy: Array<
-          | {
-              __typename: 'User'
-              id: string
-              username?: string | null | undefined
-              avatar?: string | null | undefined
-              name?: string | null | undefined
-              role?: UserRole | null | undefined
-              isViewer?: boolean | null | undefined
-              isAdmin?: boolean | null | undefined
-            }
-          | null
-          | undefined
-        >
       }
     | null
     | undefined
@@ -2284,85 +1999,6 @@ export type GetSitesQuery = {
     | undefined
 }
 
-export type GetStacksQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']>
-  after?: InputMaybe<Scalars['String']>
-}>
-
-export type GetStacksQuery = {
-  __typename?: 'Query'
-  stacks: {
-    __typename?: 'StacksConnection'
-    pageInfo?:
-      | {
-          __typename?: 'PageInfo'
-          hasNextPage?: boolean | null | undefined
-          totalCount?: number | null | undefined
-          endCursor?: string | null | undefined
-        }
-      | null
-      | undefined
-    edges: Array<
-      | {
-          __typename?: 'StackEdge'
-          cursor?: string | null | undefined
-          node?:
-            | {
-                __typename: 'Stack'
-                id: string
-                name: string
-                image?: string | null | undefined
-                url: string
-                slug: string
-              }
-            | null
-            | undefined
-        }
-      | null
-      | undefined
-    >
-  }
-}
-
-export type GetStackQueryVariables = Exact<{
-  slug: Scalars['String']
-}>
-
-export type GetStackQuery = {
-  __typename?: 'Query'
-  stack?:
-    | {
-        __typename: 'Stack'
-        createdAt: any
-        description?: string | null | undefined
-        reactionCount?: number | null | undefined
-        viewerHasReacted?: boolean | null | undefined
-        usedByViewer?: boolean | null | undefined
-        id: string
-        name: string
-        image?: string | null | undefined
-        url: string
-        slug: string
-        usedBy: Array<
-          | {
-              __typename: 'User'
-              id: string
-              username?: string | null | undefined
-              avatar?: string | null | undefined
-              name?: string | null | undefined
-              role?: UserRole | null | undefined
-              isViewer?: boolean | null | undefined
-              isAdmin?: boolean | null | undefined
-            }
-          | null
-          | undefined
-        >
-        tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
-      }
-    | null
-    | undefined
-}
-
 export type GetTagsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetTagsQuery = {
@@ -2717,56 +2353,6 @@ export const UserSiteInfoFragmentDoc = gql`
     }
   }
   ${SiteInfoFragmentDoc}
-`
-export const StackCoreFragmentDoc = gql`
-  fragment StackCore on Stack {
-    __typename
-    id
-    name
-    image
-    url
-    slug
-  }
-`
-export const StackDetailFragmentDoc = gql`
-  fragment StackDetail on Stack {
-    ...StackCore
-    createdAt
-    description
-    reactionCount
-    viewerHasReacted
-    usedByViewer
-    usedBy {
-      ...UserInfo
-    }
-    tags {
-      name
-    }
-  }
-  ${StackCoreFragmentDoc}
-  ${UserInfoFragmentDoc}
-`
-export const StackListItemFragmentDoc = gql`
-  fragment StackListItem on Stack {
-    ...StackCore
-  }
-  ${StackCoreFragmentDoc}
-`
-export const StacksConnectionFragmentDoc = gql`
-  fragment StacksConnection on StacksConnection {
-    pageInfo {
-      hasNextPage
-      totalCount
-      endCursor
-    }
-    edges {
-      cursor
-      node {
-        ...StackListItem
-      }
-    }
-  }
-  ${StackListItemFragmentDoc}
 `
 export const UserSettingsFragmentDoc = gql`
   fragment UserSettings on User {
@@ -3591,11 +3177,6 @@ export type AddQuestionMutationOptions = Apollo.BaseMutationOptions<
 export const ToggleReactionDocument = gql`
   mutation toggleReaction($refId: ID!, $type: ReactionType!) {
     toggleReaction(refId: $refId, type: $type) {
-      ... on Stack {
-        id
-        reactionCount
-        viewerHasReacted
-      }
       ... on Bookmark {
         id
         url
@@ -3854,208 +3435,6 @@ export type AddSiteMutationResult = Apollo.MutationResult<AddSiteMutation>
 export type AddSiteMutationOptions = Apollo.BaseMutationOptions<
   AddSiteMutation,
   AddSiteMutationVariables
->
-export const EditStackDocument = gql`
-  mutation editStack($id: ID!, $data: EditStackInput!) {
-    editStack(id: $id, data: $data) {
-      ...StackDetail
-    }
-  }
-  ${StackDetailFragmentDoc}
-`
-export type EditStackMutationFn = Apollo.MutationFunction<
-  EditStackMutation,
-  EditStackMutationVariables
->
-
-/**
- * __useEditStackMutation__
- *
- * To run a mutation, you first call `useEditStackMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEditStackMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [editStackMutation, { data, loading, error }] = useEditStackMutation({
- *   variables: {
- *      id: // value for 'id'
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useEditStackMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    EditStackMutation,
-    EditStackMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<EditStackMutation, EditStackMutationVariables>(
-    EditStackDocument,
-    options
-  )
-}
-export type EditStackMutationHookResult = ReturnType<
-  typeof useEditStackMutation
->
-export type EditStackMutationResult = Apollo.MutationResult<EditStackMutation>
-export type EditStackMutationOptions = Apollo.BaseMutationOptions<
-  EditStackMutation,
-  EditStackMutationVariables
->
-export const DeleteStackDocument = gql`
-  mutation deleteStack($id: ID!) {
-    deleteStack(id: $id)
-  }
-`
-export type DeleteStackMutationFn = Apollo.MutationFunction<
-  DeleteStackMutation,
-  DeleteStackMutationVariables
->
-
-/**
- * __useDeleteStackMutation__
- *
- * To run a mutation, you first call `useDeleteStackMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteStackMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteStackMutation, { data, loading, error }] = useDeleteStackMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteStackMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteStackMutation,
-    DeleteStackMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<DeleteStackMutation, DeleteStackMutationVariables>(
-    DeleteStackDocument,
-    options
-  )
-}
-export type DeleteStackMutationHookResult = ReturnType<
-  typeof useDeleteStackMutation
->
-export type DeleteStackMutationResult =
-  Apollo.MutationResult<DeleteStackMutation>
-export type DeleteStackMutationOptions = Apollo.BaseMutationOptions<
-  DeleteStackMutation,
-  DeleteStackMutationVariables
->
-export const AddStackDocument = gql`
-  mutation addStack($data: AddStackInput!) {
-    addStack(data: $data) {
-      ...StackDetail
-    }
-  }
-  ${StackDetailFragmentDoc}
-`
-export type AddStackMutationFn = Apollo.MutationFunction<
-  AddStackMutation,
-  AddStackMutationVariables
->
-
-/**
- * __useAddStackMutation__
- *
- * To run a mutation, you first call `useAddStackMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddStackMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addStackMutation, { data, loading, error }] = useAddStackMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useAddStackMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddStackMutation,
-    AddStackMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<AddStackMutation, AddStackMutationVariables>(
-    AddStackDocument,
-    options
-  )
-}
-export type AddStackMutationHookResult = ReturnType<typeof useAddStackMutation>
-export type AddStackMutationResult = Apollo.MutationResult<AddStackMutation>
-export type AddStackMutationOptions = Apollo.BaseMutationOptions<
-  AddStackMutation,
-  AddStackMutationVariables
->
-export const ToggleStackUserDocument = gql`
-  mutation toggleStackUser($id: ID!) {
-    toggleStackUser(id: $id) {
-      ...StackCore
-      usedBy {
-        ...UserInfo
-      }
-    }
-  }
-  ${StackCoreFragmentDoc}
-  ${UserInfoFragmentDoc}
-`
-export type ToggleStackUserMutationFn = Apollo.MutationFunction<
-  ToggleStackUserMutation,
-  ToggleStackUserMutationVariables
->
-
-/**
- * __useToggleStackUserMutation__
- *
- * To run a mutation, you first call `useToggleStackUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useToggleStackUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [toggleStackUserMutation, { data, loading, error }] = useToggleStackUserMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useToggleStackUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ToggleStackUserMutation,
-    ToggleStackUserMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    ToggleStackUserMutation,
-    ToggleStackUserMutationVariables
-  >(ToggleStackUserDocument, options)
-}
-export type ToggleStackUserMutationHookResult = ReturnType<
-  typeof useToggleStackUserMutation
->
-export type ToggleStackUserMutationResult =
-  Apollo.MutationResult<ToggleStackUserMutation>
-export type ToggleStackUserMutationOptions = Apollo.BaseMutationOptions<
-  ToggleStackUserMutation,
-  ToggleStackUserMutationVariables
 >
 export const DeleteUserDocument = gql`
   mutation deleteUser {
@@ -4929,115 +4308,6 @@ export type GetSitesLazyQueryHookResult = ReturnType<
 export type GetSitesQueryResult = Apollo.QueryResult<
   GetSitesQuery,
   GetSitesQueryVariables
->
-export const GetStacksDocument = gql`
-  query getStacks($first: Int, $after: String) {
-    stacks(first: $first, after: $after) {
-      ...StacksConnection
-    }
-  }
-  ${StacksConnectionFragmentDoc}
-`
-
-/**
- * __useGetStacksQuery__
- *
- * To run a query within a React component, call `useGetStacksQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetStacksQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetStacksQuery({
- *   variables: {
- *      first: // value for 'first'
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useGetStacksQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetStacksQuery, GetStacksQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetStacksQuery, GetStacksQueryVariables>(
-    GetStacksDocument,
-    options
-  )
-}
-export function useGetStacksLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetStacksQuery,
-    GetStacksQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetStacksQuery, GetStacksQueryVariables>(
-    GetStacksDocument,
-    options
-  )
-}
-export type GetStacksQueryHookResult = ReturnType<typeof useGetStacksQuery>
-export type GetStacksLazyQueryHookResult = ReturnType<
-  typeof useGetStacksLazyQuery
->
-export type GetStacksQueryResult = Apollo.QueryResult<
-  GetStacksQuery,
-  GetStacksQueryVariables
->
-export const GetStackDocument = gql`
-  query getStack($slug: String!) {
-    stack(slug: $slug) {
-      ...StackDetail
-    }
-  }
-  ${StackDetailFragmentDoc}
-`
-
-/**
- * __useGetStackQuery__
- *
- * To run a query within a React component, call `useGetStackQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetStackQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetStackQuery({
- *   variables: {
- *      slug: // value for 'slug'
- *   },
- * });
- */
-export function useGetStackQuery(
-  baseOptions: Apollo.QueryHookOptions<GetStackQuery, GetStackQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetStackQuery, GetStackQueryVariables>(
-    GetStackDocument,
-    options
-  )
-}
-export function useGetStackLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetStackQuery,
-    GetStackQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetStackQuery, GetStackQueryVariables>(
-    GetStackDocument,
-    options
-  )
-}
-export type GetStackQueryHookResult = ReturnType<typeof useGetStackQuery>
-export type GetStackLazyQueryHookResult = ReturnType<
-  typeof useGetStackLazyQuery
->
-export type GetStackQueryResult = Apollo.QueryResult<
-  GetStackQuery,
-  GetStackQueryVariables
 >
 export const GetTagsDocument = gql`
   query getTags {

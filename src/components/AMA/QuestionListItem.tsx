@@ -12,8 +12,8 @@ interface Props {
 export const QuestionListItem = React.memo<Props>(({ question, active }) => {
   return (
     <ListItem
-      href={'/ama/[id]'}
-      as={`/ama/${question.id}`}
+      href={'/qa/[id]'}
+      as={`/qa/${question.id}`}
       title={question.title}
       description={null}
       byline={

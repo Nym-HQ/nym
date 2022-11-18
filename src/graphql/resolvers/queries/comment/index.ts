@@ -54,13 +54,6 @@ export async function getComments(_, args, ctx: Context) {
 
       return results || []
     }
-    case CommentType.Stack: {
-      const results = await prisma.stack
-        .findFirst({ where: { id: refId, siteId: site.id } })
-        .comments()
-
-      return results || []
-    }
     case CommentType.Post: {
       const results = await prisma.post
         .findFirst({ where: { id: refId, siteId: site.id } })

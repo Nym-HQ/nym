@@ -79,13 +79,7 @@ export async function addComment(
     case CommentType.Question: {
       field = 'questionId'
       table = 'question'
-      route = `${CLIENT_URL}/ama/${refId}`
-      break
-    }
-    case CommentType.Stack: {
-      field = 'stackId'
-      table = 'stack'
-      route = `${CLIENT_URL}/stack/${refId}`
+      route = `${CLIENT_URL}/qa/${refId}`
       break
     }
     default: {
