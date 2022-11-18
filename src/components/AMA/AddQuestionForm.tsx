@@ -23,7 +23,7 @@ export function AddQuestionForm({ closeModal }) {
   const [handleAddQuestion, { loading }] = useAddQuestionMutation({
     onCompleted: ({ addQuestion: { id } }) => {
       closeModal()
-      return router.push(`/ama/${id}`)
+      return router.push(`/qa/${id}`)
     },
     onError({ message }) {
       const clean = message.replace('GraphQL error:', '')
@@ -81,7 +81,7 @@ export function AddQuestionForm({ closeModal }) {
         <Textarea
           rows={1}
           value={title}
-          placeholder="Ask me anything..."
+          placeholder="Ask a Question"
           onChange={onTitleChange}
           onKeyDown={onKeyDown}
         />

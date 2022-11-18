@@ -142,7 +142,7 @@ export function EditQuestionForm({ closeModal, question }) {
     <div className="p-4">
       <form className="space-y-3" onSubmit={handleSave}>
         <Input
-          placeholder="Ask me anything..."
+          placeholder="Ask a Question"
           value={state.title}
           onChange={onTitleChange}
           onKeyDown={onKeyDown}

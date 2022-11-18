@@ -84,8 +84,8 @@ export async function addQuestion(
     })
 
   emailMe({
-    subject: `AMA: ${title}`,
-    body: `${title}\n\n${baseUrl}/ama/${question.id}`,
+    subject: `Q&A: ${title}`,
+    body: `${title}\n\n${baseUrl}/qa/${question.id}`,
   })
 
   return question

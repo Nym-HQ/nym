@@ -35,11 +35,11 @@ const routes = {
     }),
   },
   ama: {
-    label: 'AMA',
-    path: '/ama',
+    label: 'Q&A',
+    path: '/qa',
     seo: extendSEO({
-      title: 'AMA',
-      description: 'Ask me anything.',
+      title: 'Q&A',
+      description: 'Q&A',
       image: 'og/ama.png',
       url: 'ama',
     }),

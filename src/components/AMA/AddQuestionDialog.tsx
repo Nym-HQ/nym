@@ -8,7 +8,7 @@ export function AddQuestionDialog({ trigger }) {
   return (
     <DialogComponent
       trigger={trigger}
-      title={'Ask Me Anything'}
+      title={'Ask a Question'}
       modalContent={({ closeModal }) => (
         <AddQuestionForm closeModal={closeModal} />
       )}

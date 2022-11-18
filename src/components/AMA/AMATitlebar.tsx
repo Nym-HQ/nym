@@ -71,7 +71,7 @@ export function AMATitlebar({ scrollContainerRef }) {
   return (
     <TitleBar
       scrollContainerRef={scrollContainerRef}
-      title="Ask me anything"
+      title="Ask a Question"
       trailingAccessory={trailingAccessory()}
     >
       {getChildren()}

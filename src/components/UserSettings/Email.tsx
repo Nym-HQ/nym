@@ -131,7 +131,7 @@ export function EmailForm(props: {
           {isNew && (
             <p className="text-quaternary text-sm">
               Adding your email will allow you to turn on replies for comments
-              or AMA questions.
+              or Q&A questions.
             </p>
           )}
           <Input
