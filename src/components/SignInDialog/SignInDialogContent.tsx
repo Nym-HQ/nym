@@ -36,9 +36,7 @@ export function SignInDialogContent() {
       <div className="text-primary grid w-full gap-4 sm:grid-cols-2">
         <div className="flex flex-col items-center justify-center space-y-2 rounded-lg bg-gray-100 p-4 dark:bg-gray-700 dark:bg-opacity-70">
           <AMAIcon />
-          <p className="text-primary text-base font-semibold">
-            Ask a Question
-          </p>
+          <p className="text-primary text-base font-semibold">Ask a Question</p>
         </div>
 
         <div className="flex flex-col items-center justify-center space-y-2 rounded-lg bg-gray-100 p-4 dark:bg-gray-700 dark:bg-opacity-70">
