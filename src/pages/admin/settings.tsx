@@ -300,8 +300,7 @@ function AdminSettingsPage(props) {
 
         <Subsection title="Email newsletter settings">
           <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            The Mailgun API is used for bulk email newsletter
-            delivery.
+            The Mailgun API is used for bulk email newsletter delivery.
           </p>
 
           <div className="mt-10 sm:mt-0">
