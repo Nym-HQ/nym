@@ -26,13 +26,6 @@ function LinkRenderer({ href, ...rest }: any) {
   }
   try {
     const url = new URL(href)
-    if (url.origin === 'https://brianlovin.com') {
-      return (
-        <Link href={href}>
-          <a {...rest} />
-        </Link>
-      )
-    }
     return <a rel="noopener" href={href} {...rest} />
   } catch (e) {
     console.error(e)

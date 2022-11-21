@@ -5,9 +5,9 @@ Hacker News Digest
 {{#each posts}}
   {{ title }}                                  
   {{ url }}                                  
-  {{comments_count}} comments · https://brianlovin.com/hn/{{ id }}
+  {{comments_count}} comments · {{ id }}
 {{/each}}
                         
-You are receiving this email because you subscribed at https://brianlovin.com/hn
+You are receiving this email because you subscribed 
                         
 Unsubscribe: {{ unsubscribe_url }}

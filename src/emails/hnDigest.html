@@ -347,47 +347,7 @@
                   cellspacing="0"
                   role="presentation"
                 >
-                  <!-- Body content -->
-                  <tr>
-                    <td class="content-cell">
-                      <div class="f-fallback">
-                        <h2>Hacker News Digest</h2>
-                        <h3 class="gray-link">{{ date }}</h3>
-
-                        <table width="100%" cellpadding="0" cellspacing="0">
-                          {{#each posts}}
-                          <tr>
-                            <td class="post-cell">
-                              <table
-                                width="100%"
-                                cellpadding="0"
-                                cellspacing="0"
-                              >
-                                <tr>
-                                  <td class="attributes_item post-title">
-                                    <a href="{{ url }}">{{ title }}</a>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td class="attributes_item post-meta">
-                                    <a class="gray-link" href="{{ url }}"
-                                      >{{ domain }}</a
-                                    >{{#domain}} / {{/domain}}<a
-                                      class="gray-link"
-                                      href="https://brianlovin.com/hn/{{ id }}"
-                                      >{{ comments_count }} comments</a
-                                    >
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          {{/each}}
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
-                  <!-- Body content -->
+      
                 </table>
               </td>
             </tr>
@@ -403,14 +363,7 @@
                 >
                   <tr>
                     <td class="content-cell">
-                      <p class="f-fallback sub">
-                        You are receiving this email because you subscribed at
-                        <a href="https://brianlovin.com/hn"
-                          >brianlovin.com/hn</a
-                        >
-                        <br />
-                        <a href="{{ unsubscribe_url }}">Unsubscribe</a>
-                      </p>
+                    
                     </td>
                   </tr>
                 </table>

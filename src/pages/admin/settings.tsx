@@ -3,7 +3,6 @@
  * These pages will be used to manage the user's contents on the site
  *
  */
-
 import * as React from 'react'
 import toast from 'react-hot-toast'
 
@@ -301,8 +300,8 @@ function AdminSettingsPage(props) {
 
         <Subsection title="Email newsletter settings">
           <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            The <a href="#">Mailgun API</a> is used for bulk email newsletter
-            delivery. <a href="#">Why is this required?</a>
+            The Mailgun API is used for bulk email newsletter
+            delivery.
           </p>
 
           <div className="mt-10 sm:mt-0">
@@ -343,8 +342,7 @@ function AdminSettingsPage(props) {
                 </div>
                 <div className="col-span-6">
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Find your Mailgun region and domain <a href="#">here</a>.
-                    &gt;&gt;
+                    Find your Mailgun region and domain.
                   </p>
                 </div>
 

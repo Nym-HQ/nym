@@ -153,7 +153,7 @@ export function TitleBar({
               }
               className="text-primary transform-gpu text-sm font-bold line-clamp-1"
             >
-              <Link href="/">{title}</Link>
+              <Link href="/"><a className="inline-flex">{title}</a></Link>
             </h2>
           </span>
 

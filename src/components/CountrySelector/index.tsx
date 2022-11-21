@@ -46,14 +46,7 @@ export const CountrySelector = React.forwardRef<
           aria-labelledby="listbox-label"
           onClick={props.onToggle}
         >
-          <span className="truncate flex items-center">
-            <img
-              alt={`${props.selectedValue.value}`}
-              src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${props.selectedValue.value}.svg`}
-              className={'inline mr-2 h-4 rounded-sm'}
-            />
-            {props.selectedValue.title}
-          </span>
+    
           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
             <svg
               className="h-5 w-5 text-gray-400"
