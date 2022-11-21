@@ -343,9 +343,8 @@ function AdminSettingsPage(props) {
                 </div>
                 <div className="col-span-6">
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    <a href="#">
-                      Find your Mailgun region and domain here. &gt;&gt;
-                    </a>
+                    Find your Mailgun region and domain <a href="#">here</a>.
+                    &gt;&gt;
                   </p>
                 </div>
 
