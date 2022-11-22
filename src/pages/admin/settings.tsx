@@ -56,7 +56,7 @@ function AdminSettingsPage(props) {
 
   const [editSite, { loading: saving }] = useEditSiteMutation({
     onCompleted({ editSite }) {
-      toast.success('Saved domain mapping information!')
+      toast.success('Saved site settings!')
     },
   })
 
@@ -64,7 +64,20 @@ function AdminSettingsPage(props) {
     return editSite({
       variables: {
         subdomain: data?.viewer?.viewerSite?.subdomain,
-        data: values,
+        data: {
+          name: values.name,
+          description: values.description,
+          attach_css: values.attach_css,
+          attach_js: values.attach_js,
+          banner: values.banner,
+          logo: values.logo,
+          mailgun_api_key: values.mailgun_api_key,
+          mailgun_domain: values.mailgun_domain,
+          mailgun_region: values.mailgun_region,
+          social_github: values.social_github,
+          social_twitter: values.social_twitter,
+          social_youtube: values.social_youtube,
+        },
       },
     })
   }
@@ -316,7 +329,7 @@ function AdminSettingsPage(props) {
                       setCountrySelectorOpen(!countrySelectorOpen)
                     }}
                     onChange={(e) =>
-                      setValues({ ...values, mailgun_region: e.target.value })
+                      setValues({ ...values, mailgun_region: e })
                     }
                     selectedValue={
                       COUNTRIES.find(

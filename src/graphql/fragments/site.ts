@@ -31,4 +31,5 @@ export const UserSiteInfoFragment = gql`
       ...SiteInfo
     }
   }
+  ${SiteInfoFragment}
 `

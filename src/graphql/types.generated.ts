@@ -944,6 +944,22 @@ export type SiteInfoFragment = {
   social_github?: string | null | undefined
 }
 
+export type SiteSettingsFragment = {
+  __typename?: 'Site'
+  name?: string | null | undefined
+  description?: string | null | undefined
+  logo?: string | null | undefined
+  banner?: string | null | undefined
+  attach_css?: string | null | undefined
+  attach_js?: string | null | undefined
+  mailgun_region?: string | null | undefined
+  mailgun_domain?: string | null | undefined
+  mailgun_api_key?: string | null | undefined
+  social_twitter?: string | null | undefined
+  social_youtube?: string | null | undefined
+  social_github?: string | null | undefined
+}
+
 export type UserSiteInfoFragment = {
   __typename?: 'UserSite'
   id: string
@@ -1407,11 +1423,7 @@ export type EditSiteDomainMutation = {
   __typename?: 'Mutation'
   editSiteDomain?:
     | {
-        __typename: 'Site'
-        id: string
-        subdomain?: string | null | undefined
-        parkedDomain?: string | null | undefined
-        plan?: string | null | undefined
+        __typename?: 'Site'
         name?: string | null | undefined
         description?: string | null | undefined
         logo?: string | null | undefined
@@ -2321,6 +2333,22 @@ export const QuestionsConnectionFragmentDoc = gql`
     }
   }
   ${QuestionListItemFragmentDoc}
+`
+export const SiteSettingsFragmentDoc = gql`
+  fragment SiteSettings on Site {
+    name
+    description
+    logo
+    banner
+    attach_css
+    attach_js
+    mailgun_region
+    mailgun_domain
+    mailgun_api_key
+    social_twitter
+    social_youtube
+    social_github
+  }
 `
 export const SiteInfoFragmentDoc = gql`
   fragment SiteInfo on Site {
@@ -3243,10 +3271,10 @@ export type ToggleReactionMutationOptions = Apollo.BaseMutationOptions<
 export const EditSiteDomainDocument = gql`
   mutation editSiteDomain($subdomain: String!, $data: EditSiteDomainInput!) {
     editSiteDomain(subdomain: $subdomain, data: $data) {
-      ...SiteInfo
+      ...SiteSettings
     }
   }
-  ${SiteInfoFragmentDoc}
+  ${SiteSettingsFragmentDoc}
 `
 export type EditSiteDomainMutationFn = Apollo.MutationFunction<
   EditSiteDomainMutation,

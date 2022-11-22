@@ -8,7 +8,6 @@ import {
   MutationEditSiteDomainArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
-import { isValidParkedDomain } from '~/lib/utils'
 import { addDomainToProject, removeDomainFromProject } from '~/lib/vercel'
 
 export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
@@ -80,25 +79,31 @@ export async function editSiteDomain(
         where: { id: site.id },
       })
     : await prisma.site.findUnique({ where: { subdomain } })
-  if (existing?.subdomain !== subdomain)
+
+  if (!existing) throw new UserInputError('Site not found')
+
+  if (existing.subdomain !== subdomain)
     throw new UserInputError('Slug already exists')
 
+  // nothing changed
+  if (existing.parkedDomain === parkedDomain) {
+    return existing
+  }
+
   // Changing parked domain
-  if (existing?.parkedDomain !== parkedDomain) {
-    if (existing?.parkedDomain) {
-      // remove old parked domain
-      await removeDomainFromProject(existing.parkedDomain)
-    }
-    if (parkedDomain) {
-      await addDomainToProject(parkedDomain)
-    }
+  if (existing.parkedDomain) {
+    // remove old parked domain
+    await removeDomainFromProject(existing.parkedDomain)
+  }
+  if (parkedDomain) {
+    await addDomainToProject(parkedDomain)
   }
 
   return await prisma.site
     .update({
       where: { subdomain },
       data: {
-        parkedDomain,
+        parkedDomain: parkedDomain || subdomain,
       },
     })
     .then((site) => {
