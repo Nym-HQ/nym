@@ -11,7 +11,7 @@ import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { GET_HOME_PAGE } from '~/graphql/queries/pages'
 import { GET_USER_SITES } from '~/graphql/queries/site'
-import { useGetSitesQuery, useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery, useGetSitesQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
@@ -51,10 +51,10 @@ function UserSitesList({ sites }) {
 function AppIntro() {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
-  const { data: viewerData } = useViewerQuery()
+  const { data } = useContextQuery()
   const router = useRouter()
 
-  if (viewerData?.viewer) {
+  if (data?.context?.viewer) {
     const { data } = useGetSitesQuery()
 
     return (
@@ -126,7 +126,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
   }
   const commonQuries = await Promise.all(graphql)
 
-  if (commonQuries[1].data?.viewer && commonProps.site.isAppDomain) {
+  if (commonQuries[1].data?.context?.viewer && commonProps.site.isAppDomain) {
     await apolloClient.query({ query: GET_USER_SITES })
   }
 

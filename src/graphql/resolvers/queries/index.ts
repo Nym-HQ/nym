@@ -6,15 +6,14 @@ import { getHackerNewsPost, getHackerNewsPosts } from './hackerNews'
 import { getHomePage, getPage, getPages } from './pages'
 import { getPost, getPosts } from './posts'
 import { getQuestion, getQuestions } from './questions'
-import { getUserSites, viewSite } from './site'
+import { getUserSites } from './site'
 import { getTags } from './tags'
 import { getUser } from './user'
-import { viewer } from './viewer'
+import { getViewerContext } from './viewer'
 
 export default {
-  viewSite: viewSite,
+  context: getViewerContext,
   userSites: requiresUser(getUserSites),
-  viewer: viewer,
   user: getUser,
   bookmark: getBookmark,
   bookmarks: getBookmarks,

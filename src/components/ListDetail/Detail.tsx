@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Compass } from 'react-feather'
 
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import Button from '../Button'
 import { TitleBar } from './TitleBar'
@@ -62,7 +62,7 @@ function Loading() {
 }
 
 function Null({ type }: { type: '404' | 'Page' | 'Post' }) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
 
   if (type === 'Page') {
     return (

@@ -17,13 +17,13 @@ import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { getContext } from '~/graphql/context'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function AdminProfilePage(props) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
 
   return (
     <Detail.Container>
@@ -101,9 +101,10 @@ AdminProfilePage.getLayout = function getLayout(page) {
 }
 
 export async function getServerSideProps(ctx) {
-  const commonProps = await getCommonPageProps(ctx)
-  const { req, res } = ctx
-
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -112,12 +113,7 @@ export async function getServerSideProps(ctx) {
       },
     }
   }
-
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
-
-  if (!graphqlData[1]?.data?.viewer?.isViewerSiteAdmin) {
+  if (graphqlData[0]?.data?.context?.userSite?.siteRole !== 'ADMIN') {
     return {
       redirect: {
         destination: '/',

@@ -18,11 +18,11 @@ export function UserSettings() {
   const titleRef = React.useRef(null)
   const scrollContainerRef = React.useRef(null)
 
-  if (!data?.viewer && loading) {
+  if (!data?.context?.viewer && loading) {
     return <Detail.Loading />
   }
 
-  if (!data?.viewer) {
+  if (!data?.context?.viewer) {
     return <SignedOut />
   }
 
@@ -42,14 +42,14 @@ export function UserSettings() {
         <div className="divide-y divide-gray-200 py-12 dark:divide-gray-800">
           <div className="space-y-8 py-12">
             <h3 className="text-primary text-lg font-bold">Account</h3>
-            <EmailForm viewer={data.viewer} />
-            <UsernameForm viewer={data.viewer} />
+            <EmailForm viewer={data?.context?.viewer} />
+            <UsernameForm viewer={data?.context?.viewer} />
           </div>
 
-          {data.viewer.email && (
+          {data?.context?.viewer.email && (
             <div className="space-y-8 py-12">
               <h3 className="text-primary text-lg font-bold">Emails</h3>
-              <EmailPreferences viewer={data.viewer} />
+              <EmailPreferences viewer={data?.context?.viewer} />
             </div>
           )}
 

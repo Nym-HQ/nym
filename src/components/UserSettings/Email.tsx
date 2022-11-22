@@ -11,7 +11,7 @@ import {
 } from '~/graphql/types.generated'
 
 export function EmailForm(props: {
-  viewer: GetViewerWithSettingsQuery['viewer']
+  viewer: GetViewerWithSettingsQuery['context']['viewer']
 }) {
   const { viewer } = props
   const isNew = !viewer.email && !viewer.pendingEmail
@@ -26,16 +26,20 @@ export function EmailForm(props: {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const {
+        context: { viewer },
+      } = cache.readQuery({
         query: GET_VIEWER_SETTINGS,
       }) as any
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
         data: {
-          viewer: {
-            ...viewer,
-            pendingEmail: email === viewer.email ? null : email,
+          context: {
+            viewer: {
+              ...viewer,
+              pendingEmail: email === viewer.email ? null : email,
+            },
           },
         },
       })
@@ -53,16 +57,18 @@ export function EmailForm(props: {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
+      const { context } = cache.readQuery({
         query: GET_VIEWER_SETTINGS,
       }) as any
 
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
         data: {
-          viewer: {
-            ...viewer,
-            pendingEmail: null,
+          context: {
+            viewer: {
+              ...viewer,
+              pendingEmail: null,
+            },
           },
         },
       })

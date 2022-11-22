@@ -4,18 +4,18 @@ import { Plus } from 'react-feather'
 import { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { SignInDialog } from '~/components/SignInDialog'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import SegmentedControl from '../SegmentedController'
 import { AddQuestionDialog } from './AddQuestionDialog'
 import { QuestionsContext } from './QuestionsList'
 
 export function AMATitlebar({ scrollContainerRef }) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   const { setFilterPending, filterPending } = React.useContext(QuestionsContext)
 
   function getAddButton() {
-    if (!data?.viewer) {
+    if (!data?.context?.viewer) {
       return (
         <SignInDialog
           trigger={
@@ -51,7 +51,7 @@ export function AMATitlebar({ scrollContainerRef }) {
   }
 
   function getChildren() {
-    if (data?.viewer?.isViewerSiteAdmin) {
+    if (data?.context?.userSite?.siteRole === 'ADMIN') {
       return (
         <div className="pt-2 pb-1">
           <SegmentedControl

@@ -11,7 +11,7 @@ import {
 import { validUsername } from '~/lib/validators'
 
 export function UsernameForm(props: {
-  viewer: GetViewerWithSettingsQuery['viewer']
+  viewer: GetViewerWithSettingsQuery['context']['viewer']
 }) {
   const { viewer } = props
   const [username, setUsername] = React.useState('')

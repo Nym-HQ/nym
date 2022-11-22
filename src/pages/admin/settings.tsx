@@ -24,18 +24,13 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { getContext } from '~/graphql/context'
-import {
-  useEditSiteMutation,
-  useViewerQuery,
-  useViewSiteQuery,
-} from '~/graphql/types.generated'
+import { useContextQuery, useEditSiteMutation } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function AdminSettingsPage(props) {
-  const { data } = useViewerQuery()
-  const { data: siteData } = useViewSiteQuery()
+  const { data } = useContextQuery()
 
   const countrySelectorRef = React.createRef<HTMLDivElement>()
   const [countrySelectorOpen, setCountrySelectorOpen] = React.useState(false)
@@ -51,7 +46,7 @@ function AdminSettingsPage(props) {
     mailgun_region: 'US',
     mailgun_domain: '',
     mailgun_api_key: '',
-    ...(siteData?.viewSite || {}),
+    ...(data?.context?.site || {}),
   })
 
   const [editSite, { loading: saving }] = useEditSiteMutation({
@@ -63,7 +58,7 @@ function AdminSettingsPage(props) {
   const saveSettings = () => {
     return editSite({
       variables: {
-        subdomain: data?.viewer?.viewerSite?.subdomain,
+        subdomain: data?.context?.site?.subdomain,
         data: {
           name: values.name,
           description: values.description,
@@ -389,8 +384,10 @@ function AdminSettingsPage(props) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { req, res } = ctx
-  const commonProps = await getCommonPageProps(ctx)
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -400,11 +397,7 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
-
-  if (!graphqlData[1]?.data?.viewer?.isViewerSiteAdmin) {
+  if (graphqlData[0]?.data?.context?.userSite?.siteRole !== 'ADMIN') {
     return {
       redirect: {
         destination: '/',

@@ -22,11 +22,20 @@ export default function UserPage(props) {
 export async function getServerSideProps(ctx) {
   const {
     params: { username },
-    req,
-    res,
   } = ctx
 
-  const commonProps = await getCommonPageProps(ctx)
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+
+  const graphqlData = await Promise.all([
+    ...getCommonQueries(apolloClient),
+
+    apolloClient.query({
+      query: GET_USER,
+      variables: { username },
+    }),
+  ])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -35,18 +44,6 @@ export async function getServerSideProps(ctx) {
       },
     }
   }
-
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-
-  await Promise.all([
-    ...getCommonQueries(apolloClient),
-
-    apolloClient.query({
-      query: GET_USER,
-      variables: { username },
-    }),
-  ])
 
   return addApolloState(apolloClient, {
     props: {

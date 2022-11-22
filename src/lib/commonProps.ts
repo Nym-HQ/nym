@@ -14,19 +14,19 @@ export interface CommonPageProps {
 }
 
 export async function getCommonPageProps(
-  context: NextPageContext
+  context: NextPageContext,
+  graphqlContextQueryData?: any
 ): Promise<CommonPageProps> {
   const domain = context.req.headers.host
   const isAppDomain = isMainAppDomain(domain)
   const subdomain = getSubdomain(domain)
-  const site = isAppDomain ? null : await getSiteByDomain(domain)
 
   return {
     site: {
       domain,
       isAppDomain,
       subdomain,
-      siteId: site ? site.id : null,
+      siteId: graphqlContextQueryData?.data?.context?.site?.id || null,
     },
   }
 }

@@ -4,21 +4,23 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
 import { getContext } from '~/graphql/context'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function NewPostPage(props) {
-  const { data } = useViewerQuery()
-  if (!data?.viewer?.isViewerSiteAdmin) return <Detail.Null type="404" />
+  const { data } = useContextQuery()
+  if (data?.context?.userSite?.siteRole !== 'ADMIN')
+    return <Detail.Null type="404" />
   return <PostEditor />
 }
 
 export async function getServerSideProps(ctx) {
-  const { req, res } = ctx
-
-  const commonProps = await getCommonPageProps(ctx)
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -27,11 +29,6 @@ export async function getServerSideProps(ctx) {
       },
     }
   }
-
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-
-  await Promise.all([...getCommonQueries(apolloClient)])
 
   return addApolloState(apolloClient, {
     props: { ...commonProps },

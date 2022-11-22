@@ -1,7 +1,7 @@
 import { NextPageContext } from 'next'
 import * as React from 'react'
 
-import { useViewerQuery, useViewSiteQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 interface Props {
@@ -20,8 +20,7 @@ const globalSiteContext = {
 export const GlobalSiteContext = React.createContext(globalSiteContext)
 
 export function GlobalSiteContextProvider({ children, pageProps }: Props) {
-  const { data } = useViewerQuery()
-  const { data: siteData } = useViewSiteQuery()
+  const { data } = useContextQuery()
 
   const initialState = {
     ...globalSiteContext,
@@ -34,21 +33,21 @@ export function GlobalSiteContextProvider({ children, pageProps }: Props) {
   }
 
   React.useEffect(() => {
-    if (siteData?.viewSite) {
+    if (data?.context?.site) {
       setSite({
-        siteId: siteData.viewSite.id,
-        subdomain: siteData.viewSite.subdomain,
+        siteId: data?.context?.site?.id,
+        subdomain: data?.context?.site.subdomain,
         domain: window.location.host,
         isAppDomain: window.location.host === MAIN_APP_DOMAIN,
-        unparkedSubdomain: !siteData.viewSite.id,
+        unparkedSubdomain: !data?.context?.site?.id,
       })
-    } else if (data?.viewer?.viewerSite) {
+    } else if (data?.context?.site) {
       setSite({
-        siteId: data.viewer.viewerSite.id,
-        subdomain: data.viewer.viewerSite.subdomain,
+        siteId: data?.context?.site?.id,
+        subdomain: data?.context?.site?.subdomain,
         domain: window.location.host,
         isAppDomain: window.location.host === MAIN_APP_DOMAIN,
-        unparkedSubdomain: !data.viewer.viewerSite.id,
+        unparkedSubdomain: !data?.context?.site?.id,
       })
     } else {
       setSite({

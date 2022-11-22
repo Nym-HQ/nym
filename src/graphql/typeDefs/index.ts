@@ -141,12 +141,8 @@ const typeDefs = gql`
     social_twitter: String
     social_youtube: String
     social_github: String
-
-    isViewer: Boolean
-    viewerSite: Site
-    viewerUserSite: UserSite
-    isViewerSiteAdmin: Boolean
     emailSubscriptions: [EmailSubscription]
+
     isAdmin: Boolean
   }
 
@@ -234,10 +230,15 @@ const typeDefs = gql`
     edges: [QuestionEdge]!
   }
 
-  type Query {
-    userSites: [UserSite!]
-    viewSite: Site
+  type ViewerContext {
     viewer: User
+    site: Site
+    userSite: UserSite
+  }
+
+  type Query {
+    context: ViewerContext!
+    userSites: [UserSite!]
     user(username: String!): User
     bookmark(id: ID!): Bookmark
     bookmarks(

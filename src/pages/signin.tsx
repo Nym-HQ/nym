@@ -21,7 +21,6 @@ export default function SignInPage(props) {
  * @returns
  */
 export async function getServerSideProps(ctx: NextPageContext) {
-  const commonProps = await getCommonPageProps(ctx)
   const { req, res } = ctx
 
   const url = new URL(req.url, `http://${req.headers.host}`)
@@ -53,7 +52,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
-  await Promise.all([...getCommonQueries(apolloClient)])
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
 
   return addApolloState(apolloClient, {
     props: { ...commonProps },

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { GlobalNavigationContext } from '~/components/Providers/GlobalNavigation'
 import { GlobalSiteContext } from '~/components/Providers/GlobalSite'
-import { useViewSiteQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import { AppSidebarNavigation } from './AppNavigation'
 import { EmptySidebarNavigation } from './EmptyNavigation'
@@ -12,7 +12,7 @@ import { SiteSidebarNavigation } from './SiteNavigation'
 import { UserFooter } from './UserFooter'
 
 export function Sidebar() {
-  const { data: siteData } = useViewSiteQuery()
+  const { data } = useContextQuery()
 
   const scrollContainerRef = React.useRef(null)
 
@@ -34,7 +34,7 @@ export function Sidebar() {
                   <TitleBar
                     scrollContainerRef={scrollContainerRef}
                     leadingAccessory={null}
-                    title={siteData?.viewSite?.name || 'Nym'}
+                    title={data?.context?.site?.name || 'Nym'}
                   />
                   {isAppDomain ? (
                     <AppSidebarNavigation />

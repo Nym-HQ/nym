@@ -2,6 +2,7 @@ import { PrismaClient, Site, SiteRole, UserSite } from '@prisma/client'
 
 import { User, UserRole } from '~/graphql/types.generated'
 import { isAuthenticatedServerSide } from '~/lib/auth/nextauth'
+import { isMainAppDomain } from '~/lib/multitenancy/client'
 import { getSiteByDomain, getUserSiteById } from '~/lib/multitenancy/server'
 import { prisma } from '~/lib/prisma'
 
@@ -17,8 +18,14 @@ async function getViewer(ctx) {
 }
 
 async function getSite(ctx) {
+  if (isMainAppDomain(ctx.req.headers.host)) {
+    return null
+  }
+
   const site = await getSiteByDomain(ctx.req.headers.host)
   if (site) {
+    // fix parkedDomain, as we are filling them with subdomain values
+    // if they are empty just to make it compliant with unique constraint.
     site.parkedDomain =
       site.parkedDomain && site.parkedDomain.indexOf('.') >= 0
         ? site.parkedDomain

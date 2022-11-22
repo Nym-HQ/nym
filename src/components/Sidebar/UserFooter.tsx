@@ -7,7 +7,7 @@ import { Avatar } from '~/components/Avatar'
 import { GhostButton } from '~/components/Button'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { GlobalNavigationContext } from '~/components/Providers/GlobalNavigation'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 function Container(props) {
@@ -21,7 +21,7 @@ function Container(props) {
 }
 
 export function UserFooter() {
-  const { data, loading, error } = useViewerQuery()
+  const { data, loading, error } = useContextQuery()
   const { setIsOpen } = React.useContext(GlobalNavigationContext)
 
   const getSignInUrl = () => {
@@ -64,17 +64,17 @@ export function UserFooter() {
     return <Container>{signInButton()}</Container>
   }
 
-  if (data?.viewer) {
+  if (data?.context?.viewer) {
     return (
       <Container>
-        <Link href={`/u/${data.viewer.username}`}>
+        <Link href={`/u/${data?.context?.viewer?.username}`}>
           <a
             onClick={() => setIsOpen(false)}
             className="flex flex-none items-center rounded-full"
           >
             <Avatar
-              user={data.viewer}
-              src={data.viewer.avatar}
+              user={data?.context?.viewer}
+              src={data?.context?.viewer?.avatar}
               width={24}
               height={24}
               layout="fixed"

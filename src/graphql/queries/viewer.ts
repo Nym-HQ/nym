@@ -3,29 +3,38 @@ import { gql } from '@apollo/client'
 import {
   UserInfoFragment,
   UserSettingsFragment,
-  ViewerInfoFragment,
 } from '~/graphql/fragments/user'
 
-export const GET_VIEWER = gql`
-  query viewer {
-    viewer {
-      ...UserInfo
-      ...ViewerInfo
-    }
-  }
-  ${UserInfoFragment}
-  ${ViewerInfoFragment}
-`
+import { SiteInfoFragment, UserSiteInfoFragment } from '../fragments/site'
 
 export const GET_VIEWER_SETTINGS = gql`
   query getViewerWithSettings {
-    viewer {
-      ...UserInfo
-      ...ViewerInfo
-      ...UserSettings
+    context {
+      viewer {
+        ...UserInfo
+        ...UserSettings
+      }
     }
   }
   ${UserInfoFragment}
-  ${ViewerInfoFragment}
   ${UserSettingsFragment}
+`
+
+export const GET_CONTEXT = gql`
+  query context {
+    context {
+      viewer {
+        ...UserInfo
+      }
+      site {
+        ...SiteInfo
+      }
+      userSite {
+        ...UserSiteInfo
+      }
+    }
+  }
+  ${UserInfoFragment}
+  ${SiteInfoFragment}
+  ${UserSiteInfoFragment}
 `

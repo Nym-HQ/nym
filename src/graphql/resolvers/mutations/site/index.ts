@@ -149,12 +149,12 @@ export async function deleteSite(
   ctx: Context
 ) {
   const { subdomain } = args
-  const { prisma, viewer, site } = ctx
+  const { prisma, viewer, site, userSite } = ctx
 
   let canDelete = false
 
   if (subdomain == site.subdomain) {
-    canDelete = viewer.viewerUserSite?.siteRole === 'OWNER'
+    canDelete = userSite?.siteRole === 'OWNER'
   } else {
     const existing = await prisma.site.findUnique({ where: { subdomain } })
     if (existing) {

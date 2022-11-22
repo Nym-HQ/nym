@@ -27,9 +27,10 @@ AccountPage.getLayout = function getLayout(page) {
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const commonProps = await getCommonPageProps(ctx)
-  const { res } = ctx
-
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -38,10 +39,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
       },
     }
   }
-
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-  await Promise.all([...getCommonQueries(apolloClient)])
 
   return addApolloState(apolloClient, {
     props: { ...commonProps },

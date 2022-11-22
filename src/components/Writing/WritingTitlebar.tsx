@@ -3,7 +3,7 @@ import { Plus, Radio } from 'react-feather'
 
 import Button, { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import { DialogComponent } from '../Dialog'
 import SegmentedControl from '../SegmentedController'
@@ -11,11 +11,11 @@ import { WritingContext } from './PostsList'
 import { WritingSubscriptionForm } from './SubscriptionForm'
 
 export function WritingTitlebar({ scrollContainerRef }) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   console.log('viewer query data', data)
 
   function getAddButton() {
-    if (data?.viewer?.isViewerSiteAdmin) {
+    if (data?.context?.userSite?.siteRole === 'ADMIN') {
       return (
         <GhostButton
           href="/writing/new"
@@ -31,7 +31,7 @@ export function WritingTitlebar({ scrollContainerRef }) {
   }
 
   function getSubscribeButton() {
-    if (data?.viewer?.isViewerSiteAdmin) return null
+    if (data?.context?.userSite?.siteRole === 'ADMIN') return null
     return (
       <DialogComponent
         title="Newsletter"
@@ -56,9 +56,9 @@ export function WritingTitlebar({ scrollContainerRef }) {
   }
 
   function getChildren() {
-    const { data } = useViewerQuery()
+    const { data } = useContextQuery()
     const { setFilter, filter } = React.useContext(WritingContext)
-    if (data?.viewer?.isViewerSiteAdmin) {
+    if (data?.context?.userSite?.siteRole === 'ADMIN') {
       return (
         <div className="pt-2 pb-1">
           <SegmentedControl
