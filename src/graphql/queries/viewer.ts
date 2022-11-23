@@ -5,7 +5,7 @@ import {
   UserSettingsFragment,
 } from '~/graphql/fragments/user'
 
-import { SiteInfoFragment, UserSiteInfoFragment } from '../fragments/site'
+import { SiteInfoFragment, UserSiteFragment } from '../fragments/site'
 
 export const GET_VIEWER_SETTINGS = gql`
   query getViewerWithSettings {
@@ -30,11 +30,11 @@ export const GET_CONTEXT = gql`
         ...SiteInfo
       }
       userSite {
-        ...UserSiteInfo
+        ...UserSite
       }
     }
   }
   ${UserInfoFragment}
   ${SiteInfoFragment}
-  ${UserSiteInfoFragment}
+  ${UserSiteFragment}
 `

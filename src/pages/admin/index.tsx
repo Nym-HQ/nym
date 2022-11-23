@@ -47,7 +47,7 @@ export async function getServerSideProps(ctx) {
       },
     }
   }
-  if (graphqlData[0]?.data?.context?.viewer?.isAdmin) {
+  if (!graphqlData[0]?.data?.context?.viewer?.isAdmin) {
     return {
       redirect: {
         destination: '/',

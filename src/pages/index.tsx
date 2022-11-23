@@ -55,7 +55,8 @@ function AppIntro() {
   const router = useRouter()
 
   if (data?.context?.viewer) {
-    const { data } = useGetSitesQuery()
+    const { data: userSites } = useGetSitesQuery()
+    console.log(userSites)
 
     return (
       <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
@@ -79,7 +80,7 @@ function AppIntro() {
             </div>
           </div>
           <section>
-            <UserSitesList sites={data?.userSites} />
+            <UserSitesList sites={userSites?.userSites} />
             <div className="flex justify-center mt-4">
               <PrimaryButton
                 onClick={() => {

@@ -941,12 +941,41 @@ export type SiteInfoFragment = {
   social_github?: string | null | undefined
 }
 
-export type UserSiteInfoFragment = {
+export type UserSiteFragment = {
   __typename?: 'UserSite'
   id: string
   userId?: string | null | undefined
   siteRole?: SiteRole | null | undefined
   site?: { __typename?: 'Site'; id: string } | null | undefined
+}
+
+export type UserSiteInfoFragment = {
+  __typename?: 'UserSite'
+  id: string
+  userId?: string | null | undefined
+  siteRole?: SiteRole | null | undefined
+  site?:
+    | {
+        __typename: 'Site'
+        id: string
+        subdomain?: string | null | undefined
+        parkedDomain?: string | null | undefined
+        plan?: string | null | undefined
+        name?: string | null | undefined
+        description?: string | null | undefined
+        logo?: string | null | undefined
+        banner?: string | null | undefined
+        attach_css?: string | null | undefined
+        attach_js?: string | null | undefined
+        mailgun_region?: string | null | undefined
+        mailgun_domain?: string | null | undefined
+        mailgun_api_key?: string | null | undefined
+        social_twitter?: string | null | undefined
+        social_youtube?: string | null | undefined
+        social_github?: string | null | undefined
+      }
+    | null
+    | undefined
 }
 
 export type UserInfoFragment = {
@@ -1897,7 +1926,28 @@ export type GetSitesQuery = {
         id: string
         userId?: string | null | undefined
         siteRole?: SiteRole | null | undefined
-        site?: { __typename?: 'Site'; id: string } | null | undefined
+        site?:
+          | {
+              __typename: 'Site'
+              id: string
+              subdomain?: string | null | undefined
+              parkedDomain?: string | null | undefined
+              plan?: string | null | undefined
+              name?: string | null | undefined
+              description?: string | null | undefined
+              logo?: string | null | undefined
+              banner?: string | null | undefined
+              attach_css?: string | null | undefined
+              attach_js?: string | null | undefined
+              mailgun_region?: string | null | undefined
+              mailgun_domain?: string | null | undefined
+              mailgun_api_key?: string | null | undefined
+              social_twitter?: string | null | undefined
+              social_youtube?: string | null | undefined
+              social_github?: string | null | undefined
+            }
+          | null
+          | undefined
       }>
     | null
     | undefined
@@ -2232,6 +2282,16 @@ export const QuestionsConnectionFragmentDoc = gql`
   }
   ${QuestionListItemFragmentDoc}
 `
+export const UserSiteFragmentDoc = gql`
+  fragment UserSite on UserSite {
+    id
+    userId
+    siteRole
+    site {
+      id
+    }
+  }
+`
 export const SiteInfoFragmentDoc = gql`
   fragment SiteInfo on Site {
     __typename
@@ -2259,9 +2319,10 @@ export const UserSiteInfoFragmentDoc = gql`
     userId
     siteRole
     site {
-      id
+      ...SiteInfo
     }
   }
+  ${SiteInfoFragmentDoc}
 `
 export const UserSettingsFragmentDoc = gql`
   fragment UserSettings on User {
@@ -4318,13 +4379,13 @@ export const ContextDocument = gql`
         ...SiteInfo
       }
       userSite {
-        ...UserSiteInfo
+        ...UserSite
       }
     }
   }
   ${UserInfoFragmentDoc}
   ${SiteInfoFragmentDoc}
-  ${UserSiteInfoFragmentDoc}
+  ${UserSiteFragmentDoc}
 `
 
 /**

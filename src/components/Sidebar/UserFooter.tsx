@@ -83,10 +83,10 @@ export function UserFooter() {
           </a>
         </Link>
         <GhostButton
-          aria-label="Manage settings"
+          aria-label="Profile Settings"
           onClick={() => setIsOpen(false)}
           size="small-square"
-          href="/settings"
+          href="/profile"
         >
           <Settings size={16} />
         </GhostButton>

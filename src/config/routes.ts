@@ -54,14 +54,14 @@ const routes = {
       url: 'writing',
     }),
   },
-  settings: {
-    label: 'Settings',
-    path: '/settings',
+  profile: {
+    label: 'Profile',
+    path: '/profile',
     seo: extendSEO({
-      title: 'Settings',
+      title: 'Profile',
       description: 'Manage your profile.',
       image: 'og/settings.png',
-      url: 'settings',
+      url: 'profile',
     }),
   },
 }

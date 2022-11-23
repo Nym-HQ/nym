@@ -30,13 +30,13 @@ export function UserSettings() {
     <Detail.Container ref={scrollContainerRef}>
       <TitleBar
         magicTitle
-        title={'Settings'}
+        title={'Profile Settings'}
         titleRef={titleRef}
         scrollContainerRef={scrollContainerRef}
       />
       <Detail.ContentContainer>
         <Detail.Header>
-          <Detail.Title ref={titleRef}>Settings</Detail.Title>
+          <Detail.Title ref={titleRef}>Profile Settings</Detail.Title>
         </Detail.Header>
 
         <div className="divide-y divide-gray-200 py-12 dark:divide-gray-800">
@@ -46,12 +46,12 @@ export function UserSettings() {
             <UsernameForm viewer={data?.context?.viewer} />
           </div>
 
-          {data?.context?.viewer.email && (
+          {/* {data?.context?.viewer.email && (
             <div className="space-y-8 py-12">
               <h3 className="text-primary text-lg font-bold">Emails</h3>
               <EmailPreferences viewer={data?.context?.viewer} />
             </div>
-          )}
+          )} */}
 
           <UserSettingsFooter />
         </div>

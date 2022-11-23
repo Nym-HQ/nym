@@ -24,11 +24,7 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { getContext } from '~/graphql/context'
-import {
-  SiteRole,
-  useContextQuery,
-  useEditSiteMutation,
-} from '~/graphql/types.generated'
+import { useContextQuery, useEditSiteMutation } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
@@ -92,7 +88,7 @@ function AdminSettingsPage(props) {
       />
 
       <Detail.ContentContainer>
-        <Detail.Title>Settings</Detail.Title>
+        <Detail.Title>Site Settings</Detail.Title>
 
         <Subsection title="General Settings">
           <div className="grid grid-cols-6 gap-6">
@@ -401,7 +397,7 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-  if (graphqlData[0]?.data?.context?.viewer?.isAdmin) {
+  if (!graphqlData[0]?.data?.context?.viewer?.isAdmin) {
     return {
       redirect: {
         destination: '/',
