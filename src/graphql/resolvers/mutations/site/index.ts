@@ -9,6 +9,7 @@ import {
   MutationEditSiteDomainArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
+import { preservedSubdomains } from '~/lib/consts'
 import { addDomainToProject, removeDomainFromProject } from '~/lib/vercel'
 
 export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
@@ -85,6 +86,9 @@ export async function editSiteDomain(
 
   if (existing.subdomain !== subdomain)
     throw new UserInputError('Slug already exists')
+
+  if (preservedSubdomains.includes(subdomain))
+    throw new UserInputError('Subdomain is reserved')
 
   // nothing changed
   if (existing.parkedDomain === parkedDomain) {
