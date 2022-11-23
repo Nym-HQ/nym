@@ -5,7 +5,7 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { PageEditor } from '~/components/Page/Editor/PageEditor'
 import { getContext } from '~/graphql/context'
 import { GET_PAGE } from '~/graphql/queries/pages'
-import { SiteRole, useContextQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
@@ -13,8 +13,7 @@ import { getCommonPageProps } from '~/lib/commonProps'
 function EditPagePage(props) {
   const { slug } = props
   const { data } = useContextQuery()
-  if (data?.context?.userSite?.siteRole !== SiteRole.Admin)
-    return <Detail.Null type="404" />
+  if (!data?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
   return <PageEditor slug={slug} />
 }
 
