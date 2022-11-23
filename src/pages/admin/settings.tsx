@@ -24,7 +24,11 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { getContext } from '~/graphql/context'
-import { useContextQuery, useEditSiteMutation } from '~/graphql/types.generated'
+import {
+  SiteRole,
+  useContextQuery,
+  useEditSiteMutation,
+} from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
@@ -397,7 +401,7 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-  if (graphqlData[0]?.data?.context?.userSite?.siteRole !== 'ADMIN') {
+  if (graphqlData[0]?.data?.context?.viewer?.isAdmin) {
     return {
       redirect: {
         destination: '/',

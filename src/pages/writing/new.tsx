@@ -4,14 +4,14 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
 import { getContext } from '~/graphql/context'
-import { useContextQuery } from '~/graphql/types.generated'
+import { SiteRole, useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function NewPostPage(props) {
   const { data } = useContextQuery()
-  if (data?.context?.userSite?.siteRole !== 'ADMIN')
+  if (data?.context?.userSite?.siteRole !== SiteRole.Admin)
     return <Detail.Null type="404" />
   return <PostEditor />
 }

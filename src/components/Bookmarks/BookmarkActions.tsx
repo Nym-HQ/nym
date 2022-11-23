@@ -64,7 +64,7 @@ export function BookmarkActions({ bookmark }) {
   return (
     <div className="flex items-center space-x-2">
       {getReactionButton(bookmark)}
-      {data?.context?.userSite?.siteRole === 'ADMIN' && (
+      {data?.context?.viewer?.isAdmin && (
         <EditBookmarkDialog
           bookmark={bookmark}
           trigger={<Button data-cy="open-edit-bookmark-dialog">Edit</Button>}

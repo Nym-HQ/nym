@@ -28,7 +28,7 @@ export const UserSiteInfoFragment = gql`
     userId
     siteRole
     site {
-      ...SiteInfo
+      id
     }
   }
   ${SiteInfoFragment}

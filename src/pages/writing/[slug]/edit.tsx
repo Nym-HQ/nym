@@ -6,7 +6,7 @@ import { withProviders } from '~/components/Providers/withProviders'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
 import { getContext } from '~/graphql/context'
 import { GET_POST } from '~/graphql/queries/posts'
-import { useContextQuery } from '~/graphql/types.generated'
+import { SiteRole, useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
@@ -14,7 +14,7 @@ import { getCommonPageProps } from '~/lib/commonProps'
 function EditPostPage(props) {
   const { slug } = props
   const { data } = useContextQuery()
-  if (data?.context?.userSite?.siteRole !== 'ADMIN')
+  if (data?.context?.userSite?.siteRole !== SiteRole.Admin)
     return <Detail.Null type="404" />
   return <PostEditor slug={slug} />
 }

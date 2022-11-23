@@ -551,7 +551,7 @@ export enum UserRole {
 export type UserSite = {
   __typename?: 'UserSite'
   id: Scalars['ID']
-  site: Site
+  site?: Maybe<Site>
   siteRole?: Maybe<SiteRole>
   userId?: Maybe<Scalars['String']>
 }
@@ -946,25 +946,7 @@ export type UserSiteInfoFragment = {
   id: string
   userId?: string | null | undefined
   siteRole?: SiteRole | null | undefined
-  site: {
-    __typename: 'Site'
-    id: string
-    subdomain?: string | null | undefined
-    parkedDomain?: string | null | undefined
-    plan?: string | null | undefined
-    name?: string | null | undefined
-    description?: string | null | undefined
-    logo?: string | null | undefined
-    banner?: string | null | undefined
-    attach_css?: string | null | undefined
-    attach_js?: string | null | undefined
-    mailgun_region?: string | null | undefined
-    mailgun_domain?: string | null | undefined
-    mailgun_api_key?: string | null | undefined
-    social_twitter?: string | null | undefined
-    social_youtube?: string | null | undefined
-    social_github?: string | null | undefined
-  }
+  site?: { __typename?: 'Site'; id: string } | null | undefined
 }
 
 export type UserInfoFragment = {
@@ -1915,25 +1897,7 @@ export type GetSitesQuery = {
         id: string
         userId?: string | null | undefined
         siteRole?: SiteRole | null | undefined
-        site: {
-          __typename: 'Site'
-          id: string
-          subdomain?: string | null | undefined
-          parkedDomain?: string | null | undefined
-          plan?: string | null | undefined
-          name?: string | null | undefined
-          description?: string | null | undefined
-          logo?: string | null | undefined
-          banner?: string | null | undefined
-          attach_css?: string | null | undefined
-          attach_js?: string | null | undefined
-          mailgun_region?: string | null | undefined
-          mailgun_domain?: string | null | undefined
-          mailgun_api_key?: string | null | undefined
-          social_twitter?: string | null | undefined
-          social_youtube?: string | null | undefined
-          social_github?: string | null | undefined
-        }
+        site?: { __typename?: 'Site'; id: string } | null | undefined
       }>
     | null
     | undefined
@@ -2049,25 +2013,7 @@ export type ContextQuery = {
           id: string
           userId?: string | null | undefined
           siteRole?: SiteRole | null | undefined
-          site: {
-            __typename: 'Site'
-            id: string
-            subdomain?: string | null | undefined
-            parkedDomain?: string | null | undefined
-            plan?: string | null | undefined
-            name?: string | null | undefined
-            description?: string | null | undefined
-            logo?: string | null | undefined
-            banner?: string | null | undefined
-            attach_css?: string | null | undefined
-            attach_js?: string | null | undefined
-            mailgun_region?: string | null | undefined
-            mailgun_domain?: string | null | undefined
-            mailgun_api_key?: string | null | undefined
-            social_twitter?: string | null | undefined
-            social_youtube?: string | null | undefined
-            social_github?: string | null | undefined
-          }
+          site?: { __typename?: 'Site'; id: string } | null | undefined
         }
       | null
       | undefined
@@ -2313,10 +2259,9 @@ export const UserSiteInfoFragmentDoc = gql`
     userId
     siteRole
     site {
-      ...SiteInfo
+      id
     }
   }
-  ${SiteInfoFragmentDoc}
 `
 export const UserSettingsFragmentDoc = gql`
   fragment UserSettings on User {

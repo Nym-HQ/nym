@@ -3,7 +3,7 @@ import { Plus } from 'react-feather'
 
 import { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { useContextQuery } from '~/graphql/types.generated'
+import { SiteRole, useContextQuery } from '~/graphql/types.generated'
 
 import { AddBookmarkDialog } from './AddBookmarkDialog'
 import { BookmarksFilterMenu } from './FilterMenu'
@@ -12,7 +12,7 @@ export function BookmarksTitlebar({ scrollContainerRef }) {
   const { data } = useContextQuery()
 
   function getAddButton() {
-    if (data?.context?.userSite?.siteRole === 'ADMIN') {
+    if (data?.context?.viewer?.isAdmin) {
       return (
         <AddBookmarkDialog
           trigger={

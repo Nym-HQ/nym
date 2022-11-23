@@ -40,17 +40,11 @@ export async function getContext(ctx) {
   const userSite =
     site && viewer ? await getUserSiteById(viewer.id, site.id) : null
   if (viewer) {
-    if (site) {
-      // on sites, check siteRole
-      viewer.isAdmin = !!(
-        userSite &&
-        (userSite.siteRole === SiteRole.ADMIN ||
-          userSite.siteRole === SiteRole.OWNER)
-      )
-    } else {
-      // on app site, check user role
-      viewer.isAdmin = viewer.role === UserRole.Admin
-    }
+    // on app site, check user role
+    viewer.isAdmin =
+      viewer.role === UserRole.Admin ||
+      userSite?.siteRole === SiteRole.ADMIN ||
+      userSite?.siteRole === SiteRole.OWNER
   }
 
   return {

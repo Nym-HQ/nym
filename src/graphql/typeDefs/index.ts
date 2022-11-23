@@ -33,7 +33,7 @@ const typeDefs = gql`
     id: ID!
     userId: String
     siteRole: SiteRole
-    site: Site!
+    site: Site
   }
 
   type Page {

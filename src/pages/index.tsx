@@ -105,9 +105,17 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const commonProps = await getCommonPageProps(ctx)
-  const { res } = ctx
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
 
+  const graphql = [...getCommonQueries(apolloClient)]
+
+  let commonProps = await getCommonPageProps(ctx)
+  if (!commonProps.site.isAppDomain) {
+    graphql.push(apolloClient.query({ query: GET_HOME_PAGE }))
+  }
+  const graphqlData = await Promise.all(graphql)
+  commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -117,16 +125,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     }
   }
 
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-
-  const graphql = [...getCommonQueries(apolloClient)]
-  if (!commonProps.site.isAppDomain) {
-    graphql.push(apolloClient.query({ query: GET_HOME_PAGE }))
-  }
-  const commonQuries = await Promise.all(graphql)
-
-  if (commonQuries[1].data?.context?.viewer && commonProps.site.isAppDomain) {
+  if (graphqlData[0].data?.context?.viewer && commonProps.site.isAppDomain) {
     await apolloClient.query({ query: GET_USER_SITES })
   }
 

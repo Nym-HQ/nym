@@ -2,15 +2,11 @@ import * as React from 'react'
 
 import { ListDetailView } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
-import { useContextQuery } from '~/graphql/types.generated'
+import { SiteRole, useContextQuery } from '~/graphql/types.generated'
 
 function MissingPage() {
   const { data } = useContextQuery()
-  return (
-    <Detail.Null
-      type={data?.context?.userSite?.siteRole === 'ADMIN' ? 'Page' : '404'}
-    />
-  )
+  return <Detail.Null type={data?.context?.viewer?.isAdmin ? 'Page' : '404'} />
 }
 
 export default function Home() {

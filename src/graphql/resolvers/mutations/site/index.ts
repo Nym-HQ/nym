@@ -1,3 +1,4 @@
+import { SiteRole } from '@prisma/client'
 import { UserInputError } from 'apollo-server-errors'
 
 import { Context } from '~/graphql/context'
@@ -134,7 +135,7 @@ export async function addSite(_, args: MutationAddSiteArgs, ctx: Context) {
     data: {
       userId: viewer.id,
       siteId: newSite.id,
-      siteRole: 'OWNER',
+      siteRole: SiteRole.OWNER,
     },
   })
   return {
@@ -154,7 +155,7 @@ export async function deleteSite(
   let canDelete = false
 
   if (subdomain == site.subdomain) {
-    canDelete = userSite?.siteRole === 'OWNER'
+    canDelete = userSite?.siteRole === SiteRole.OWNER
   } else {
     const existing = await prisma.site.findUnique({ where: { subdomain } })
     if (existing) {
@@ -164,7 +165,7 @@ export async function deleteSite(
           siteId: existing.id,
         },
       })
-      canDelete = userSite?.siteRole === 'OWNER'
+      canDelete = userSite?.siteRole === SiteRole.OWNER
     }
   }
 

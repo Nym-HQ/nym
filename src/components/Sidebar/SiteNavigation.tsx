@@ -6,13 +6,10 @@ import { AddBookmarkDialog } from '~/components/Bookmarks/AddBookmarkDialog'
 import { GhostButton } from '~/components/Button'
 import {
   AMAIcon,
-  AppDissectionIcon,
   BookAtlasIcon,
   BookmarksIcon,
   ExternalLinkIcon,
   GitHubIcon,
-  GlobeIcon,
-  HackerNewsIcon,
   HomeIcon,
   PageIcon,
   StaffDesignIcon,
@@ -20,7 +17,11 @@ import {
   WritingIcon,
   YouTubeIcon,
 } from '~/components/Icon'
-import { useContextQuery, useGetPagesQuery } from '~/graphql/types.generated'
+import {
+  SiteRole,
+  useContextQuery,
+  useGetPagesQuery,
+} from '~/graphql/types.generated'
 
 import { NavigationLink } from './NavigationLink'
 
@@ -76,10 +77,9 @@ export function SiteSidebarNavigation() {
           icon: BookmarksIcon,
           trailingAccessory: null,
           isActive: router.asPath.indexOf('/bookmarks') >= 0,
-          trailingAction:
-            data?.context?.userSite?.siteRole === 'ADMIN'
-              ? ThisAddBookmarkDialog
-              : null,
+          trailingAction: data?.context?.viewer?.isAdmin
+            ? ThisAddBookmarkDialog
+            : null,
           isExternal: false,
         },
 
@@ -103,7 +103,7 @@ export function SiteSidebarNavigation() {
     label: 'Pages',
     items: [],
   }
-  if (data?.context?.userSite?.siteRole === 'ADMIN') {
+  if (data?.context?.viewer?.isAdmin) {
     pagesSection.items.push({
       href: '/pages',
       label: 'All pages',
@@ -171,7 +171,7 @@ export function SiteSidebarNavigation() {
     })
   }
 
-  if (data?.context?.userSite?.siteRole === 'ADMIN') {
+  if (data?.context?.viewer?.isAdmin) {
     sections.push({
       label: 'Admin',
       items: [

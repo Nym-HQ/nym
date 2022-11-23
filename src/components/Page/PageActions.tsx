@@ -1,12 +1,12 @@
 import * as React from 'react'
 
 import Button from '~/components/Button'
-import { useContextQuery } from '~/graphql/types.generated'
+import { SiteRole, useContextQuery } from '~/graphql/types.generated'
 
 function getEditButton(page) {
   const { data } = useContextQuery()
 
-  if (data?.context?.userSite?.siteRole !== 'ADMIN') return null
+  if (data?.context?.userSite?.siteRole !== SiteRole.Admin) return null
 
   return (
     <Button href="/pages/[slug]/edit" as={`/pages/${page.slug}/edit`}>

@@ -51,7 +51,7 @@ export function AMATitlebar({ scrollContainerRef }) {
   }
 
   function getChildren() {
-    if (data?.context?.userSite?.siteRole === 'ADMIN') {
+    if (data?.context?.viewer?.isAdmin) {
       return (
         <div className="pt-2 pb-1">
           <SegmentedControl

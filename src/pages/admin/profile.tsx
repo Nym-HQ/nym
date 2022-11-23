@@ -4,6 +4,7 @@
  *
  */
 
+import { SiteRole } from '@prisma/client'
 import * as React from 'react'
 
 import {
@@ -113,7 +114,7 @@ export async function getServerSideProps(ctx) {
       },
     }
   }
-  if (graphqlData[0]?.data?.context?.userSite?.siteRole !== 'ADMIN') {
+  if (graphqlData[0]?.data?.context?.viewer?.isAdmin) {
     return {
       redirect: {
         destination: '/',

@@ -2,7 +2,11 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { ListContainer } from '~/components/ListDetail/ListContainer'
-import { useContextQuery, useGetPagesQuery } from '~/graphql/types.generated'
+import {
+  SiteRole,
+  useContextQuery,
+  useGetPagesQuery,
+} from '~/graphql/types.generated'
 
 import { LoadingSpinner } from '../LoadingSpinner'
 import { PageListItem } from './PageListItem'
@@ -25,14 +29,14 @@ export function PagesList() {
           filter: {
             published: true,
             featuredOnly: false,
-            includeHomepage: data?.context?.userSite?.siteRole === 'ADMIN',
+            includeHomepage: data?.context?.viewer?.isAdmin,
           },
         }
       : {
           filter: {
             published: false,
             featuredOnly: false,
-            includeHomepage: data?.context?.userSite?.siteRole === 'ADMIN',
+            includeHomepage: data?.context?.viewer?.isAdmin,
           },
         }
 
