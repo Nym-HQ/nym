@@ -2,11 +2,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { ListContainer } from '~/components/ListDetail/ListContainer'
-import {
-  SiteRole,
-  useContextQuery,
-  useGetPagesQuery,
-} from '~/graphql/types.generated'
+import { useContextQuery, useGetPagesQuery } from '~/graphql/types.generated'
 
 import { LoadingSpinner } from '../LoadingSpinner'
 import { PageListItem } from './PageListItem'

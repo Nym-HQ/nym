@@ -17,11 +17,7 @@ import {
   WritingIcon,
   YouTubeIcon,
 } from '~/components/Icon'
-import {
-  SiteRole,
-  useContextQuery,
-  useGetPagesQuery,
-} from '~/graphql/types.generated'
+import { useContextQuery, useGetPagesQuery } from '~/graphql/types.generated'
 
 import { NavigationLink } from './NavigationLink'
 

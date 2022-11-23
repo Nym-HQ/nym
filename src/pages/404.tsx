@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { ListDetailView } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
-import { SiteRole, useContextQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 function MissingPage() {
   const { data } = useContextQuery()

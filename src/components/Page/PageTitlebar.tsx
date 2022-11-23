@@ -3,7 +3,7 @@ import { Plus, Radio } from 'react-feather'
 
 import Button, { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { SiteRole, useContextQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import { DialogComponent } from '../Dialog'
 import SegmentedControl from '../SegmentedController'

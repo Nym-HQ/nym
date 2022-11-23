@@ -4,7 +4,6 @@
  *
  */
 
-import { SiteRole } from '@prisma/client'
 import * as React from 'react'
 
 import { SiteLayout } from '~/components/Layouts'
