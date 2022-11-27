@@ -103,7 +103,10 @@ export async function addBookmark(
         tags: {
           connectOrCreate: {
             where: { name_siteId: { name: tag, siteId: site.id } },
-            create: { name: tag !== null ? tag.toLocaleLowerCase() : tag, siteId: site.id },
+            create: {
+              name: tag !== null ? tag.toLocaleLowerCase() : tag,
+              siteId: site.id,
+            },
           },
         },
         site: {

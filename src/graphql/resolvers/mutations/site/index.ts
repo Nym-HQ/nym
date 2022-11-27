@@ -8,8 +8,8 @@ import {
   MutationEditSiteArgs,
   MutationEditSiteDomainArgs,
 } from '~/graphql/types.generated'
-import { graphcdn } from '~/lib/graphcdn'
 import { preservedSubdomains } from '~/lib/consts'
+import { graphcdn } from '~/lib/graphcdn'
 import { addDomainToProject, removeDomainFromProject } from '~/lib/vercel'
 
 export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {

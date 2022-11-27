@@ -4,8 +4,8 @@ import { ChevronDown } from 'react-feather'
 
 import { useGetTagsQuery } from '~/graphql/types.generated'
 
-import { Tag } from '.'
 import { Input } from '../Input'
+import { Tag } from '.'
 
 export function TagPicker({ filter, onChange, defaultValue = undefined }) {
   const { data, loading } = useGetTagsQuery()
@@ -45,9 +45,13 @@ export function TagPicker({ filter, onChange, defaultValue = undefined }) {
             <ChevronDown size={16} aria-hidden="true" />
           </span>
         </Listbox.Button>
-        { isNew && (
+        {isNew && (
           <div className="absolute mt-1 w-full">
-            <Input value={newTag} onChange={handleNewTagChange} placeholder="New Tag" />
+            <Input
+              value={newTag}
+              onChange={handleNewTagChange}
+              placeholder="New Tag"
+            />
           </div>
         )}
         <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white text-base shadow-sm dark:border-gray-700 dark:bg-gray-700">

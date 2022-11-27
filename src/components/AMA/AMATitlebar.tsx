@@ -52,18 +52,18 @@ export function AMATitlebar({ scrollContainerRef }) {
 
   function getChildren() {
     // if (data?.context?.viewer?.isAdmin) {
-      return (
-        <div className="pt-2 pb-1">
-          <SegmentedControl
-            onSetActiveItem={() => setFilterPending(!filterPending)}
-            active={filterPending ? 'pending' : 'answered'}
-            items={[
-              { id: 'answered', label: 'Answered' },
-              { id: 'pending', label: 'Pending' },
-            ]}
-          />
-        </div>
-      )
+    return (
+      <div className="pt-2 pb-1">
+        <SegmentedControl
+          onSetActiveItem={() => setFilterPending(!filterPending)}
+          active={filterPending ? 'pending' : 'answered'}
+          items={[
+            { id: 'answered', label: 'Answered' },
+            { id: 'pending', label: 'Pending' },
+          ]}
+        />
+      </div>
+    )
     // }
     // return null
   }

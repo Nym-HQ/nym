@@ -13,8 +13,7 @@ export function isValidParkedDomain(domain: string): boolean {
   return domain && domain.indexOf('.') >= 0
 }
 
-
-export function isPreservedPath(path: string) : boolean {
+export function isPreservedPath(path: string): boolean {
   const preservedPaths = [
     '/api',
     '/admin',
@@ -22,7 +21,9 @@ export function isPreservedPath(path: string) : boolean {
     '/graphql',
     '/pages',
     '/profile',
-    '/u'
+    '/u',
   ]
-  return preservedPaths.findIndex((p) => path === p || path.startsWith(p + '/')) >= 0
+  return (
+    preservedPaths.findIndex((p) => path === p || path.startsWith(p + '/')) >= 0
+  )
 }
