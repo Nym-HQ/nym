@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { ListContainer } from '~/components/ListDetail/ListContainer'
-import { useGetPagesQuery, useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery, useGetPagesQuery } from '~/graphql/types.generated'
 
 import { LoadingSpinner } from '../LoadingSpinner'
 import { PageListItem } from './PageListItem'
@@ -17,7 +17,7 @@ export function PagesList() {
   const router = useRouter()
   const [filter, setFilter] = React.useState('published')
   let [scrollContainerRef, setScrollContainerRef] = React.useState(null)
-  const { data: viewerData } = useViewerQuery()
+  const { data } = useContextQuery()
 
   const variables =
     filter === 'published'
@@ -25,18 +25,23 @@ export function PagesList() {
           filter: {
             published: true,
             featuredOnly: false,
-            includeHomepage: viewerData?.viewer?.isViewerSiteAdmin,
+            includeHomepage: data?.context?.viewer?.isAdmin,
           },
         }
       : {
           filter: {
             published: false,
             featuredOnly: false,
-            includeHomepage: viewerData?.viewer?.isViewerSiteAdmin,
+            includeHomepage: data?.context?.viewer?.isAdmin,
           },
         }
 
-  const { data, error, loading, refetch } = useGetPagesQuery({ variables })
+  const {
+    data: pagesData,
+    error,
+    loading,
+    refetch,
+  } = useGetPagesQuery({ variables })
 
   React.useEffect(() => {
     refetch()
@@ -50,7 +55,7 @@ export function PagesList() {
     )
   }
 
-  if (loading && !data?.pages) {
+  if (loading && !pagesData?.pages) {
     return (
       <ListContainer onRef={setScrollContainerRef}>
         <PageTitlebar scrollContainerRef={scrollContainerRef} />
@@ -60,8 +65,6 @@ export function PagesList() {
       </ListContainer>
     )
   }
-
-  const { pages } = data
 
   const defaultContextValue = {
     filter,
@@ -74,7 +77,7 @@ export function PagesList() {
         <PageTitlebar scrollContainerRef={scrollContainerRef} />
 
         <div className="lg:space-y-1 lg:p-3">
-          {pages.map((page) => {
+          {pagesData.pages.map((page) => {
             const active = router.query?.slug === page.slug
 
             return <PageListItem key={page.id} page={page} active={active} />

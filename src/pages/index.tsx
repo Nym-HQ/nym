@@ -11,7 +11,7 @@ import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { GET_HOME_PAGE } from '~/graphql/queries/pages'
 import { GET_USER_SITES } from '~/graphql/queries/site'
-import { useGetSitesQuery, useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery, useGetSitesQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
@@ -51,11 +51,12 @@ function UserSitesList({ sites }) {
 function AppIntro() {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
-  const { data: viewerData } = useViewerQuery()
+  const { data } = useContextQuery()
   const router = useRouter()
 
-  if (viewerData?.viewer) {
-    const { data } = useGetSitesQuery()
+  if (data?.context?.viewer) {
+    const { data: userSites } = useGetSitesQuery()
+    console.log(userSites)
 
     return (
       <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
@@ -79,7 +80,7 @@ function AppIntro() {
             </div>
           </div>
           <section>
-            <UserSitesList sites={data?.userSites} />
+            <UserSitesList sites={userSites?.userSites} />
             <div className="flex justify-center mt-4">
               <PrimaryButton
                 onClick={() => {
@@ -105,9 +106,17 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const commonProps = await getCommonPageProps(ctx)
-  const { res } = ctx
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
 
+  const graphql = [...getCommonQueries(apolloClient)]
+
+  let commonProps = await getCommonPageProps(ctx)
+  if (!commonProps.site.isAppDomain) {
+    graphql.push(apolloClient.query({ query: GET_HOME_PAGE }))
+  }
+  const graphqlData = await Promise.all(graphql)
+  commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -117,16 +126,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     }
   }
 
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-
-  const graphql = [...getCommonQueries(apolloClient)]
-  if (!commonProps.site.isAppDomain) {
-    graphql.push(apolloClient.query({ query: GET_HOME_PAGE }))
-  }
-  const commonQuries = await Promise.all(graphql)
-
-  if (commonQuries[1].data?.viewer && commonProps.site.isAppDomain) {
+  if (graphqlData[0].data?.context?.viewer && commonProps.site.isAppDomain) {
     await apolloClient.query({ query: GET_USER_SITES })
   }
 

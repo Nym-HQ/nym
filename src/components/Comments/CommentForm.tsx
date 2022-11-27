@@ -8,7 +8,7 @@ import { GET_COMMENTS } from '~/graphql/queries/comments'
 import {
   CommentType,
   useAddCommentMutation,
-  useViewerQuery,
+  useContextQuery,
 } from '~/graphql/types.generated'
 import { useDebounce } from '~/hooks/useDebounce'
 import { timestampToCleanTime } from '~/lib/transformers'
@@ -20,7 +20,7 @@ interface Props {
 }
 
 export function CommentForm({ refId, type, openModal }: Props) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   const [text, setText] = React.useState('')
   const [error, setError] = React.useState(null)
 
@@ -38,11 +38,10 @@ export function CommentForm({ refId, type, openModal }: Props) {
         author: {
           __typename: 'User',
           id: uuidv4(),
-          username: data?.viewer?.username,
-          avatar: data?.viewer?.avatar,
-          name: data?.viewer?.name,
-          role: data?.viewer?.role,
-          isViewer: true,
+          username: data?.context?.viewer?.username,
+          avatar: data?.context?.viewer?.avatar,
+          name: data?.context?.viewer?.name,
+          role: data?.context?.viewer?.role,
         },
       },
     },
@@ -66,7 +65,7 @@ export function CommentForm({ refId, type, openModal }: Props) {
     e.preventDefault()
 
     // not signed in, save to localstorage
-    if (!data?.viewer) {
+    if (!data?.context?.viewer) {
       // persist everything to local storage so we don't lose it
       localStorage.setItem(refId, text)
       // pop the sign in modal

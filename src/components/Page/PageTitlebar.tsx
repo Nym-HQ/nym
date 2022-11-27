@@ -3,7 +3,7 @@ import { Plus, Radio } from 'react-feather'
 
 import Button, { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import { DialogComponent } from '../Dialog'
 import SegmentedControl from '../SegmentedController'
@@ -11,11 +11,10 @@ import { PageContext } from './PagesList'
 import { PageSubscriptionForm } from './SubscriptionForm'
 
 export function PageTitlebar({ scrollContainerRef }) {
-  const { data } = useViewerQuery()
-  console.log('viewer query data', data)
+  const { data } = useContextQuery()
 
   function getAddButton() {
-    if (data?.viewer?.isViewerSiteAdmin) {
+    if (data?.context?.viewer?.isAdmin) {
       return (
         <GhostButton
           href="/pages/new"
@@ -31,7 +30,7 @@ export function PageTitlebar({ scrollContainerRef }) {
   }
 
   function getSubscribeButton() {
-    if (data?.viewer?.isViewerSiteAdmin) return null
+    if (data?.context?.viewer?.isAdmin) return null
     return (
       <DialogComponent
         title="Newsletter"
@@ -56,9 +55,9 @@ export function PageTitlebar({ scrollContainerRef }) {
   }
 
   function getChildren() {
-    const { data } = useViewerQuery()
+    const { data } = useContextQuery()
     const { setFilter, filter } = React.useContext(PageContext)
-    if (data?.viewer?.isViewerSiteAdmin) {
+    if (data?.context?.viewer?.isAdmin) {
       return (
         <div className="pt-2 pb-1">
           <SegmentedControl

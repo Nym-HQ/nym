@@ -7,7 +7,7 @@ import { prisma } from '~/lib/prisma'
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { token } = req.query
 
-  function done(path = '/settings') {
+  function done(path = '/profile') {
     res.writeHead(301, { Location: `${baseUrl}${path}` })
     res.end()
   }

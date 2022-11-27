@@ -2,13 +2,13 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { BookmarksIcon, HomeIcon } from '~/components/Icon'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import { NavigationLink } from './NavigationLink'
 
 export function AppSidebarNavigation() {
   const router = useRouter()
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   const sections = [
     {
       label: null,

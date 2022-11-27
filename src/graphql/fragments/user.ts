@@ -8,7 +8,6 @@ export const UserInfoFragment = gql`
     avatar
     name
     role
-    isViewer
     isAdmin
   }
 `
@@ -21,21 +20,5 @@ export const UserSettingsFragment = gql`
       type
       subscribed
     }
-  }
-`
-
-export const ViewerInfoFragment = gql`
-  fragment ViewerInfo on User {
-    isViewer
-    isViewerSiteAdmin
-    viewerSite {
-      id
-      subdomain
-      parkedDomain
-    }
-    viewerUserSite {
-      siteRole
-    }
-    isAdmin
   }
 `

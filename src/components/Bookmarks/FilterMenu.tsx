@@ -15,10 +15,6 @@ export function BookmarksFilterMenu() {
 
   const { tags } = data
 
-  const allowedTags = ['website', 'reading', 'portfolio']
-
-  const filtered = tags.filter((t) => allowedTags.indexOf(t.name) >= 0)
-
   return (
     <div className="flex items-center justify-center">
       <div className="relative inline-block text-left">
@@ -77,7 +73,7 @@ export function BookmarksFilterMenu() {
                     </Menu.Item>
                   </div>
                   <div className="flex flex-col py-2">
-                    {filtered.map((t) => (
+                    {tags.map((t) => (
                       <Menu.Item key={t.name}>
                         {({ active }) => (
                           <a

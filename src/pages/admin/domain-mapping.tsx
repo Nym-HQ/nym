@@ -20,8 +20,8 @@ import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { getContext } from '~/graphql/context'
 import {
+  useContextQuery,
   useEditSiteDomainMutation,
-  useViewerQuery,
 } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
@@ -29,9 +29,9 @@ import { getCommonPageProps } from '~/lib/commonProps'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
 function AdminDomainMappingPage(props) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   const [parkedDomain, setParkedDomain] = React.useState(
-    data?.viewer?.viewerSite?.parkedDomain || ''
+    data?.context?.site?.parkedDomain || ''
   )
 
   const [editSiteDomain, { loading: saving }] = useEditSiteDomainMutation({
@@ -43,7 +43,7 @@ function AdminDomainMappingPage(props) {
   const saveDomainMapping = () => {
     return editSiteDomain({
       variables: {
-        subdomain: data?.viewer?.viewerSite?.subdomain,
+        subdomain: data?.context?.site?.subdomain,
         data: {
           parkedDomain,
         },
@@ -136,26 +136,14 @@ AdminDomainMappingPage.getLayout = function getLayout(page) {
 }
 
 export async function getServerSideProps(ctx) {
-  const commonProps = await getCommonPageProps(ctx)
-  const { req, res } = ctx
-
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
         destination: '/create-your-site',
-        permanent: false,
-      },
-    }
-  }
-
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
-
-  if (!graphqlData[1]?.data?.viewer?.isViewerSiteAdmin) {
-    return {
-      redirect: {
-        destination: '/',
         permanent: false,
       },
     }

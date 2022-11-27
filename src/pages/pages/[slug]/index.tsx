@@ -22,19 +22,7 @@ function PagePagePage(props) {
 export async function getServerSideProps(ctx) {
   const {
     params: { slug },
-    req,
-    res,
   } = ctx
-
-  const commonProps = await getCommonPageProps(ctx)
-  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
-    return {
-      redirect: {
-        destination: '/create-your-site',
-        permanent: false,
-      },
-    }
-  }
 
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
@@ -44,7 +32,7 @@ export async function getServerSideProps(ctx) {
     variables: { slug },
   })
 
-  await Promise.all([
+  const graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),
     apolloClient.query({ query: GET_PAGES }),
 
@@ -54,6 +42,15 @@ export async function getServerSideProps(ctx) {
         variables: { refId: data.page.id, type: CommentType.Bookmark },
       }),
   ])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
+    return {
+      redirect: {
+        destination: '/create-your-site',
+        permanent: false,
+      },
+    }
+  }
 
   return addApolloState(apolloClient, {
     props: {

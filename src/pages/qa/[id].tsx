@@ -19,24 +19,11 @@ function QuestionDetailPage(props) {
 export async function getServerSideProps(ctx) {
   const {
     params: { id },
-    req,
-    res,
   } = ctx
-
-  const commonProps = await getCommonPageProps(ctx)
-  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
-    return {
-      redirect: {
-        destination: '/create-your-site',
-        permanent: false,
-      },
-    }
-  }
 
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
-
-  await Promise.all([
+  const graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),
 
     apolloClient.query({
@@ -54,6 +41,15 @@ export async function getServerSideProps(ctx) {
       variables: { refId: id, type: CommentType.Question },
     }),
   ])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
+    return {
+      redirect: {
+        destination: '/create-your-site',
+        permanent: false,
+      },
+    }
+  }
 
   return addApolloState(apolloClient, {
     props: {

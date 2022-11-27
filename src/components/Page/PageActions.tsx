@@ -1,12 +1,12 @@
 import * as React from 'react'
 
 import Button from '~/components/Button'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 function getEditButton(page) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
 
-  if (!data?.viewer?.isViewerSiteAdmin) return null
+  if (!data?.context?.viewer?.isAdmin) return null
 
   return (
     <Button href="/pages/[slug]/edit" as={`/pages/${page.slug}/edit`}>

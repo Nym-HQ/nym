@@ -29,12 +29,19 @@ HqPage.getLayout = function getLayout(page) {
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const commonProps = await getCommonPageProps(ctx)
-
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 
-  await Promise.all([...getCommonQueries(apolloClient)])
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
+    return {
+      redirect: {
+        destination: '/create-your-site',
+        permanent: false,
+      },
+    }
+  }
 
   return addApolloState(apolloClient, {
     props: {

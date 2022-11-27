@@ -5,8 +5,8 @@ import Button from '~/components/Button'
 import { GET_BOOKMARK } from '~/graphql/queries/bookmarks'
 import {
   ReactionType,
+  useContextQuery,
   useToggleReactionMutation,
-  useViewerQuery,
 } from '~/graphql/types.generated'
 
 import { ReactionButton } from '../Button/ReactionButton'
@@ -60,11 +60,11 @@ function getReactionButton(bookmark) {
 }
 
 export function BookmarkActions({ bookmark }) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   return (
     <div className="flex items-center space-x-2">
       {getReactionButton(bookmark)}
-      {data?.viewer?.isViewerSiteAdmin && (
+      {data?.context?.viewer?.isAdmin && (
         <EditBookmarkDialog
           bookmark={bookmark}
           trigger={<Button data-cy="open-edit-bookmark-dialog">Edit</Button>}

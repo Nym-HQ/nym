@@ -8,13 +8,13 @@ import { Textarea } from '~/components/Input'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import {
   useAddQuestionMutation,
-  useViewerQuery,
+  useContextQuery,
 } from '~/graphql/types.generated'
 
 import { Avatar } from '../Avatar'
 
 export function AddQuestionForm({ closeModal }) {
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   const [title, setTitle] = React.useState('')
   const [description, setDescription] = React.useState('')
   const [error, setError] = React.useState('')
@@ -64,7 +64,7 @@ export function AddQuestionForm({ closeModal }) {
     }
   }
 
-  const { viewer } = data
+  const { viewer } = data?.context
 
   return (
     <form className="items-stretch space-y-4 p-4" onSubmit={onSubmit}>

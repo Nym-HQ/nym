@@ -24,18 +24,13 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { getContext } from '~/graphql/context'
-import {
-  useEditSiteMutation,
-  useViewerQuery,
-  useViewSiteQuery,
-} from '~/graphql/types.generated'
+import { useContextQuery, useEditSiteMutation } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function AdminSettingsPage(props) {
-  const { data } = useViewerQuery()
-  const { data: siteData } = useViewSiteQuery()
+  const { data } = useContextQuery()
 
   const countrySelectorRef = React.createRef<HTMLDivElement>()
   const [countrySelectorOpen, setCountrySelectorOpen] = React.useState(false)
@@ -51,20 +46,33 @@ function AdminSettingsPage(props) {
     mailgun_region: 'US',
     mailgun_domain: '',
     mailgun_api_key: '',
-    ...(siteData?.viewSite || {}),
+    ...(data?.context?.site || {}),
   })
 
   const [editSite, { loading: saving }] = useEditSiteMutation({
     onCompleted({ editSite }) {
-      toast.success('Saved domain mapping information!')
+      toast.success('Saved site settings!')
     },
   })
 
   const saveSettings = () => {
     return editSite({
       variables: {
-        subdomain: data?.viewer?.viewerSite?.subdomain,
-        data: values,
+        subdomain: data?.context?.site?.subdomain,
+        data: {
+          name: values.name,
+          description: values.description,
+          attach_css: values.attach_css,
+          attach_js: values.attach_js,
+          banner: values.banner,
+          logo: values.logo,
+          mailgun_api_key: values.mailgun_api_key,
+          mailgun_domain: values.mailgun_domain,
+          mailgun_region: values.mailgun_region,
+          social_github: values.social_github,
+          social_twitter: values.social_twitter,
+          social_youtube: values.social_youtube,
+        },
       },
     })
   }
@@ -80,7 +88,7 @@ function AdminSettingsPage(props) {
       />
 
       <Detail.ContentContainer>
-        <Detail.Title>Settings</Detail.Title>
+        <Detail.Title>Site Settings</Detail.Title>
 
         <Subsection title="General Settings">
           <div className="grid grid-cols-6 gap-6">
@@ -316,7 +324,7 @@ function AdminSettingsPage(props) {
                       setCountrySelectorOpen(!countrySelectorOpen)
                     }}
                     onChange={(e) =>
-                      setValues({ ...values, mailgun_region: e.target.value })
+                      setValues({ ...values, mailgun_region: e })
                     }
                     selectedValue={
                       COUNTRIES.find(
@@ -376,8 +384,10 @@ function AdminSettingsPage(props) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { req, res } = ctx
-  const commonProps = await getCommonPageProps(ctx)
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -387,11 +397,7 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
-
-  if (!graphqlData[1]?.data?.viewer?.isViewerSiteAdmin) {
+  if (!graphqlData[0]?.data?.context?.viewer?.isAdmin) {
     return {
       redirect: {
         destination: '/',

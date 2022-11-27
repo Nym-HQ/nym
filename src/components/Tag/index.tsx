@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { XCircle } from 'react-feather'
+import { PlusCircle, XCircle } from 'react-feather'
 
 export function Tags({ tags }) {
   if (!tags || tags.length === 0) return null
@@ -50,6 +50,15 @@ export function Tag({ name }) {
           'border-gray-200 text-gray-600 dark:text-gray-300 bg-gray-200 bg-opacity-30 dark:bg-opacity-10 hover:bg-opacity-40'
         break
       }
+      case '__new_tag_picker': {
+        specificClasses =
+          'border-gray-200 text-gray-600 dark:text-gray-300 bg-gray-200 bg-opacity-30 dark:bg-opacity-10 hover:bg-opacity-40'
+        break
+      }
+      default: {
+        specificClasses =
+          'border-yellow-200 text-yellow-600 dark:text-yellow-200 bg-yellow-500 bg-opacity-5 dark:bg-opacity-10'
+      }
     }
   }
   return (
@@ -58,6 +67,11 @@ export function Tag({ name }) {
         <>
           <XCircle size={16} />
           <span>Clear tag</span>
+        </>
+      ) : name === '__new_tag_picker' ? (
+        <>
+          <PlusCircle size={16} />
+          <span>Add tag</span>
         </>
       ) : (
         name

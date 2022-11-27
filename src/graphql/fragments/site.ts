@@ -22,6 +22,17 @@ export const SiteInfoFragment = gql`
   }
 `
 
+export const UserSiteFragment = gql`
+  fragment UserSite on UserSite {
+    id
+    userId
+    siteRole
+    site {
+      id
+    }
+  }
+`
+
 export const UserSiteInfoFragment = gql`
   fragment UserSiteInfo on UserSite {
     id
@@ -31,4 +42,5 @@ export const UserSiteInfoFragment = gql`
       ...SiteInfo
     }
   }
+  ${SiteInfoFragment}
 `

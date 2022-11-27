@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import Button from '~/components/Button'
-import { useViewerQuery } from '~/graphql/types.generated'
+import { useContextQuery } from '~/graphql/types.generated'
 
 import { HeartFillIcon, HeartIcon } from '../Icon'
 import { SignInDialog } from '../SignInDialog'
@@ -17,7 +17,7 @@ interface Props {
 export function ReactionButton(props: Props) {
   const { id, onClick, hasReacted, count, loading } = props
 
-  const { data } = useViewerQuery()
+  const { data } = useContextQuery()
   const [hasReactedState, setHasReactedState] = React.useState(hasReacted)
   let currCount = count
   let nextCount = hasReactedState ? count - 1 : count + 1
@@ -40,7 +40,7 @@ export function ReactionButton(props: Props) {
     setNextTranslate(hasReacted ? 'translate-y-0' : '-translate-y-4')
   }, [id, hasReacted])
 
-  if (!data?.viewer) {
+  if (!data?.context?.viewer) {
     return (
       <SignInDialog
         trigger={

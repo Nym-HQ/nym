@@ -4,17 +4,32 @@ import { ChevronDown } from 'react-feather'
 
 import { useGetTagsQuery } from '~/graphql/types.generated'
 
+import { Input } from '../Input'
 import { Tag } from '.'
 
 export function TagPicker({ filter, onChange, defaultValue = undefined }) {
   const { data, loading } = useGetTagsQuery()
   const [selected, setSelected] = React.useState(defaultValue)
+  const [isNew, setNew] = React.useState(false)
+  const [newTag, setNewTag] = React.useState('')
 
   if (loading) return null
 
   function handleChange(val) {
-    setSelected(val)
-    onChange(val)
+    if (val === '__new_tag_picker') {
+      setNew(true)
+      onChange(null)
+      setSelected(null)
+    } else {
+      setSelected(val)
+      onChange(val)
+      setNew(false)
+    }
+  }
+
+  function handleNewTagChange(evt) {
+    setNewTag(evt.target.value || '')
+    onChange(evt.target.value || null)
   }
 
   return (
@@ -30,6 +45,15 @@ export function TagPicker({ filter, onChange, defaultValue = undefined }) {
             <ChevronDown size={16} aria-hidden="true" />
           </span>
         </Listbox.Button>
+        {isNew && (
+          <div className="absolute mt-1 w-full">
+            <Input
+              value={newTag}
+              onChange={handleNewTagChange}
+              placeholder="New Tag"
+            />
+          </div>
+        )}
         <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white text-base shadow-sm dark:border-gray-700 dark:bg-gray-700">
           <div className="flex flex-wrap p-2">
             {data.tags
@@ -44,12 +68,18 @@ export function TagPicker({ filter, onChange, defaultValue = undefined }) {
                 </Listbox.Option>
               ))}
           </div>
-          <div className="w-full border-t border-gray-150 p-2 dark:border-gray-600">
+          <div className="w-full flex border-t border-gray-150 p-2 dark:border-gray-600">
             <Listbox.Option
               className={`text-primary relative flex flex-none cursor-pointer select-none p-1`}
               value={null}
             >
               <Tag name={'__clear_tag_picker'} />
+            </Listbox.Option>
+            <Listbox.Option
+              className={`text-primary relative flex flex-none cursor-pointer select-none p-1`}
+              value={'__new_tag_picker'}
+            >
+              <Tag name={'__new_tag_picker'} />
             </Listbox.Option>
           </div>
         </Listbox.Options>

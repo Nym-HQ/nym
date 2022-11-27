@@ -70,9 +70,9 @@ export async function getQuestions(
     edges: [],
   }
 
-  if (!viewer?.isAdmin && filter.status === QuestionStatus.Pending) {
-    return nullResults
-  }
+  // if (!viewer?.isAdmin && filter.status === QuestionStatus.Pending) {
+  //   return nullResults
+  // }
 
   /*
     When we are paginating after a cursor, we need to skip the cursor object itself. 

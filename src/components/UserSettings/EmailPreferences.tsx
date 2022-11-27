@@ -81,7 +81,7 @@ export function EmailSubscriptionForm({ subscription }: Props) {
 }
 
 export function EmailPreferences(props: {
-  viewer: GetViewerWithSettingsQuery['viewer']
+  viewer: GetViewerWithSettingsQuery['context']['viewer']
 }) {
   const { viewer } = props
 

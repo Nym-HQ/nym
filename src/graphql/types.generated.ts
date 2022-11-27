@@ -379,6 +379,7 @@ export type Query = {
   bookmarks: BookmarksConnection
   comment?: Maybe<Comment>
   comments: Array<Maybe<Comment>>
+  context: ViewerContext
   hackerNewsPost?: Maybe<HackerNewsPost>
   hackerNewsPosts: Array<Maybe<HackerNewsPost>>
   homepage?: Maybe<Page>
@@ -391,8 +392,6 @@ export type Query = {
   tags: Array<Maybe<Tag>>
   user?: Maybe<User>
   userSites?: Maybe<Array<UserSite>>
-  viewSite?: Maybe<Site>
-  viewer?: Maybe<User>
 }
 
 export type QueryBookmarkArgs = {
@@ -533,8 +532,6 @@ export type User = {
   emailSubscriptions?: Maybe<Array<Maybe<EmailSubscription>>>
   id: Scalars['ID']
   isAdmin?: Maybe<Scalars['Boolean']>
-  isViewer?: Maybe<Scalars['Boolean']>
-  isViewerSiteAdmin?: Maybe<Scalars['Boolean']>
   location?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   pendingEmail?: Maybe<Scalars['String']>
@@ -543,8 +540,6 @@ export type User = {
   social_twitter?: Maybe<Scalars['String']>
   social_youtube?: Maybe<Scalars['String']>
   username?: Maybe<Scalars['String']>
-  viewerSite?: Maybe<Site>
-  viewerUserSite?: Maybe<UserSite>
 }
 
 export enum UserRole {
@@ -556,9 +551,16 @@ export enum UserRole {
 export type UserSite = {
   __typename?: 'UserSite'
   id: Scalars['ID']
-  site: Site
+  site?: Maybe<Site>
   siteRole?: Maybe<SiteRole>
   userId?: Maybe<Scalars['String']>
+}
+
+export type ViewerContext = {
+  __typename?: 'ViewerContext'
+  site?: Maybe<Site>
+  userSite?: Maybe<UserSite>
+  viewer?: Maybe<User>
 }
 
 export type WritingFilter = {
@@ -646,7 +648,6 @@ export type CommentInfoFragment = {
     avatar?: string | null | undefined
     name?: string | null | undefined
     role?: UserRole | null | undefined
-    isViewer?: boolean | null | undefined
     isAdmin?: boolean | null | undefined
   }
 }
@@ -828,7 +829,6 @@ export type QuestionCoreFragment = {
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
         isAdmin?: boolean | null | undefined
       }
     | null
@@ -848,7 +848,6 @@ export type QuestionListItemFragment = {
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
         isAdmin?: boolean | null | undefined
       }
     | null
@@ -874,7 +873,6 @@ export type QuestionDetailFragment = {
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
         isAdmin?: boolean | null | undefined
       }
     | null
@@ -910,7 +908,6 @@ export type QuestionsConnectionFragment = {
                     avatar?: string | null | undefined
                     name?: string | null | undefined
                     role?: UserRole | null | undefined
-                    isViewer?: boolean | null | undefined
                     isAdmin?: boolean | null | undefined
                   }
                 | null
@@ -944,30 +941,41 @@ export type SiteInfoFragment = {
   social_github?: string | null | undefined
 }
 
+export type UserSiteFragment = {
+  __typename?: 'UserSite'
+  id: string
+  userId?: string | null | undefined
+  siteRole?: SiteRole | null | undefined
+  site?: { __typename?: 'Site'; id: string } | null | undefined
+}
+
 export type UserSiteInfoFragment = {
   __typename?: 'UserSite'
   id: string
   userId?: string | null | undefined
   siteRole?: SiteRole | null | undefined
-  site: {
-    __typename: 'Site'
-    id: string
-    subdomain?: string | null | undefined
-    parkedDomain?: string | null | undefined
-    plan?: string | null | undefined
-    name?: string | null | undefined
-    description?: string | null | undefined
-    logo?: string | null | undefined
-    banner?: string | null | undefined
-    attach_css?: string | null | undefined
-    attach_js?: string | null | undefined
-    mailgun_region?: string | null | undefined
-    mailgun_domain?: string | null | undefined
-    mailgun_api_key?: string | null | undefined
-    social_twitter?: string | null | undefined
-    social_youtube?: string | null | undefined
-    social_github?: string | null | undefined
-  }
+  site?:
+    | {
+        __typename: 'Site'
+        id: string
+        subdomain?: string | null | undefined
+        parkedDomain?: string | null | undefined
+        plan?: string | null | undefined
+        name?: string | null | undefined
+        description?: string | null | undefined
+        logo?: string | null | undefined
+        banner?: string | null | undefined
+        attach_css?: string | null | undefined
+        attach_js?: string | null | undefined
+        mailgun_region?: string | null | undefined
+        mailgun_domain?: string | null | undefined
+        mailgun_api_key?: string | null | undefined
+        social_twitter?: string | null | undefined
+        social_youtube?: string | null | undefined
+        social_github?: string | null | undefined
+      }
+    | null
+    | undefined
 }
 
 export type UserInfoFragment = {
@@ -977,7 +985,6 @@ export type UserInfoFragment = {
   avatar?: string | null | undefined
   name?: string | null | undefined
   role?: UserRole | null | undefined
-  isViewer?: boolean | null | undefined
   isAdmin?: boolean | null | undefined
 }
 
@@ -995,26 +1002,6 @@ export type UserSettingsFragment = {
         | null
         | undefined
       >
-    | null
-    | undefined
-}
-
-export type ViewerInfoFragment = {
-  __typename?: 'User'
-  isViewer?: boolean | null | undefined
-  isViewerSiteAdmin?: boolean | null | undefined
-  isAdmin?: boolean | null | undefined
-  viewerSite?:
-    | {
-        __typename?: 'Site'
-        id: string
-        subdomain?: string | null | undefined
-        parkedDomain?: string | null | undefined
-      }
-    | null
-    | undefined
-  viewerUserSite?:
-    | { __typename?: 'UserSite'; siteRole?: SiteRole | null | undefined }
     | null
     | undefined
 }
@@ -1099,7 +1086,6 @@ export type AddCommentMutation = {
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
-          isViewer?: boolean | null | undefined
           isAdmin?: boolean | null | undefined
         }
       }
@@ -1130,7 +1116,6 @@ export type EditCommentMutation = {
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
-          isViewer?: boolean | null | undefined
           isAdmin?: boolean | null | undefined
         }
       }
@@ -1312,7 +1297,6 @@ export type EditQuestionMutation = {
               avatar?: string | null | undefined
               name?: string | null | undefined
               role?: UserRole | null | undefined
-              isViewer?: boolean | null | undefined
               isAdmin?: boolean | null | undefined
             }
           | null
@@ -1357,7 +1341,6 @@ export type AddQuestionMutation = {
               avatar?: string | null | undefined
               name?: string | null | undefined
               role?: UserRole | null | undefined
-              isViewer?: boolean | null | undefined
               isAdmin?: boolean | null | undefined
             }
           | null
@@ -1520,7 +1503,6 @@ export type EditUserMutation = {
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
         isAdmin?: boolean | null | undefined
       }
     | null
@@ -1615,7 +1597,6 @@ export type GetCommentsQuery = {
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
-          isViewer?: boolean | null | undefined
           isAdmin?: boolean | null | undefined
         }
       }
@@ -1886,7 +1867,6 @@ export type GetQuestionsQuery = {
                       avatar?: string | null | undefined
                       name?: string | null | undefined
                       role?: UserRole | null | undefined
-                      isViewer?: boolean | null | undefined
                       isAdmin?: boolean | null | undefined
                     }
                   | null
@@ -1927,39 +1907,10 @@ export type GetQuestionQuery = {
               avatar?: string | null | undefined
               name?: string | null | undefined
               role?: UserRole | null | undefined
-              isViewer?: boolean | null | undefined
               isAdmin?: boolean | null | undefined
             }
           | null
           | undefined
-      }
-    | null
-    | undefined
-}
-
-export type ViewSiteQueryVariables = Exact<{ [key: string]: never }>
-
-export type ViewSiteQuery = {
-  __typename?: 'Query'
-  viewSite?:
-    | {
-        __typename: 'Site'
-        id: string
-        subdomain?: string | null | undefined
-        parkedDomain?: string | null | undefined
-        plan?: string | null | undefined
-        name?: string | null | undefined
-        description?: string | null | undefined
-        logo?: string | null | undefined
-        banner?: string | null | undefined
-        attach_css?: string | null | undefined
-        attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
-        social_twitter?: string | null | undefined
-        social_youtube?: string | null | undefined
-        social_github?: string | null | undefined
       }
     | null
     | undefined
@@ -1975,25 +1926,28 @@ export type GetSitesQuery = {
         id: string
         userId?: string | null | undefined
         siteRole?: SiteRole | null | undefined
-        site: {
-          __typename: 'Site'
-          id: string
-          subdomain?: string | null | undefined
-          parkedDomain?: string | null | undefined
-          plan?: string | null | undefined
-          name?: string | null | undefined
-          description?: string | null | undefined
-          logo?: string | null | undefined
-          banner?: string | null | undefined
-          attach_css?: string | null | undefined
-          attach_js?: string | null | undefined
-          mailgun_region?: string | null | undefined
-          mailgun_domain?: string | null | undefined
-          mailgun_api_key?: string | null | undefined
-          social_twitter?: string | null | undefined
-          social_youtube?: string | null | undefined
-          social_github?: string | null | undefined
-        }
+        site?:
+          | {
+              __typename: 'Site'
+              id: string
+              subdomain?: string | null | undefined
+              parkedDomain?: string | null | undefined
+              plan?: string | null | undefined
+              name?: string | null | undefined
+              description?: string | null | undefined
+              logo?: string | null | undefined
+              banner?: string | null | undefined
+              attach_css?: string | null | undefined
+              attach_js?: string | null | undefined
+              mailgun_region?: string | null | undefined
+              mailgun_domain?: string | null | undefined
+              mailgun_api_key?: string | null | undefined
+              social_twitter?: string | null | undefined
+              social_youtube?: string | null | undefined
+              social_github?: string | null | undefined
+            }
+          | null
+          | undefined
       }>
     | null
     | undefined
@@ -2020,41 +1974,7 @@ export type GetUserQuery = {
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
         isAdmin?: boolean | null | undefined
-      }
-    | null
-    | undefined
-}
-
-export type ViewerQueryVariables = Exact<{ [key: string]: never }>
-
-export type ViewerQuery = {
-  __typename?: 'Query'
-  viewer?:
-    | {
-        __typename: 'User'
-        id: string
-        username?: string | null | undefined
-        avatar?: string | null | undefined
-        name?: string | null | undefined
-        role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
-        isAdmin?: boolean | null | undefined
-        isViewerSiteAdmin?: boolean | null | undefined
-        viewerSite?:
-          | {
-              __typename?: 'Site'
-              id: string
-              subdomain?: string | null | undefined
-              parkedDomain?: string | null | undefined
-            }
-          | null
-          | undefined
-        viewerUserSite?:
-          | { __typename?: 'UserSite'; siteRole?: SiteRole | null | undefined }
-          | null
-          | undefined
       }
     | null
     | undefined
@@ -2066,47 +1986,88 @@ export type GetViewerWithSettingsQueryVariables = Exact<{
 
 export type GetViewerWithSettingsQuery = {
   __typename?: 'Query'
-  viewer?:
-    | {
-        __typename: 'User'
-        id: string
-        username?: string | null | undefined
-        avatar?: string | null | undefined
-        name?: string | null | undefined
-        role?: UserRole | null | undefined
-        isViewer?: boolean | null | undefined
-        isAdmin?: boolean | null | undefined
-        isViewerSiteAdmin?: boolean | null | undefined
-        email?: string | null | undefined
-        pendingEmail?: string | null | undefined
-        viewerSite?:
-          | {
-              __typename?: 'Site'
-              id: string
-              subdomain?: string | null | undefined
-              parkedDomain?: string | null | undefined
-            }
-          | null
-          | undefined
-        viewerUserSite?:
-          | { __typename?: 'UserSite'; siteRole?: SiteRole | null | undefined }
-          | null
-          | undefined
-        emailSubscriptions?:
-          | Array<
-              | {
-                  __typename?: 'EmailSubscription'
-                  type?: EmailSubscriptionType | null | undefined
-                  subscribed?: boolean | null | undefined
-                }
-              | null
-              | undefined
-            >
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+  context: {
+    __typename?: 'ViewerContext'
+    viewer?:
+      | {
+          __typename: 'User'
+          id: string
+          username?: string | null | undefined
+          avatar?: string | null | undefined
+          name?: string | null | undefined
+          role?: UserRole | null | undefined
+          isAdmin?: boolean | null | undefined
+          email?: string | null | undefined
+          pendingEmail?: string | null | undefined
+          emailSubscriptions?:
+            | Array<
+                | {
+                    __typename?: 'EmailSubscription'
+                    type?: EmailSubscriptionType | null | undefined
+                    subscribed?: boolean | null | undefined
+                  }
+                | null
+                | undefined
+              >
+            | null
+            | undefined
+        }
+      | null
+      | undefined
+  }
+}
+
+export type ContextQueryVariables = Exact<{ [key: string]: never }>
+
+export type ContextQuery = {
+  __typename?: 'Query'
+  context: {
+    __typename?: 'ViewerContext'
+    viewer?:
+      | {
+          __typename: 'User'
+          id: string
+          username?: string | null | undefined
+          avatar?: string | null | undefined
+          name?: string | null | undefined
+          role?: UserRole | null | undefined
+          isAdmin?: boolean | null | undefined
+        }
+      | null
+      | undefined
+    site?:
+      | {
+          __typename: 'Site'
+          id: string
+          subdomain?: string | null | undefined
+          parkedDomain?: string | null | undefined
+          plan?: string | null | undefined
+          name?: string | null | undefined
+          description?: string | null | undefined
+          logo?: string | null | undefined
+          banner?: string | null | undefined
+          attach_css?: string | null | undefined
+          attach_js?: string | null | undefined
+          mailgun_region?: string | null | undefined
+          mailgun_domain?: string | null | undefined
+          mailgun_api_key?: string | null | undefined
+          social_twitter?: string | null | undefined
+          social_youtube?: string | null | undefined
+          social_github?: string | null | undefined
+        }
+      | null
+      | undefined
+    userSite?:
+      | {
+          __typename?: 'UserSite'
+          id: string
+          userId?: string | null | undefined
+          siteRole?: SiteRole | null | undefined
+          site?: { __typename?: 'Site'; id: string } | null | undefined
+        }
+      | null
+      | undefined
+  }
 }
 
 export const BookmarkCoreFragmentDoc = gql`
@@ -2161,7 +2122,6 @@ export const UserInfoFragmentDoc = gql`
     avatar
     name
     role
-    isViewer
     isAdmin
   }
 `
@@ -2322,6 +2282,16 @@ export const QuestionsConnectionFragmentDoc = gql`
   }
   ${QuestionListItemFragmentDoc}
 `
+export const UserSiteFragmentDoc = gql`
+  fragment UserSite on UserSite {
+    id
+    userId
+    siteRole
+    site {
+      id
+    }
+  }
+`
 export const SiteInfoFragmentDoc = gql`
   fragment SiteInfo on Site {
     __typename
@@ -2362,21 +2332,6 @@ export const UserSettingsFragmentDoc = gql`
       type
       subscribed
     }
-  }
-`
-export const ViewerInfoFragmentDoc = gql`
-  fragment ViewerInfo on User {
-    isViewer
-    isViewerSiteAdmin
-    viewerSite {
-      id
-      subdomain
-      parkedDomain
-    }
-    viewerUserSite {
-      siteRole
-    }
-    isAdmin
   }
 `
 export const EditBookmarkDocument = gql`
@@ -4203,59 +4158,6 @@ export type GetQuestionQueryResult = Apollo.QueryResult<
   GetQuestionQuery,
   GetQuestionQueryVariables
 >
-export const ViewSiteDocument = gql`
-  query viewSite {
-    viewSite {
-      ...SiteInfo
-    }
-  }
-  ${SiteInfoFragmentDoc}
-`
-
-/**
- * __useViewSiteQuery__
- *
- * To run a query within a React component, call `useViewSiteQuery` and pass it any options that fit your needs.
- * When your component renders, `useViewSiteQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useViewSiteQuery({
- *   variables: {
- *   },
- * });
- */
-export function useViewSiteQuery(
-  baseOptions?: Apollo.QueryHookOptions<ViewSiteQuery, ViewSiteQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ViewSiteQuery, ViewSiteQueryVariables>(
-    ViewSiteDocument,
-    options
-  )
-}
-export function useViewSiteLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ViewSiteQuery,
-    ViewSiteQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ViewSiteQuery, ViewSiteQueryVariables>(
-    ViewSiteDocument,
-    options
-  )
-}
-export type ViewSiteQueryHookResult = ReturnType<typeof useViewSiteQuery>
-export type ViewSiteLazyQueryHookResult = ReturnType<
-  typeof useViewSiteLazyQuery
->
-export type ViewSiteQueryResult = Apollo.QueryResult<
-  ViewSiteQuery,
-  ViewSiteQueryVariables
->
 export const GetSitesDocument = gql`
   query getSites {
     userSites {
@@ -4405,66 +4307,16 @@ export type GetUserQueryResult = Apollo.QueryResult<
   GetUserQuery,
   GetUserQueryVariables
 >
-export const ViewerDocument = gql`
-  query viewer {
-    viewer {
-      ...UserInfo
-      ...ViewerInfo
-    }
-  }
-  ${UserInfoFragmentDoc}
-  ${ViewerInfoFragmentDoc}
-`
-
-/**
- * __useViewerQuery__
- *
- * To run a query within a React component, call `useViewerQuery` and pass it any options that fit your needs.
- * When your component renders, `useViewerQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useViewerQuery({
- *   variables: {
- *   },
- * });
- */
-export function useViewerQuery(
-  baseOptions?: Apollo.QueryHookOptions<ViewerQuery, ViewerQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ViewerQuery, ViewerQueryVariables>(
-    ViewerDocument,
-    options
-  )
-}
-export function useViewerLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ViewerQuery, ViewerQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ViewerQuery, ViewerQueryVariables>(
-    ViewerDocument,
-    options
-  )
-}
-export type ViewerQueryHookResult = ReturnType<typeof useViewerQuery>
-export type ViewerLazyQueryHookResult = ReturnType<typeof useViewerLazyQuery>
-export type ViewerQueryResult = Apollo.QueryResult<
-  ViewerQuery,
-  ViewerQueryVariables
->
 export const GetViewerWithSettingsDocument = gql`
   query getViewerWithSettings {
-    viewer {
-      ...UserInfo
-      ...ViewerInfo
-      ...UserSettings
+    context {
+      viewer {
+        ...UserInfo
+        ...UserSettings
+      }
     }
   }
   ${UserInfoFragmentDoc}
-  ${ViewerInfoFragmentDoc}
   ${UserSettingsFragmentDoc}
 `
 
@@ -4516,4 +4368,62 @@ export type GetViewerWithSettingsLazyQueryHookResult = ReturnType<
 export type GetViewerWithSettingsQueryResult = Apollo.QueryResult<
   GetViewerWithSettingsQuery,
   GetViewerWithSettingsQueryVariables
+>
+export const ContextDocument = gql`
+  query context {
+    context {
+      viewer {
+        ...UserInfo
+      }
+      site {
+        ...SiteInfo
+      }
+      userSite {
+        ...UserSite
+      }
+    }
+  }
+  ${UserInfoFragmentDoc}
+  ${SiteInfoFragmentDoc}
+  ${UserSiteFragmentDoc}
+`
+
+/**
+ * __useContextQuery__
+ *
+ * To run a query within a React component, call `useContextQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContextQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContextQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useContextQuery(
+  baseOptions?: Apollo.QueryHookOptions<ContextQuery, ContextQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ContextQuery, ContextQueryVariables>(
+    ContextDocument,
+    options
+  )
+}
+export function useContextLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ContextQuery, ContextQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ContextQuery, ContextQueryVariables>(
+    ContextDocument,
+    options
+  )
+}
+export type ContextQueryHookResult = ReturnType<typeof useContextQuery>
+export type ContextLazyQueryHookResult = ReturnType<typeof useContextLazyQuery>
+export type ContextQueryResult = Apollo.QueryResult<
+  ContextQuery,
+  ContextQueryVariables
 >

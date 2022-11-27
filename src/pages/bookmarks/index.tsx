@@ -22,9 +22,16 @@ function BookmarksPage(props) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { req, res } = ctx
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
 
-  const commonProps = await getCommonPageProps(ctx)
+  const graphqlData = await Promise.all([
+    ...getCommonQueries(apolloClient),
+
+    apolloClient.query({ query: GET_BOOKMARKS }),
+    apolloClient.query({ query: GET_TAGS }),
+  ])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -33,16 +40,6 @@ export async function getServerSideProps(ctx) {
       },
     }
   }
-
-  const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-
-  await Promise.all([
-    ...getCommonQueries(apolloClient),
-
-    apolloClient.query({ query: GET_BOOKMARKS }),
-    apolloClient.query({ query: GET_TAGS }),
-  ])
 
   return addApolloState(apolloClient, {
     props: {

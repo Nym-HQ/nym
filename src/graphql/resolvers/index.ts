@@ -1,3 +1,5 @@
+import { SiteRole } from '@prisma/client'
+
 import { Context } from '~/graphql/context'
 import Mutation from '~/graphql/resolvers/mutations'
 import Query from '~/graphql/resolvers/queries'
@@ -82,20 +84,12 @@ const resolvers = {
     },
   },
   User: {
-    isViewer: ({ id }, _, { viewer }: Context) => {
-      return viewer && viewer.id === id
-    },
-    viewerSite: ({ id }, _, { viewer, site }: Context) => {
-      return site
-    },
-    viewerUserSite: ({ id }, _, { viewer, site, userSite }: Context) => {
-      return viewer && viewer.id === id && site ? userSite : null
-    },
-    isViewerSiteAdmin: ({ id }, _, { viewer, site, userSite }: Context) => {
-      return !!(viewer && viewer.id === id && viewer.isAdmin)
-    },
-    isAdmin: ({ role }) => {
-      return role === UserRole.Admin
+    isAdmin: ({ role }, _, { viewer, userSite }) => {
+      return (
+        role === UserRole.Admin ||
+        userSite?.siteRole === SiteRole.ADMIN ||
+        userSite?.siteRole === SiteRole.OWNER
+      )
     },
     email: ({ id }, _, { viewer }: Context) => {
       return viewer && viewer.id === id ? viewer.email : null

@@ -6,13 +6,10 @@ import { AddBookmarkDialog } from '~/components/Bookmarks/AddBookmarkDialog'
 import { GhostButton } from '~/components/Button'
 import {
   AMAIcon,
-  AppDissectionIcon,
   BookAtlasIcon,
   BookmarksIcon,
   ExternalLinkIcon,
   GitHubIcon,
-  GlobeIcon,
-  HackerNewsIcon,
   HomeIcon,
   PageIcon,
   StaffDesignIcon,
@@ -20,11 +17,7 @@ import {
   WritingIcon,
   YouTubeIcon,
 } from '~/components/Icon'
-import {
-  useGetPagesQuery,
-  useViewerQuery,
-  useViewSiteQuery,
-} from '~/graphql/types.generated'
+import { useContextQuery, useGetPagesQuery } from '~/graphql/types.generated'
 
 import { NavigationLink } from './NavigationLink'
 
@@ -42,8 +35,7 @@ function ThisAddBookmarkDialog() {
 
 export function SiteSidebarNavigation() {
   const router = useRouter()
-  const { data } = useViewerQuery()
-  const { data: siteData } = useViewSiteQuery()
+  const { data } = useContextQuery()
   const { data: pagesData } = useGetPagesQuery({
     variables: { filter: { published: true, featuredOnly: true } },
   })
@@ -81,7 +73,7 @@ export function SiteSidebarNavigation() {
           icon: BookmarksIcon,
           trailingAccessory: null,
           isActive: router.asPath.indexOf('/bookmarks') >= 0,
-          trailingAction: data?.viewer?.isViewerSiteAdmin
+          trailingAction: data?.context?.viewer?.isAdmin
             ? ThisAddBookmarkDialog
             : null,
           isExternal: false,
@@ -107,7 +99,7 @@ export function SiteSidebarNavigation() {
     label: 'Pages',
     items: [],
   }
-  if (data?.viewer?.isViewerSiteAdmin) {
+  if (data?.context?.viewer?.isAdmin) {
     pagesSection.items.push({
       href: '/pages',
       label: 'All pages',
@@ -134,9 +126,9 @@ export function SiteSidebarNavigation() {
 
   // Social
   const social_items = []
-  if (siteData?.viewSite?.social_twitter) {
+  if (data?.context?.site?.social_twitter) {
     social_items.push({
-      href: siteData?.viewSite?.social_twitter,
+      href: data?.context?.site?.social_twitter,
       label: 'Twitter',
       icon: TwitterIcon,
       trailingAccessory: ExternalLinkIcon,
@@ -145,9 +137,9 @@ export function SiteSidebarNavigation() {
       isExternal: true,
     })
   }
-  if (siteData?.viewSite?.social_youtube) {
+  if (data?.context?.site?.social_youtube) {
     social_items.push({
-      href: siteData?.viewSite?.social_youtube,
+      href: data?.context?.site?.social_youtube,
       label: 'Youtube',
       icon: YouTubeIcon,
       trailingAccessory: ExternalLinkIcon,
@@ -156,9 +148,9 @@ export function SiteSidebarNavigation() {
       isExternal: true,
     })
   }
-  if (siteData?.viewSite?.social_github) {
+  if (data?.context?.site?.social_github) {
     social_items.push({
-      href: siteData?.viewSite?.social_github,
+      href: data?.context?.site?.social_github,
       label: 'GitHub',
       icon: GitHubIcon,
       trailingAccessory: ExternalLinkIcon,
@@ -175,7 +167,7 @@ export function SiteSidebarNavigation() {
     })
   }
 
-  if (data?.viewer?.isViewerSiteAdmin) {
+  if (data?.context?.viewer?.isAdmin) {
     sections.push({
       label: 'Admin',
       items: [
