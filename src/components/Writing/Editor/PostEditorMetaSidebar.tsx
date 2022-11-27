@@ -107,7 +107,7 @@ export function PostEditorMetaSidebar() {
           sidebarIsOpen
             ? 'absolute inset-y-0 right-0 translate-x-0 shadow-lg'
             : 'absolute right-0 translate-x-full'
-        } 3xl:w-80 z-30 flex h-full max-h-screen-safe min-h-screen-safe pb-safe w-3/4 flex-none transform flex-col overflow-y-auto border-l border-gray-150 bg-white pb-10 transition duration-200 ease-in-out dark:border-gray-800 dark:bg-gray-900 sm:w-1/2 sm:pb-0 md:w-1/3 lg:w-56 2xl:w-72`}
+        } 3xl:w-80 z-30 flex h-full max-h-screen-safe min-h-screen-safe pb-safe w-3/4 flex-none transform flex-col overflow-y-auto border-l border-gray-150 bg-white pb-10 transition duration-200 ease-in-out dark:border-gray-800 dark:bg-gray-900 sm:w-1/2 md:w-1/3 lg:w-56 2xl:w-72`}
       >
         <TitleBar
           scrollContainerRef={scrollContainerRef}
