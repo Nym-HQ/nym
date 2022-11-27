@@ -9,6 +9,10 @@ export function SEO() {
     <>
       <DefaultSeo {...defaultSEO} />
       <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+        />
         <link rel="icon" href="/static/favicon.ico" sizes="any" />
         <link
           rel="icon"
