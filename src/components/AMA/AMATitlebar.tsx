@@ -51,7 +51,7 @@ export function AMATitlebar({ scrollContainerRef }) {
   }
 
   function getChildren() {
-    if (data?.context?.viewer?.isAdmin) {
+    // if (data?.context?.viewer?.isAdmin) {
       return (
         <div className="pt-2 pb-1">
           <SegmentedControl
@@ -64,8 +64,8 @@ export function AMATitlebar({ scrollContainerRef }) {
           />
         </div>
       )
-    }
-    return null
+    // }
+    // return null
   }
 
   return (
