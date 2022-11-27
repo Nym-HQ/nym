@@ -51,7 +51,7 @@ export function DialogComponent({
           onClose={closeModal}
           initialFocus={closeButtonRef}
         >
-          <div className="min-h-screen px-4">
+          <div className="min-h-screen-safe pb-safe px-4">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-100"
@@ -73,7 +73,7 @@ export function DialogComponent({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="fixed bottom-0 left-0 max-h-screen w-full transform-gpu overflow-y-auto rounded-t-xl border border-gray-200 bg-white pb-10 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:shadow-2xl sm:bottom-auto sm:top-1/4 sm:left-1/2 sm:max-w-sm sm:-translate-x-1/2 sm:rounded-xl sm:pb-0 md:max-w-md lg:max-w-lg">
+              <div className="fixed bottom-0 left-0 max-h-screen-safe w-full transform-gpu overflow-y-auto rounded-t-xl border border-gray-200 bg-white pb-10 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:shadow-2xl sm:bottom-auto sm:top-1/4 sm:left-1/2 sm:max-w-sm sm:-translate-x-1/2 sm:rounded-xl sm:pb-0 md:max-w-md lg:max-w-lg">
                 <div className="flex flex-col">
                   <div className="sticky top-0 flex w-full items-center justify-between border-b border-gray-150 bg-white py-2 pl-4 pr-2 dark:border-gray-700 dark:bg-gray-800">
                     <Dialog.Title

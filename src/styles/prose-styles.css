@@ -1,5 +1,6 @@
 .prose {
   @apply text-gray-700 dark:text-gray-400;
+  max-width: 100vw;
 }
 
 .prose blockquote {
