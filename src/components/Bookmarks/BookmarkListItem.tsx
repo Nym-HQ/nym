@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link } from 'react-feather'
+import { Link as LinkIcon } from 'react-feather'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 
 import { ListItem } from '~/components/ListDetail/ListItem'
@@ -41,7 +41,7 @@ export const BookmarksListItem = React.memo<Props>(({ bookmark, active }) => {
               />
             ) : (
               <span className="flex h-4 w-4 items-center justify-center">
-                <Link size={12} />
+                <LinkIcon size={12} />
               </span>
             )}
             <span>{bookmark.host}</span>
