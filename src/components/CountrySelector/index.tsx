@@ -54,7 +54,7 @@ export const CountrySelector = React.forwardRef<
               src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${props.selectedValue.value}.svg`}
               className={'inline mr-2 h-4 rounded-sm'}
             /> */}
-            {props.selectedValue.title}
+            {props.selectedValue?.title}
           </span>
           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
             <SelectorIcon />
@@ -124,7 +124,7 @@ export const CountrySelector = React.forwardRef<
                         <span className="font-normal truncate">
                           {value.title}
                         </span>
-                        {value.value === props.selectedValue.value ? (
+                        {value.value === props.selectedValue?.value ? (
                           <span className="text-blue-600 absolute inset-y-0 right-0 flex items-center pr-8">
                             <CheckIcon />
                           </span>
