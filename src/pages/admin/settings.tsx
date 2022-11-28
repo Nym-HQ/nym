@@ -43,10 +43,10 @@ function AdminSettingsPage(props) {
     social_twitter: '',
     social_youtube: '',
     social_github: '',
-    mailgun_region: 'US',
     mailgun_domain: '',
     mailgun_api_key: '',
     ...(data?.context?.site || {}),
+    mailgun_region: (data?.context?.site || {}).mailgun_region || 'US',
   })
 
   const [editSite, { loading: saving }] = useEditSiteMutation({
