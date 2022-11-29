@@ -277,7 +277,7 @@ const typeDefs = gql`
 
   input AddBookmarkInput {
     url: String!
-    tag: String!
+    tag: String
   }
 
   input EditBookmarkInput {

@@ -100,15 +100,15 @@ export async function addBookmark(
         image,
         description,
         faviconUrl,
-        tags: {
+        tags: tag !== null ? {
           connectOrCreate: {
             where: { name_siteId: { name: tag, siteId: site.id } },
             create: {
-              name: tag !== null ? tag.toLocaleLowerCase() : tag,
+              name: tag.toLocaleLowerCase(),
               siteId: site.id,
             },
           },
-        },
+        } : undefined,
         site: {
           connect: { id: site.id },
         },
