@@ -73,7 +73,19 @@ export async function addBookmark(
 
   if (!validUrl(url)) throw new UserInputError('URL was invalid')
 
-  const metadata = await getBookmarkMetaData(url)
+  let metadata
+  try {
+    metadata = await getBookmarkMetaData(url)
+  } catch (err) {
+    console.error('Unable to get metadata for bookmark: ' + url, { err })
+    metadata = {
+      host: '',
+      title: '',
+      image: null,
+      description: '',
+      faviconUrl: null,
+    }
+  }
   const { host, title, image, description, faviconUrl } = metadata
 
   /*
@@ -100,15 +112,18 @@ export async function addBookmark(
         image,
         description,
         faviconUrl,
-        tags: {
-          connectOrCreate: {
-            where: { name_siteId: { name: tag, siteId: site.id } },
-            create: {
-              name: tag !== null ? tag.toLocaleLowerCase() : tag,
-              siteId: site.id,
-            },
-          },
-        },
+        tags:
+          tag !== null
+            ? {
+                connectOrCreate: {
+                  where: { name_siteId: { name: tag, siteId: site.id } },
+                  create: {
+                    name: tag.toLocaleLowerCase(),
+                    siteId: site.id,
+                  },
+                },
+              }
+            : undefined,
         site: {
           connect: { id: site.id },
         },

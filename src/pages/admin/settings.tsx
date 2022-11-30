@@ -123,7 +123,7 @@ function AdminSettingsPage(props) {
 
         <Subsection title="Appearances">
           <div className="grid grid-cols-6 gap-6">
-            <div className="col-span-6">
+            {/* <div className="col-span-6">
               <Label>Logo</Label>
               <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
                 <div className="space-y-1 text-center">
@@ -161,9 +161,9 @@ function AdminSettingsPage(props) {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="col-span-6">
+            {/* <div className="col-span-6">
               <Label>Banner</Label>
               <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
                 <div className="space-y-1 text-center">
@@ -201,7 +201,7 @@ function AdminSettingsPage(props) {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col-span-6">
               <Label htmlFor="css-customization">CSS Customization</Label>
               <Textarea
@@ -304,7 +304,7 @@ function AdminSettingsPage(props) {
           </div>
         </Subsection>
 
-        <SubsectionSplitter />
+        {/* <SubsectionSplitter />
 
         <Subsection title="Email newsletter settings">
           <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -369,7 +369,7 @@ function AdminSettingsPage(props) {
               </div>
             </div>
           </div>
-        </Subsection>
+        </Subsection> */}
 
         <SubsectionSplitter />
 
