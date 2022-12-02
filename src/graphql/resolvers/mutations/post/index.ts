@@ -19,10 +19,16 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
   } = data
   const { prisma, site } = ctx
 
-  const existing = await prisma.post.findUnique({
+  const existing = await prisma.post.findUnique({ where: { id } })
+
+  if (!existing || existing.siteId !== site.id)
+    throw new UserInputError('Post not found!')
+
+  const checkDup = await prisma.post.findUnique({
     where: { slug_siteId: { slug, siteId: site.id } },
   })
-  if (existing?.id !== id) throw new UserInputError('Slug already exists')
+  if (checkDup && checkDup.id !== id)
+    throw new UserInputError('Slug already exists')
 
   let publishedAt = existing.publishedAt
   if (!existing.publishedAt && published === true) {

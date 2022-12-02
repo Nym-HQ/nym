@@ -1,6 +1,9 @@
 import '~/styles/custom-styles.css'
 import '~/styles/dracula.css'
 import '~/styles/prose-styles.css'
+import '@uiw/react-md-editor/markdown-editor.css'
+import '@uiw/react-markdown-preview/markdown.css'
+import '~/styles/react-md-editor.css'
 
 import { useRouter } from 'next/router'
 import Script from 'next/script'
