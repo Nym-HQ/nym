@@ -13,8 +13,9 @@ export function PageEditorAutoSave() {
   const [editPage, { loading }] = useEditPageMutation()
 
   // auto save every 30 seconds
+  // only in draft mode
   useInterval(() => {
-    if (!existingPage?.id) return
+    if (!existingPage?.id || existingPage.publishedAt) return
 
     editPage({
       variables: {

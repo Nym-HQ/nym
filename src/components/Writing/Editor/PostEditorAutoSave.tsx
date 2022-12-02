@@ -13,8 +13,9 @@ export function PostEditorAutoSave() {
   const [editPost, { loading }] = useEditPostMutation()
 
   // auto save every 30 seconds
+  // only in draft mode
   useInterval(() => {
-    if (!existingPost?.id) return
+    if (!existingPost?.id || existingPost.publishedAt) return
 
     editPost({
       variables: {
