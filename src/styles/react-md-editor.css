@@ -4,6 +4,20 @@
   line-height: 24px !important;
 }
 
+.wmde-markdown ul {
+  list-style-type: disc;
+}
+.wmde-markdown ul ul {
+  list-style-type: circle;
+}
+
+.wmde-markdown ol {
+  list-style-type: decimal;
+}
+.wmde-markdown ol ol {
+  list-style-type: lower-alpha;
+}
+
 .wmde-markdown img {
   display: inline;
 }
