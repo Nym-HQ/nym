@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import * as React from 'react'
 
 import { Comments } from '~/components/Comments'
@@ -8,6 +7,7 @@ import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import { CommentType, useGetPostQuery } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
+import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PostActions } from './PostActions'
 import { PostSEO } from './PostSEO'
 
@@ -51,7 +51,10 @@ export function PostDetail({ slug }) {
             </span>
           </Detail.Header>
 
-          <MarkdownRenderer children={post.text} className="prose mt-8" />
+          <div className="mt-8">
+            <MDEditorPreviewer source={post.text} />
+          </div>
+          {/* <MarkdownRenderer children={post.text} className="prose mt-8" /> */}
 
           {/* bottom padding to give space between post content and comments */}
           <div className="py-6" />

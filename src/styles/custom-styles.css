@@ -131,6 +131,13 @@
       background-size: 16px 16px;
     }
   }
+
+  /**=== Markdown Editor ======**/
+  .w-md-editor-text-pre > code,
+  .w-md-editor-text-input {
+    font-size: 23px !important;
+    line-height: 24px !important;
+  }
 }
 
 /* Your own custom utilities */

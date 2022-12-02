@@ -1,0 +1,15 @@
+.w-md-editor-text-pre > code,
+.w-md-editor-text-input {
+  font-size: 16px !important;
+  line-height: 24px !important;
+}
+
+.wmde-markdown img {
+  display: inline;
+}
+
+@media (prefers-color-scheme: dark) {
+  .wmde-markdown, .wmde-markdown-var {
+    --color-canvas-default: rgb(5 5 5 / var(--tw-bg-opacity));
+  }
+}

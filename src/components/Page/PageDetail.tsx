@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
@@ -7,6 +6,7 @@ import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import { useGetPageQuery } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
+import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
 
@@ -50,7 +50,10 @@ export function PageDetail({ slug }) {
             </span>
           </Detail.Header>
 
-          <MarkdownRenderer children={page.text} className="prose" />
+          <div className="mt-8">
+            <MDEditorPreviewer source={page.text} />
+          </div>
+          {/* <MarkdownRenderer children={page.text} className="prose" /> */}
 
           {/* bottom padding to give space between page content and comments */}
           <div className="py-6" />

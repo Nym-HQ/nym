@@ -1,4 +1,8 @@
-module.exports = {
+const removeImports = require('next-remove-imports')({
+  options: { },
+})
+
+module.exports = removeImports({
   swcMinify: true,
   webpack: (
     config,
@@ -43,4 +47,4 @@ module.exports = {
       },
     ];
   }
-}
+})

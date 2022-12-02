@@ -5,6 +5,7 @@ import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { useGetHomePageQuery } from '~/graphql/types.generated'
 
 import { MarkdownRenderer } from '../MarkdownRenderer'
+import { MDEditorPreviewer } from '../ReactMdEditor'
 
 export function SiteIntro() {
   const scrollContainerRef = React.useRef(null)
@@ -32,7 +33,10 @@ export function SiteIntro() {
             {data.homepage.publishedAt.formatted}
           </span>
 
-          <MarkdownRenderer children={data.homepage.text} className="prose" />
+          <div className="mt-8">
+            <MDEditorPreviewer source={data.homepage.text} />
+          </div>
+          {/* <MarkdownRenderer children={data.homepage.text} className="prose" /> */}
         </div>
       </Detail.ContentContainer>
     </Detail.Container>
