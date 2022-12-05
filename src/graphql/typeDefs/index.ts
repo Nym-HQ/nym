@@ -314,6 +314,7 @@ const typeDefs = gql`
     excerpt: String
     published: Boolean
     featured: Boolean
+    publishedAt: Date
   }
 
   input AddPostInput {

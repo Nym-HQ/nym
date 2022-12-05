@@ -41,10 +41,10 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
     })
   }
 
-  let publishedAt = existing.publishedAt
+  let publishedAt = data.publishedAt || existing.publishedAt
   if (!existing.publishedAt && published === true) {
     // newly published
-    publishedAt = new Date()
+    publishedAt = data.publishedAt || new Date()
   } else if (existing.publishedAt && published === false) {
     // unpublished
     publishedAt = null
