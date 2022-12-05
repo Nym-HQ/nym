@@ -27,32 +27,6 @@ This is for registered users and sites to show contents and manage contents.
 - `VERCEL_PROJECT_ID` Vercel Project ID
 - `VERCEL_API_TOKEN` (https://vercel.com/docs/rest-api#introduction/api-basics/authentication) Token to access Vercel's API
 
-#### Fathom
-
-- `NEXT_PUBLIC_FATHOM_SITE_ID`
-- `NEXT_PUBLIC_FATHOM_CUSTOM_URL` (https://analytics.example.com)
-- `NEXT_PUBLIC_FATHOM_CUSTOM_DOMAIN` (analytics.example.com)
-
-#### CloudFlare
-
-- `CLOUDFLARE_ACCOUNT_ID`
-- `CLOUDFLARE_IMAGES_KEY`
-
-
-#### GraphCDN
-
-- `GRAPHCDN_PURGE_KEY`
-- `GRAPHCDN_PURGE_ENDPOINT` (https://api.graphcdn.io/purge)
-
-#### PostMark
-
-- `POSTMARK_CLIENT_ID`
-
-#### Revue
-
-- `REVUE_API_KEY`
-- `HN_TOKEN`
-
 #### Prisma and PlanetScale
 
 A good resource to understand Prisma and its Shadow DB
