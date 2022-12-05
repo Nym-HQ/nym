@@ -1,1 +1,1 @@
-export const preservedSubdomains = ['app']
+export const preservedSubdomains = ['app', 'staging']
