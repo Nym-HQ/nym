@@ -30,10 +30,10 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
   if (checkDup && checkDup.id !== id)
     throw new UserInputError('Slug already exists')
 
-  let publishedAt = existing.publishedAt
+  let publishedAt = data.publishedAt || existing.publishedAt
   if (!existing.publishedAt && published === true) {
     // newly published
-    publishedAt = new Date()
+    publishedAt = data.publishedAt || new Date()
   } else if (existing.publishedAt && published === false) {
     // unpublished
     publishedAt = null

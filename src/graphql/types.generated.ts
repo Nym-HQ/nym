@@ -126,6 +126,7 @@ export type EditPageInput = {
 export type EditPostInput = {
   excerpt?: InputMaybe<Scalars['String']>
   published?: InputMaybe<Scalars['Boolean']>
+  publishedAt?: InputMaybe<Scalars['Date']>
   slug: Scalars['String']
   text: Scalars['String']
   title: Scalars['String']

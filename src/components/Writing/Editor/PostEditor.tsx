@@ -16,6 +16,7 @@ export const PostEditorContext = React.createContext({
     text: '',
     slug: '',
     excerpt: '',
+    publishedAt: null,
   },
   setDraftState: (draftObj: unknown) => {},
   existingPost: null,
@@ -34,6 +35,7 @@ export function PostEditor({ slug: propsSlug = '' }) {
     text: data?.post?.text || '',
     slug: data?.post?.slug || '',
     excerpt: data?.post?.excerpt || '',
+    publishedAt: data?.post?.publishedAt || null,
   }
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)
