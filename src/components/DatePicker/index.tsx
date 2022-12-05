@@ -346,19 +346,17 @@ function InputGroup6({
   )
 }
 
-const CustomInputField = forwardRef(
-  (
-    {
-      name,
-      value,
-      label,
-      onClick,
-      disabled,
-      inputClassName,
-      icon = <BiCalendar size="1rem" />,
-    },
-    ref
-  ) => (
+const CustomInputField = forwardRef<HTMLButtonElement, any>((el, ref) => {
+  const {
+    name,
+    value,
+    label,
+    onClick,
+    disabled,
+    inputClassName,
+    icon = <BiCalendar size="1rem" />,
+  } = el as any
+  return (
     <button className="w-full " onClick={onClick} ref={ref} disabled={disabled}>
       <InputGroup6
         name={name}
@@ -371,7 +369,7 @@ const CustomInputField = forwardRef(
       />
     </button>
   )
-)
+})
 
 const TimeInputSelect = ({ date, onChange }) => (
   <DatePicker1
