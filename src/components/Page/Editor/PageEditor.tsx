@@ -19,6 +19,7 @@ export const PageEditorContext = React.createContext({
     slug: '',
     excerpt: '',
     featured: false,
+    publishedAt: null,
   },
   setDraftState: (draftObj: unknown) => {},
   existingPage: null,
@@ -39,6 +40,7 @@ export function PageEditor({ slug: propsSlug = '' }) {
     slug: data?.page?.slug || '',
     excerpt: data?.page?.excerpt || '',
     featured: data?.page?.featured || false,
+    publishedAt: data?.page?.publishedAt || null,
   }
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)

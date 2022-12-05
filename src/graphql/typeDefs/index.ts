@@ -314,6 +314,7 @@ const typeDefs = gql`
     excerpt: String
     published: Boolean
     featured: Boolean
+    publishedAt: Date
   }
 
   input AddPostInput {
@@ -329,6 +330,7 @@ const typeDefs = gql`
     slug: String!
     excerpt: String
     published: Boolean
+    publishedAt: Date
   }
 
   input AddSiteInput {

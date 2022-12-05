@@ -16,9 +16,16 @@ export async function getPosts(_, args: GetPostsQueryVariables, ctx: Context) {
   return await prisma.post.findMany({
     orderBy: published ? { publishedAt: 'desc' } : { createdAt: 'desc' },
     where: {
-      publishedAt:
-        !published && viewer?.isAdmin ? { equals: null } : { not: null },
       siteId: site.id,
+
+      ...(!published && viewer?.isAdmin
+        ? {
+            OR: [
+              { publishedAt: { equals: null } },
+              { publishedAt: { gte: new Date() } },
+            ],
+          }
+        : { publishedAt: { not: null, lt: new Date() } }),
     },
     include: {
       _count: {

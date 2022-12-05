@@ -22,9 +22,16 @@ export async function getPages(_, args: GetPagesQueryVariables, ctx: Context) {
     where: {
       featured: featuredOnly ? true : undefined,
       path: includeHomepage ? undefined : { not: '/' },
-      publishedAt:
-        !published && viewer?.isAdmin ? { equals: null } : { not: null },
       siteId: site.id,
+
+      ...(!published && viewer?.isAdmin
+        ? {
+            OR: [
+              { publishedAt: { equals: null } },
+              { publishedAt: { gte: new Date() } },
+            ],
+          }
+        : { publishedAt: { not: null, lt: new Date() } }),
     },
   })
 }
