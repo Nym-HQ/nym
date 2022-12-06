@@ -98,6 +98,10 @@ function DatePicker1(props) {
           }
         }
 
+        .react-datepicker-popper {
+          z-index: 20;
+        }
+
         .react-datepicker {
           @apply border primary-border-color rounded-md !p-2;
           &__navigation {
