@@ -75,6 +75,10 @@
   .max-h-screen-safe {
     max-height: calc(100vh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
   }
+
+  .max-w-3xl-screen {
+    max-width: min(calc(100vw - (env(safe-area-inset-left) + env(safe-area-inset-right))), 768px);
+  }
 }
 
 @layer components {
