@@ -4,7 +4,6 @@ import { Sidebar } from 'react-feather'
 import toast from 'react-hot-toast'
 
 import Button from '~/components/Button'
-import { TextWithDatePicker } from '~/components/DatePicker'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import {
   useAddPostMutation,
@@ -68,14 +67,6 @@ export function PostEditorActions() {
 
   return (
     <div className="flex items-center space-x-2">
-      {draftState.publishedAt && (
-        <span className="text-gray-500">
-          <TextWithDatePicker
-            value={draftState.publishedAt}
-            onChange={(v) => setDraftState({ ...draftState, publishedAt: v })}
-          />
-        </span>
-      )}
       <Button disabled={isSavingDraft} onClick={handleEditOrCreate}>
         {isSavingDraft ? (
           <LoadingSpinner />

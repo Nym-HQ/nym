@@ -4,6 +4,7 @@ import { X } from 'react-feather'
 import toast from 'react-hot-toast'
 
 import Button, { GhostButton, PrimaryButton } from '~/components/Button'
+import { TextWithDatePicker } from '~/components/DatePicker'
 import { Input, Textarea } from '~/components/Input'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
@@ -11,7 +12,6 @@ import { GET_POSTS } from '~/graphql/queries/posts'
 import {
   useAddPostMutation,
   useEditPostMutation,
-  useGetPostsQuery,
 } from '~/graphql/types.generated'
 import { slugifyString } from '~/lib/utils'
 
@@ -139,6 +139,14 @@ export function PostEditorMetaSidebar() {
               rows={8}
               maxRows={8}
               onChange={handleExcerptChange}
+            />
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <p className="text-primary text-sm font-semibold">Publish Date</p>
+            <TextWithDatePicker
+              value={draftState.publishedAt}
+              onChange={(v) => setDraftState({ ...draftState, publishedAt: v })}
             />
           </div>
         </div>
