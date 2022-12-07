@@ -7,16 +7,32 @@ import { PostsList } from '~/components/Writing/PostsList'
 import { getContext } from '~/graphql/context'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_POST, GET_POSTS } from '~/graphql/queries/posts'
-import { CommentType, useGetPostQuery } from '~/graphql/types.generated'
+import {
+  CommentType,
+  useContextQuery,
+  useGetPostQuery,
+} from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function WritingPostPage(props) {
   const { slug } = props
-  const { data } = useGetPostQuery({ variables: { slug } })
-  if (data?.post && !data.post.publishedAt) return <PostEditor slug={slug} />
-  return <PostDetail slug={slug} />
+  const { data: context } = useContextQuery({ variables: {} })
+  const { data, error, loading } = useGetPostQuery({ variables: { slug } })
+  if (data?.post && !data.post.publishedAt)
+    return (
+      <PostEditor slug={slug} site={context.context.site} post={data.post} />
+    )
+  return (
+    <PostDetail
+      slug={slug}
+      site={context.context.site}
+      post={data.post}
+      error={error}
+      loading={loading}
+    />
+  )
 }
 
 export async function getServerSideProps(ctx) {

@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { useGetPostQuery } from '~/graphql/types.generated'
 
 import { PostEditorActions } from './PostEditorActions'
 import { PostEditorComposer } from './PostEditorComposer'
@@ -26,22 +25,21 @@ export const PostEditorContext = React.createContext({
   setIsPreviewing: (isPreviewing: boolean) => {},
 })
 
-export function PostEditor({ slug: propsSlug = '' }) {
+export function PostEditor({ slug: propsSlug = '', site, post }) {
   const scrollContainerRef = React.useRef(null)
-  const { data } = useGetPostQuery({ variables: { slug: propsSlug } })
 
   const defaultDraftState = {
-    title: data?.post?.title || '',
-    text: data?.post?.text || '',
-    slug: data?.post?.slug || '',
-    excerpt: data?.post?.excerpt || '',
-    publishedAt: data?.post?.publishedAt || null,
+    title: post?.title || '',
+    text: post?.text || '',
+    slug: post?.slug || '',
+    excerpt: post?.excerpt || '',
+    publishedAt: post?.publishedAt || null,
   }
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)
   const [isPreviewing, setIsPreviewing] = React.useState(false)
 
-  const existingPost = data?.post
+  const existingPost = post
   const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false)
 
   React.useEffect(() => {

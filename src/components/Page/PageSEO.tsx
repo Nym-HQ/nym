@@ -2,27 +2,33 @@ import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
 import { baseUrl } from '~/config/seo'
-import { Page } from '~/graphql/types.generated'
+import { Page, Site } from '~/graphql/types.generated'
 
 interface Props {
   page: Page
+  site?: Site
 }
 
-export function PageSEO({ page }: Props) {
+export function PageSEO({ page, site }: Props) {
+  const title = `${site?.name || 'Nym'} | ${page.title}`
+  const description = `${site?.description || ''} | ${page.excerpt}`
+  const imgUrl =
+    site?.logo ||
+    page.featureImage ||
+    `${baseUrl}/static/img/writing/${page.slug}.png`
+
   return (
     <NextSeo
-      title={page.title}
-      description={page.excerpt}
+      title={title}
+      description={description}
       openGraph={{
-        title: page.title,
+        title: title,
         url: `${baseUrl}/pages/${page.slug}`,
-        description: page.excerpt,
+        description: description,
         images: [
           {
-            url:
-              page.featureImage ||
-              `${baseUrl}/static/img/pages/${page.slug}.png`,
-            alt: page.title,
+            url: imgUrl,
+            alt: title,
           },
         ],
       }}
