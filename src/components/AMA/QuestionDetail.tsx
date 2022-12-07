@@ -7,49 +7,42 @@ import { Comments } from '~/components/Comments'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import routes from '~/config/routes'
+import { extendSEO } from '~/config/seo'
 import { CommentType, useGetQuestionQuery } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { QuestionActions } from './QuestionActions'
 
-export function QuestionDetail({ id }) {
+export function QuestionDetail({ id, question, site, loading, error }) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
-  const { data, loading, error } = useGetQuestionQuery({
-    variables: { id },
-  })
 
   if (loading) {
     return <Detail.Loading />
   }
 
-  if (!data?.question || error) {
+  if (!question || error) {
     return <Detail.Null type="404" />
   }
 
-  const { question } = data
   const createdAt = timestampToCleanTime({
     month: 'short',
-    timestamp: data?.question.createdAt,
+    timestamp: question.createdAt,
   })
+
+  const seo = extendSEO(
+    {
+      ...routes.ama.seo,
+      title: question.title,
+      description: question.description,
+    },
+    site
+  )
 
   return (
     <>
-      <NextSeo
-        title={question.title}
-        description={question.description}
-        openGraph={{
-          title: question.title,
-          description: question.description,
-          images: [
-            {
-              url: routes.ama.seo.image,
-              alt: routes.ama.seo.description,
-            },
-          ],
-        }}
-      />
+      <NextSeo {...seo} />
       <Detail.Container data-cy="question-detail" ref={scrollContainerRef}>
         <TitleBar
           backButton

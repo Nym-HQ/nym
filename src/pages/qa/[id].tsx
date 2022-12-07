@@ -6,14 +6,32 @@ import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { getContext } from '~/graphql/context'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_QUESTION, GET_QUESTIONS } from '~/graphql/queries/questions'
-import { CommentType, QuestionStatus } from '~/graphql/types.generated'
+import {
+  CommentType,
+  QuestionStatus,
+  useContextQuery,
+  useGetQuestionQuery,
+} from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function QuestionDetailPage(props) {
   const { id } = props
-  return <QuestionDetail id={id} />
+  const { data: context } = useContextQuery()
+  const { data, loading, error } = useGetQuestionQuery({
+    variables: { id },
+  })
+
+  return (
+    <QuestionDetail
+      id={id}
+      question={data.question}
+      site={context.context.site}
+      loading={loading}
+      error={error}
+    />
+  )
 }
 
 export async function getServerSideProps(ctx) {

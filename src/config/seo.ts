@@ -1,10 +1,12 @@
+import { Site } from '~/graphql/types.generated'
+
 export const baseUrl =
   process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : ''
 export const baseEmail = 'hi@nymhq.com'
 
 export const defaultSEO = {
-  title: 'Nym',
-  description: 'Nym is a personal website maker.',
+  title: '',
+  description: '',
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -31,12 +33,14 @@ interface SEOProps {
   url?: string
 }
 
-export function extendSEO(options: SEOProps) {
+export function extendSEO(options: SEOProps, site?: Site) {
   const images = options.image
     ? [{ url: `${baseUrl}/static/${options.image}` }]
+    : site && site.logo
+    ? [{ url: site.logo }]
     : defaultSEO.openGraph.images
 
-  return {
+  const seo = {
     ...defaultSEO,
     ...options,
     url: `${baseUrl}/${options.url}`,
@@ -46,4 +50,18 @@ export function extendSEO(options: SEOProps) {
       url: `${baseUrl}/${options.url}`,
     },
   }
+
+  // override with site configuration
+  seo.title = `${site?.name || 'Nym'}${seo.title ? ` | ${seo.title}` : ''}`
+  seo.description = `${seo.description ? `${seo.description} |` : ''}${site?.description || 'Nym is a personal website maker.'}`
+
+  if(site) {
+    seo.twitter = {
+      handle: `@${site.social_twitter || 'nym_xyz'}`,
+      site: `@${site.parkedDomain || (site.subdomain + '.nymhq.com')}`,
+      cardType: 'summary_large_image',
+    }
+  }
+
+  return seo;
 }

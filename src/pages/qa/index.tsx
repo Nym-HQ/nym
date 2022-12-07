@@ -4,21 +4,19 @@ import * as React from 'react'
 import { QuestionsList } from '~/components/AMA/QuestionsList'
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import routes from '~/config/routes'
+import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { GET_QUESTIONS } from '~/graphql/queries/questions'
-import { QuestionStatus } from '~/graphql/types.generated'
+import { QuestionStatus, useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function AmaPage(props) {
-  return (
-    <NextSeo
-      title={routes.ama.seo.title}
-      description={routes.ama.seo.description}
-      openGraph={routes.ama.seo.openGraph}
-    />
-  )
+  const { data: context } = useContextQuery()
+  const seo = extendSEO(routes.ama.seo, context.context.site)
+
+  return <NextSeo {...seo} />
 }
 
 export async function getServerSideProps(ctx) {
