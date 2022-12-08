@@ -3,7 +3,6 @@ import * as React from 'react'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { Switch } from '~/components/Switch'
-import { useGetPageQuery } from '~/graphql/types.generated'
 
 import { PageEditorActions } from './PageEditorActions'
 import { PageEditorComposer } from './PageEditorComposer'
@@ -29,24 +28,23 @@ export const PageEditorContext = React.createContext({
   setIsPreviewing: (isPreviewing: boolean) => {},
 })
 
-export function PageEditor({ slug: propsSlug = '' }) {
+export function PageEditor({ slug: propsSlug = '', site, page }) {
   const scrollContainerRef = React.useRef(null)
-  const { data } = useGetPageQuery({ variables: { slug: propsSlug } })
 
   const defaultDraftState = {
-    title: data?.page?.title || '',
-    text: data?.page?.text || '',
-    path: data?.page?.path || '',
-    slug: data?.page?.slug || '',
-    excerpt: data?.page?.excerpt || '',
-    featured: data?.page?.featured || false,
-    publishedAt: data?.page?.publishedAt || null,
+    title: page?.title || '',
+    text: page?.text || '',
+    path: page?.path || '',
+    slug: page?.slug || '',
+    excerpt: page?.excerpt || '',
+    featured: page?.featured || false,
+    publishedAt: page?.publishedAt || null,
   }
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)
   const [isPreviewing, setIsPreviewing] = React.useState(false)
 
-  const existingPage = data?.page
+  const existingPage = page
   const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false)
 
   React.useEffect(() => {

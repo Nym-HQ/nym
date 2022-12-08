@@ -6,16 +6,20 @@ import { withProviders } from '~/components/Providers/withProviders'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
 import { getContext } from '~/graphql/context'
 import { GET_POST } from '~/graphql/queries/posts'
-import { useContextQuery } from '~/graphql/types.generated'
+import { useContextQuery, useGetPostQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function EditPostPage(props) {
   const { slug } = props
-  const { data } = useContextQuery()
-  if (!data?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
-  return <PostEditor slug={slug} />
+  const { data: context } = useContextQuery()
+  const { data } = useGetPostQuery({ variables: { slug } })
+
+  if (!context?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
+  return (
+    <PostEditor slug={slug} post={data.post} site={context.context?.site} />
+  )
 }
 
 export async function getServerSideProps(ctx) {

@@ -3,30 +3,28 @@ import * as React from 'react'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { MarkdownRenderer } from '~/components/MarkdownRenderer'
-import { useGetPageQuery } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
 
-export function PageDetail({ slug }) {
+export function PageDetail({ slug, site, page, error, loading }) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
-  const { data, error, loading } = useGetPageQuery({ variables: { slug } })
 
   if (loading) {
     return <Detail.Loading />
   }
 
-  if (!data?.page || error) {
+  if (!page || error) {
     return <Detail.Null type="Page" />
   }
-  const { page } = data
+
   const publishedAt = timestampToCleanTime({ timestamp: page.publishedAt })
   return (
     <>
-      <PageSEO page={page} />
+      <PageSEO page={page} site={site} />
       <Detail.Container data-cy="page-detail" ref={scrollContainerRef}>
         <TitleBar
           backButton

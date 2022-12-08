@@ -45,7 +45,9 @@ export function PostEditorMetaSidebar() {
       return addPost({
         variables: {
           data: {
-            ...draftState,
+            title: draftState.title,
+            text: draftState.text,
+            excerpt: draftState.excerpt,
             slug:
               slugifyString(draftState.slug) || slugifyString(draftState.title),
           },
@@ -54,26 +56,11 @@ export function PostEditorMetaSidebar() {
     }
   }
 
-  function handlePublish() {
-    // if already publish, don't try to publish again
-    if (existingPost.publishedAt) return
-
-    return editPost({
-      variables: {
-        id: existingPost.id,
-        data: {
-          ...draftState,
-          slug: slugifyString(draftState.slug),
-          published: true,
-        },
-      },
-      refetchQueries: [GET_POSTS],
-    })
-  }
-
-  function handleUnpublish() {
+  function handleUpdate(published?: boolean) {
     // if it's not published already, don't try to unpublish
-    if (!existingPost.publishedAt) return
+    if (!existingPost.publishedAt && published === false) return
+
+    if (typeof published === 'undefined') published = !!existingPost.publishedAt
 
     return editPost({
       variables: {
@@ -81,7 +68,7 @@ export function PostEditorMetaSidebar() {
         data: {
           ...draftState,
           slug: slugifyString(draftState.slug),
-          published: false,
+          published,
         },
       },
       refetchQueries: [GET_POSTS],
@@ -142,37 +129,50 @@ export function PostEditorMetaSidebar() {
             />
           </div>
 
-          <div className="flex flex-col space-y-1">
-            <p className="text-primary text-sm font-semibold">Publish Date</p>
-            <TextWithDatePicker
-              value={draftState.publishedAt}
-              onChange={(v) => setDraftState({ ...draftState, publishedAt: v })}
-            />
-          </div>
+          {existingPost?.id && (
+            <div className="flex flex-col space-y-1">
+              <p className="text-primary text-sm font-semibold">Publish Date</p>
+              <TextWithDatePicker
+                value={draftState.publishedAt}
+                onChange={(v) =>
+                  setDraftState({ ...draftState, publishedAt: v })
+                }
+              />
+            </div>
+          )}
         </div>
 
-        <div className="filter-blur sticky bottom-0 z-10 flex items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
+        <div className="flex flex-col filter-blur sticky bottom-0 z-10 flex items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
+          {existingPost?.id && (
+            <PrimaryButton
+              style={{ width: '100%', margin: '8px 0 0 0' }}
+              disabled={editingPost}
+              onClick={() => handleUpdate()}
+            >
+              {editingPost ? <LoadingSpinner /> : 'Save'}
+            </PrimaryButton>
+          )}
           {existingPost?.id && !existingPost?.publishedAt && (
             <PrimaryButton
-              style={{ width: '100%' }}
+              style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={editingPost}
-              onClick={handlePublish}
+              onClick={() => handleUpdate(true)}
             >
               {editingPost ? <LoadingSpinner /> : 'Publish'}
             </PrimaryButton>
           )}
           {existingPost?.id && existingPost?.publishedAt && (
             <Button
-              style={{ width: '100%' }}
+              style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={editingPost}
-              onClick={handleUnpublish}
+              onClick={() => handleUpdate(false)}
             >
               {editingPost ? <LoadingSpinner /> : 'Unpublish'}
             </Button>
           )}
           {!existingPost?.id && (
             <Button
-              style={{ width: '100%' }}
+              style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={creatingPost}
               onClick={handleCreateDraft}
             >

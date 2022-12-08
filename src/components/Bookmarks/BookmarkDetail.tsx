@@ -9,45 +9,37 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { Tags } from '~/components/Tag'
 import routes from '~/config/routes'
+import { extendSEO } from '~/config/seo'
 import { CommentType, useGetBookmarkQuery } from '~/graphql/types.generated'
 
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { BookmarkActions } from './BookmarkActions'
 import { RelatedBookmarks } from './RelatedBookmarks'
 
-export function BookmarkDetail({ id }) {
+export function BookmarkDetail({ id, bookmark, site, loading, error }) {
   const scrollContainerRef: React.RefObject<HTMLDivElement> = React.useRef(null)
   const titleRef: React.RefObject<HTMLHeadingElement> = React.useRef(null)
-  const { data, loading, error } = useGetBookmarkQuery({
-    variables: { id },
-  })
 
   if (loading) {
     return <Detail.Loading />
   }
 
-  if (!data?.bookmark || error) {
+  if (!bookmark || error) {
     return <Detail.Null type="404" />
   }
 
-  const { bookmark } = data
+  const seo = extendSEO(
+    {
+      ...routes.bookmarks.seo,
+      title: bookmark.title,
+      description: bookmark.description,
+    },
+    site
+  )
 
   return (
     <>
-      <NextSeo
-        title={bookmark.title}
-        description={bookmark.description}
-        openGraph={{
-          title: bookmark.title,
-          description: bookmark.description,
-          images: [
-            {
-              url: routes.bookmarks.seo.image,
-              alt: routes.bookmarks.seo.description,
-            },
-          ],
-        }}
-      />
+      <NextSeo {...seo} />
       <Detail.Container data-cy="bookmark-detail" ref={scrollContainerRef}>
         <TitleBar
           backButton

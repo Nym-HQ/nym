@@ -8,14 +8,31 @@ import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
 import { GET_BOOKMARK } from '~/graphql/queries/bookmarks'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_TAGS } from '~/graphql/queries/tags'
-import { CommentType } from '~/graphql/types.generated'
+import {
+  CommentType,
+  useContextQuery,
+  useGetBookmarkQuery,
+} from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function BookmarkPage(props) {
   const { id } = props
-  return <BookmarkDetail id={id} />
+  const { data: context } = useContextQuery()
+  const { data, loading, error } = useGetBookmarkQuery({
+    variables: { id },
+  })
+
+  return (
+    <BookmarkDetail
+      id={id}
+      site={context.context.site}
+      bookmark={data.bookmark}
+      loading={loading}
+      error={error}
+    />
+  )
 }
 
 export async function getServerSideProps(ctx) {

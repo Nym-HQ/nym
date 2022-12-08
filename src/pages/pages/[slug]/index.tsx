@@ -7,16 +7,33 @@ import { PagesList } from '~/components/Page/PagesList'
 import { getContext } from '~/graphql/context'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_PAGE, GET_PAGES } from '~/graphql/queries/pages'
-import { CommentType, useGetPageQuery } from '~/graphql/types.generated'
+import {
+  CommentType,
+  useContextQuery,
+  useGetPageQuery,
+} from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function PagePagePage(props) {
   const { slug } = props
-  const { data } = useGetPageQuery({ variables: { slug } })
-  if (data?.page && !data.page.publishedAt) return <PageEditor slug={slug} />
-  return <PageDetail slug={slug} />
+  const { data: context } = useContextQuery({ variables: {} })
+  const { data, error, loading } = useGetPageQuery({ variables: { slug } })
+  if (data?.page && !data.page.publishedAt)
+    return (
+      <PageEditor slug={slug} site={context.context.site} page={data.page} />
+    )
+
+  return (
+    <PageDetail
+      slug={slug}
+      site={context.context.site}
+      page={data.page}
+      error={error}
+      loading={loading}
+    />
+  )
 }
 
 export async function getServerSideProps(ctx) {

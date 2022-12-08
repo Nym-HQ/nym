@@ -10,9 +10,9 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function NewPostPage(props) {
-  const { data } = useContextQuery()
-  if (!data?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
-  return <PostEditor />
+  const { data: context } = useContextQuery()
+  if (!context?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
+  return <PostEditor post={null} site={context.context?.site} />
 }
 
 export async function getServerSideProps(ctx) {

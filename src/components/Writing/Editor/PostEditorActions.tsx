@@ -55,7 +55,9 @@ export function PostEditorActions() {
     return addPost({
       variables: {
         data: {
-          ...draftState,
+          title: draftState.title,
+          text: draftState.text,
+          excerpt: draftState.excerpt,
           slug:
             slugifyString(draftState.slug) || slugifyString(draftState.title),
         },

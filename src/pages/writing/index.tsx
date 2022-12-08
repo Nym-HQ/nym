@@ -4,20 +4,19 @@ import * as React from 'react'
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { PostsList } from '~/components/Writing/PostsList'
 import routes from '~/config/routes'
+import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { GET_POSTS } from '~/graphql/queries/posts'
+import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function WritingPage(props) {
-  return (
-    <NextSeo
-      title={routes.writing.seo.title}
-      description={routes.writing.seo.description}
-      openGraph={routes.writing.seo.openGraph}
-    />
-  )
+  const { data: context } = useContextQuery()
+  const seo = extendSEO(routes.writing.seo, context.context.site)
+
+  return <NextSeo {...seo} />
 }
 
 export async function getServerSideProps(ctx) {

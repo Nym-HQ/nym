@@ -4,30 +4,29 @@ import { Comments } from '~/components/Comments'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { MarkdownRenderer } from '~/components/MarkdownRenderer'
-import { CommentType, useGetPostQuery } from '~/graphql/types.generated'
+import { CommentType } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PostActions } from './PostActions'
 import { PostSEO } from './PostSEO'
 
-export function PostDetail({ slug }) {
+export function PostDetail({ slug, site, post, error, loading }) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
-  const { data, error, loading } = useGetPostQuery({ variables: { slug } })
 
   if (loading) {
     return <Detail.Loading />
   }
 
-  if (!data?.post || error) {
+  if (!post || error) {
     return <Detail.Null type="Post" />
   }
-  const { post } = data
+
   const publishedAt = timestampToCleanTime({ timestamp: post.publishedAt })
   return (
     <>
-      <PostSEO post={post} />
+      <PostSEO post={post} site={site} />
       <Detail.Container data-cy="post-detail" ref={scrollContainerRef}>
         <TitleBar
           backButton
