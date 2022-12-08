@@ -5,16 +5,19 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { PageEditor } from '~/components/Page/Editor/PageEditor'
 import { getContext } from '~/graphql/context'
 import { GET_PAGE } from '~/graphql/queries/pages'
-import { useContextQuery } from '~/graphql/types.generated'
+import { useContextQuery, useGetPageQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function EditPagePage(props) {
   const { slug } = props
-  const { data } = useContextQuery()
-  if (!data?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
-  return <PageEditor slug={slug} />
+  const { data: context } = useContextQuery()
+  const { data } = useGetPageQuery({ variables: { slug } })
+  if (!context?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
+  return (
+    <PageEditor slug={slug} page={data.page} site={context.context?.site} />
+  )
 }
 
 export async function getServerSideProps(ctx) {

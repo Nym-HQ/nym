@@ -53,15 +53,17 @@ export function extendSEO(options: SEOProps, site?: Site) {
 
   // override with site configuration
   seo.title = `${site?.name || 'Nym'}${seo.title ? ` | ${seo.title}` : ''}`
-  seo.description = `${seo.description ? `${seo.description} |` : ''}${site?.description || 'Nym is a personal website maker.'}`
+  seo.description = `${seo.description ? `${seo.description} |` : ''}${
+    site?.description || 'Nym is a personal website maker.'
+  }`
 
-  if(site) {
+  if (site) {
     seo.twitter = {
       handle: `@${site.social_twitter || 'nym_xyz'}`,
-      site: `@${site.parkedDomain || (site.subdomain + '.nymhq.com')}`,
+      site: `@${site.parkedDomain || `${site.subdomain}.nymhq.com`}`,
       cardType: 'summary_large_image',
     }
   }
 
-  return seo;
+  return seo
 }

@@ -5,7 +5,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ./src/*.ts ./src/pages/* ./src/components/* ./src/pages/api/* ./src/graphql/* ./src/lib/* -c .eslintrc.json --fix --ext ts,tsx",
+    "lint": "eslint ./src/*.ts ./src/config/* ./src/pages/* ./src/components/* ./src/pages/api/* ./src/graphql/* ./src/lib/* -c .eslintrc.json --fix --ext ts,tsx",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "generate": "graphql-codegen",

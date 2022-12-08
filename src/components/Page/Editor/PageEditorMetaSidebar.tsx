@@ -45,35 +45,24 @@ export function PageEditorMetaSidebar() {
       return addPage({
         variables: {
           data: {
-            ...draftState,
+            title: draftState.title,
+            text: draftState.text,
+            excerpt: draftState.excerpt,
             slug:
               slugifyString(draftState.slug) || slugifyString(draftState.title),
+            path: draftState.path,
+            featured: draftState.featured,
           },
         },
       })
     }
   }
 
-  function handlePublish() {
-    // if already publish, don't try to publish again
-    if (existingPage.publishedAt) return
-
-    return editPage({
-      variables: {
-        id: existingPage.id,
-        data: {
-          ...draftState,
-          slug: slugifyString(draftState.slug),
-          published: true,
-        },
-      },
-      refetchQueries: [GET_PAGES],
-    })
-  }
-
-  function handleUnpublish() {
+  function handleUpdate(published?: boolean) {
     // if it's not published already, don't try to unpublish
-    if (!existingPage.publishedAt) return
+    if (!existingPage.publishedAt && published === false) return
+
+    if (typeof published === 'undefined') published = !!existingPage.publishedAt
 
     return editPage({
       variables: {
@@ -81,7 +70,7 @@ export function PageEditorMetaSidebar() {
         data: {
           ...draftState,
           slug: slugifyString(draftState.slug),
-          published: false,
+          published,
         },
       },
       refetchQueries: [GET_PAGES],
@@ -142,37 +131,50 @@ export function PageEditorMetaSidebar() {
             />
           </div>
 
-          <div className="flex flex-col space-y-1">
-            <p className="text-primary text-sm font-semibold">Publish date</p>
-            <TextWithDatePicker
-              value={draftState.publishedAt}
-              onChange={(v) => setDraftState({ ...draftState, publishedAt: v })}
-            />
-          </div>
+          {existingPage?.id && (
+            <div className="flex flex-col space-y-1">
+              <p className="text-primary text-sm font-semibold">Publish date</p>
+              <TextWithDatePicker
+                value={draftState.publishedAt}
+                onChange={(v) =>
+                  setDraftState({ ...draftState, publishedAt: v })
+                }
+              />
+            </div>
+          )}
         </div>
 
         <div className="filter-blur sticky bottom-0 z-10 flex items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
+          {existingPage?.id && (
+            <PrimaryButton
+              style={{ width: '100%', margin: '8px 0 0 0' }}
+              disabled={editingPage}
+              onClick={() => handleUpdate()}
+            >
+              {editingPage ? <LoadingSpinner /> : 'Save'}
+            </PrimaryButton>
+          )}
           {existingPage?.id && !existingPage?.publishedAt && (
             <PrimaryButton
-              style={{ width: '100%' }}
+              style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={editingPage}
-              onClick={handlePublish}
+              onClick={() => handleUpdate(true)}
             >
               {editingPage ? <LoadingSpinner /> : 'Publish'}
             </PrimaryButton>
           )}
           {existingPage?.id && existingPage?.publishedAt && (
             <Button
-              style={{ width: '100%' }}
+              style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={editingPage}
-              onClick={handleUnpublish}
+              onClick={() => handleUpdate(false)}
             >
               {editingPage ? <LoadingSpinner /> : 'Unpublish'}
             </Button>
           )}
           {!existingPage?.id && (
             <Button
-              style={{ width: '100%' }}
+              style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={creatingPage}
               onClick={handleCreateDraft}
             >
