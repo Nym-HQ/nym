@@ -76,7 +76,11 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
           leadingAccessory={<PreviewSwitch />}
         />
 
-        {isPreviewing ? <PageEditorPreview /> : <PageEditorComposer />}
+        {isPreviewing ? (
+          <PageEditorPreview />
+        ) : (
+          <PageEditorComposer site={site} />
+        )}
       </Detail.Container>
       <PageEditorMetaSidebar />
     </PageEditorContext.Provider>

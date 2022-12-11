@@ -46,6 +46,13 @@ A good resource to understand Prisma and its Shadow DB
 - `TWITTER_API_KEY`  Use Twitter API Key 
 - `TWITTER_API_SECRET` Use Twitter API Secret
 
+#### [Cloudinary](https://cloudinary.com/)
+
+- `CLOUDINARY_CLOUD_NAME` - Cloudinary Cloud name
+- `CLOUDINARY_API_KEY` - Cloudinary API KEY
+- `CLOUDINARY_API_SECRET` - Cloudinary API Secret
+- `CLOUDINARY_PRESET` - Preset name created on Cloudinary, make sure you set the "Signed" property to true
+
 ### Setting up DB for development environment
 
 #### Using PlanetScale

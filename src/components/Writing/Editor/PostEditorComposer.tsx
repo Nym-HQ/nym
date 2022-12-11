@@ -8,7 +8,7 @@ import { MDEditor } from '~/components/ReactMdEditor'
 
 import { PostEditorContext } from './PostEditor'
 
-export function PostEditorComposer() {
+export function PostEditorComposer({ site }) {
   const context = React.useContext(PostEditorContext)
   const { draftState, setDraftState } = context
   const uploadingImagePlaceholder = '![](Uploading...)'
@@ -45,6 +45,7 @@ export function PostEditorComposer() {
 
   return (
     <Dropzone
+      site={site}
       onUploadStarted={onUploadStarted}
       onUploadComplete={onUploadComplete}
       onUploadFailed={onUploadFailed}
