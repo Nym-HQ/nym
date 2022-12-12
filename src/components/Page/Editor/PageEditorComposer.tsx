@@ -7,7 +7,7 @@ import { MDEditor } from '~/components/ReactMdEditor'
 
 import { PageEditorContext } from './PageEditor'
 
-export function PageEditorComposer() {
+export function PageEditorComposer({ site }) {
   const context = React.useContext(PageEditorContext)
   const { draftState, setDraftState } = context
   const uploadingImagePlaceholder = '![](Uploading...)'
@@ -44,6 +44,7 @@ export function PageEditorComposer() {
 
   return (
     <Dropzone
+      site={site}
       onUploadStarted={onUploadStarted}
       onUploadComplete={onUploadComplete}
       onUploadFailed={onUploadFailed}

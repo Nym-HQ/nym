@@ -14,7 +14,7 @@ import { getCommonPageProps } from '~/lib/commonProps'
 
 function PagePage(props) {
   const { data: context } = useContextQuery()
-  const seo = extendSEO(routes.writing.seo, context.context.site)
+  const seo = extendSEO(routes.pages.seo, context.context.site)
 
   return <NextSeo {...seo} />
 }

@@ -71,7 +71,11 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
           leadingAccessory={<PreviewSwitch />}
         />
 
-        {isPreviewing ? <PostEditorPreview /> : <PostEditorComposer />}
+        {isPreviewing ? (
+          <PostEditorPreview />
+        ) : (
+          <PostEditorComposer site={site} />
+        )}
       </Detail.Container>
       <PostEditorMetaSidebar />
     </PostEditorContext.Provider>
