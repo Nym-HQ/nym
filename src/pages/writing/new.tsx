@@ -1,8 +1,11 @@
+import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PostEditor } from '~/components/Writing/Editor/PostEditor'
+import routes from '~/config/routes'
+import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
@@ -11,8 +14,14 @@ import { getCommonPageProps } from '~/lib/commonProps'
 
 function NewPostPage(props) {
   const { data: context } = useContextQuery()
+  const seo = extendSEO(routes.writing.seo, context.context.site)
   if (!context?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
-  return <PostEditor post={null} site={context.context?.site} />
+  return (
+    <>
+      <NextSeo {...seo} />
+      <PostEditor post={null} site={context.context?.site} />
+    </>
+  )
 }
 
 export async function getServerSideProps(ctx) {

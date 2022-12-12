@@ -19,7 +19,7 @@ const routes = {
     path: '/writing',
     seo: extendSEO({
       title: 'Writing',
-      description: 'Thinking out loud about software design and development.',
+      description: 'Express yourself.',
       image: 'og/writing.png',
       url: 'writing',
     }),

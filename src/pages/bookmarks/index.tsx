@@ -15,7 +15,7 @@ import { getCommonPageProps } from '~/lib/commonProps'
 
 function BookmarksPage(props) {
   const { data: context } = useContextQuery()
-  const seo = extendSEO(routes.writing.seo, context.context.site)
+  const seo = extendSEO(routes.bookmarks.seo, context.context.site)
 
   return <NextSeo {...seo} />
 }
