@@ -26,7 +26,7 @@ AccountPage.getLayout = function getLayout(page) {
   return <SiteLayout>{page}</SiteLayout>
 }
 
-export async function getServerSideProps(ctx: NextPageContext) {
+export async function getInitialProps(ctx: NextPageContext) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])

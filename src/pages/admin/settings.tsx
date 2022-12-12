@@ -409,7 +409,7 @@ function AdminSettingsPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export async function getInitialProps(ctx) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])

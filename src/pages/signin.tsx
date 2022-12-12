@@ -20,7 +20,7 @@ export default function SignInPage(props) {
  * @param props
  * @returns
  */
-export async function getServerSideProps(ctx: NextPageContext) {
+export async function getInitialProps(ctx: NextPageContext) {
   const { req, res } = ctx
 
   const url = new URL(req.url, `http://${req.headers.host}`)

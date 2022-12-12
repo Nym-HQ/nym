@@ -105,7 +105,7 @@ export default function Home(props) {
   return isAppDomain ? <AppIntro /> : <SiteIntro />
 }
 
-export async function getServerSideProps(ctx: NextPageContext) {
+export async function getInitialProps(ctx: NextPageContext) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 

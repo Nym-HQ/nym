@@ -105,7 +105,7 @@ export function initApolloClient({ initialState = null, context = {} }) {
     // Get existing cache, loaded during client side data fetching
     const existingCache = _apolloClient.extract()
 
-    // Merge the existing cache into data passed from getStaticProps/getServerSideProps
+    // Merge the existing cache into data passed from getStaticProps/getInitialProps
     const data = merge(initialState, existingCache, {
       // combine arrays using object equality (like in sets)
       arrayMerge: (destinationArray, sourceArray) => [

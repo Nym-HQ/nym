@@ -23,7 +23,7 @@ function NewPagePage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export async function getInitialProps(ctx) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 

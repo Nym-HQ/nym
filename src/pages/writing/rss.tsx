@@ -7,7 +7,7 @@ import { generateRSS } from '~/lib/rss'
 
 const RSSFeed: React.FC = () => null
 
-export async function getServerSideProps(ctx) {
+export async function getInitialProps(ctx) {
   const { req, res } = ctx
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })

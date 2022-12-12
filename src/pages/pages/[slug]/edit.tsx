@@ -20,7 +20,7 @@ function EditPagePage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export async function getInitialProps(ctx) {
   const {
     params: { slug },
   } = ctx

@@ -22,7 +22,7 @@ export default function Profile() {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export async function getInitialProps(ctx) {
   const {
     params: { slug },
   } = ctx
