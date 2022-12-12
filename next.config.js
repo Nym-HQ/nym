@@ -19,6 +19,7 @@ module.exports = removeImports({
     return config
   },
   images: {
+    unoptimized: true,
     domains: [
       'pbs.twimg.com',
       'abs.twimg.com',
