@@ -19,9 +19,11 @@ export const MDEditorPreviewer = dynamic(
 export function CustomizedMDEditor({ value, onChange, ...props }) {
   const [commands, setCommands] = React.useState(null)
 
-  import('@uiw/react-md-editor').then((mod) => {
-    setCommands(mod.commands)
-  })
+  React.useEffect(() => {
+    import('@uiw/react-md-editor').then((mod) => {
+      setCommands(mod.commands)
+    })
+  }, [])
 
   const fileRef = React.useRef(null)
   const fileProvider =
