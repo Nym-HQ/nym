@@ -23,10 +23,6 @@ export default function Profile() {
 }
 
 export async function getServerSideProps(ctx) {
-  const {
-    params: { slug },
-  } = ctx
-
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 
@@ -43,7 +39,6 @@ export async function getServerSideProps(ctx) {
 
   return addApolloState(apolloClient, {
     props: {
-      slug,
       ...commonProps,
     },
   })
