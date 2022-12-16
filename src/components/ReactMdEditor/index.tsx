@@ -72,7 +72,6 @@ export function CustomizedMDEditor({ value, onChange, ...props }) {
 
   const getCommands = () => {
     if (commands) {
-      console.log('heyhey')
       return [
         commands.bold,
         commands.italic,
