@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Dropzone } from '~/components/Dropzone'
 import { Textarea } from '~/components/Input'
 import { Detail } from '~/components/ListDetail/Detail'
-import { MDEditor } from '~/components/ReactMdEditor'
+import { CustomizedMDEditor } from '~/components/ReactMdEditor'
 
 import { PageEditorContext } from './PageEditor'
 
@@ -58,14 +58,11 @@ export function PageEditorComposer({ site }) {
             placeholder={'Page title'}
             className="block w-full p-0 text-2xl font-bold border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black md:text-3xl"
           />
-          <div className="block w-full relative p-0 text-lg font-normal">
-            <MDEditor
-              value={draftState.text}
-              onChange={handleTextChange}
-              preview="edit"
-              height={500}
-            />
-          </div>
+          <CustomizedMDEditor
+            value={draftState.text}
+            onChange={handleTextChange}
+          />
+
           {/* <Textarea
             rows={20}
             maxRows={2000}
