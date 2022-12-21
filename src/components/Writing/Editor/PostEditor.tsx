@@ -77,7 +77,7 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
           <PostEditorComposer site={site} />
         )}
       </Detail.Container>
-      <PostEditorMetaSidebar />
+      <PostEditorMetaSidebar site={site} />
     </PostEditorContext.Provider>
   )
 }

@@ -13,11 +13,12 @@ import {
   useAddPageMutation,
   useEditPageMutation,
 } from '~/graphql/types.generated'
+import * as bee from '~/lib/bee'
 import { slugifyString } from '~/lib/utils'
 
 import { PageEditorContext } from './PageEditor'
 
-export function PageEditorMetaSidebar() {
+export function PageEditorMetaSidebar({ site }) {
   const router = useRouter()
   const context = React.useContext(PageEditorContext)
   const {
@@ -62,7 +63,16 @@ export function PageEditorMetaSidebar() {
     // if it's not published already, don't try to unpublish
     if (!existingPage.publishedAt && published === false) return
 
-    if (typeof published === 'undefined') published = !!existingPage.publishedAt
+    let newlyPublished = false
+    if (typeof published === 'undefined')
+      // publish status unchanged
+      published = !!existingPage.publishedAt
+    else if (published === true) {
+      // publish
+      newlyPublished = true
+    } else if (published === false) {
+      // unpublish
+    }
 
     return editPage({
       variables: {
@@ -74,6 +84,15 @@ export function PageEditorMetaSidebar() {
         },
       },
       refetchQueries: [GET_PAGES],
+    }).then((resp) => {
+      if (newlyPublished) {
+        bee.track('Page Published', {
+          site_id: site?.id,
+          subdomain: site?.subdomain,
+          page_id: resp.data.editPage.id,
+          page_slug: resp.data.editPage.slug,
+        })
+      }
     })
   }
 

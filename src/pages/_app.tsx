@@ -23,7 +23,11 @@ export default function App({ Component, session, pageProps }) {
   useEffect(() => {
     const handleRouteChange = (url) => {
       gtag.pageview(url)
-      bee.track('PageView', { url: url })
+      bee.track('Page View', {
+        site_id: pageProps?.site?.id,
+        subdomain: pageProps?.site?.subdomain,
+        url: url,
+      })
     }
     router.events.on('routeChangeComplete', handleRouteChange)
     router.events.on('hashChangeComplete', handleRouteChange)

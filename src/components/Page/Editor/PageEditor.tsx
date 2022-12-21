@@ -82,7 +82,7 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
           <PageEditorComposer site={site} />
         )}
       </Detail.Container>
-      <PageEditorMetaSidebar />
+      <PageEditorMetaSidebar site={site} />
     </PageEditorContext.Provider>
   )
 }

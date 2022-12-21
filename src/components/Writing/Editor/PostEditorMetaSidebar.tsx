@@ -13,11 +13,12 @@ import {
   useAddPostMutation,
   useEditPostMutation,
 } from '~/graphql/types.generated'
+import * as bee from '~/lib/bee'
 import { slugifyString } from '~/lib/utils'
 
 import { PostEditorContext } from './PostEditor'
 
-export function PostEditorMetaSidebar() {
+export function PostEditorMetaSidebar({ site }) {
   const router = useRouter()
   const context = React.useContext(PostEditorContext)
   const {
@@ -60,7 +61,16 @@ export function PostEditorMetaSidebar() {
     // if it's not published already, don't try to unpublish
     if (!existingPost.publishedAt && published === false) return
 
-    if (typeof published === 'undefined') published = !!existingPost.publishedAt
+    let newlyPublished = false
+    if (typeof published === 'undefined')
+      // publish status unchanged
+      published = !!existingPost.publishedAt
+    else if (published === true) {
+      // publish
+      newlyPublished = true
+    } else if (published === false) {
+      // unpublish
+    }
 
     return editPost({
       variables: {
@@ -72,6 +82,15 @@ export function PostEditorMetaSidebar() {
         },
       },
       refetchQueries: [GET_POSTS],
+    }).then((resp) => {
+      if (newlyPublished) {
+        bee.track('Post Published', {
+          site_id: site?.id,
+          subdomain: site?.subdomain,
+          post_id: resp.data.editPost.id,
+          post_slug: resp.data.editPost.slug,
+        })
+      }
     })
   }
 

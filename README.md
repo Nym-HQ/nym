@@ -89,5 +89,131 @@ yarn prisma migrate dev
 - Make sure you connect to the `dev` branch only, not to the `main` branch directly.
 - When you want to deploy changes from `dev` to `main`, go to https://app.planetscale.com/sov-ventures/nymhq/deploy-requests and create deployment request from `dev` branch to `main` branch.
 
+### Splitbee tracking
+
+- Page View
+    ```json
+    {
+        "event": "Page View",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "url": "..."
+        }
+    }
+    ```
+- Subscribe Newsletter
+    ```json
+    {
+        "event": "Subscribe Newsletter",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "url": "..."
+        }
+    }
+    ```
+- External Link Click
+    ```json
+    {
+        "event": "External Link",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "url": "..."
+        }
+    }
+    ```
+- Comment
+    ```json
+    {
+        "event": "Comment",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "url": "..."
+        }
+    }
+    ```
+- Favorite
+    ```json
+    {
+        "event": "Favorite",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "url": "..."
+        }
+    }
+    ```
+- Post Published
+    ```json
+    {
+        "event": "Post Published",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "post_id": "...",
+            "post_slug": "...",
+        }
+    }
+    ```
+- Page Published
+    ```json
+    {
+        "event": "Page Published",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "page_id": "...",
+            "page_slug": "...",
+        }
+    }
+    ```
+- Site Created
+    ```json
+    {
+        "event": "Site Created",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "subdomain": "...",
+        }
+    }
+    ```
+- Question Asked
+    ```json
+    {
+        "event": "Question Asked",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "question_id": "...",
+        }
+    }
+    ```
+- Question Answered
+    ```json
+    {
+        "event": "Question Answered",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "question_id": "...",
+        }
+    }
+    ```
+- Link Clicked
+    ```json
+    {
+        "event": "Link Clicked",
+        "data": {
+            "site_id": "...",
+            "subdomain": "...",
+            "url": "...",
+        }
+    }
+    ```
+
 ### Nym is a fork of the briOS project
 https://github.com/brianlovin/briOS
