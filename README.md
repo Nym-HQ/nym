@@ -109,11 +109,11 @@ yarn prisma migrate dev
 - Subscribe Newsletter
     ```json
     {
-        "event": "Subscribe Newsletter",
+        "event": "newsletter-subscribe",
         "data": {
             "site_id": "...",
             "subdomain": "...",
-            "url": "..."
+            "email": "..."
         }
     }
     ```
