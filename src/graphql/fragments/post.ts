@@ -22,6 +22,7 @@ export const PostDetailFragment = gql`
   fragment PostDetail on Post {
     ...PostCore
     text
+    data
     featureImage
     reactionCount
     viewerHasReacted

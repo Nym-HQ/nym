@@ -12,7 +12,6 @@ import {
 import { slugifyString } from '~/lib/utils'
 
 import { PostEditorContext } from './PostEditor'
-import { PostEditorAutoSave } from './PostEditorAutoSave'
 
 export function PostEditorActions() {
   const router = useRouter()
@@ -46,6 +45,7 @@ export function PostEditorActions() {
           id: existingPost.id,
           data: {
             ...draftState,
+            data: JSON.stringify(draftState.data),
             slug: slugifyString(draftState.slug),
           },
         },
@@ -57,6 +57,7 @@ export function PostEditorActions() {
         data: {
           title: draftState.title,
           text: draftState.text,
+          data: JSON.stringify(draftState.data),
           excerpt: draftState.excerpt,
           slug:
             slugifyString(draftState.slug) || slugifyString(draftState.title),
@@ -74,7 +75,6 @@ export function PostEditorActions() {
           <LoadingSpinner />
         ) : (
           <>
-            <PostEditorAutoSave />{' '}
             <span>{existingPost?.publishedAt ? 'Update' : 'Save draft'}</span>
           </>
         )}

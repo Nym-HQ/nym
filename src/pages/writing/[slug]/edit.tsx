@@ -10,16 +10,16 @@ import { useContextQuery, useGetPostQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import { parsePostData } from '~/lib/compat/data'
 
 function EditPostPage(props) {
   const { slug } = props
   const { data: context } = useContextQuery()
   const { data } = useGetPostQuery({ variables: { slug } })
+  const post = parsePostData(data?.post)
 
   if (!context?.context?.viewer?.isAdmin) return <Detail.Null type="404" />
-  return (
-    <PostEditor slug={slug} post={data.post} site={context.context?.site} />
-  )
+  return <PostEditor slug={slug} post={post} site={context.context?.site} />
 }
 
 export async function getServerSideProps(ctx) {

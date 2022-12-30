@@ -13,11 +13,12 @@ import {
   useAddPageMutation,
   useEditPageMutation,
 } from '~/graphql/types.generated'
+import * as bee from '~/lib/bee'
 import { slugifyString } from '~/lib/utils'
 
 import { PageEditorContext } from './PageEditor'
 
-export function PageEditorMetaSidebar() {
+export function PageEditorMetaSidebar({ site }) {
   const router = useRouter()
   const context = React.useContext(PageEditorContext)
   const {
@@ -47,6 +48,7 @@ export function PageEditorMetaSidebar() {
           data: {
             title: draftState.title,
             text: draftState.text,
+            data: JSON.stringify(draftState.data),
             excerpt: draftState.excerpt,
             slug:
               slugifyString(draftState.slug) || slugifyString(draftState.title),
@@ -62,18 +64,37 @@ export function PageEditorMetaSidebar() {
     // if it's not published already, don't try to unpublish
     if (!existingPage.publishedAt && published === false) return
 
-    if (typeof published === 'undefined') published = !!existingPage.publishedAt
+    let newlyPublished = false
+    if (typeof published === 'undefined')
+      // publish status unchanged
+      published = !!existingPage.publishedAt
+    else if (published === true) {
+      // publish
+      newlyPublished = true
+    } else if (published === false) {
+      // unpublish
+    }
 
     return editPage({
       variables: {
         id: existingPage.id,
         data: {
           ...draftState,
+          data: JSON.stringify(draftState.data),
           slug: slugifyString(draftState.slug),
           published,
         },
       },
       refetchQueries: [GET_PAGES],
+    }).then((resp) => {
+      if (newlyPublished) {
+        bee.track('Page Published', {
+          site_id: site?.id,
+          subdomain: site?.subdomain,
+          page_id: resp.data.editPage.id,
+          page_slug: resp.data.editPage.slug,
+        })
+      }
     })
   }
 
@@ -95,7 +116,7 @@ export function PageEditorMetaSidebar() {
         className={`${
           sidebarIsOpen
             ? 'absolute inset-y-0 right-0 translate-x-0 shadow-lg'
-            : 'absolute right-0 translate-x-full'
+            : 'absolute right-0 translate-x-full hidden'
         } 3xl:w-80 z-30 flex h-full max-h-screen-safe min-h-screen-safe pb-safe w-3/4 flex-none transform flex-col overflow-y-auto border-l border-gray-150 bg-white pb-10 transition duration-200 ease-in-out dark:border-gray-800 dark:bg-gray-900 sm:w-1/2 md:w-1/3 lg:w-64 2xl:w-72`}
       >
         <TitleBar
@@ -144,7 +165,7 @@ export function PageEditorMetaSidebar() {
           )}
         </div>
 
-        <div className="filter-blur sticky bottom-0 z-10 flex items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
+        <div className="filter-blur sticky bottom-0 z-10 flex flex-col items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
           {existingPage?.id && (
             <PrimaryButton
               style={{ width: '100%', margin: '8px 0 0 0' }}

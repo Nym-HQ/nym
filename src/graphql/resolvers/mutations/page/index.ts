@@ -6,6 +6,7 @@ import {
   MutationDeletePageArgs,
   MutationEditPageArgs,
 } from '~/graphql/types.generated'
+import { extractFeatureImage } from '~/lib/compat/data'
 import { graphcdn } from '~/lib/graphcdn'
 
 export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
@@ -13,6 +14,7 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
   const {
     title = '',
     text = '',
+    data: blocks = '{}',
     path = '',
     slug = '',
     excerpt = '',
@@ -25,6 +27,11 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
     where: { slug_siteId: { slug, siteId: site.id } },
   })
   if (existing?.id !== id) throw new UserInputError('Slug already exists')
+
+  let featureImage = existing.featureImage
+  if (!featureImage) {
+    featureImage = extractFeatureImage(text, blocks)
+  }
 
   if (path === '/' && published) {
     // new homepage is being published
@@ -55,7 +62,9 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
       where: { id },
       data: {
         title,
+        featureImage,
         text,
+        data: blocks,
         path: path || `/pages/${slug}`,
         slug,
         excerpt,
@@ -75,14 +84,24 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
 
 export async function addPage(_, args: MutationAddPageArgs, ctx: Context) {
   const { data } = args
-  const { title, text, path, slug, excerpt = '', featured = false } = data
+  const {
+    title,
+    text,
+    data: blocks,
+    path,
+    slug,
+    excerpt = '',
+    featured = false,
+  } = data
   const { prisma, viewer, site } = ctx
 
   return await prisma.page
     .create({
       data: {
         title,
+        featureImage: extractFeatureImage(text, blocks),
         text,
+        data: blocks,
         path: path || `/pages/${slug}`,
         slug,
         excerpt,

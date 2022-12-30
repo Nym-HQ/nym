@@ -13,11 +13,12 @@ import {
   useAddPostMutation,
   useEditPostMutation,
 } from '~/graphql/types.generated'
+import * as bee from '~/lib/bee'
 import { slugifyString } from '~/lib/utils'
 
 import { PostEditorContext } from './PostEditor'
 
-export function PostEditorMetaSidebar() {
+export function PostEditorMetaSidebar({ site }) {
   const router = useRouter()
   const context = React.useContext(PostEditorContext)
   const {
@@ -47,6 +48,7 @@ export function PostEditorMetaSidebar() {
           data: {
             title: draftState.title,
             text: draftState.text,
+            data: JSON.stringify(draftState.data),
             excerpt: draftState.excerpt,
             slug:
               slugifyString(draftState.slug) || slugifyString(draftState.title),
@@ -60,18 +62,37 @@ export function PostEditorMetaSidebar() {
     // if it's not published already, don't try to unpublish
     if (!existingPost.publishedAt && published === false) return
 
-    if (typeof published === 'undefined') published = !!existingPost.publishedAt
+    let newlyPublished = false
+    if (typeof published === 'undefined')
+      // publish status unchanged
+      published = !!existingPost.publishedAt
+    else if (published === true) {
+      // publish
+      newlyPublished = true
+    } else if (published === false) {
+      // unpublish
+    }
 
     return editPost({
       variables: {
         id: existingPost.id,
         data: {
           ...draftState,
+          data: JSON.stringify(draftState.data),
           slug: slugifyString(draftState.slug),
           published,
         },
       },
       refetchQueries: [GET_POSTS],
+    }).then((resp) => {
+      if (newlyPublished) {
+        bee.track('Post Published', {
+          site_id: site?.id,
+          subdomain: site?.subdomain,
+          post_id: resp.data.editPost.id,
+          post_slug: resp.data.editPost.slug,
+        })
+      }
     })
   }
 
@@ -93,7 +114,7 @@ export function PostEditorMetaSidebar() {
         className={`${
           sidebarIsOpen
             ? 'absolute inset-y-0 right-0 translate-x-0 shadow-lg'
-            : 'absolute right-0 translate-x-full'
+            : 'absolute right-0 translate-x-full hidden'
         } 3xl:w-80 z-30 flex h-full max-h-screen-safe min-h-screen-safe pb-safe w-3/4 flex-none transform flex-col overflow-y-auto border-l border-gray-150 bg-white pb-10 transition duration-200 ease-in-out dark:border-gray-800 dark:bg-gray-900 sm:w-1/2 md:w-1/3 lg:w-64 2xl:w-72`}
       >
         <TitleBar

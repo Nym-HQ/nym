@@ -10,6 +10,7 @@ import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { extendSEO } from '~/config/seo'
 import { useAddSiteMutation, useContextQuery } from '~/graphql/types.generated'
+import * as bee from '~/lib/bee'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
 function CreateYourWebsitePage() {
@@ -32,6 +33,11 @@ function CreateYourWebsitePage() {
           subdomain,
         },
       },
+    }).then((resp) => {
+      bee.track('Site Created', {
+        site_id: resp.data.addSite.id,
+        subdomain,
+      })
     })
   }
 

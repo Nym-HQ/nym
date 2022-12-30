@@ -15,21 +15,21 @@ import {
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import { parsePageData } from '~/lib/compat/data'
 
 function PagePagePage(props) {
   const { slug } = props
   const { data: context } = useContextQuery({ variables: {} })
   const { data, error, loading } = useGetPageQuery({ variables: { slug } })
-  if (data?.page && !data.page.publishedAt)
-    return (
-      <PageEditor slug={slug} site={context.context.site} page={data.page} />
-    )
+  const page = parsePageData(data?.page)
+  if (page && !page.publishedAt)
+    return <PageEditor slug={slug} site={context.context.site} page={page} />
 
   return (
     <PageDetail
       slug={slug}
       site={context.context.site}
-      page={data.page}
+      page={page}
       error={error}
       loading={loading}
     />

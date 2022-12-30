@@ -4,6 +4,7 @@ import '~/styles/prose-styles.css'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 import '~/styles/react-md-editor.css'
+import '~/styles/editor-js.css'
 
 import { useRouter } from 'next/router'
 import Script from 'next/script'
@@ -23,7 +24,11 @@ export default function App({ Component, session, pageProps }) {
   useEffect(() => {
     const handleRouteChange = (url) => {
       gtag.pageview(url)
-      bee.track('PageView', { url: url })
+      bee.track('Page View', {
+        site_id: pageProps?.site?.id,
+        subdomain: pageProps?.site?.subdomain,
+        url: url,
+      })
     }
     router.events.on('routeChangeComplete', handleRouteChange)
     router.events.on('hashChangeComplete', handleRouteChange)

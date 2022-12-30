@@ -9,10 +9,7 @@ export const MDEditor = dynamic(
 )
 
 export const MDEditorPreviewer = dynamic(
-  () =>
-    import('@uiw/react-md-editor').then((mod) => {
-      return mod.default.Markdown
-    }),
+  () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
   { ssr: false }
 )
 

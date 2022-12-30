@@ -2,9 +2,10 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { MarkdownRenderer } from '~/components/MarkdownRenderer'
+// import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import { timestampToCleanTime } from '~/lib/transformers'
 
+import { EditorJSPreviewer } from '../EditorJS'
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
@@ -48,9 +49,13 @@ export function PageDetail({ slug, site, page, error, loading }) {
             </span>
           </Detail.Header>
 
-          <div className="mt-8">
-            <MDEditorPreviewer source={page.text} />
-          </div>
+          {page.text && !page.data?.blocks ? (
+            <div className="mt-8">
+              <MDEditorPreviewer source={page.text} />
+            </div>
+          ) : (
+            <EditorJSPreviewer value={page.data} />
+          )}
           {/* <MarkdownRenderer children={page.text} className="prose" /> */}
 
           {/* bottom padding to give space between page content and comments */}

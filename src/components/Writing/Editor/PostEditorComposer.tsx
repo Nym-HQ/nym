@@ -1,17 +1,15 @@
-import dynamic from 'next/dynamic'
 import * as React from 'react'
 
-import { Dropzone } from '~/components/Dropzone'
+import { EditorJSEditor } from '~/components/EditorJS'
 import { Textarea } from '~/components/Input'
 import { Detail } from '~/components/ListDetail/Detail'
-import { CustomizedMDEditor, MDEditor } from '~/components/ReactMdEditor'
+import { CustomizedMDEditor } from '~/components/ReactMdEditor'
 
 import { PostEditorContext } from './PostEditor'
 
 export function PostEditorComposer({ site }) {
   const context = React.useContext(PostEditorContext)
   const { draftState, setDraftState } = context
-  const uploadingImagePlaceholder = '![](Uploading...)'
 
   function handleTitleChange(e) {
     setDraftState((draft) => ({ ...draft, title: e.target.value }))
@@ -21,49 +19,36 @@ export function PostEditorComposer({ site }) {
     setDraftState((draft) => ({ ...draft, text: e }))
   }
 
-  function onUploadComplete(url) {
-    const image = `![](${url})`
-    setDraftState((draft) => ({
-      ...draft,
-      text: draft.text.replace(uploadingImagePlaceholder, image),
-    }))
-  }
-
-  function onUploadFailed() {
-    setDraftState((draft) => ({
-      ...draft,
-      text: draft.text.replace(uploadingImagePlaceholder, ''),
-    }))
-  }
-
-  function onUploadStarted() {
-    setDraftState((draft) => ({
-      ...draft,
-      text: (draft.text += uploadingImagePlaceholder),
-    }))
+  function handleDataChange(data) {
+    setDraftState((draft) => ({ ...draft, data }))
   }
 
   return (
-    <Dropzone
-      site={site}
-      onUploadStarted={onUploadStarted}
-      onUploadComplete={onUploadComplete}
-      onUploadFailed={onUploadFailed}
-    >
-      <Detail.ContentContainer>
-        <Detail.Header>
-          <Textarea
-            rows={1}
-            value={draftState.title}
-            onChange={handleTitleChange}
-            placeholder={'Post title'}
-            className="block w-full p-0 text-2xl font-bold border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black md:text-3xl"
-          />
+    <Detail.ContentContainer>
+      <Detail.Header>
+        <Textarea
+          rows={1}
+          value={draftState.title}
+          onChange={handleTitleChange}
+          placeholder={'Post title'}
+          className="block w-full p-0 text-2xl font-bold border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black md:text-3xl"
+        />
+
+        {draftState.text && !draftState.data?.blocks ? (
           <CustomizedMDEditor
             value={draftState.text}
             onChange={handleTextChange}
           />
-          {/* <Textarea
+        ) : (
+          <EditorJSEditor
+            value={draftState.data}
+            site={site}
+            editorRef={(el) => {}}
+            onChange={handleDataChange}
+          />
+        )}
+
+        {/* <Textarea
             rows={20}
             maxRows={2000}
             value={draftState.text}
@@ -71,8 +56,7 @@ export function PostEditorComposer({ site }) {
             placeholder={'Write a post...'}
             className="block w-full p-0 pt-5 text-lg font-normal prose border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black"
           /> */}
-        </Detail.Header>
-      </Detail.ContentContainer>
-    </Dropzone>
+      </Detail.Header>
+    </Detail.ContentContainer>
   )
 }

@@ -7,6 +7,7 @@ import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import { CommentType } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
+import { EditorJSPreviewer } from '../EditorJS'
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PostActions } from './PostActions'
 import { PostSEO } from './PostSEO'
@@ -50,9 +51,13 @@ export function PostDetail({ slug, site, post, error, loading }) {
             </span>
           </Detail.Header>
 
-          <div className="mt-8">
-            <MDEditorPreviewer source={post.text} />
-          </div>
+          {post.text && !post.data?.blocks ? (
+            <div className="mt-8">
+              <MDEditorPreviewer source={post.text} />
+            </div>
+          ) : (
+            <EditorJSPreviewer value={post.data} />
+          )}
           {/* <MarkdownRenderer children={post.text} className="prose mt-8" /> */}
 
           {/* bottom padding to give space between post content and comments */}
