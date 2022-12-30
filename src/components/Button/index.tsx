@@ -76,7 +76,9 @@ const composer = {
 }
 
 export const Button = React.forwardRef((props: ButtonProps, ref) => {
-  const classes = `text-gray-700 hover:text-gray-1000 shadow-xs bg-white border border-gray-400 border-opacity-30 dark:border-gray-700 dark:hover:border-gray-600 dark:bg-white dark:bg-opacity-10 dark:text-gray-200 dark:hover:text-white hover:border-opacity-50 hover:shadow-sm ${props.addClassName || ''}`
+  const classes = `text-gray-700 hover:text-gray-1000 shadow-xs bg-white border border-gray-400 border-opacity-30 dark:border-gray-700 dark:hover:border-gray-600 dark:bg-white dark:bg-opacity-10 dark:text-gray-200 dark:hover:text-white hover:border-opacity-50 hover:shadow-sm ${
+    props.addClassName || ''
+  }`
   const size = composer.getSize(props.size)
   const opacity = composer.getOpacity(props.disabled)
   const radius = composer.getRadius(props.size)
@@ -87,7 +89,9 @@ export const Button = React.forwardRef((props: ButtonProps, ref) => {
 export default Button
 
 export const PrimaryButton = React.forwardRef((props: ButtonProps, ref) => {
-  const classes = `text-white hover:text-white shadow-xs bg-blue-500 border border-blue-600 dark:border-blue-400 dark:border-opacity-50 hover:shadow-sm ${props.addClassName||''}`
+  const classes = `text-white hover:text-white shadow-xs bg-blue-500 border border-blue-600 dark:border-blue-400 dark:border-opacity-50 hover:shadow-sm ${
+    props.addClassName || ''
+  }`
   const size = composer.getSize(props.size)
   const opacity = composer.getOpacity(props.disabled)
   const radius = composer.getRadius(props.size)

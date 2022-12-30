@@ -359,7 +359,10 @@ function AdminSettingsPage(props) {
                   </div>
                   <div className="col-span-5 sm:col-span-4">
                     <div className="w-full mb-1">
-                      <Label className="sr-only" htmlFor="social-profile-other1">
+                      <Label
+                        className="sr-only"
+                        htmlFor="social-profile-other1"
+                      >
                         URL of the link
                       </Label>
                       <Input
@@ -370,12 +373,18 @@ function AdminSettingsPage(props) {
                         placeholder="https://abc.xyz"
                         value={values.social_other1}
                         onChange={(e) =>
-                          setValues({ ...values, social_other1: e.target.value })
+                          setValues({
+                            ...values,
+                            social_other1: e.target.value,
+                          })
                         }
                       />
                     </div>
                     <div className="w-full flex">
-                      <Label className="sr-only" htmlFor="social-profile-other1-label">
+                      <Label
+                        className="sr-only"
+                        htmlFor="social-profile-other1-label"
+                      >
                         Name of the link
                       </Label>
                       <Input
@@ -386,13 +395,25 @@ function AdminSettingsPage(props) {
                         placeholder="Name of the link"
                         value={values.social_other1_label}
                         onChange={(e) =>
-                          setValues({ ...values, social_other1_label: e.target.value })
+                          setValues({
+                            ...values,
+                            social_other1_label: e.target.value,
+                          })
                         }
                       />
-                      <DeleteButton addClassName="ml-1" onClick={() => {
-                        setValues({ ...values, social_other1: '', social_other1_label: '' })
-                        setShowSocialOther1(false)
-                      }} >Remove</DeleteButton>
+                      <DeleteButton
+                        addClassName="ml-1"
+                        onClick={() => {
+                          setValues({
+                            ...values,
+                            social_other1: '',
+                            social_other1_label: '',
+                          })
+                          setShowSocialOther1(false)
+                        }}
+                      >
+                        Remove
+                      </DeleteButton>
                     </div>
                   </div>
                   <div className="hidden sm:block sm:col-span-1"></div>
