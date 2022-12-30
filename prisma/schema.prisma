@@ -252,8 +252,8 @@ model Post {
   author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   slug         String
   title        String     @db.VarChar(280)
-  text         String     @db.Text
-  data         String     @db.Text
+  text         String     @default("") @db.Text
+  data         String     @default("") @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
   comments     Comment[]
@@ -272,7 +272,8 @@ model Post {
 model PostEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
-  text         String   @db.Text
+  text         String   @default("") @db.Text
+  data         String   @default("") @db.Text
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
   featureImage String?
@@ -341,8 +342,8 @@ model Page {
   path         String
   slug         String
   title        String     @db.VarChar(280)
-  text         String     @db.Text
-  data         String     @db.Text
+  text         String     @default("") @db.Text
+  data         String     @default("") @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
   userId       String
@@ -360,7 +361,8 @@ model Page {
 model PageEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
-  text         String   @db.Text
+  text         String   @default("") @db.Text
+  data         String   @default("") @db.Text
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
   featureImage String?
