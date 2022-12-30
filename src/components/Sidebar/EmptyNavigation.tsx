@@ -1,7 +1,4 @@
-import { useRouter } from 'next/router'
 import * as React from 'react'
-
-import { useContextQuery } from '~/graphql/types.generated'
 
 import { NavigationLink } from './NavigationLink'
 
