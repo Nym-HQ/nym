@@ -28,7 +28,7 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
   })
   if (existing?.id !== id) throw new UserInputError('Slug already exists')
 
-  let featureImage = existing.featureImage;
+  let featureImage = existing.featureImage
   if (!featureImage) {
     featureImage = extractFeatureImage(text, blocks)
   }

@@ -40,12 +40,12 @@ export function parsePageData(page: Page) {
 
 /**
  * Extract feature image from the post/page content
- * 
- * @param text 
- * @param data 
- * @returns 
+ *
+ * @param text
+ * @param data
+ * @returns
  */
-export function extractFeatureImage(text: string,  data: string) {
+export function extractFeatureImage(text: string, data: string) {
   if (text) {
     // <img> tag
     const regex = /<img[^>]+src="([^">]+)"/g
@@ -59,10 +59,12 @@ export function extractFeatureImage(text: string,  data: string) {
 
     return null
   } else if (data) {
-    const blocks = parseEditorJsData(data);
-    const imageBlock = blocks?.blocks?.find((block: any) => block.type === 'image')
+    const blocks = parseEditorJsData(data)
+    const imageBlock = blocks?.blocks?.find(
+      (block: any) => block.type === 'image'
+    )
     if (imageBlock) return imageBlock.data.file.url
     return null
   }
-  return null;
+  return null
 }

@@ -118,8 +118,8 @@ export default function CustomizedEditorJS({
       class: LinkTool,
       config: {
         endpoint: '/api/link-meta', // endpoint for url data fetching,
-      }
-    }
+      },
+    },
   }
 
   const ReactEditorJS = createReactEditorJS()

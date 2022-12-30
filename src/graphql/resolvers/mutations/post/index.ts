@@ -26,7 +26,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
   if (!existing || existing.siteId !== site.id)
     throw new UserInputError('Post not found!')
 
-  let featureImage = existing.featureImage;
+  let featureImage = existing.featureImage
   if (!featureImage) {
     featureImage = extractFeatureImage(text, blocks)
   }
