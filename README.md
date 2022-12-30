@@ -142,7 +142,7 @@ yarn prisma migrate dev
 - Favorite
     ```json
     {
-        "event": "Favorite",
+        "event": "Bookmark Added",
         "data": {
             "site_id": "...",
             "subdomain": "...",
