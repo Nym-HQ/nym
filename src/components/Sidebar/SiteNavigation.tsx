@@ -10,6 +10,7 @@ import {
   BookmarksIcon,
   ExternalLinkIcon,
   GitHubIcon,
+  GlobeIcon,
   HomeIcon,
   PageIcon,
   StaffDesignIcon,
@@ -153,6 +154,17 @@ export function SiteSidebarNavigation() {
       href: data?.context?.site?.social_github,
       label: 'GitHub',
       icon: GitHubIcon,
+      trailingAccessory: ExternalLinkIcon,
+      isActive: false,
+      trailingAction: null,
+      isExternal: true,
+    })
+  }
+  if (data?.context?.site?.social_other1) {
+    social_items.push({
+      href: data?.context?.site?.social_other1,
+      label: data?.context?.site?.social_other1_label || 'Other',
+      icon: GlobeIcon,
       trailingAccessory: ExternalLinkIcon,
       isActive: false,
       trailingAction: null,

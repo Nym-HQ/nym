@@ -157,6 +157,8 @@ export type EditSiteInput = {
   mailgun_region?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   social_github?: InputMaybe<Scalars['String']>
+  social_other1?: InputMaybe<Scalars['String']>
+  social_other1_label?: InputMaybe<Scalars['String']>
   social_twitter?: InputMaybe<Scalars['String']>
   social_youtube?: InputMaybe<Scalars['String']>
 }
@@ -514,6 +516,8 @@ export type Site = {
   parkedDomain?: Maybe<Scalars['String']>
   plan?: Maybe<Scalars['String']>
   social_github?: Maybe<Scalars['String']>
+  social_other1?: Maybe<Scalars['String']>
+  social_other1_label?: Maybe<Scalars['String']>
   social_twitter?: Maybe<Scalars['String']>
   social_youtube?: Maybe<Scalars['String']>
   subdomain?: Maybe<Scalars['String']>
@@ -545,6 +549,8 @@ export type User = {
   pendingEmail?: Maybe<Scalars['String']>
   role?: Maybe<UserRole>
   social_github?: Maybe<Scalars['String']>
+  social_other1?: Maybe<Scalars['String']>
+  social_other1_label?: Maybe<Scalars['String']>
   social_twitter?: Maybe<Scalars['String']>
   social_youtube?: Maybe<Scalars['String']>
   username?: Maybe<Scalars['String']>
@@ -949,6 +955,8 @@ export type SiteInfoFragment = {
   social_twitter?: string | null | undefined
   social_youtube?: string | null | undefined
   social_github?: string | null | undefined
+  social_other1?: string | null | undefined
+  social_other1_label?: string | null | undefined
 }
 
 export type UserSiteFragment = {
@@ -983,6 +991,8 @@ export type UserSiteInfoFragment = {
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
+        social_other1?: string | null | undefined
+        social_other1_label?: string | null | undefined
       }
     | null
     | undefined
@@ -1421,6 +1431,8 @@ export type EditSiteDomainMutation = {
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
+        social_other1?: string | null | undefined
+        social_other1_label?: string | null | undefined
       }
     | null
     | undefined
@@ -1452,6 +1464,8 @@ export type EditSiteMutation = {
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
+        social_other1?: string | null | undefined
+        social_other1_label?: string | null | undefined
       }
     | null
     | undefined
@@ -1491,6 +1505,8 @@ export type AddSiteMutation = {
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
+        social_other1?: string | null | undefined
+        social_other1_label?: string | null | undefined
       }
     | null
     | undefined
@@ -1962,6 +1978,8 @@ export type GetSitesQuery = {
               social_twitter?: string | null | undefined
               social_youtube?: string | null | undefined
               social_github?: string | null | undefined
+              social_other1?: string | null | undefined
+              social_other1_label?: string | null | undefined
             }
           | null
           | undefined
@@ -2071,6 +2089,8 @@ export type ContextQuery = {
           social_twitter?: string | null | undefined
           social_youtube?: string | null | undefined
           social_github?: string | null | undefined
+          social_other1?: string | null | undefined
+          social_other1_label?: string | null | undefined
         }
       | null
       | undefined
@@ -2330,6 +2350,8 @@ export const SiteInfoFragmentDoc = gql`
     social_twitter
     social_youtube
     social_github
+    social_other1
+    social_other1_label
   }
 `
 export const UserSiteInfoFragmentDoc = gql`

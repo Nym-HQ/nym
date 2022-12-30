@@ -12,14 +12,20 @@ import {
   Subsection,
   SubsectionSplitter,
 } from '~/components/admin-components'
-import { PrimaryButton } from '~/components/Button'
+import Button, { DeleteButton, PrimaryButton } from '~/components/Button'
 import { CountrySelector } from '~/components/CountrySelector'
 import {
   COUNTRIES,
   SelectMenuOption,
 } from '~/components/CountrySelector/countries'
 import { Dropzone } from '~/components/Dropzone'
-import { GitHubIcon, TwitterIcon, YouTubeIcon } from '~/components/Icon'
+import {
+  ExternalLinkIcon,
+  GitHubIcon,
+  GlobeIcon,
+  TwitterIcon,
+  YouTubeIcon,
+} from '~/components/Icon'
 import { Input, Select, Textarea } from '~/components/Input'
 import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
@@ -48,11 +54,17 @@ function AdminSettingsPage(props) {
     social_twitter: '',
     social_youtube: '',
     social_github: '',
+    social_other1: '',
+    social_other1_label: '',
     mailgun_domain: '',
     mailgun_api_key: '',
     ...(context?.context?.site || {}),
     mailgun_region: (context?.context?.site || {}).mailgun_region || 'US',
   })
+
+  const [showSocialOther1, setShowSocialOther1] = React.useState(
+    !!context?.context?.site?.social_other1
+  )
 
   const [editSite, { loading: saving }] = useEditSiteMutation({
     onCompleted({ editSite }) {
@@ -77,6 +89,8 @@ function AdminSettingsPage(props) {
           social_github: values.social_github,
           social_twitter: values.social_twitter,
           social_youtube: values.social_youtube,
+          social_other1: values.social_other1,
+          social_other1_label: values.social_other1_label,
         },
       },
     })
@@ -322,6 +336,68 @@ function AdminSettingsPage(props) {
                 />
               </div>
               <div className="hidden sm:block sm:col-span-1"></div>
+
+              {!showSocialOther1 && (
+                <>
+                  <div className="col-span-1">&nbsp;</div>
+                  <div className="col-span-4 text-center">
+                    <PrimaryButton
+                      addClassName="w-full"
+                      onClick={() => setShowSocialOther1(true)}
+                    >
+                      Add a Link
+                    </PrimaryButton>
+                  </div>
+                </>
+              )}
+              {showSocialOther1 && (
+                <>
+                  <div className="col-span-1 sm:col-span-1 text-center">
+                    <div className="inline-block">
+                      <GlobeIcon width={36} height={36} fill="#FFFFFF" />
+                    </div>
+                  </div>
+                  <div className="col-span-5 sm:col-span-4">
+                    <div className="w-full mb-1">
+                      <Label className="sr-only" htmlFor="social-profile-other1">
+                        URL of the link
+                      </Label>
+                      <Input
+                        type="text"
+                        name="social-profile-other1"
+                        id="social-profile-other1"
+                        autoComplete="disabled"
+                        placeholder="https://abc.xyz"
+                        value={values.social_other1}
+                        onChange={(e) =>
+                          setValues({ ...values, social_other1: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="w-full flex">
+                      <Label className="sr-only" htmlFor="social-profile-other1-label">
+                        Name of the link
+                      </Label>
+                      <Input
+                        type="text"
+                        name="social-profile-other1-label"
+                        id="social-profile-other1-label"
+                        autoComplete="disabled"
+                        placeholder="Name of the link"
+                        value={values.social_other1_label}
+                        onChange={(e) =>
+                          setValues({ ...values, social_other1_label: e.target.value })
+                        }
+                      />
+                      <DeleteButton addClassName="ml-1" onClick={() => {
+                        setValues({ ...values, social_other1: '', social_other1_label: '' })
+                        setShowSocialOther1(false)
+                      }} >Remove</DeleteButton>
+                    </div>
+                  </div>
+                  <div className="hidden sm:block sm:col-span-1"></div>
+                </>
+              )}
             </div>
           </Subsection>
 

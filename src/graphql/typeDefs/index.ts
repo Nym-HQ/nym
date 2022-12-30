@@ -20,6 +20,8 @@ const typeDefs = gql`
     social_twitter: String
     social_youtube: String
     social_github: String
+    social_other1: String
+    social_other1_label: String
   }
 
   enum SiteRole {
@@ -143,6 +145,8 @@ const typeDefs = gql`
     social_twitter: String
     social_youtube: String
     social_github: String
+    social_other1: String
+    social_other1_label: String
     emailSubscriptions: [EmailSubscription]
 
     isAdmin: Boolean
@@ -360,6 +364,8 @@ const typeDefs = gql`
     social_twitter: String
     social_youtube: String
     social_github: String
+    social_other1: String
+    social_other1_label: String
   }
 
   union Reactable = Bookmark | Question | Post
