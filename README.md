@@ -53,6 +53,10 @@ A good resource to understand Prisma and its Shadow DB
 - `CLOUDINARY_API_SECRET` - Cloudinary API Secret
 - `CLOUDINARY_PRESET` - Preset name created on Cloudinary, make sure you set the "Signed" property to true
 
+#### [IFramely](https://iframely.com/)
+
+- `IFRAMELY_API_KEY` - Iframely API key - to extract metadata from a url
+
 ### Setting up DB for development environment
 
 #### Using PlanetScale
