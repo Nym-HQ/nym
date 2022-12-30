@@ -15,20 +15,20 @@ import {
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import { parsePostData } from '~/lib/compat/data'
 
 function WritingPostPage(props) {
   const { slug } = props
   const { data: context } = useContextQuery({ variables: {} })
   const { data, error, loading } = useGetPostQuery({ variables: { slug } })
-  if (data?.post && !data.post.publishedAt)
-    return (
-      <PostEditor slug={slug} site={context.context.site} post={data.post} />
-    )
+  const post = parsePostData(data?.post)
+  if (post && !post.publishedAt)
+    return <PostEditor slug={slug} site={context.context.site} post={post} />
   return (
     <PostDetail
       slug={slug}
       site={context.context.site}
-      post={data.post}
+      post={post}
       error={error}
       loading={loading}
     />

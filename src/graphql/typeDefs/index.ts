@@ -46,6 +46,7 @@ const typeDefs = gql`
     slug: String
     path: String
     text: String
+    data: String
     excerpt: String
     featureImage: String
     featured: Boolean
@@ -60,6 +61,7 @@ const typeDefs = gql`
     title: String
     slug: String
     text: String
+    data: String
     excerpt: String
     featureImage: String
     reactionCount: Int
@@ -300,6 +302,7 @@ const typeDefs = gql`
   input AddPageInput {
     title: String!
     text: String!
+    data: String!
     path: String!
     slug: String!
     excerpt: String
@@ -309,6 +312,7 @@ const typeDefs = gql`
   input EditPageInput {
     title: String!
     text: String!
+    data: String!
     path: String!
     slug: String!
     excerpt: String
@@ -320,6 +324,7 @@ const typeDefs = gql`
   input AddPostInput {
     title: String!
     text: String!
+    data: String!
     slug: String!
     excerpt: String
   }
@@ -327,6 +332,7 @@ const typeDefs = gql`
   input EditPostInput {
     title: String!
     text: String!
+    data: String!
     slug: String!
     excerpt: String
     published: Boolean

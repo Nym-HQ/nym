@@ -14,6 +14,7 @@ export const PageEditorContext = React.createContext({
   draftState: {
     title: '',
     text: '',
+    data: {} as any,
     path: '',
     slug: '',
     excerpt: '',
@@ -34,6 +35,7 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
   const defaultDraftState = {
     title: page?.title || '',
     text: page?.text || '',
+    data: page?.data || {},
     path: page?.path || '',
     slug: page?.slug || '',
     excerpt: page?.excerpt || '',

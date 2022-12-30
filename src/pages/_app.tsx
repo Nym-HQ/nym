@@ -4,6 +4,7 @@ import '~/styles/prose-styles.css'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 import '~/styles/react-md-editor.css'
+import '~/styles/editor-js.css'
 
 import { useRouter } from 'next/router'
 import Script from 'next/script'

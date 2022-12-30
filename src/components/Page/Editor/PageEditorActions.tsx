@@ -13,7 +13,6 @@ import {
 import { slugifyString } from '~/lib/utils'
 
 import { PageEditorContext } from './PageEditor'
-import { PageEditorAutoSave } from './PageEditorAutoSave'
 
 export function PageEditorActions() {
   const router = useRouter()
@@ -47,6 +46,7 @@ export function PageEditorActions() {
           id: existingPage.id,
           data: {
             ...draftState,
+            data: JSON.stringify(draftState.data),
             slug: slugifyString(draftState.slug),
           },
         },
@@ -58,6 +58,7 @@ export function PageEditorActions() {
         data: {
           title: draftState.title,
           text: draftState.text,
+          data: JSON.stringify(draftState.data),
           excerpt: draftState.excerpt,
           slug:
             slugifyString(draftState.slug) || slugifyString(draftState.title),
@@ -89,7 +90,6 @@ export function PageEditorActions() {
           <LoadingSpinner />
         ) : (
           <>
-            <PageEditorAutoSave />{' '}
             <span>{existingPage?.publishedAt ? 'Update' : 'Save draft'}</span>
           </>
         )}

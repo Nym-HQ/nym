@@ -24,6 +24,7 @@ export const PageDetailFragment = gql`
   fragment PageDetail on Page {
     ...PageCore
     text
+    data
     featureImage
   }
   ${PageCoreFragment}

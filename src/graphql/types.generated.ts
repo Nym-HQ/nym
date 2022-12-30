@@ -32,6 +32,7 @@ export type AddBookmarkInput = {
 }
 
 export type AddPageInput = {
+  data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   featured?: InputMaybe<Scalars['Boolean']>
   path: Scalars['String']
@@ -41,6 +42,7 @@ export type AddPageInput = {
 }
 
 export type AddPostInput = {
+  data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   slug: Scalars['String']
   text: Scalars['String']
@@ -114,6 +116,7 @@ export type EditBookmarkInput = {
 }
 
 export type EditPageInput = {
+  data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   featured?: InputMaybe<Scalars['Boolean']>
   path: Scalars['String']
@@ -125,6 +128,7 @@ export type EditPageInput = {
 }
 
 export type EditPostInput = {
+  data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   published?: InputMaybe<Scalars['Boolean']>
   publishedAt?: InputMaybe<Scalars['Date']>
@@ -334,6 +338,7 @@ export type Page = {
   __typename?: 'Page'
   author?: Maybe<User>
   createdAt?: Maybe<Scalars['Date']>
+  data?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
   featureImage?: Maybe<Scalars['String']>
   featured?: Maybe<Scalars['Boolean']>
@@ -363,6 +368,7 @@ export type Post = {
   __typename?: 'Post'
   author?: Maybe<User>
   createdAt?: Maybe<Scalars['Date']>
+  data?: Maybe<Scalars['String']>
   excerpt?: Maybe<Scalars['String']>
   featureImage?: Maybe<Scalars['String']>
   id: Scalars['ID']
@@ -777,6 +783,7 @@ export type PageListItemFragment = {
 export type PageDetailFragment = {
   __typename: 'Page'
   text?: string | null | undefined
+  data?: string | null | undefined
   featureImage?: string | null | undefined
   id: string
   publishedAt?: any | null | undefined
@@ -808,6 +815,7 @@ export type PostListItemFragment = {
 export type PostDetailFragment = {
   __typename: 'Post'
   text?: string | null | undefined
+  data?: string | null | undefined
   featureImage?: string | null | undefined
   reactionCount?: number | null | undefined
   viewerHasReacted?: boolean | null | undefined
@@ -1171,6 +1179,7 @@ export type EditPageMutation = {
     | {
         __typename: 'Page'
         text?: string | null | undefined
+        data?: string | null | undefined
         featureImage?: string | null | undefined
         id: string
         publishedAt?: any | null | undefined
@@ -1203,6 +1212,7 @@ export type AddPageMutation = {
     | {
         __typename: 'Page'
         text?: string | null | undefined
+        data?: string | null | undefined
         featureImage?: string | null | undefined
         id: string
         publishedAt?: any | null | undefined
@@ -1227,6 +1237,7 @@ export type EditPostMutation = {
     | {
         __typename: 'Post'
         text?: string | null | undefined
+        data?: string | null | undefined
         featureImage?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
@@ -1259,6 +1270,7 @@ export type AddPostMutation = {
     | {
         __typename: 'Post'
         text?: string | null | undefined
+        data?: string | null | undefined
         featureImage?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
@@ -1755,6 +1767,7 @@ export type GetPageQuery = {
     | {
         __typename: 'Page'
         text?: string | null | undefined
+        data?: string | null | undefined
         featureImage?: string | null | undefined
         id: string
         publishedAt?: any | null | undefined
@@ -1776,6 +1789,7 @@ export type GetHomePageQuery = {
     | {
         __typename: 'Page'
         text?: string | null | undefined
+        data?: string | null | undefined
         featureImage?: string | null | undefined
         id: string
         publishedAt?: any | null | undefined
@@ -1819,6 +1833,7 @@ export type GetPostQuery = {
     | {
         __typename: 'Post'
         text?: string | null | undefined
+        data?: string | null | undefined
         featureImage?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
@@ -2208,6 +2223,7 @@ export const PageDetailFragmentDoc = gql`
   fragment PageDetail on Page {
     ...PageCore
     text
+    data
     featureImage
   }
   ${PageCoreFragmentDoc}
@@ -2232,6 +2248,7 @@ export const PostDetailFragmentDoc = gql`
   fragment PostDetail on Post {
     ...PostCore
     text
+    data
     featureImage
     reactionCount
     viewerHasReacted

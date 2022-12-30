@@ -13,6 +13,7 @@ export const PostEditorContext = React.createContext({
   draftState: {
     title: '',
     text: '',
+    data: {} as any,
     slug: '',
     excerpt: '',
     publishedAt: null,
@@ -31,6 +32,7 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
   const defaultDraftState = {
     title: post?.title || '',
     text: post?.text || '',
+    data: post?.data || {},
     slug: post?.slug || '',
     excerpt: post?.excerpt || '',
     publishedAt: post?.publishedAt || null,

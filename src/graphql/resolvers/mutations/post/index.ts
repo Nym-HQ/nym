@@ -6,6 +6,7 @@ import {
   MutationDeletePostArgs,
   MutationEditPostArgs,
 } from '~/graphql/types.generated'
+import { extractFeatureImage } from '~/lib/compat/data'
 import { graphcdn } from '~/lib/graphcdn'
 
 export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
@@ -13,6 +14,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
   const {
     title = '',
     text = '',
+    data: blocks = '{}',
     slug = '',
     excerpt = '',
     published = undefined,
@@ -23,6 +25,11 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
 
   if (!existing || existing.siteId !== site.id)
     throw new UserInputError('Post not found!')
+
+  let featureImage = existing.featureImage;
+  if (!featureImage) {
+    featureImage = extractFeatureImage(text, blocks)
+  }
 
   const checkDup = await prisma.post.findUnique({
     where: { slug_siteId: { slug, siteId: site.id } },
@@ -44,7 +51,9 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
       where: { id },
       data: {
         title,
+        featureImage,
         text,
+        data: blocks,
         slug,
         excerpt,
         publishedAt: publishedAt,
@@ -62,14 +71,16 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
 
 export async function addPost(_, args: MutationAddPostArgs, ctx: Context) {
   const { data } = args
-  const { title, text, slug, excerpt = '' } = data
+  const { title, text, data: blocks, slug, excerpt = '' } = data
   const { prisma, viewer, site } = ctx
 
   return await prisma.post
     .create({
       data: {
         title,
+        featureImage: extractFeatureImage(text, blocks),
         text,
+        data: blocks,
         slug,
         excerpt,
         author: {

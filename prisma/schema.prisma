@@ -253,6 +253,7 @@ model Post {
   slug         String
   title        String     @db.VarChar(280)
   text         String     @db.Text
+  data         String     @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
   comments     Comment[]
@@ -341,6 +342,7 @@ model Page {
   slug         String
   title        String     @db.VarChar(280)
   text         String     @db.Text
+  data         String     @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
   userId       String
