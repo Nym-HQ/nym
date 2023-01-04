@@ -10,6 +10,7 @@ import {
   BookmarksIcon,
   ExternalLinkIcon,
   GitHubIcon,
+  GlobeIcon,
   HomeIcon,
   PageIcon,
   StaffDesignIcon,
@@ -159,6 +160,17 @@ export function SiteSidebarNavigation() {
       isExternal: true,
     })
   }
+  if (data?.context?.site?.social_other1) {
+    social_items.push({
+      href: data?.context?.site?.social_other1,
+      label: data?.context?.site?.social_other1_label || 'Other',
+      icon: GlobeIcon,
+      trailingAccessory: ExternalLinkIcon,
+      isActive: false,
+      trailingAction: null,
+      isExternal: true,
+    })
+  }
 
   if (social_items.length > 0) {
     sections.push({
@@ -216,7 +228,7 @@ export function SiteSidebarNavigation() {
               </h4>
             )}
             {section.items.map((item, j) => (
-              <NavigationLink key={j} link={item} />
+              <NavigationLink key={j} link={item} site={data?.context?.site} />
             ))}
           </ul>
         )

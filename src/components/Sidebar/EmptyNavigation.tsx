@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { useContextQuery } from '~/graphql/types.generated'
@@ -7,6 +6,7 @@ import { NavigationLink } from './NavigationLink'
 
 export function EmptySidebarNavigation() {
   const sections = []
+  const { data } = useContextQuery()
 
   return (
     <div className="flex-1 px-3 py-3 space-y-1">
@@ -22,7 +22,7 @@ export function EmptySidebarNavigation() {
               </h4>
             )}
             {section.items.map((item, j) => (
-              <NavigationLink key={j} link={item} />
+              <NavigationLink key={j} link={item} site={data?.context?.site} />
             ))}
           </ul>
         )

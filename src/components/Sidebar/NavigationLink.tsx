@@ -2,6 +2,7 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { GlobalNavigationContext } from '~/components/Providers/GlobalNavigation'
+import { track } from '~/lib/bee'
 
 export function NavigationLink({
   link: {
@@ -13,12 +14,21 @@ export function NavigationLink({
     isActive,
     isExternal,
   },
+  site,
 }) {
   const { setIsOpen } = React.useContext(GlobalNavigationContext)
   return (
     <li
       className="flex items-stretch space-x-1"
-      onClick={() => setIsOpen(false)}
+      onClick={() => {
+        track(isExternal ? 'External Link' : 'Internal Link', {
+          site_id: site?.id,
+          subdomain: site?.subdomain,
+          destination: label,
+          url: href,
+        })
+        setIsOpen(false)
+      }}
     >
       <Link href={href}>
         <a

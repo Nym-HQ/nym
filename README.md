@@ -109,11 +109,11 @@ yarn prisma migrate dev
 - Subscribe Newsletter
     ```json
     {
-        "event": "Subscribe Newsletter",
+        "event": "newsletter-subscribe",
         "data": {
             "site_id": "...",
             "subdomain": "...",
-            "url": "..."
+            "email": "..."
         }
     }
     ```
@@ -142,7 +142,7 @@ yarn prisma migrate dev
 - Favorite
     ```json
     {
-        "event": "Favorite",
+        "event": "Bookmark Added",
         "data": {
             "site_id": "...",
             "subdomain": "...",

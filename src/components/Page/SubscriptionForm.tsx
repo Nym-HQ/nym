@@ -4,9 +4,12 @@ import { ErrorAlert, SuccessAlert } from '~/components/Alert'
 import { PrimaryButton } from '~/components/Button'
 import { Input } from '~/components/Input'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { useContextQuery } from '~/graphql/types.generated'
+import { track } from '~/lib/bee'
 import { validEmail } from '~/lib/validators'
 
 export function PageSubscriptionForm({ defaultValue = '' }) {
+  const { data: context } = useContextQuery()
   const [email, setEmail] = React.useState(defaultValue)
   const [status, setStatus] = React.useState('default')
 
@@ -25,9 +28,17 @@ export function PageSubscriptionForm({ defaultValue = '' }) {
     }
 
     await fetch(`/api/newsletter`, {
-      method: 'PAGE',
+      method: 'POST',
       body: JSON.stringify({ email }),
-    }).then((res) => res.json())
+    })
+      .then((res) => res.json())
+      .then(() => {
+        track('newsletter-subscribe', {
+          site_id: context?.context?.site?.id,
+          subdomain: context?.context?.site?.subdomain,
+          email,
+        })
+      })
 
     setStatus('success')
   }

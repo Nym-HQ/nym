@@ -27,6 +27,8 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     social_twitter = '',
     social_youtube = '',
     social_github = '',
+    social_other1 = '',
+    social_other1_label = '',
   } = data
   const { prisma, site } = ctx
 
@@ -55,6 +57,8 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
         social_twitter,
         social_youtube,
         social_github,
+        social_other1,
+        social_other1_label,
       },
     })
     .then((site) => {

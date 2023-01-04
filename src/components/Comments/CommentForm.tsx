@@ -11,6 +11,7 @@ import {
   useContextQuery,
 } from '~/graphql/types.generated'
 import { useDebounce } from '~/hooks/useDebounce'
+import { track } from '~/lib/bee'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 interface Props {
@@ -58,6 +59,23 @@ export function CommentForm({ refId, type, openModal }: Props) {
           comments: [...comments, addComment],
         },
       })
+    },
+    onCompleted: ({ addComment: { id } }) => {
+      if (type === CommentType.Question) {
+        track('Question Answered', {
+          site_id: data?.context.site.id,
+          subdomain: data?.context.site.subdomain,
+          question_id: refId,
+          answer_id: id,
+        })
+      } else if (type === CommentType.Post) {
+        track('Comment', {
+          site_id: data?.context.site.id,
+          subdomain: data?.context.site.subdomain,
+          post_id: refId,
+          comment_id: id,
+        })
+      }
     },
   })
 

@@ -19,6 +19,8 @@ export const SiteInfoFragment = gql`
     social_twitter
     social_youtube
     social_github
+    social_other1
+    social_other1_label
   }
 `
 

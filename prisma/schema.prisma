@@ -93,6 +93,8 @@ model User {
   social_twitter String? @db.Text
   social_youtube String? @db.Text
   social_github  String? @db.Text
+  social_other1  String? @db.Text
+  social_other1_label  String? @db.Text
 
   comments     Comment[]
   questions    Question[]
@@ -135,6 +137,8 @@ model Site {
   social_twitter  String?  @db.Text
   social_youtube  String?  @db.Text
   social_github   String?  @db.Text
+  social_other1   String?  @db.Text
+  social_other1_label  String? @db.Text
 
   userSites         UserSite[]
   Bookmark          Bookmark[]
