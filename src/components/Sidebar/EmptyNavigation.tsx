@@ -22,7 +22,7 @@ export function EmptySidebarNavigation() {
               </h4>
             )}
             {section.items.map((item, j) => (
-              <NavigationLink key={j} link={item} site={data.context?.site} />
+              <NavigationLink key={j} link={item} site={data?.context?.site} />
             ))}
           </ul>
         )
