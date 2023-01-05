@@ -15,7 +15,9 @@ export function PostEditorPreview() {
 
   return (
     <Detail.ContentContainer>
-      <Detail.Header>
+      <Detail.Header
+        style={{ maxWidth: '650px', marginLeft: 'auto', marginRight: 'auto' }}
+      >
         <Detail.Title>{title}</Detail.Title>
       </Detail.Header>
 
@@ -24,7 +26,9 @@ export function PostEditorPreview() {
           <MDEditorPreviewer source={text} />
         </div>
       ) : (
-        <EditorJSPreviewer value={data} />
+        <div className="mt-3">
+          <EditorJSPreviewer value={data} />
+        </div>
       )}
 
       {/* <MarkdownRenderer children={text} className="prose mt-8" /> */}

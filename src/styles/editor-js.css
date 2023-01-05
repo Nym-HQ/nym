@@ -199,3 +199,7 @@
     scroll-margin-top: 4rem;
   }
 }
+
+.codex-editor .ce-paragraph {
+  word-break: break-word;
+}
