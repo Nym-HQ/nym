@@ -2,13 +2,27 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { Switch } from '~/components/Switch'
 
 import { PageEditorActions } from './PageEditorActions'
 import { PageEditorComposer } from './PageEditorComposer'
 import { PageEditorMetaSidebar } from './PageEditorMetaSidebar'
 import { PageEditorPreview } from './PageEditorPreview'
 import { PreviewSwitch } from './PreviewSwitch'
+
+interface PageDraftState {
+  title: string
+  text: string
+  data: any
+  path: string
+  slug: string
+  excerpt: string
+  featured: boolean
+  publishedAt: Date | null
+}
+interface PageDraftError {
+  field: string
+  message: string
+}
 
 export const PageEditorContext = React.createContext({
   draftState: {
@@ -20,14 +34,37 @@ export const PageEditorContext = React.createContext({
     excerpt: '',
     featured: false,
     publishedAt: null,
-  },
+  } as PageDraftState,
   setDraftState: (draftObj: unknown) => {},
   existingPage: null,
   sidebarIsOpen: false,
   setSidebarIsOpen: (isOpen: boolean) => {},
   isPreviewing: false,
   setIsPreviewing: (isPreviewing: boolean) => {},
+  isDraftValid: false,
+  draftErrors: [] as PageDraftError[],
 })
+
+function checkIfDraftIsValid(draftState: PageDraftState, existingPost: any) {
+  const errors = []
+  if (!draftState.title) {
+    errors.push({
+      field: 'title',
+      message: 'Title is required',
+    } as PageDraftError)
+  }
+  if (!draftState.slug) {
+    errors.push({
+      field: 'slug',
+      message: 'Slug is required',
+    } as PageDraftError)
+  }
+
+  return {
+    isDraftValid: errors.length == 0,
+    draftErrors: errors,
+  }
+}
 
 export function PageEditor({ slug: propsSlug = '', site, page }) {
   const scrollContainerRef = React.useRef(null)
@@ -41,13 +78,24 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
     excerpt: page?.excerpt || '',
     featured: page?.featured || false,
     publishedAt: page?.publishedAt || null,
-  }
+  } as PageDraftState
 
-  const [draftState, setDraftState] = React.useState(defaultDraftState)
+  const [draftState, _setDraftState] = React.useState(defaultDraftState)
   const [isPreviewing, setIsPreviewing] = React.useState(false)
 
   const existingPage = page
+  let validInit = checkIfDraftIsValid(defaultDraftState, existingPage)
+
+  const [isDraftValid, setIsDraftValid] = React.useState(validInit.isDraftValid)
+  const [draftErrors, setDraftErrors] = React.useState(validInit.draftErrors)
   const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false)
+
+  const setDraftState = (newDraftState) => {
+    _setDraftState(newDraftState)
+    let validNext = checkIfDraftIsValid(newDraftState, existingPage)
+    setIsDraftValid(validNext.isDraftValid)
+    setDraftErrors(validNext.draftErrors)
+  }
 
   React.useEffect(() => {
     // if navigating between drafts, reset the state each time with the correct
@@ -63,6 +111,8 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
     setSidebarIsOpen,
     isPreviewing,
     setIsPreviewing,
+    isDraftValid,
+    draftErrors,
   }
 
   return (

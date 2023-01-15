@@ -24,6 +24,8 @@ export function PostEditorActions() {
     setSidebarIsOpen,
     isPreviewing,
     setIsPreviewing,
+    isDraftValid,
+    draftErrors,
   } = context
 
   const [addPost, { loading: creatingPost }] = useAddPostMutation({
@@ -70,7 +72,10 @@ export function PostEditorActions() {
 
   return (
     <div className="flex items-center space-x-2">
-      <Button disabled={isSavingDraft} onClick={handleEditOrCreate}>
+      <Button
+        disabled={isSavingDraft || !isDraftValid}
+        onClick={handleEditOrCreate}
+      >
         {isSavingDraft ? (
           <LoadingSpinner />
         ) : (

@@ -27,6 +27,8 @@ export function PostEditorMetaSidebar({ site }) {
     setDraftState,
     sidebarIsOpen,
     setSidebarIsOpen,
+    isDraftValid,
+    draftErrors,
   } = context
   const scrollContainerRef = React.useRef(null)
 
@@ -167,7 +169,7 @@ export function PostEditorMetaSidebar({ site }) {
           {existingPost?.id && (
             <PrimaryButton
               style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPost}
+              disabled={editingPost || !isDraftValid}
               onClick={() => handleUpdate()}
             >
               {editingPost ? <LoadingSpinner /> : 'Save'}
@@ -176,7 +178,7 @@ export function PostEditorMetaSidebar({ site }) {
           {existingPost?.id && !existingPost?.publishedAt && (
             <PrimaryButton
               style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPost}
+              disabled={editingPost || !isDraftValid}
               onClick={() => handleUpdate(true)}
             >
               {editingPost ? <LoadingSpinner /> : 'Publish'}
@@ -185,7 +187,7 @@ export function PostEditorMetaSidebar({ site }) {
           {existingPost?.id && existingPost?.publishedAt && (
             <Button
               style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPost}
+              disabled={editingPost || !isDraftValid}
               onClick={() => handleUpdate(false)}
             >
               {editingPost ? <LoadingSpinner /> : 'Unpublish'}
@@ -194,7 +196,7 @@ export function PostEditorMetaSidebar({ site }) {
           {!existingPost?.id && (
             <Button
               style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={creatingPost}
+              disabled={creatingPost || !isDraftValid}
               onClick={handleCreateDraft}
             >
               {creatingPost ? <LoadingSpinner /> : <span>Save draft</span>}

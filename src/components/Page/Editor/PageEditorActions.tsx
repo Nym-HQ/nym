@@ -25,6 +25,8 @@ export function PageEditorActions() {
     isPreviewing,
     setIsPreviewing,
     setDraftState,
+    isDraftValid,
+    draftErrors,
   } = context
 
   const [addPage, { loading: creatingPage }] = useAddPageMutation({
@@ -85,7 +87,10 @@ export function PageEditorActions() {
         defaultEnabled={draftState.featured}
         onChange={(val) => setDraftState({ ...draftState, featured: val })}
       />
-      <Button disabled={isSavingDraft} onClick={handleEditOrCreate}>
+      <Button
+        disabled={isSavingDraft || !isDraftValid}
+        onClick={handleEditOrCreate}
+      >
         {isSavingDraft ? (
           <LoadingSpinner />
         ) : (
