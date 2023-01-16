@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import Button from '~/components/Button'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { Switch } from '~/components/Switch'
+import { Tooltip } from '~/components/Tooltip'
 import {
   useAddPageMutation,
   useEditPageMutation,
@@ -87,10 +88,9 @@ export function PageEditorActions() {
         defaultEnabled={draftState.featured}
         onChange={(val) => setDraftState({ ...draftState, featured: val })}
       />
-      <Button
-        disabled={isSavingDraft || !isDraftValid}
-        onClick={handleEditOrCreate}
-        title={
+      <Tooltip
+        placement="bottom"
+        content={
           isDraftValid
             ? existingPage?.publishedAt
               ? 'Update'
@@ -98,14 +98,24 @@ export function PageEditorActions() {
             : draftErrors[0].message
         }
       >
-        {isSavingDraft ? (
-          <LoadingSpinner />
-        ) : (
-          <>
-            <span>{existingPage?.publishedAt ? 'Update' : 'Save draft'}</span>
-          </>
-        )}
-      </Button>
+        {/* a small trick to show the tooltip even if the button is disabled by wrapping into <span/> */}
+        <span>
+          <Button
+            disabled={isSavingDraft || !isDraftValid}
+            onClick={handleEditOrCreate}
+          >
+            {isSavingDraft ? (
+              <LoadingSpinner />
+            ) : (
+              <>
+                <span>
+                  {existingPage?.publishedAt ? 'Update' : 'Save draft'}
+                </span>
+              </>
+            )}
+          </Button>
+        </span>
+      </Tooltip>
       <Button onClick={() => setSidebarIsOpen(!sidebarIsOpen)}>
         <Sidebar size={16} />
       </Button>

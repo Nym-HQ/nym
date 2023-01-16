@@ -8,6 +8,7 @@ import { TextWithDatePicker } from '~/components/DatePicker'
 import { Input, Textarea } from '~/components/Input'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { Tooltip } from '~/components/Tooltip'
 import { GET_POSTS } from '~/graphql/queries/posts'
 import {
   useAddPostMutation,
@@ -167,44 +168,62 @@ export function PostEditorMetaSidebar({ site }) {
 
         <div className="flex flex-col filter-blur sticky bottom-0 z-10 flex items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
           {existingPost?.id && (
-            <PrimaryButton
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPost || !isDraftValid}
-              title={isDraftValid ? 'Save' : draftErrors[0].message}
-              onClick={() => handleUpdate()}
-            >
-              {editingPost ? <LoadingSpinner /> : 'Save'}
-            </PrimaryButton>
+            <Tooltip content={isDraftValid ? 'Save' : draftErrors[0].message}>
+              <span className="w-full mt-1">
+                <PrimaryButton
+                  addClassName="w-full"
+                  disabled={editingPost || !isDraftValid}
+                  onClick={() => handleUpdate()}
+                >
+                  {editingPost ? <LoadingSpinner /> : 'Save'}
+                </PrimaryButton>
+              </span>
+            </Tooltip>
           )}
           {existingPost?.id && !existingPost?.publishedAt && (
-            <PrimaryButton
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPost || !isDraftValid}
-              title={isDraftValid ? 'Publish' : draftErrors[0].message}
-              onClick={() => handleUpdate(true)}
+            <Tooltip
+              content={isDraftValid ? 'Publish' : draftErrors[0].message}
             >
-              {editingPost ? <LoadingSpinner /> : 'Publish'}
-            </PrimaryButton>
+              <span className="w-full mt-1">
+                <PrimaryButton
+                  addClassName="w-full"
+                  disabled={editingPost || !isDraftValid}
+                  onClick={() => handleUpdate(true)}
+                >
+                  {editingPost ? <LoadingSpinner /> : 'Publish'}
+                </PrimaryButton>
+              </span>
+            </Tooltip>
           )}
           {existingPost?.id && existingPost?.publishedAt && (
-            <Button
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPost || !isDraftValid}
-              title={isDraftValid ? 'Unpublish' : draftErrors[0].message}
-              onClick={() => handleUpdate(false)}
+            <Tooltip
+              content={isDraftValid ? 'Unpublish' : draftErrors[0].message}
             >
-              {editingPost ? <LoadingSpinner /> : 'Unpublish'}
-            </Button>
+              <span className="w-full mt-1">
+                <Button
+                  addClassName="w-full"
+                  disabled={editingPost || !isDraftValid}
+                  onClick={() => handleUpdate(false)}
+                >
+                  {editingPost ? <LoadingSpinner /> : 'Unpublish'}
+                </Button>
+              </span>
+            </Tooltip>
           )}
           {!existingPost?.id && (
-            <Button
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={creatingPost || !isDraftValid}
-              title={isDraftValid ? 'Save draft' : draftErrors[0].message}
-              onClick={handleCreateDraft}
+            <Tooltip
+              content={isDraftValid ? 'Save draft' : draftErrors[0].message}
             >
-              {creatingPost ? <LoadingSpinner /> : <span>Save draft</span>}
-            </Button>
+              <span className="w-full mt-1">
+                <Button
+                  addClassName="w-full"
+                  disabled={creatingPost || !isDraftValid}
+                  onClick={handleCreateDraft}
+                >
+                  {creatingPost ? <LoadingSpinner /> : <span>Save draft</span>}
+                </Button>
+              </span>
+            </Tooltip>
           )}
         </div>
       </nav>
