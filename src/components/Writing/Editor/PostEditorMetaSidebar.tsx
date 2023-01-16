@@ -171,7 +171,7 @@ export function PostEditorMetaSidebar({ site }) {
             <Tooltip content={isDraftValid ? 'Save' : draftErrors[0].message}>
               <span className="w-full mt-1">
                 <PrimaryButton
-                  addClassName="w-full"
+                  addclassname="w-full"
                   disabled={editingPost || !isDraftValid}
                   onClick={() => handleUpdate()}
                 >
@@ -186,7 +186,7 @@ export function PostEditorMetaSidebar({ site }) {
             >
               <span className="w-full mt-1">
                 <PrimaryButton
-                  addClassName="w-full"
+                  addclassname="w-full"
                   disabled={editingPost || !isDraftValid}
                   onClick={() => handleUpdate(true)}
                 >
@@ -201,7 +201,7 @@ export function PostEditorMetaSidebar({ site }) {
             >
               <span className="w-full mt-1">
                 <Button
-                  addClassName="w-full"
+                  addclassname="w-full"
                   disabled={editingPost || !isDraftValid}
                   onClick={() => handleUpdate(false)}
                 >
@@ -216,7 +216,7 @@ export function PostEditorMetaSidebar({ site }) {
             >
               <span className="w-full mt-1">
                 <Button
-                  addClassName="w-full"
+                  addclassname="w-full"
                   disabled={creatingPost || !isDraftValid}
                   onClick={handleCreateDraft}
                 >
