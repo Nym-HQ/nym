@@ -8,7 +8,7 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
-import { CommentType, useGetQuestionQuery } from '~/graphql/types.generated'
+import { CommentType } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { MarkdownRenderer } from '../MarkdownRenderer'
@@ -34,7 +34,7 @@ export function QuestionDetail({ id, question, site, loading, error }) {
   const seo = extendSEO(
     {
       ...routes.ama.seo,
-      title: question.title,
+      title: `Q:${question.title}`,
       description: question.description,
     },
     site
@@ -62,7 +62,7 @@ export function QuestionDetail({ id, question, site, loading, error }) {
                 <a className="inline-flex">
                   <Avatar
                     user={question.author}
-                    src={question.author.avatar}
+                    src={question.author.avatar || question.author.image}
                     width={32}
                     height={32}
                     quality={100}

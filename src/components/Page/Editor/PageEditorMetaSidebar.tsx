@@ -8,6 +8,7 @@ import { TextWithDatePicker } from '~/components/DatePicker'
 import { Input, Textarea } from '~/components/Input'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { Tooltip } from '~/components/Tooltip'
 import { GET_PAGES } from '~/graphql/queries/pages'
 import {
   useAddPageMutation,
@@ -27,6 +28,8 @@ export function PageEditorMetaSidebar({ site }) {
     setDraftState,
     sidebarIsOpen,
     setSidebarIsOpen,
+    isDraftValid,
+    draftErrors,
   } = context
   const scrollContainerRef = React.useRef(null)
 
@@ -165,42 +168,65 @@ export function PageEditorMetaSidebar({ site }) {
           )}
         </div>
 
-        <div className="filter-blur sticky bottom-0 z-10 flex flex-col items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
+        <div className="filter-blur sticky bottom-0 z-10 flex flex-col items-center justify-between border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
           {existingPage?.id && (
-            <PrimaryButton
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPage}
-              onClick={() => handleUpdate()}
-            >
-              {editingPage ? <LoadingSpinner /> : 'Save'}
-            </PrimaryButton>
+            <Tooltip content={isDraftValid ? 'Save' : draftErrors[0].message}>
+              <span className="w-full mt-1">
+                <PrimaryButton
+                  addclassname="w-full"
+                  disabled={editingPage || !isDraftValid}
+                  title={isDraftValid ? 'Save' : draftErrors[0].message}
+                  onClick={() => handleUpdate()}
+                >
+                  {editingPage ? <LoadingSpinner /> : 'Save'}
+                </PrimaryButton>
+              </span>
+            </Tooltip>
           )}
           {existingPage?.id && !existingPage?.publishedAt && (
-            <PrimaryButton
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPage}
-              onClick={() => handleUpdate(true)}
+            <Tooltip
+              content={isDraftValid ? 'Publish' : draftErrors[0].message}
             >
-              {editingPage ? <LoadingSpinner /> : 'Publish'}
-            </PrimaryButton>
+              <span className="w-full mt-1">
+                <PrimaryButton
+                  addclassname="w-full"
+                  disabled={editingPage || !isDraftValid}
+                  onClick={() => handleUpdate(true)}
+                >
+                  {editingPage ? <LoadingSpinner /> : 'Publish'}
+                </PrimaryButton>
+              </span>
+            </Tooltip>
           )}
           {existingPage?.id && existingPage?.publishedAt && (
-            <Button
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={editingPage}
-              onClick={() => handleUpdate(false)}
+            <Tooltip
+              content={isDraftValid ? 'Unpublish' : draftErrors[0].message}
             >
-              {editingPage ? <LoadingSpinner /> : 'Unpublish'}
-            </Button>
+              <span className="w-full mt-1">
+                <Button
+                  addclassname="w-full"
+                  disabled={editingPage || !isDraftValid}
+                  onClick={() => handleUpdate(false)}
+                >
+                  {editingPage ? <LoadingSpinner /> : 'Unpublish'}
+                </Button>
+              </span>
+            </Tooltip>
           )}
           {!existingPage?.id && (
-            <Button
-              style={{ width: '100%', margin: '8px 0 0 0' }}
-              disabled={creatingPage}
-              onClick={handleCreateDraft}
+            <Tooltip
+              content={isDraftValid ? 'Save draft' : draftErrors[0].message}
             >
-              {creatingPage ? <LoadingSpinner /> : <span>Save draft</span>}
-            </Button>
+              <span className="w-full mt-1">
+                <Button
+                  addclassname="w-full"
+                  disabled={creatingPage || !isDraftValid}
+                  onClick={handleCreateDraft}
+                >
+                  {creatingPage ? <LoadingSpinner /> : <span>Save draft</span>}
+                </Button>
+              </span>
+            </Tooltip>
           )}
         </div>
       </nav>

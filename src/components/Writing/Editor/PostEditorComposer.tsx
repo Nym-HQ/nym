@@ -10,10 +10,18 @@ import { PostEditorContext } from './PostEditor'
 export function PostEditorComposer({ site }) {
   const context = React.useContext(PostEditorContext)
   const { draftState, setDraftState } = context
+  const editorJsRef = React.useRef(null)
 
   function handleTitleChange(e) {
     let v = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
     setDraftState((draft) => ({ ...draft, title: v }))
+
+    // on press enter, focus the editor
+    if ((e.target.value || '') !== v) {
+      editorJsRef.current &&
+        editorJsRef.current._editorJS &&
+        editorJsRef.current._editorJS.focus()
+    }
   }
 
   function handleTextChange(e) {
@@ -48,7 +56,9 @@ export function PostEditorComposer({ site }) {
           <EditorJSEditor
             value={draftState.data}
             site={site}
-            editorRef={(el) => {}}
+            editorRef={(el) => {
+              editorJsRef.current = el
+            }}
             onChange={handleDataChange}
           />
         </div>

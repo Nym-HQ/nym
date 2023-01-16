@@ -1,3 +1,5 @@
+import { SiteRole } from '@prisma/client'
+
 import { PRESERVED_SUBDOMAINS } from '~/config/tenants'
 import { prisma } from '~/lib/prisma'
 
@@ -44,4 +46,22 @@ export async function getUserSiteById(userId: string, siteId: string) {
       siteId: siteId,
     },
   })
+}
+
+/**
+ * Find Site object from the domain name
+ *
+ * @param domain
+ * @returns
+ */
+export async function getSiteOwner(siteId: string) {
+  const userSite = await prisma.userSite.findFirst({
+    where: {
+      siteRole: SiteRole.OWNER,
+      siteId: siteId,
+    },
+  })
+  return userSite
+    ? await prisma.user.findUnique({ where: { id: userSite.userId } })
+    : null
 }

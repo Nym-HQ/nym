@@ -3,7 +3,11 @@ import { PrismaClient, Site, SiteRole, UserSite } from '@prisma/client'
 import { User, UserRole } from '~/graphql/types.generated'
 import { isAuthenticatedServerSide } from '~/lib/auth/nextauth'
 import { isMainAppDomain } from '~/lib/multitenancy/client'
-import { getSiteByDomain, getUserSiteById } from '~/lib/multitenancy/server'
+import {
+  getSiteByDomain,
+  getSiteOwner,
+  getUserSiteById,
+} from '~/lib/multitenancy/server'
 import { prisma } from '~/lib/prisma'
 
 async function getViewer(ctx) {
@@ -46,12 +50,18 @@ export async function getContext(ctx) {
       userSite?.siteRole === SiteRole.ADMIN ||
       userSite?.siteRole === SiteRole.OWNER
   }
+  const owner = site
+    ? userSite?.siteRole === SiteRole.OWNER
+      ? viewer
+      : await getSiteOwner(site?.id)
+    : null
 
   return {
     viewer,
     site,
     userSite,
     prisma,
+    owner,
   }
 }
 
@@ -60,4 +70,5 @@ export type Context = {
   viewer: User | null
   site: Site | null
   userSite: UserSite | null
+  owner: User | null
 }

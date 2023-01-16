@@ -20,7 +20,7 @@ export const QuestionListItem = React.memo<Props>(({ question, active }) => {
         <div className="flex items-center space-x-2">
           <Avatar
             user={question.author}
-            src={question.author.avatar}
+            src={question.author.avatar || question.author.image}
             width={16}
             height={16}
             layout={'fixed'}

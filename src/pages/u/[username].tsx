@@ -14,17 +14,13 @@ import { getCommonPageProps } from '~/lib/commonProps'
 export default function UserPage(props) {
   const { data: context } = useContextQuery()
   const { username } = props
-  const seo = extendSEO({}, context.context.site)
 
   return (
-    <>
-      <NextSeo {...seo} />
-      <ListDetailView
-        list={null}
-        hasDetail
-        detail={<UserDetail username={username} />}
-      />
-    </>
+    <ListDetailView
+      list={null}
+      hasDetail
+      detail={<UserDetail username={username} />}
+    />
   )
 }
 

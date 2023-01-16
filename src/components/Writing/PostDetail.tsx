@@ -41,7 +41,13 @@ export function PostDetail({ slug, site, post, error, loading }) {
         />
 
         <Detail.ContentContainer>
-          <Detail.Header>
+          <Detail.Header
+            style={{
+              maxWidth: '650px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
             <Detail.Title ref={titleRef}>{post.title}</Detail.Title>
             <span
               title={publishedAt.raw}

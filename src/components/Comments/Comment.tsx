@@ -113,7 +113,7 @@ export const Comment = React.memo(function MemoComment({
             <a className="inline-flex">
               <Avatar
                 user={comment.author}
-                src={comment.author.avatar}
+                src={comment.author.avatar || comment.author.image}
                 width={40}
                 height={40}
                 quality={100}

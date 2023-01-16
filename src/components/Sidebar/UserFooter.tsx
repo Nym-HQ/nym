@@ -74,7 +74,9 @@ export function UserFooter() {
           >
             <Avatar
               user={data?.context?.viewer}
-              src={data?.context?.viewer?.avatar}
+              src={
+                data?.context?.viewer?.avatar || data?.context?.viewer?.image
+              }
               width={24}
               height={24}
               layout="fixed"

@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 
 import Button from '~/components/Button'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { Tooltip } from '~/components/Tooltip'
 import {
   useAddPostMutation,
   useEditPostMutation,
@@ -24,6 +25,8 @@ export function PostEditorActions() {
     setSidebarIsOpen,
     isPreviewing,
     setIsPreviewing,
+    isDraftValid,
+    draftErrors,
   } = context
 
   const [addPost, { loading: creatingPost }] = useAddPostMutation({
@@ -70,15 +73,34 @@ export function PostEditorActions() {
 
   return (
     <div className="flex items-center space-x-2">
-      <Button disabled={isSavingDraft} onClick={handleEditOrCreate}>
-        {isSavingDraft ? (
-          <LoadingSpinner />
-        ) : (
-          <>
-            <span>{existingPost?.publishedAt ? 'Update' : 'Save draft'}</span>
-          </>
-        )}
-      </Button>
+      <Tooltip
+        placement="bottom"
+        content={
+          isDraftValid
+            ? existingPost?.publishedAt
+              ? 'Update'
+              : 'Save draft'
+            : draftErrors[0].message
+        }
+      >
+        {/* a small trick to show the tooltip even if the button is disabled by wrapping into <span/> */}
+        <span>
+          <Button
+            disabled={isSavingDraft || !isDraftValid}
+            onClick={handleEditOrCreate}
+          >
+            {isSavingDraft ? (
+              <LoadingSpinner />
+            ) : (
+              <>
+                <span>
+                  {existingPost?.publishedAt ? 'Update' : 'Save draft'}
+                </span>
+              </>
+            )}
+          </Button>
+        </span>
+      </Tooltip>
       <Button onClick={() => setSidebarIsOpen(!sidebarIsOpen)}>
         <Sidebar size={16} />
       </Button>

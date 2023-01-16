@@ -39,7 +39,13 @@ export function PageDetail({ slug, site, page, error, loading }) {
         />
 
         <Detail.ContentContainer>
-          <Detail.Header>
+          <Detail.Header
+            style={{
+              maxWidth: '650px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
             <Detail.Title ref={titleRef}>{page.title}</Detail.Title>
             <span
               title={publishedAt.raw}

@@ -523,6 +523,12 @@ export type Site = {
   subdomain?: Maybe<Scalars['String']>
 }
 
+export type SiteOwner = {
+  __typename?: 'SiteOwner'
+  avatar?: Maybe<Scalars['String']>
+  image?: Maybe<Scalars['String']>
+}
+
 export enum SiteRole {
   Admin = 'ADMIN',
   Blocked = 'BLOCKED',
@@ -543,6 +549,7 @@ export type User = {
   email?: Maybe<Scalars['String']>
   emailSubscriptions?: Maybe<Array<Maybe<EmailSubscription>>>
   id: Scalars['ID']
+  image?: Maybe<Scalars['String']>
   isAdmin?: Maybe<Scalars['Boolean']>
   location?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
@@ -572,6 +579,7 @@ export type UserSite = {
 
 export type ViewerContext = {
   __typename?: 'ViewerContext'
+  owner?: Maybe<SiteOwner>
   site?: Maybe<Site>
   userSite?: Maybe<UserSite>
   viewer?: Maybe<User>
@@ -659,6 +667,7 @@ export type CommentInfoFragment = {
     __typename: 'User'
     id: string
     username?: string | null | undefined
+    image?: string | null | undefined
     avatar?: string | null | undefined
     name?: string | null | undefined
     role?: UserRole | null | undefined
@@ -842,6 +851,7 @@ export type QuestionCoreFragment = {
         __typename: 'User'
         id: string
         username?: string | null | undefined
+        image?: string | null | undefined
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
@@ -861,6 +871,7 @@ export type QuestionListItemFragment = {
         __typename: 'User'
         id: string
         username?: string | null | undefined
+        image?: string | null | undefined
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
@@ -886,6 +897,7 @@ export type QuestionDetailFragment = {
         __typename: 'User'
         id: string
         username?: string | null | undefined
+        image?: string | null | undefined
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
@@ -921,6 +933,7 @@ export type QuestionsConnectionFragment = {
                     __typename: 'User'
                     id: string
                     username?: string | null | undefined
+                    image?: string | null | undefined
                     avatar?: string | null | undefined
                     name?: string | null | undefined
                     role?: UserRole | null | undefined
@@ -1002,6 +1015,7 @@ export type UserInfoFragment = {
   __typename: 'User'
   id: string
   username?: string | null | undefined
+  image?: string | null | undefined
   avatar?: string | null | undefined
   name?: string | null | undefined
   role?: UserRole | null | undefined
@@ -1103,6 +1117,7 @@ export type AddCommentMutation = {
           __typename: 'User'
           id: string
           username?: string | null | undefined
+          image?: string | null | undefined
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
@@ -1133,6 +1148,7 @@ export type EditCommentMutation = {
           __typename: 'User'
           id: string
           username?: string | null | undefined
+          image?: string | null | undefined
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
@@ -1318,6 +1334,7 @@ export type EditQuestionMutation = {
               __typename: 'User'
               id: string
               username?: string | null | undefined
+              image?: string | null | undefined
               avatar?: string | null | undefined
               name?: string | null | undefined
               role?: UserRole | null | undefined
@@ -1362,6 +1379,7 @@ export type AddQuestionMutation = {
               __typename: 'User'
               id: string
               username?: string | null | undefined
+              image?: string | null | undefined
               avatar?: string | null | undefined
               name?: string | null | undefined
               role?: UserRole | null | undefined
@@ -1530,6 +1548,7 @@ export type EditUserMutation = {
         __typename: 'User'
         id: string
         username?: string | null | undefined
+        image?: string | null | undefined
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
@@ -1624,6 +1643,7 @@ export type GetCommentsQuery = {
           __typename: 'User'
           id: string
           username?: string | null | undefined
+          image?: string | null | undefined
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
@@ -1897,6 +1917,7 @@ export type GetQuestionsQuery = {
                       __typename: 'User'
                       id: string
                       username?: string | null | undefined
+                      image?: string | null | undefined
                       avatar?: string | null | undefined
                       name?: string | null | undefined
                       role?: UserRole | null | undefined
@@ -1937,6 +1958,7 @@ export type GetQuestionQuery = {
               __typename: 'User'
               id: string
               username?: string | null | undefined
+              image?: string | null | undefined
               avatar?: string | null | undefined
               name?: string | null | undefined
               role?: UserRole | null | undefined
@@ -2006,6 +2028,7 @@ export type GetUserQuery = {
         __typename: 'User'
         id: string
         username?: string | null | undefined
+        image?: string | null | undefined
         avatar?: string | null | undefined
         name?: string | null | undefined
         role?: UserRole | null | undefined
@@ -2028,6 +2051,7 @@ export type GetViewerWithSettingsQuery = {
           __typename: 'User'
           id: string
           username?: string | null | undefined
+          image?: string | null | undefined
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
@@ -2063,6 +2087,7 @@ export type ContextQuery = {
           __typename: 'User'
           id: string
           username?: string | null | undefined
+          image?: string | null | undefined
           avatar?: string | null | undefined
           name?: string | null | undefined
           role?: UserRole | null | undefined
@@ -2101,6 +2126,14 @@ export type ContextQuery = {
           userId?: string | null | undefined
           siteRole?: SiteRole | null | undefined
           site?: { __typename?: 'Site'; id: string } | null | undefined
+        }
+      | null
+      | undefined
+    owner?:
+      | {
+          __typename?: 'SiteOwner'
+          image?: string | null | undefined
+          avatar?: string | null | undefined
         }
       | null
       | undefined
@@ -2156,6 +2189,7 @@ export const UserInfoFragmentDoc = gql`
     __typename
     id
     username
+    image
     avatar
     name
     role
@@ -4421,6 +4455,10 @@ export const ContextDocument = gql`
       }
       userSite {
         ...UserSite
+      }
+      owner {
+        image
+        avatar
       }
     }
   }

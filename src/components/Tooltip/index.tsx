@@ -1,20 +1,21 @@
 import 'tippy.js/dist/tippy.css'
 
-import Tippy from '@tippy.js/react'
+import Tippy from '@tippyjs/react'
 import * as React from 'react'
 
 interface Props {
   content: string
+  placement?: typeof Tippy.defaultProps.placement
   style?: any
   children: any
 }
 
 export function Tooltip(props: Props) {
-  const { style = {}, content, ...rest } = props
+  const { style = {}, placement = 'auto', content, children, ...rest } = props
 
   return (
     <Tippy
-      placement="top"
+      placement={placement}
       touch={false}
       arrow={true}
       hideOnClick={false}
@@ -23,15 +24,9 @@ export function Tooltip(props: Props) {
           {content}
         </span>
       }
-      // https://github.com/FezVrasta/popper.js/issues/535
-      popperOptions={{
-        modifiers: {
-          preventOverflow: {
-            boundariesElement: 'window',
-          },
-        },
-      }}
       {...rest}
-    />
+    >
+      {children}
+    </Tippy>
   )
 }

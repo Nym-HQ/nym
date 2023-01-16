@@ -3,6 +3,13 @@ import URL from 'url'
 
 import { validUrl } from '~/lib/validators'
 
+/**
+ * NOTE: IFramely is a great service for getting metadata.
+ *      It has a free tier but sometimes it is not enough.
+ *
+ * @param url
+ * @returns
+ */
 export default async function getBookmarkMetaData(url) {
   const res = await fetch(url)
   const html = await res.text()

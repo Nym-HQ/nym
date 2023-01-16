@@ -10,7 +10,7 @@ import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { Tags } from '~/components/Tag'
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
-import { CommentType, useGetBookmarkQuery } from '~/graphql/types.generated'
+import { CommentType } from '~/graphql/types.generated'
 
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { BookmarkActions } from './BookmarkActions'
@@ -31,7 +31,7 @@ export function BookmarkDetail({ id, bookmark, site, loading, error }) {
   const seo = extendSEO(
     {
       ...routes.bookmarks.seo,
-      title: bookmark.title,
+      title: `Bookmark:${bookmark.title}`,
       description: bookmark.description,
     },
     site
