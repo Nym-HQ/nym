@@ -74,7 +74,7 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
     publishedAt: post?.publishedAt || null,
   } as PostDraftState
 
-  const [draftState, _setDraftState] = React.useState(defaultDraftState)
+  const [draftState, setDraftState] = React.useState(defaultDraftState)
   const [isPreviewing, setIsPreviewing] = React.useState(false)
 
   const existingPost = post
@@ -84,12 +84,11 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
   const [draftErrors, setDraftErrors] = React.useState(validInit.draftErrors)
   const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false)
 
-  const setDraftState = (newDraftState) => {
-    _setDraftState(newDraftState)
-    let validNext = checkIfDraftIsValid(newDraftState, existingPost)
+  React.useEffect(() => {
+    let validNext = checkIfDraftIsValid(draftState, existingPost)
     setIsDraftValid(validNext.isDraftValid)
     setDraftErrors(validNext.draftErrors)
-  }
+  }, [draftState])
 
   React.useEffect(() => {
     // if navigating between drafts, reset the state each time with the correct

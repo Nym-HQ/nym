@@ -80,7 +80,7 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
     publishedAt: page?.publishedAt || null,
   } as PageDraftState
 
-  const [draftState, _setDraftState] = React.useState(defaultDraftState)
+  const [draftState, setDraftState] = React.useState(defaultDraftState)
   const [isPreviewing, setIsPreviewing] = React.useState(false)
 
   const existingPage = page
@@ -90,12 +90,11 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
   const [draftErrors, setDraftErrors] = React.useState(validInit.draftErrors)
   const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false)
 
-  const setDraftState = (newDraftState) => {
-    _setDraftState(newDraftState)
-    let validNext = checkIfDraftIsValid(newDraftState, existingPage)
+  React.useEffect(() => {
+    let validNext = checkIfDraftIsValid(draftState, existingPage)
     setIsDraftValid(validNext.isDraftValid)
     setDraftErrors(validNext.draftErrors)
-  }
+  }, [draftState])
 
   React.useEffect(() => {
     // if navigating between drafts, reset the state each time with the correct

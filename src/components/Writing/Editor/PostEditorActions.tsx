@@ -75,6 +75,13 @@ export function PostEditorActions() {
       <Button
         disabled={isSavingDraft || !isDraftValid}
         onClick={handleEditOrCreate}
+        title={
+          isDraftValid
+            ? existingPost?.publishedAt
+              ? 'Update'
+              : 'Save draft'
+            : draftErrors[0].message
+        }
       >
         {isSavingDraft ? (
           <LoadingSpinner />

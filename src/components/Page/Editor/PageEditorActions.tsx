@@ -90,6 +90,13 @@ export function PageEditorActions() {
       <Button
         disabled={isSavingDraft || !isDraftValid}
         onClick={handleEditOrCreate}
+        title={
+          isDraftValid
+            ? existingPage?.publishedAt
+              ? 'Update'
+              : 'Save draft'
+            : draftErrors[0].message
+        }
       >
         {isSavingDraft ? (
           <LoadingSpinner />

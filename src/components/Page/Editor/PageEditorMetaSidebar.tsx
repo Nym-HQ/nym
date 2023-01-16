@@ -172,6 +172,7 @@ export function PageEditorMetaSidebar({ site }) {
             <PrimaryButton
               style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={editingPage || !isDraftValid}
+              title={isDraftValid ? 'Save' : draftErrors[0].message}
               onClick={() => handleUpdate()}
             >
               {editingPage ? <LoadingSpinner /> : 'Save'}
@@ -181,6 +182,7 @@ export function PageEditorMetaSidebar({ site }) {
             <PrimaryButton
               style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={editingPage || !isDraftValid}
+              title={isDraftValid ? 'Publish' : draftErrors[0].message}
               onClick={() => handleUpdate(true)}
             >
               {editingPage ? <LoadingSpinner /> : 'Publish'}
@@ -190,6 +192,7 @@ export function PageEditorMetaSidebar({ site }) {
             <Button
               style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={editingPage || !isDraftValid}
+              title={isDraftValid ? 'Unpublish' : draftErrors[0].message}
               onClick={() => handleUpdate(false)}
             >
               {editingPage ? <LoadingSpinner /> : 'Unpublish'}
@@ -199,6 +202,7 @@ export function PageEditorMetaSidebar({ site }) {
             <Button
               style={{ width: '100%', margin: '8px 0 0 0' }}
               disabled={creatingPage || !isDraftValid}
+              title={isDraftValid ? 'Save Draft' : draftErrors[0].message}
               onClick={handleCreateDraft}
             >
               {creatingPage ? <LoadingSpinner /> : <span>Save draft</span>}
