@@ -33,14 +33,14 @@ export function SiteLayout({ children }) {
 
   return (
     <>
-      {context.context?.site?.attach_css && (
+      {context?.context?.site?.attach_css && (
         <style jsx global>
           {`
             ${context.context.site.attach_css}
           `}
         </style>
       )}
-      {context.context?.site?.attach_js && (
+      {context?.context?.site?.attach_js && (
         <script
           dangerouslySetInnerHTML={{
             __html: context.context.site.attach_js,
