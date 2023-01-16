@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import { useCallback, useRef, useState } from 'react'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Label } from '~/components/admin-components'

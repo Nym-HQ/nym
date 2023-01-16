@@ -52,7 +52,11 @@ export function extendSEO(options: SEOProps, site?: Site) {
   }
 
   // override with site configuration
-  seo.title = `${site?.name || 'Nym'}${seo.title ? ` | ${seo.title}` : ''}`
+  seo.title = seo.title
+    ? `${seo.title}${site?.name ? ' - ' : ''}${site?.name || ''}`
+    : `${site?.name || ''}${site?.description ? ' - ' : ''}${
+        site?.description || ''
+      }` || ''
   seo.description = `${seo.description ? `${seo.description} |` : ''}${
     site?.description || 'Nym is a personal website maker.'
   }`

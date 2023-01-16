@@ -166,7 +166,7 @@ export function PostEditorMetaSidebar({ site }) {
           )}
         </div>
 
-        <div className="flex flex-col filter-blur sticky bottom-0 z-10 flex items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
+        <div className="flex flex-col filter-blur sticky bottom-0 z-10 flex items-center justify-between border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
           {existingPost?.id && (
             <Tooltip content={isDraftValid ? 'Save' : draftErrors[0].message}>
               <span className="w-full mt-1">

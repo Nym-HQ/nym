@@ -168,12 +168,12 @@ export function PageEditorMetaSidebar({ site }) {
           )}
         </div>
 
-        <div className="filter-blur sticky bottom-0 z-10 flex flex-col items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
+        <div className="filter-blur sticky bottom-0 z-10 flex flex-col items-center justify-between border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
           {existingPage?.id && (
             <Tooltip content={isDraftValid ? 'Save' : draftErrors[0].message}>
               <span className="w-full mt-1">
                 <PrimaryButton
-                  style={{ width: '100%', margin: '8px 0 0 0' }}
+                  addclassname="w-full"
                   disabled={editingPage || !isDraftValid}
                   title={isDraftValid ? 'Save' : draftErrors[0].message}
                   onClick={() => handleUpdate()}
@@ -189,9 +189,8 @@ export function PageEditorMetaSidebar({ site }) {
             >
               <span className="w-full mt-1">
                 <PrimaryButton
-                  style={{ width: '100%', margin: '8px 0 0 0' }}
+                  addclassname="w-full"
                   disabled={editingPage || !isDraftValid}
-                  title={isDraftValid ? 'Publish' : draftErrors[0].message}
                   onClick={() => handleUpdate(true)}
                 >
                   {editingPage ? <LoadingSpinner /> : 'Publish'}
@@ -205,9 +204,8 @@ export function PageEditorMetaSidebar({ site }) {
             >
               <span className="w-full mt-1">
                 <Button
-                  style={{ width: '100%', margin: '8px 0 0 0' }}
+                  addclassname="w-full"
                   disabled={editingPage || !isDraftValid}
-                  title={isDraftValid ? 'Unpublish' : draftErrors[0].message}
                   onClick={() => handleUpdate(false)}
                 >
                   {editingPage ? <LoadingSpinner /> : 'Unpublish'}
@@ -221,6 +219,7 @@ export function PageEditorMetaSidebar({ site }) {
             >
               <span className="w-full mt-1">
                 <Button
+                  addclassname="w-full"
                   disabled={creatingPage || !isDraftValid}
                   onClick={handleCreateDraft}
                 >

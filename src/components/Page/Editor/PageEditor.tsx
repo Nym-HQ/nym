@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 
+import { PageSEO } from '../PageSEO'
 import { PageEditorActions } from './PageEditorActions'
 import { PageEditorComposer } from './PageEditorComposer'
 import { PageEditorMetaSidebar } from './PageEditorMetaSidebar'
@@ -115,25 +116,28 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
   }
 
   return (
-    <PageEditorContext.Provider value={defaultContextValue}>
-      <Detail.Container ref={scrollContainerRef}>
-        <TitleBar
-          backButton
-          globalMenu={false}
-          backButtonHref={'/pages'}
-          scrollContainerRef={scrollContainerRef}
-          title=""
-          trailingAccessory={<PageEditorActions />}
-          leadingAccessory={<PreviewSwitch />}
-        />
+    <>
+      <PageSEO page={page} site={site} />
+      <PageEditorContext.Provider value={defaultContextValue}>
+        <Detail.Container ref={scrollContainerRef}>
+          <TitleBar
+            backButton
+            globalMenu={false}
+            backButtonHref={'/pages'}
+            scrollContainerRef={scrollContainerRef}
+            title=""
+            trailingAccessory={<PageEditorActions />}
+            leadingAccessory={<PreviewSwitch />}
+          />
 
-        {isPreviewing ? (
-          <PageEditorPreview />
-        ) : (
-          <PageEditorComposer site={site} />
-        )}
-      </Detail.Container>
-      <PageEditorMetaSidebar site={site} />
-    </PageEditorContext.Provider>
+          {isPreviewing ? (
+            <PageEditorPreview />
+          ) : (
+            <PageEditorComposer site={site} />
+          )}
+        </Detail.Container>
+        <PageEditorMetaSidebar site={site} />
+      </PageEditorContext.Provider>
+    </>
   )
 }
