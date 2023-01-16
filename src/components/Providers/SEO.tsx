@@ -9,7 +9,10 @@ export function SEO() {
   const { data: context } = useContextQuery()
   const seo = extendSEO({}, context?.context?.site)
   console.log(context?.context?.owner)
-  const favicon = context?.context?.owner?.avatar || '/static/favicon.ico'
+  const favicon =
+    context?.context?.owner?.avatar ||
+    context?.context?.owner?.image ||
+    '/static/favicon.ico'
 
   return (
     <>

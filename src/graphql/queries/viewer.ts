@@ -33,6 +33,7 @@ export const GET_CONTEXT = gql`
         ...UserSite
       }
       owner {
+        image
         avatar
       }
     }

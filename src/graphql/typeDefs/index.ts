@@ -40,6 +40,7 @@ const typeDefs = gql`
 
   type SiteOwner {
     avatar: String
+    image: String
   }
 
   type Page {
@@ -140,6 +141,7 @@ const typeDefs = gql`
     createdAt: Date
     role: UserRole
     username: String
+    image: String
     avatar: String
     email: String
     pendingEmail: String

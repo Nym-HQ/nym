@@ -6,8 +6,8 @@ export function getViewerContext(_, __, { viewer, site, userSite, owner }) {
     },
     userSite,
     owner: {
-      avatar:
-        owner?.avatar || owner?.image || '/static/img/fallback-avatar.png',
+      avatar: owner?.avatar,
+      image: owner?.image,
     },
   }
 }

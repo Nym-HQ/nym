@@ -62,7 +62,7 @@ export function QuestionDetail({ id, question, site, loading, error }) {
                 <a className="inline-flex">
                   <Avatar
                     user={question.author}
-                    src={question.author.avatar}
+                    src={question.author.avatar || question.author.image}
                     width={32}
                     height={32}
                     quality={100}

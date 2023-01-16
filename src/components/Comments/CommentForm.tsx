@@ -40,6 +40,7 @@ export function CommentForm({ refId, type, openModal }: Props) {
           __typename: 'User',
           id: uuidv4(),
           username: data?.context?.viewer?.username,
+          image: data?.context?.viewer?.image,
           avatar: data?.context?.viewer?.avatar,
           name: data?.context?.viewer?.name,
           role: data?.context?.viewer?.role,
