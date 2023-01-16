@@ -56,7 +56,6 @@ function AppIntro() {
 
   if (data?.context?.viewer) {
     const { data: userSites } = useGetSitesQuery()
-    console.log(userSites)
 
     return (
       <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>

@@ -8,7 +8,6 @@ import { useContextQuery } from '~/graphql/types.generated'
 export function SEO() {
   const { data: context } = useContextQuery()
   const seo = extendSEO({}, context?.context?.site)
-  console.log(context?.context?.owner)
   const favicon =
     context?.context?.owner?.avatar ||
     context?.context?.owner?.image ||
