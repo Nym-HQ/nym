@@ -32,6 +32,9 @@ export const GET_CONTEXT = gql`
       userSite {
         ...UserSite
       }
+      owner {
+        avatar
+      }
     }
   }
   ${UserInfoFragment}

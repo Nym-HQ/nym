@@ -32,7 +32,6 @@ import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
 function AdminDomainMappingPage(props) {
   const { data: context } = useContextQuery()
-  const seo = extendSEO({}, context.context.site)
 
   const [parkedDomain, setParkedDomain] = React.useState(
     context?.context?.site?.parkedDomain || ''
@@ -56,86 +55,82 @@ function AdminDomainMappingPage(props) {
   }
 
   return (
-    <>
-      <NextSeo {...seo} />
+    <Detail.Container>
+      <TitleBar
+        title="Domain Mappings"
+        backButton
+        globalMenu={false}
+        backButtonHref={'/admin'}
+        magicTitle
+      />
 
-      <Detail.Container>
-        <TitleBar
-          title="Domain Mappings"
-          backButton
-          globalMenu={false}
-          backButtonHref={'/admin'}
-          magicTitle
-        />
+      <Detail.ContentContainer>
+        <Detail.Title>Domain Mapping</Detail.Title>
 
-        <Detail.ContentContainer>
-          <Detail.Title>Domain Mapping</Detail.Title>
-
-          <Subsection title="">
-            <div className="grid grid-cols-6 gap-6">
-              <div className="col-span-6 sm:col-span-4">
-                <Label htmlFor="subdomain-name">Nymhq Subdomain name</Label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <input
-                    type="text"
-                    name="subdomain-name"
-                    id="subdomain-name"
-                    className="w-full rounded-l-md text-primary px-4 py-2 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 hover border-gray-200 dark:border-gray-700"
-                    defaultValue={props.site.subdomain}
-                    autoComplete="disabled"
-                    readOnly={true}
-                  />
-                  <span className="inline-flex items-center rounded-r-md border border-r-0 border-gray-300 px-3 text-sm text-gray-500 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 border-gray-200 dark:border-gray-700">
-                    .{TENANT_DOMAIN}
-                  </span>
-                </div>
-              </div>
-              <div className="col-span-6 sm:col-span-4">
-                <Label htmlFor="ip-mapping">IP Mapping</Label>
-                <Input
+        <Subsection title="">
+          <div className="grid grid-cols-6 gap-6">
+            <div className="col-span-6 sm:col-span-4">
+              <Label htmlFor="subdomain-name">Nymhq Subdomain name</Label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <input
                   type="text"
-                  name="ip-mapping"
-                  id="ip-mapping"
-                  defaultValue="76.76.21.21"
+                  name="subdomain-name"
+                  id="subdomain-name"
+                  className="w-full rounded-l-md text-primary px-4 py-2 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 hover border-gray-200 dark:border-gray-700"
+                  defaultValue={props.site.subdomain}
                   autoComplete="disabled"
                   readOnly={true}
                 />
-              </div>
-              <div className="col-span-6 sm:col-span-4">
-                <Label htmlFor="parked-domain-name">Domain name</Label>
-                <div className="mt-1 flex rounded-md shadow-sm">
-                  <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-sm text-gray-500 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 border-gray-200 dark:border-gray-700">
-                    https://
-                  </span>
-                  <input
-                    type="text"
-                    name="parked-domain-name"
-                    id="parked-domain-name"
-                    value={parkedDomain}
-                    onChange={(e) => setParkedDomain(e.target.value)}
-                    className="w-full rounded-r-md text-primary px-4 py-2 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 hover border-gray-200 dark:border-gray-700"
-                    placeholder="www.example.com"
-                    autoComplete="disabled"
-                  />
-                </div>
+                <span className="inline-flex items-center rounded-r-md border border-r-0 border-gray-300 px-3 text-sm text-gray-500 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 border-gray-200 dark:border-gray-700">
+                  .{TENANT_DOMAIN}
+                </span>
               </div>
             </div>
-          </Subsection>
-
-          <SubsectionSplitter />
-
-          <div className="py-3">
-            <PrimaryButton
-              type="submit"
-              onClick={saveDomainMapping}
-              disabled={saving}
-            >
-              {saving && <LoadingSpinner />}Save domain mapping
-            </PrimaryButton>
+            <div className="col-span-6 sm:col-span-4">
+              <Label htmlFor="ip-mapping">IP Mapping</Label>
+              <Input
+                type="text"
+                name="ip-mapping"
+                id="ip-mapping"
+                defaultValue="76.76.21.21"
+                autoComplete="disabled"
+                readOnly={true}
+              />
+            </div>
+            <div className="col-span-6 sm:col-span-4">
+              <Label htmlFor="parked-domain-name">Domain name</Label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-sm text-gray-500 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 border-gray-200 dark:border-gray-700">
+                  https://
+                </span>
+                <input
+                  type="text"
+                  name="parked-domain-name"
+                  id="parked-domain-name"
+                  value={parkedDomain}
+                  onChange={(e) => setParkedDomain(e.target.value)}
+                  className="w-full rounded-r-md text-primary px-4 py-2 bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 hover border-gray-200 dark:border-gray-700"
+                  placeholder="www.example.com"
+                  autoComplete="disabled"
+                />
+              </div>
+            </div>
           </div>
-        </Detail.ContentContainer>
-      </Detail.Container>
-    </>
+        </Subsection>
+
+        <SubsectionSplitter />
+
+        <div className="py-3">
+          <PrimaryButton
+            type="submit"
+            onClick={saveDomainMapping}
+            disabled={saving}
+          >
+            {saving && <LoadingSpinner />}Save domain mapping
+          </PrimaryButton>
+        </div>
+      </Detail.ContentContainer>
+    </Detail.Container>
   )
 }
 

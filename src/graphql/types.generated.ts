@@ -523,6 +523,11 @@ export type Site = {
   subdomain?: Maybe<Scalars['String']>
 }
 
+export type SiteOwner = {
+  __typename?: 'SiteOwner'
+  avatar?: Maybe<Scalars['String']>
+}
+
 export enum SiteRole {
   Admin = 'ADMIN',
   Blocked = 'BLOCKED',
@@ -572,6 +577,7 @@ export type UserSite = {
 
 export type ViewerContext = {
   __typename?: 'ViewerContext'
+  owner?: Maybe<SiteOwner>
   site?: Maybe<Site>
   userSite?: Maybe<UserSite>
   viewer?: Maybe<User>
@@ -2102,6 +2108,10 @@ export type ContextQuery = {
           siteRole?: SiteRole | null | undefined
           site?: { __typename?: 'Site'; id: string } | null | undefined
         }
+      | null
+      | undefined
+    owner?:
+      | { __typename?: 'SiteOwner'; avatar?: string | null | undefined }
       | null
       | undefined
   }
@@ -4421,6 +4431,9 @@ export const ContextDocument = gql`
       }
       userSite {
         ...UserSite
+      }
+      owner {
+        avatar
       }
     }
   }

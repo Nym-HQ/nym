@@ -2,24 +2,25 @@ import Head from 'next/head'
 import { DefaultSeo } from 'next-seo'
 import * as React from 'react'
 
-import { baseUrl, defaultSEO } from '~/config/seo'
+import { baseUrl, extendSEO } from '~/config/seo'
+import { useContextQuery } from '~/graphql/types.generated'
 
 export function SEO() {
+  const { data: context } = useContextQuery()
+  const seo = extendSEO({}, context?.context?.site)
+  console.log(context?.context?.owner)
+  const favicon = context?.context?.owner?.avatar || '/static/favicon.ico'
+
   return (
     <>
-      <DefaultSeo {...defaultSEO} />
+      <DefaultSeo {...seo} />
       <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, viewport-fit=cover"
         />
-        <link rel="icon" href="/static/favicon.ico" sizes="any" />
-        <link
-          rel="icon"
-          href="/static/favicon.png"
-          type="image/png"
-          sizes="any"
-        />
+        <link rel="icon" href={favicon} sizes="any" />
+        <link rel="icon" href={favicon} type="image/png" sizes="any" />
         <link rel="mask-icon" href="/static/meta/mask-icon.svg" />
         <link rel="apple-touch-icon" href="/static/meta/apple-touch-icon.png" />
         <link rel="manifest" href="/static/meta/manifest.webmanifest" />

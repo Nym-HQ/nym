@@ -13,14 +13,8 @@ import { getCommonPageProps } from '~/lib/commonProps'
 
 function NewPagePage(props) {
   const { data: context } = useContextQuery()
-  const seo = extendSEO({}, context.context.site)
   if (!context.context?.viewer?.isAdmin) return <Detail.Null type="404" />
-  return (
-    <>
-      <NextSeo {...seo} />
-      <PageEditor page={null} site={context.context?.site} />
-    </>
-  )
+  return <PageEditor page={null} site={context.context?.site} />
 }
 
 export async function getServerSideProps(ctx) {

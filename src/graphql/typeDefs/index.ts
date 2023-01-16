@@ -38,6 +38,10 @@ const typeDefs = gql`
     site: Site
   }
 
+  type SiteOwner {
+    avatar: String
+  }
+
   type Page {
     id: ID!
     createdAt: Date
@@ -240,6 +244,7 @@ const typeDefs = gql`
     viewer: User
     site: Site
     userSite: UserSite
+    owner: SiteOwner
   }
 
   type Query {
