@@ -6,6 +6,7 @@
 import { NextSeo } from 'next-seo'
 import * as React from 'react'
 import toast from 'react-hot-toast'
+import { BiInfoCircle } from 'react-icons/bi'
 
 import {
   Label,
@@ -31,6 +32,7 @@ import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { Tooltip } from '~/components/Tooltip'
 import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { useContextQuery, useEditSiteMutation } from '~/graphql/types.generated'
@@ -121,7 +123,7 @@ function AdminSettingsPage(props) {
                   name="site-name"
                   id="site-name"
                   autoComplete="disabled"
-                  value={values.name}
+                  value={values.name || ''}
                   onChange={(e) =>
                     setValues({ ...values, name: e.target.value })
                   }
@@ -134,7 +136,7 @@ function AdminSettingsPage(props) {
                   rows={4}
                   id="site-description"
                   autoComplete="disabled"
-                  value={values.description}
+                  value={values.description || ''}
                   onChange={(e) =>
                     setValues({ ...values, description: e.target.value })
                   }
@@ -238,24 +240,38 @@ function AdminSettingsPage(props) {
               </div>
             </div> */}
               <div className="col-span-6">
-                <Label htmlFor="css-customization">CSS Customization</Label>
+                <Label htmlFor="css-customization">
+                  CSS Customization
+                  <Tooltip content="Use this with caution!">
+                    <span className="relative ml-1 inline-block">
+                      <BiInfoCircle />
+                    </span>
+                  </Tooltip>
+                </Label>
                 <Textarea
                   id="css-customization"
                   name="css-customization"
                   rows={4}
-                  value={values.attach_css}
+                  value={values.attach_css || ''}
                   onChange={(e) =>
                     setValues({ ...values, attach_css: e.target.value })
                   }
                 />
               </div>
               <div className="col-span-6">
-                <Label htmlFor="javascript-snippets">Javascript Snippets</Label>
+                <Label htmlFor="javascript-snippets">
+                  Javascript Snippets
+                  <Tooltip content="Use this with caution!">
+                    <span className="relative ml-1 inline-block">
+                      <BiInfoCircle />
+                    </span>
+                  </Tooltip>
+                </Label>
                 <Textarea
                   id="javascript-snippets"
                   name="javascript-snippets"
                   rows={4}
-                  value={values.attach_js}
+                  value={values.attach_js || ''}
                   onChange={(e) =>
                     setValues({ ...values, attach_js: e.target.value })
                   }
@@ -283,7 +299,7 @@ function AdminSettingsPage(props) {
                   id="social-profile-twitter"
                   autoComplete="disabled"
                   placeholder="https://twitter.com/nym_xyz"
-                  value={values.social_twitter}
+                  value={values.social_twitter || ''}
                   onChange={(e) =>
                     setValues({ ...values, social_twitter: e.target.value })
                   }
@@ -306,7 +322,7 @@ function AdminSettingsPage(props) {
                   id="social-profile-youtube"
                   autoComplete="disabled"
                   placeholder="https://youtube.com/nym_xyz"
-                  value={values.social_youtube}
+                  value={values.social_youtube || ''}
                   onChange={(e) =>
                     setValues({ ...values, social_youtube: e.target.value })
                   }
@@ -329,7 +345,7 @@ function AdminSettingsPage(props) {
                   id="social-profile-github"
                   autoComplete="disabled"
                   placeholder="https://github.com/Sov-Ventures"
-                  value={values.social_github}
+                  value={values.social_github || ''}
                   onChange={(e) =>
                     setValues({ ...values, social_github: e.target.value })
                   }
@@ -342,7 +358,7 @@ function AdminSettingsPage(props) {
                   <div className="col-span-1">&nbsp;</div>
                   <div className="col-span-4 text-center">
                     <PrimaryButton
-                      addClassName="w-full"
+                      addclassname="w-full"
                       onClick={() => setShowSocialOther1(true)}
                     >
                       Add a Link
@@ -371,7 +387,7 @@ function AdminSettingsPage(props) {
                         id="social-profile-other1"
                         autoComplete="disabled"
                         placeholder="https://abc.xyz"
-                        value={values.social_other1}
+                        value={values.social_other1 || ''}
                         onChange={(e) =>
                           setValues({
                             ...values,
@@ -393,7 +409,7 @@ function AdminSettingsPage(props) {
                         id="social-profile-other1-label"
                         autoComplete="disabled"
                         placeholder="Name of the link"
-                        value={values.social_other1_label}
+                        value={values.social_other1_label || ''}
                         onChange={(e) =>
                           setValues({
                             ...values,
@@ -402,7 +418,7 @@ function AdminSettingsPage(props) {
                         }
                       />
                       <DeleteButton
-                        addClassName="ml-1"
+                        addclassname="ml-1"
                         onClick={() => {
                           setValues({
                             ...values,

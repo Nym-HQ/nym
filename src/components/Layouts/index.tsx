@@ -1,6 +1,8 @@
+import { data } from 'cheerio/lib/api/attributes'
 import * as React from 'react'
 
 import { Sidebar } from '~/components/Sidebar'
+import { useContextQuery } from '~/graphql/types.generated'
 
 interface Props {
   list: React.ReactElement | null
@@ -27,11 +29,29 @@ export function ListDetailView({ list, detail, hasDetail = false }: Props) {
 }
 
 export function SiteLayout({ children }) {
-  return (
-    <div className="relative flex h-full min-h-screen-safe pb-safe w-full">
-      <Sidebar />
+  const { data: context } = useContextQuery()
 
-      <div className="flex flex-1">{children}</div>
-    </div>
+  return (
+    <>
+      {context.context?.site?.attach_css && (
+        <style jsx global>
+          {`
+            ${context.context.site.attach_css}
+          `}
+        </style>
+      )}
+      {context.context?.site?.attach_js && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: context.context.site.attach_js,
+          }}
+        />
+      )}
+      <div className="relative flex h-full min-h-screen-safe pb-safe w-full">
+        <Sidebar />
+
+        <div className="flex flex-1">{children}</div>
+      </div>
+    </>
   )
 }
