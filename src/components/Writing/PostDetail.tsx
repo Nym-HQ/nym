@@ -28,7 +28,7 @@ export function PostDetail({ slug, site, post, error, loading }) {
   const publishedAt = timestampToCleanTime({ timestamp: post.publishedAt })
   return (
     <>
-      <PostSEO post={post} site={site} />
+      {post && <PostSEO post={post} site={site} />}
       <Detail.Container data-cy="post-detail" ref={scrollContainerRef}>
         <TitleBar
           backButton
@@ -41,39 +41,41 @@ export function PostDetail({ slug, site, post, error, loading }) {
           trailingAccessory={<PostActions post={post} />}
         />
 
-        <Detail.ContentContainer>
-          <Detail.Header
-            style={{
-              maxWidth: '650px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
-            <Detail.Title ref={titleRef}>{post.title}</Detail.Title>
-            <span
-              title={publishedAt.raw}
-              className="text-tertiary inline-block leading-snug"
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <Detail.ContentContainer>
+            <Detail.Header
+              style={{
+                maxWidth: '650px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+              }}
             >
-              {publishedAt.formatted}
-            </span>
-          </Detail.Header>
+              <Detail.Title ref={titleRef}>{post.title}</Detail.Title>
+              <span
+                title={publishedAt.raw}
+                className="text-tertiary inline-block leading-snug"
+              >
+                {publishedAt.formatted}
+              </span>
+            </Detail.Header>
 
-          {post.text && !post.data?.blocks ? (
-            <div className="mt-8">
-              <MDEditorPreviewer source={post.text} />
-            </div>
-          ) : (
-            <EditorJSPreviewer value={post.data} />
-          )}
-          {/* <MarkdownRenderer children={post.text} className="prose mt-8" /> */}
+            {post.text && !post.data?.blocks ? (
+              <div className="mt-8">
+                <MDEditorPreviewer source={post.text} />
+              </div>
+            ) : (
+              <EditorJSPreviewer value={post.data} />
+            )}
+            {/* <MarkdownRenderer children={post.text} className="prose mt-8" /> */}
 
-          {/* bottom padding to give space between post content and comments */}
-          <div className="py-6" />
-        </Detail.ContentContainer>
+            {/* bottom padding to give space between post content and comments */}
+            <div className="py-6" />
+          </Detail.ContentContainer>
 
-        <Comments refId={post.id} type={CommentType.Post} />
+          <Comments refId={post.id} type={CommentType.Post} />
+        </div>
 
-        <PoweredByNym />
+        <PoweredByNym scrollContainerRef={scrollContainerRef} />
       </Detail.Container>
     </>
   )
