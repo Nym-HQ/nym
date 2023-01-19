@@ -52,7 +52,7 @@ export function BookmarkDetail({ id, bookmark, site, loading, error }) {
           trailingAccessory={<BookmarkActions bookmark={bookmark} />}
         />
 
-        <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="flex flex-1 flex-col flex-start justify-start">
           <Detail.ContentContainer>
             <Detail.Header>
               <Tags tags={bookmark.tags} />

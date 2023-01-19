@@ -16,6 +16,7 @@ import { PostSEO } from './PostSEO'
 export function PostDetail({ slug, site, post, error, loading }) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
+  const editorJsRef = React.useRef(null)
 
   if (loading) {
     return <Detail.Loading />
@@ -23,6 +24,10 @@ export function PostDetail({ slug, site, post, error, loading }) {
 
   if (!post || error) {
     return <Detail.Null type="Post" />
+  }
+
+  if (editorJsRef.current != null) {
+    editorJsRef.current.render(post.data)
   }
 
   const publishedAt = timestampToCleanTime({ timestamp: post.publishedAt })
@@ -41,7 +46,7 @@ export function PostDetail({ slug, site, post, error, loading }) {
           trailingAccessory={<PostActions post={post} />}
         />
 
-        <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="flex flex-1 flex-col flex-start justify-start">
           <Detail.ContentContainer>
             <Detail.Header
               style={{
@@ -64,7 +69,12 @@ export function PostDetail({ slug, site, post, error, loading }) {
                 <MDEditorPreviewer source={post.text} />
               </div>
             ) : (
-              <EditorJSPreviewer value={post.data} />
+              <EditorJSPreviewer
+                value={post.data}
+                editorRef={(el) => {
+                  editorJsRef.current = el
+                }}
+              />
             )}
             {/* <MarkdownRenderer children={post.text} className="prose mt-8" /> */}
 
