@@ -5,6 +5,8 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { useGetUserQuery } from '~/graphql/types.generated'
 
+import { PoweredByNym } from '../ListDetail/PoweredByNym'
+
 export function UserDetail({ username }) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
@@ -33,6 +35,8 @@ export function UserDetail({ username }) {
             </p>
           </Detail.Header>
         </Detail.ContentContainer>
+
+        <PoweredByNym />
       </Detail.Container>
     )
   }

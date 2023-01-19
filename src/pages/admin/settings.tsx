@@ -43,6 +43,9 @@ import { getCommonPageProps } from '~/lib/commonProps'
 function AdminSettingsPage(props) {
   const { data: context } = useContextQuery()
 
+  const scrollContainerRef = React.useRef(null)
+  const titleRef = React.useRef(null)
+
   const countrySelectorRef = React.createRef<HTMLDivElement>()
   const [countrySelectorOpen, setCountrySelectorOpen] = React.useState(false)
 
@@ -98,17 +101,19 @@ function AdminSettingsPage(props) {
   }
 
   return (
-    <Detail.Container>
+    <Detail.Container ref={scrollContainerRef}>
       <TitleBar
-        title={values.name}
+        title="Site Settings"
         backButton
         globalMenu={false}
         backButtonHref={'/admin'}
+        titleRef={titleRef}
+        scrollContainerRef={scrollContainerRef}
         magicTitle
       />
 
       <Detail.ContentContainer>
-        <Detail.Title>Site Settings</Detail.Title>
+        <Detail.Title ref={titleRef}>Site Settings</Detail.Title>
 
         <Subsection title="General Settings">
           <div className="grid grid-cols-6 gap-6">

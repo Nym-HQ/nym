@@ -6,6 +6,7 @@ import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { EditorJSPreviewer } from '../EditorJS'
+import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
@@ -67,6 +68,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
           {/* bottom padding to give space between page content and comments */}
           <div className="py-6" />
         </Detail.ContentContainer>
+        <PoweredByNym />
       </Detail.Container>
     </>
   )

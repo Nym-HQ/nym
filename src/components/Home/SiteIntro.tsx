@@ -7,6 +7,7 @@ import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
 import { useContextQuery, useGetHomePageQuery } from '~/graphql/types.generated'
 
+import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { MDEditorPreviewer } from '../ReactMdEditor'
 
@@ -52,6 +53,8 @@ export function SiteIntro() {
               {/* <MarkdownRenderer children={data.homepage.text} className="prose" /> */}
             </div>
           </Detail.ContentContainer>
+
+          <PoweredByNym />
         </Detail.Container>
       ) : (
         <Detail.Null type="Page" />
