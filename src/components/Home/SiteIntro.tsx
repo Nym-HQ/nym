@@ -32,7 +32,7 @@ export function SiteIntro() {
       <NextSeo {...seo} />
       {data?.homepage ? (
         <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
-          <div className="flex flex-1 flex-col items-center justify-center">
+          <div className="flex flex-1 flex-col flex-start justify-start">
             <Detail.ContentContainer>
               <div>
                 <span

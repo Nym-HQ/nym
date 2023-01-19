@@ -19,9 +19,9 @@ import { parsePageData } from '~/lib/compat/data'
 
 function PagePagePage(props) {
   const { slug } = props
-  const { data: context } = useContextQuery({ variables: {} })
   const { data, error, loading } = useGetPageQuery({ variables: { slug } })
-  const page = parsePageData(data?.page)
+  const { data: context } = useContextQuery({ variables: {} })
+  const page = parsePageData(props.page)
   if (page && !page.publishedAt)
     return <PageEditor slug={slug} site={context.context.site} page={page} />
 
@@ -30,7 +30,7 @@ function PagePagePage(props) {
       slug={slug}
       site={context.context.site}
       page={page}
-      error={error}
+      error={null}
       loading={loading}
     />
   )
@@ -73,6 +73,7 @@ export async function getServerSideProps(ctx) {
     props: {
       slug,
       ...commonProps,
+      page: data?.page,
     },
   })
 }

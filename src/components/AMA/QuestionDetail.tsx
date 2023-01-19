@@ -56,7 +56,7 @@ export function QuestionDetail({ id, question, site, loading, error }) {
           trailingAccessory={<QuestionActions question={question} />}
         />
 
-        <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="flex flex-1 flex-col flex-start justify-start">
           <Detail.ContentContainer>
             <Detail.Header>
               <div className="flex items-center space-x-4 pb-2">

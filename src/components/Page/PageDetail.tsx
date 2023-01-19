@@ -14,6 +14,7 @@ import { PageSEO } from './PageSEO'
 export function PageDetail({ slug, site, page, error, loading }) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
+  const editorJsRef = React.useRef(null)
 
   if (loading) {
     return <Detail.Loading />
@@ -21,6 +22,10 @@ export function PageDetail({ slug, site, page, error, loading }) {
 
   if (!page || error) {
     return <Detail.Null type="Page" />
+  }
+
+  if (editorJsRef.current != null) {
+    editorJsRef.current.render(page.data)
   }
 
   const publishedAt = timestampToCleanTime({ timestamp: page.publishedAt })
@@ -39,7 +44,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
           trailingAccessory={<PageActions page={page} />}
         />
 
-        <div className="flex flex-1 flex-col items-center justify-center">
+        <div className="flex flex-1 flex-col flex-start justify-start">
           <Detail.ContentContainer>
             <Detail.Header
               style={{
@@ -62,7 +67,12 @@ export function PageDetail({ slug, site, page, error, loading }) {
                 <MDEditorPreviewer source={page.text} />
               </div>
             ) : (
-              <EditorJSPreviewer value={page.data} />
+              <EditorJSPreviewer
+                value={page.data}
+                editorRef={(el) => {
+                  editorJsRef.current = el
+                }}
+              />
             )}
             {/* <MarkdownRenderer children={page.text} className="prose" /> */}
 

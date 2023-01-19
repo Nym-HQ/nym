@@ -57,6 +57,8 @@ export default function CustomizedEditorJS({
 
   const handleSave = useCallback(
     debounce(async () => {
+      if (editorCore.current === null) return false
+
       const savedData = await editorCore.current.save()
       onChange(savedData)
     }, 200),
@@ -123,14 +125,16 @@ export default function CustomizedEditorJS({
   }
 
   const ReactEditorJS = createReactEditorJS()
+  const editorProps = readOnly
+    ? { readOnly: true }
+    : { readOnly: false, onChange: handleSave }
 
   return (
     <ReactEditorJS
       onInitialize={handleInitialize}
       defaultValue={value}
-      onChange={handleSave}
-      readOnly={readOnly}
       tools={EDITOR_JS_TOOLS}
+      {...editorProps}
     />
   )
 }
