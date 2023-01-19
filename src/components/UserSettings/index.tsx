@@ -4,6 +4,7 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { useGetViewerWithSettingsQuery } from '~/graphql/types.generated'
 
+import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { EmailForm } from './Email'
 import { EmailPreferences } from './EmailPreferences'
 import { UserSettingsFooter } from './Footer'
@@ -34,6 +35,7 @@ export function UserSettings() {
         titleRef={titleRef}
         scrollContainerRef={scrollContainerRef}
       />
+
       <Detail.ContentContainer>
         <Detail.Header>
           <Detail.Title ref={titleRef}>Profile Settings</Detail.Title>
@@ -56,6 +58,8 @@ export function UserSettings() {
           <UserSettingsFooter />
         </div>
       </Detail.ContentContainer>
+
+      <PoweredByNym />
     </Detail.Container>
   )
 }

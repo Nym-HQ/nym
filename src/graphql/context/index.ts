@@ -10,6 +10,8 @@ import {
 } from '~/lib/multitenancy/server'
 import { prisma } from '~/lib/prisma'
 
+import { NYM_APP_SITE } from '../constants'
+
 async function getViewer(ctx) {
   const viewer = await isAuthenticatedServerSide(ctx)
 
@@ -23,7 +25,7 @@ async function getViewer(ctx) {
 
 async function getSite(ctx) {
   if (isMainAppDomain(ctx.req.headers.host)) {
-    return null
+    return NYM_APP_SITE as Site
   }
 
   const site = await getSiteByDomain(ctx.req.headers.host)

@@ -8,6 +8,7 @@ import { CommentType } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { EditorJSPreviewer } from '../EditorJS'
+import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PostActions } from './PostActions'
 import { PostSEO } from './PostSEO'
@@ -71,6 +72,8 @@ export function PostDetail({ slug, site, post, error, loading }) {
         </Detail.ContentContainer>
 
         <Comments refId={post.id} type={CommentType.Post} />
+
+        <PoweredByNym />
       </Detail.Container>
     </>
   )

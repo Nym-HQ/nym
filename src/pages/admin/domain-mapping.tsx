@@ -33,6 +33,9 @@ import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 function AdminDomainMappingPage(props) {
   const { data: context } = useContextQuery()
 
+  const scrollContainerRef = React.useRef(null)
+  const titleRef = React.useRef(null)
+
   const [parkedDomain, setParkedDomain] = React.useState(
     context?.context?.site?.parkedDomain || ''
   )
@@ -55,17 +58,19 @@ function AdminDomainMappingPage(props) {
   }
 
   return (
-    <Detail.Container>
+    <Detail.Container ref={scrollContainerRef}>
       <TitleBar
         title="Domain Mappings"
         backButton
         globalMenu={false}
         backButtonHref={'/admin'}
+        titleRef={titleRef}
+        scrollContainerRef={scrollContainerRef}
         magicTitle
       />
 
       <Detail.ContentContainer>
-        <Detail.Title>Domain Mapping</Detail.Title>
+        <Detail.Title ref={titleRef}>Domain Mapping</Detail.Title>
 
         <Subsection title="">
           <div className="grid grid-cols-6 gap-6">

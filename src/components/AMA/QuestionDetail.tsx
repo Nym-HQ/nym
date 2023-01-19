@@ -11,6 +11,7 @@ import { extendSEO } from '~/config/seo'
 import { CommentType } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
+import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { QuestionActions } from './QuestionActions'
 
@@ -105,6 +106,7 @@ export function QuestionDetail({ id, question, site, loading, error }) {
         {question.viewerCanComment && (
           <Comments refId={question.id} type={CommentType.Question} />
         )}
+        <PoweredByNym />
       </Detail.Container>
     </>
   )

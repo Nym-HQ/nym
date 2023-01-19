@@ -21,3 +21,24 @@ export const RATE_LIMIT_REQUEST_AMOUNT = 1024
 export const RATE_LIMIT_REQUEST_DURATION = 10 * 1000 // 10 seconds
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
+
+export const NYM_APP_SITE = {
+  id: '0',
+  subdomain: 'app',
+  parkedDomain: '',
+  plan: 'free',
+  name: 'Nym App',
+  description: '',
+  logo: `${PUBLIC_URL}/static/meta-icon-192.png`,
+  banner: null,
+  attach_css: null,
+  attach_js: null,
+  mailgun_region: 'US',
+  mailgun_domain: '',
+  mailgun_api_key: '',
+  social_twitter: 'nym_xyz',
+  social_youtube: '',
+  social_github: 'alpha8eta',
+  social_other1: null,
+  social_other1_label: null,
+}

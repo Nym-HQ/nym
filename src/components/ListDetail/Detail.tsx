@@ -5,6 +5,7 @@ import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { useContextQuery } from '~/graphql/types.generated'
 
 import Button from '../Button'
+import { PoweredByNym } from './PoweredByNym'
 import { TitleBar } from './TitleBar'
 
 function ContentContainer(props) {
@@ -77,6 +78,7 @@ function Null({ type }: { type: '404' | 'Page' | 'Post' }) {
           </div>
           <Button href="/pages/new">Create new Page</Button>
         </div>
+        <PoweredByNym />
       </Container>
     )
   } else if (type === 'Post') {
@@ -92,6 +94,7 @@ function Null({ type }: { type: '404' | 'Page' | 'Post' }) {
           </div>
           <Button href="/writing/new">Create new Post</Button>
         </div>
+        <PoweredByNym />
       </Container>
     )
   } else {
@@ -111,6 +114,7 @@ function Null({ type }: { type: '404' | 'Page' | 'Post' }) {
           </div>
           <Button href="/">Go home</Button>
         </div>
+        <PoweredByNym />
       </Container>
     )
   }
