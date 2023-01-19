@@ -36,7 +36,7 @@ export function UserDetail({ username }) {
           </Detail.Header>
         </Detail.ContentContainer>
 
-        <PoweredByNym />
+        <PoweredByNym scrollContainerRef={scrollContainerRef} />
       </Detail.Container>
     )
   }

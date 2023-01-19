@@ -56,57 +56,60 @@ export function QuestionDetail({ id, question, site, loading, error }) {
           trailingAccessory={<QuestionActions question={question} />}
         />
 
-        <Detail.ContentContainer>
-          <Detail.Header>
-            <div className="flex items-center space-x-4 pb-2">
-              <Link href={`/u/${question.author.username}`}>
-                <a className="inline-flex">
-                  <Avatar
-                    user={question.author}
-                    src={question.author.avatar || question.author.image}
-                    width={32}
-                    height={32}
-                    quality={100}
-                    layout="fixed"
-                    className="rounded-full"
-                  />
-                </a>
-              </Link>
-              <div className="flex space-x-1">
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <Detail.ContentContainer>
+            <Detail.Header>
+              <div className="flex items-center space-x-4 pb-2">
                 <Link href={`/u/${question.author.username}`}>
-                  <a className="inline-flex space-x-1">
-                    <span className="text-primary whitespace-nowrap font-semibold leading-snug">
-                      {question.author.name}
-                    </span>
-                    <span className="text-tertiary inline-flex font-normal leading-snug line-clamp-1">
-                      @{question.author.username}
-                    </span>
+                  <a className="inline-flex">
+                    <Avatar
+                      user={question.author}
+                      src={question.author.avatar || question.author.image}
+                      width={32}
+                      height={32}
+                      quality={100}
+                      layout="fixed"
+                      className="rounded-full"
+                    />
                   </a>
                 </Link>
-                <p className="text-quaternary leading-snug">·</p>
-                <p
-                  className="text-quaternary leading-snug line-clamp-1"
-                  title={createdAt.raw}
-                >
-                  {createdAt.formatted}
-                </p>
+                <div className="flex space-x-1">
+                  <Link href={`/u/${question.author.username}`}>
+                    <a className="inline-flex space-x-1">
+                      <span className="text-primary whitespace-nowrap font-semibold leading-snug">
+                        {question.author.name}
+                      </span>
+                      <span className="text-tertiary inline-flex font-normal leading-snug line-clamp-1">
+                        @{question.author.username}
+                      </span>
+                    </a>
+                  </Link>
+                  <p className="text-quaternary leading-snug">·</p>
+                  <p
+                    className="text-quaternary leading-snug line-clamp-1"
+                    title={createdAt.raw}
+                  >
+                    {createdAt.formatted}
+                  </p>
+                </div>
               </div>
-            </div>
-            <Detail.Title ref={titleRef}>{question.title}</Detail.Title>
-            {question.description && (
-              <MarkdownRenderer
-                children={question.description}
-                className="comment prose leading-normal"
-                variant="comment"
-              />
-            )}
-          </Detail.Header>
-        </Detail.ContentContainer>
+              <Detail.Title ref={titleRef}>{question.title}</Detail.Title>
+              {question.description && (
+                <MarkdownRenderer
+                  children={question.description}
+                  className="comment prose leading-normal"
+                  variant="comment"
+                />
+              )}
+            </Detail.Header>
+          </Detail.ContentContainer>
 
-        {question.viewerCanComment && (
-          <Comments refId={question.id} type={CommentType.Question} />
-        )}
-        <PoweredByNym />
+          {question.viewerCanComment && (
+            <Comments refId={question.id} type={CommentType.Question} />
+          )}
+        </div>
+
+        <PoweredByNym scrollContainerRef={scrollContainerRef} />
       </Detail.Container>
     </>
   )

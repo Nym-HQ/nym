@@ -26,7 +26,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
   const publishedAt = timestampToCleanTime({ timestamp: page.publishedAt })
   return (
     <>
-      <PageSEO page={page} site={site} />
+      {page && <PageSEO page={page} site={site} />}
       <Detail.Container data-cy="page-detail" ref={scrollContainerRef}>
         <TitleBar
           backButton
@@ -39,36 +39,39 @@ export function PageDetail({ slug, site, page, error, loading }) {
           trailingAccessory={<PageActions page={page} />}
         />
 
-        <Detail.ContentContainer>
-          <Detail.Header
-            style={{
-              maxWidth: '650px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
-            <Detail.Title ref={titleRef}>{page.title}</Detail.Title>
-            <span
-              title={publishedAt.raw}
-              className="text-tertiary inline-block leading-snug"
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <Detail.ContentContainer>
+            <Detail.Header
+              style={{
+                maxWidth: '650px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+              }}
             >
-              {publishedAt.formatted}
-            </span>
-          </Detail.Header>
+              <Detail.Title ref={titleRef}>{page.title}</Detail.Title>
+              <span
+                title={publishedAt.raw}
+                className="text-tertiary inline-block leading-snug"
+              >
+                {publishedAt.formatted}
+              </span>
+            </Detail.Header>
 
-          {page.text && !page.data?.blocks ? (
-            <div className="mt-8">
-              <MDEditorPreviewer source={page.text} />
-            </div>
-          ) : (
-            <EditorJSPreviewer value={page.data} />
-          )}
-          {/* <MarkdownRenderer children={page.text} className="prose" /> */}
+            {page.text && !page.data?.blocks ? (
+              <div className="mt-8">
+                <MDEditorPreviewer source={page.text} />
+              </div>
+            ) : (
+              <EditorJSPreviewer value={page.data} />
+            )}
+            {/* <MarkdownRenderer children={page.text} className="prose" /> */}
 
-          {/* bottom padding to give space between page content and comments */}
-          <div className="py-6" />
-        </Detail.ContentContainer>
-        <PoweredByNym />
+            {/* bottom padding to give space between page content and comments */}
+            <div className="py-6" />
+          </Detail.ContentContainer>
+        </div>
+
+        <PoweredByNym scrollContainerRef={scrollContainerRef} />
       </Detail.Container>
     </>
   )

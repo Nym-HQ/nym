@@ -3,7 +3,6 @@ import * as React from 'react'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 
-import { PostSEO } from '../PostSEO'
 import { PostEditorActions } from './PostEditorActions'
 import { PostEditorComposer } from './PostEditorComposer'
 import { PostEditorMetaSidebar } from './PostEditorMetaSidebar'
@@ -110,28 +109,25 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
   }
 
   return (
-    <>
-      <PostSEO post={post} site={site} />
-      <PostEditorContext.Provider value={defaultContextValue}>
-        <Detail.Container ref={scrollContainerRef}>
-          <TitleBar
-            backButton
-            globalMenu={false}
-            backButtonHref={'/writing'}
-            scrollContainerRef={scrollContainerRef}
-            title=""
-            trailingAccessory={<PostEditorActions />}
-            leadingAccessory={<PreviewSwitch />}
-          />
+    <PostEditorContext.Provider value={defaultContextValue}>
+      <Detail.Container ref={scrollContainerRef}>
+        <TitleBar
+          backButton
+          globalMenu={false}
+          backButtonHref={'/writing'}
+          scrollContainerRef={scrollContainerRef}
+          title=""
+          trailingAccessory={<PostEditorActions />}
+          leadingAccessory={<PreviewSwitch />}
+        />
 
-          {isPreviewing ? (
-            <PostEditorPreview />
-          ) : (
-            <PostEditorComposer site={site} />
-          )}
-        </Detail.Container>
-        <PostEditorMetaSidebar site={site} />
-      </PostEditorContext.Provider>
-    </>
+        {isPreviewing ? (
+          <PostEditorPreview />
+        ) : (
+          <PostEditorComposer site={site} />
+        )}
+      </Detail.Container>
+      <PostEditorMetaSidebar site={site} />
+    </PostEditorContext.Provider>
   )
 }

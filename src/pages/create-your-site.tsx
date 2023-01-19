@@ -4,6 +4,7 @@ import * as React from 'react'
 import { PrimaryButton } from '~/components/Button'
 import { ListDetailView } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
+import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { extendSEO } from '~/config/seo'
 import { useContextQuery } from '~/graphql/types.generated'
@@ -25,20 +26,24 @@ function CreateYourSite() {
 
       <div className="p-4" ref={titleRef} />
 
-      <Detail.ContentContainer>
-        <div className="pb-24 space-y-8 md:space-y-16">
-          <h2 className="text-primary font-sans text-xl font-semibold">
-            Let&rsquo;s get started{' '}
-          </h2>
-          <PrimaryButton
-            onClick={() =>
-              (window.location.href = `//${MAIN_APP_DOMAIN}/signin`)
-            }
-          >
-            Create Site &gt;&gt;
-          </PrimaryButton>
-        </div>
-      </Detail.ContentContainer>
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <Detail.ContentContainer>
+          <div className="pb-24 space-y-8 md:space-y-16">
+            <h2 className="text-primary font-sans text-xl font-semibold">
+              Let&rsquo;s get started{' '}
+            </h2>
+            <PrimaryButton
+              onClick={() =>
+                (window.location.href = `//${MAIN_APP_DOMAIN}/signin`)
+              }
+            >
+              Create Site &gt;&gt;
+            </PrimaryButton>
+          </div>
+        </Detail.ContentContainer>
+      </div>
+
+      <PoweredByNym scrollContainerRef={scrollContainerRef} />
     </Detail.Container>
   )
 }
