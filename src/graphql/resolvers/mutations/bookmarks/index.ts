@@ -28,7 +28,7 @@ export async function editBookmark(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
 
   // reset tags
   await prisma.bookmark.update({
@@ -67,7 +67,7 @@ export async function editBookmark(
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
         },
-      });
+      })
     })
 }
 
@@ -85,7 +85,7 @@ export async function addBookmark(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
 
   let metadata
   try {
@@ -154,7 +154,7 @@ export async function addBookmark(
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
         },
-      });
+      })
     })
 }
 
@@ -180,6 +180,6 @@ export async function deleteBookmark(
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
         },
-      });
+      })
     })
 }

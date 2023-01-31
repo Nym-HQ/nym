@@ -1,5 +1,5 @@
-import { GraphQLError } from 'graphql';
 import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
 export function requiresAdmin(fn) {
   return function resolve(parent, args, context) {
@@ -11,6 +11,6 @@ export function requiresAdmin(fn) {
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
   }
 }

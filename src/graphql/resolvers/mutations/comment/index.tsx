@@ -1,5 +1,6 @@
 import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
+
 import { CLIENT_URL } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import {
@@ -24,7 +25,7 @@ export async function editComment(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
 
   const comment = await prisma.comment.findUnique({
     where: { id },
@@ -35,14 +36,14 @@ export async function editComment(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
 
   if (comment.userId !== viewer?.id) {
     throw new GraphQLError('You can’t edit this comment', {
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
   }
 
   return await prisma.comment
@@ -60,7 +61,7 @@ export async function editComment(
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
         },
-      });
+      })
     })
 }
 
@@ -79,7 +80,7 @@ export async function addComment(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
 
   let field
   let table
@@ -108,7 +109,7 @@ export async function addComment(
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
         },
-      });
+      })
     }
   }
 
@@ -119,7 +120,7 @@ export async function addComment(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
   }
 
   if (!viewer.isAdmin) {
@@ -152,7 +153,7 @@ export async function addComment(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
   })
 
   graphcdn.purgeList('comments')
@@ -180,7 +181,7 @@ export async function deleteComment(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
   }
 
   return await prisma.comment
@@ -197,6 +198,6 @@ export async function deleteComment(
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
         },
-      });
+      })
     })
 }

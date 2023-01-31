@@ -1,6 +1,6 @@
-import { ApolloServerErrorCode } from '@apollo/server/errors';
+import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { SiteRole } from '@prisma/client'
-import { GraphQLError } from 'graphql';
+import { GraphQLError } from 'graphql'
 
 export function requiresSiteAdmin(fn) {
   return function resolve(parent, args, context) {
@@ -16,6 +16,6 @@ export function requiresSiteAdmin(fn) {
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
   }
 }

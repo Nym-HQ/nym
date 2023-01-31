@@ -22,7 +22,7 @@ export async function editEmailSubscription(
     throw new GraphQLError('No email', {
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
-      }
+      },
     })
   }
 

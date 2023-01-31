@@ -25,7 +25,7 @@ export async function editQuestion(
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
-    });
+    })
   }
 
   if (viewer.isAdmin || viewer.id === question.userId) {

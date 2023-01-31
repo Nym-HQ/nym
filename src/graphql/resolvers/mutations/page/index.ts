@@ -27,11 +27,12 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
   const existing = await prisma.page.findUnique({
     where: { slug_siteId: { slug, siteId: site.id } },
   })
-  if (existing?.id !== id) throw new GraphQLError('Slug already exists', {
-    extensions: {
-      code: ApolloServerErrorCode.BAD_REQUEST,
-    },
-  })
+  if (existing?.id !== id)
+    throw new GraphQLError('Slug already exists', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   let featureImage = existing.featureImage
   if (!featureImage) {
