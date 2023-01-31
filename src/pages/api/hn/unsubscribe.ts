@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { baseUrl } from '~/config/seo'
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { EmailSubscriptionType } from '~/graphql/types.generated'
 import { getSiteByDomain } from '~/lib/multitenancy/server'
 import { prisma } from '~/lib/prisma'
@@ -20,7 +21,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ error })
   }
 
-  if (!token || !site) {
+  if (!token || !site || site.id === NYM_APP_SITE.id) {
     return done()
   }
 

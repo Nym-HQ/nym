@@ -1,4 +1,4 @@
-import { PAGINATION_AMOUNT } from '~/graphql/constants'
+import { NYM_APP_SITE, PAGINATION_AMOUNT } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import {
   GetQuestionsQueryVariables,
@@ -10,7 +10,7 @@ import {
 export async function getQuestion(_, { id }: QueryQuestionArgs, ctx: Context) {
   const { prisma, viewer, site } = ctx
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return null
   }
 
@@ -57,7 +57,7 @@ export async function getQuestions(
 
   const { prisma, viewer, site } = ctx
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return null
   }
 

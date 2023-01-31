@@ -1,3 +1,4 @@
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import {
   GetPostQueryVariables,
@@ -9,7 +10,7 @@ export async function getPosts(_, args: GetPostsQueryVariables, ctx: Context) {
   const { prisma, viewer, site } = ctx
   const published = filter?.published
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return []
   }
 
@@ -44,7 +45,7 @@ export async function getPost(
 ) {
   const { prisma, viewer, site } = ctx
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return null
   }
 

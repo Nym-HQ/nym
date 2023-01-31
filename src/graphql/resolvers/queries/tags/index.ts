@@ -1,9 +1,10 @@
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 
 export async function getTags(_, __, ctx: Context) {
   const { prisma, site } = ctx
 
-  if (!site) return null
+  if (!site || site.id === NYM_APP_SITE.id) return null
 
   const tags = [{ name: 'website' }, { name: 'reading' }, { name: 'portfolio' }]
 
