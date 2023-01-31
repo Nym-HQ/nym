@@ -8,7 +8,10 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     console.log('Handling callback request from my Identity Provider', req.body)
   }
 
-  if (req.query.nextauth.includes('signin')) {
+  if (
+    process.env.TWITTER_OAUTH_VER != '2.0' &&
+    req.query.nextauth.includes('signin')
+  ) {
     // A little hack around the next-auth bug, to attach "force_login" paramter for Twitter Oauth
     // https://developer.twitter.com/en/docs/authentication/api-reference/authenticate
     const orig_json = res.json
