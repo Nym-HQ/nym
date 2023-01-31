@@ -1,4 +1,5 @@
-import { UserInputError } from 'apollo-server-micro'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
 import { IS_PROD } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
@@ -23,7 +24,11 @@ export async function editBookmark(
   const { prisma, site } = ctx
 
   if (!title || title.length === 0)
-    throw new UserInputError('Bookmark must have a title')
+    throw new GraphQLError('Bookmark must have a title', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    });
 
   // reset tags
   await prisma.bookmark.update({
@@ -58,7 +63,11 @@ export async function editBookmark(
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to edit bookmark')
+      throw new GraphQLError('Unable to edit bookmark', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      });
     })
 }
 
@@ -71,7 +80,12 @@ export async function addBookmark(
   const { url, tag } = data
   const { prisma, site } = ctx
 
-  if (!validUrl(url)) throw new UserInputError('URL was invalid')
+  if (!validUrl(url))
+    throw new GraphQLError('URL was invalid', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    });
 
   let metadata
   try {
@@ -136,7 +150,11 @@ export async function addBookmark(
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to create bookmark')
+      throw new GraphQLError('Unable to create bookmark', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      });
     })
 }
 
@@ -158,6 +176,10 @@ export async function deleteBookmark(
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to delete bookmark')
+      throw new GraphQLError('Unable to delete bookmark', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      });
     })
 }

@@ -2,6 +2,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { NextAuthOptions, unstable_getServerSession } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import TwitterProvider, {
+  TwitterLegacy,
   TwitterLegacyProfile,
   TwitterProfile,
 } from 'next-auth/providers/twitter'
@@ -21,11 +22,12 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
 
 if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
   providers.push(
-    TwitterProvider({
+    TwitterLegacy({
       clientId: process.env.TWITTER_API_KEY,
       clientSecret: process.env.TWITTER_API_SECRET,
       // version: '2.0',
       profile: (profile: TwitterProfile | TwitterLegacyProfile) => {
+        console.debug('Got twitter profile data', profile)
         if ('data' in profile) {
           return {
             id: profile.data.id,
@@ -39,7 +41,7 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
           return {
             id: profile.id_str,
             name: profile.name,
-            email: profile.id_str,
+            email: (profile as any).email,
             username: profile.screen_name,
             image: profile.profile_image_url_https.replace(
               /_normal\.(jpg|png|gif)$/,
@@ -83,7 +85,11 @@ const authOptions = {
  * @returns
  */
 const isAuthenticatedServerSide = async (ctx) => {
-  const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions)
+  const session: any = await unstable_getServerSession(
+    ctx.req,
+    ctx.res,
+    authOptions
+  )
   return session?.user
 }
 
