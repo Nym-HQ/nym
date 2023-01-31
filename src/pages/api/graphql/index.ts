@@ -19,6 +19,7 @@ export const config = {
 let started = false
 
 export default withRateLimit(async (req, res) => {
+  console.log('/api/graphql request');
   if (!started) {
     await apolloServer.start()
     started = true
