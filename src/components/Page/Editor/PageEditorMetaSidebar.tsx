@@ -75,7 +75,7 @@ export function PageEditorMetaSidebar({ site }) {
       // publish
       newlyPublished = true
       if (!draftState.publishedAt) {
-        setDraftState({...draftState, publishedAt: new Date()})
+        setDraftState({ ...draftState, publishedAt: new Date() })
       }
     } else if (published === false) {
       // unpublish
