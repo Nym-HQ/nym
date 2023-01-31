@@ -72,6 +72,9 @@ export function PostEditorMetaSidebar({ site }) {
     else if (published === true) {
       // publish
       newlyPublished = true
+      if (!draftState.publishedAt) {
+        setDraftState({ ...draftState, publishedAt: new Date() })
+      }
     } else if (published === false) {
       // unpublish
     }

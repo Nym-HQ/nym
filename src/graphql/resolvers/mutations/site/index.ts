@@ -1,5 +1,6 @@
+import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { SiteRole } from '@prisma/client'
-import { UserInputError } from 'apollo-server-errors'
+import { GraphQLError } from 'graphql'
 
 import { Context } from '~/graphql/context'
 import {
@@ -39,7 +40,11 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     : await prisma.site.findUnique({ where: { subdomain } })
 
   if (existing?.subdomain !== subdomain)
-    throw new UserInputError('Slug already exists')
+    throw new GraphQLError('Slug already exists', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   return await prisma.site
     .update({
@@ -67,7 +72,11 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to edit site')
+      throw new GraphQLError('Unable to edit site', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      })
     })
 }
 
@@ -86,13 +95,26 @@ export async function editSiteDomain(
       })
     : await prisma.site.findUnique({ where: { subdomain } })
 
-  if (!existing) throw new UserInputError('Site not found')
+  if (!existing)
+    throw new GraphQLError('Site not found', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   if (existing.subdomain !== subdomain)
-    throw new UserInputError('Slug already exists')
+    throw new GraphQLError('Slug already exists', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   if (preservedSubdomains.includes(subdomain))
-    throw new UserInputError('Subdomain is reserved')
+    throw new GraphQLError('Subdomain is reserved', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   // nothing changed
   if (existing.parkedDomain === parkedDomain) {
@@ -121,7 +143,11 @@ export async function editSiteDomain(
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to edit site')
+      throw new GraphQLError('Unable to edit site', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      })
     })
 }
 
@@ -131,7 +157,12 @@ export async function addSite(_, args: MutationAddSiteArgs, ctx: Context) {
   const { prisma, viewer, site } = ctx
 
   const existing = await prisma.site.findUnique({ where: { subdomain } })
-  if (existing) throw new UserInputError('Subdomain already exists')
+  if (existing)
+    throw new GraphQLError('Subdomain already exists', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   const newSite = await prisma.site.create({
     data: {

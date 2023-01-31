@@ -1,4 +1,5 @@
-import { UserInputError } from 'apollo-server-errors'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
 import { Context } from '~/graphql/context'
 import {
@@ -18,11 +19,19 @@ export async function editEmailSubscription(
   const { prisma, viewer, site } = ctx
 
   if (!viewer?.email && !email) {
-    throw new UserInputError('No email')
+    throw new GraphQLError('No email', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
   }
 
   if (email && !validEmail(email)) {
-    throw new UserInputError('Invalid email')
+    throw new GraphQLError('Invalid email', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
   }
 
   const emailToUse = viewer && viewer.email ? viewer.email : email

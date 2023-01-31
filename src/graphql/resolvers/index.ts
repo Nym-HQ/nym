@@ -12,6 +12,8 @@ import {
   UserRole,
 } from '~/graphql/types.generated'
 
+import { NYM_APP_SITE } from '../constants'
+
 const resolvers = {
   Date: dateScalar,
   Query,
@@ -102,7 +104,13 @@ const resolvers = {
       _,
       { viewer, prisma, site }: Context
     ) => {
-      if (!viewer || !viewer.email || viewer.id !== id || !site)
+      if (
+        !viewer ||
+        !viewer.email ||
+        viewer.id !== id ||
+        !site ||
+        site.id === NYM_APP_SITE.id
+      )
         return [
           {
             type: EmailSubscriptionType.HackerNews,

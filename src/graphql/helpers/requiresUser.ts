@@ -1,8 +1,14 @@
-import { AuthenticationError } from 'apollo-server-micro'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
 export function requiresUser(fn) {
   return function resolve(parent, args, context) {
     if (context?.viewer?.id) return fn(parent, args, context)
-    throw new AuthenticationError('You must be signed in to do that.')
+
+    throw new GraphQLError('You must be signed in to do that.', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
   }
 }

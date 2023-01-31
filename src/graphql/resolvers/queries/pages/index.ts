@@ -1,3 +1,4 @@
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import {
   GetPageQueryVariables,
@@ -13,7 +14,7 @@ export async function getPages(_, args: GetPagesQueryVariables, ctx: Context) {
     includeHomepage = false,
   } = filter || {}
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return []
   }
 
@@ -43,7 +44,7 @@ export async function getPage(
 ) {
   const { prisma, viewer, site } = ctx
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return null
   }
 
@@ -71,7 +72,7 @@ export async function getPage(
 export async function getHomePage(_, __, ctx: Context) {
   const { prisma, viewer, site } = ctx
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return null
   }
 

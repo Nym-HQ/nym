@@ -1,4 +1,3 @@
-import { data } from 'cheerio/lib/api/attributes'
 import * as React from 'react'
 
 import { Sidebar } from '~/components/Sidebar'

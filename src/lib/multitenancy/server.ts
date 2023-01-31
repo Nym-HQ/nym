@@ -1,6 +1,7 @@
 import { SiteRole } from '@prisma/client'
 
 import { PRESERVED_SUBDOMAINS } from '~/config/tenants'
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { prisma } from '~/lib/prisma'
 
 import { getSubdomain } from './client'
@@ -40,6 +41,7 @@ export async function getSiteByDomain(domain: string) {
  * @returns
  */
 export async function getUserSiteById(userId: string, siteId: string) {
+  if (siteId === NYM_APP_SITE.id) return null
   return await prisma.userSite.findFirst({
     where: {
       userId: userId,
@@ -55,6 +57,7 @@ export async function getUserSiteById(userId: string, siteId: string) {
  * @returns
  */
 export async function getSiteOwner(siteId: string) {
+  if (siteId === NYM_APP_SITE.id) return null
   const userSite = await prisma.userSite.findFirst({
     where: {
       siteRole: SiteRole.OWNER,

@@ -1,4 +1,4 @@
-import { PAGINATION_AMOUNT } from '~/graphql/constants'
+import { NYM_APP_SITE, PAGINATION_AMOUNT } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import { GetBookmarksQueryVariables } from '~/graphql/types.generated'
 
@@ -10,7 +10,7 @@ export async function getBookmarks(
   const { first = PAGINATION_AMOUNT, after = undefined, filter = null } = args
   const { prisma, site } = ctx
 
-  if (!site) {
+  if (!site || site.id === NYM_APP_SITE.id) {
     return null
   }
 

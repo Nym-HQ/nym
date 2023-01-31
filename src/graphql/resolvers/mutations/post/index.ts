@@ -1,4 +1,5 @@
-import { UserInputError } from 'apollo-server-errors'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
 import { Context } from '~/graphql/context'
 import {
@@ -24,7 +25,11 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
   const existing = await prisma.post.findUnique({ where: { id } })
 
   if (!existing || existing.siteId !== site.id)
-    throw new UserInputError('Post not found!')
+    throw new GraphQLError('Post not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   let featureImage = existing.featureImage
   if (!featureImage) {
@@ -35,7 +40,11 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
     where: { slug_siteId: { slug, siteId: site.id } },
   })
   if (checkDup && checkDup.id !== id)
-    throw new UserInputError('Slug already exists')
+    throw new GraphQLError('Slug already exists', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
 
   let publishedAt = data.publishedAt || existing.publishedAt
   if (!existing.publishedAt && published === true) {
@@ -65,7 +74,11 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to edit post')
+      throw new GraphQLError('Unable to edit post', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      })
     })
 }
 
@@ -97,7 +110,11 @@ export async function addPost(_, args: MutationAddPostArgs, ctx: Context) {
     })
     .catch((err) => {
       console.error({ err })
-      throw new UserInputError('Unable to add post')
+      throw new GraphQLError('Unable to add post', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      })
     })
 }
 

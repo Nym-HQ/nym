@@ -1,26 +1,35 @@
-import { ApolloServer } from 'apollo-server-micro'
+import { ApolloServer } from '@apollo/server'
+import { expressMiddleware } from '@apollo/server/express4'
 
-import { getContext } from '~/graphql/context'
+import { Context, getContext } from '~/graphql/context'
 import withRateLimit from '~/graphql/helpers/withRateLimit'
 import resolvers from '~/graphql/resolvers'
 import typeDefs from '~/graphql/typeDefs'
 
-const apolloServer = new ApolloServer({
+const apolloServer = new ApolloServer<Context>({
   typeDefs,
   resolvers,
-  context: async (ctx) => await getContext(ctx),
   introspection: true,
 })
 
 export const config = {
-  api: {
-    bodyParser: false,
-  },
+  api: {},
 }
 
-const startServer = apolloServer.start()
+let started = false
 
 export default withRateLimit(async (req, res) => {
-  await startServer
-  await apolloServer.createHandler({ path: '/api/graphql' })(req, res)
+  console.log('/api/graphql request')
+  if (!started) {
+    await apolloServer.start()
+    started = true
+  }
+
+  const middleware = expressMiddleware(apolloServer, {
+    // A named context function is required if you are not
+    // using ApolloServer<BaseContext>
+    context: async (ctx) => await getContext(ctx),
+  })
+
+  await middleware(req, res, () => res.next())
 })
