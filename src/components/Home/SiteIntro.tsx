@@ -38,7 +38,7 @@ export function SiteIntro() {
             scrollContainerRef={scrollContainerRef}
             title="Home"
           />
-          
+
           <div className="flex flex-1 flex-col flex-start justify-start">
             <Detail.ContentContainer>
               <div>

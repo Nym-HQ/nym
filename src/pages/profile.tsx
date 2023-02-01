@@ -28,6 +28,17 @@ export async function getServerSideProps(ctx) {
 
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
+  // if not signed in, redirect to sign in page
+  if (!context.viewer) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    }
+  }
+
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
