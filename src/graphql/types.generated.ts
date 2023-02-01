@@ -152,10 +152,11 @@ export type EditSiteInput = {
   banner?: InputMaybe<Scalars['String']>
   description?: InputMaybe<Scalars['String']>
   logo?: InputMaybe<Scalars['String']>
-  mailgun_api_key?: InputMaybe<Scalars['String']>
-  mailgun_domain?: InputMaybe<Scalars['String']>
-  mailgun_region?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
+  newsletter_provider?: InputMaybe<Scalars['String']>
+  newsletter_setting1?: InputMaybe<Scalars['String']>
+  newsletter_setting2?: InputMaybe<Scalars['String']>
+  newsletter_setting3?: InputMaybe<Scalars['String']>
   social_github?: InputMaybe<Scalars['String']>
   social_other1?: InputMaybe<Scalars['String']>
   social_other1_label?: InputMaybe<Scalars['String']>
@@ -509,10 +510,11 @@ export type Site = {
   description?: Maybe<Scalars['String']>
   id: Scalars['ID']
   logo?: Maybe<Scalars['String']>
-  mailgun_api_key?: Maybe<Scalars['String']>
-  mailgun_domain?: Maybe<Scalars['String']>
-  mailgun_region?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+  newsletter_provider?: Maybe<Scalars['String']>
+  newsletter_setting1?: Maybe<Scalars['String']>
+  newsletter_setting2?: Maybe<Scalars['String']>
+  newsletter_setting3?: Maybe<Scalars['String']>
   parkedDomain?: Maybe<Scalars['String']>
   plan?: Maybe<Scalars['String']>
   social_github?: Maybe<Scalars['String']>
@@ -962,9 +964,10 @@ export type SiteInfoFragment = {
   banner?: string | null | undefined
   attach_css?: string | null | undefined
   attach_js?: string | null | undefined
-  mailgun_region?: string | null | undefined
-  mailgun_domain?: string | null | undefined
-  mailgun_api_key?: string | null | undefined
+  newsletter_provider?: string | null | undefined
+  newsletter_setting1?: string | null | undefined
+  newsletter_setting2?: string | null | undefined
+  newsletter_setting3?: string | null | undefined
   social_twitter?: string | null | undefined
   social_youtube?: string | null | undefined
   social_github?: string | null | undefined
@@ -998,9 +1001,10 @@ export type UserSiteInfoFragment = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1443,9 +1447,10 @@ export type EditSiteDomainMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1476,9 +1481,10 @@ export type EditSiteMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1517,9 +1523,10 @@ export type AddSiteMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1994,9 +2001,10 @@ export type GetSitesQuery = {
               banner?: string | null | undefined
               attach_css?: string | null | undefined
               attach_js?: string | null | undefined
-              mailgun_region?: string | null | undefined
-              mailgun_domain?: string | null | undefined
-              mailgun_api_key?: string | null | undefined
+              newsletter_provider?: string | null | undefined
+              newsletter_setting1?: string | null | undefined
+              newsletter_setting2?: string | null | undefined
+              newsletter_setting3?: string | null | undefined
               social_twitter?: string | null | undefined
               social_youtube?: string | null | undefined
               social_github?: string | null | undefined
@@ -2108,9 +2116,10 @@ export type ContextQuery = {
           banner?: string | null | undefined
           attach_css?: string | null | undefined
           attach_js?: string | null | undefined
-          mailgun_region?: string | null | undefined
-          mailgun_domain?: string | null | undefined
-          mailgun_api_key?: string | null | undefined
+          newsletter_provider?: string | null | undefined
+          newsletter_setting1?: string | null | undefined
+          newsletter_setting2?: string | null | undefined
+          newsletter_setting3?: string | null | undefined
           social_twitter?: string | null | undefined
           social_youtube?: string | null | undefined
           social_github?: string | null | undefined
@@ -2378,9 +2387,10 @@ export const SiteInfoFragmentDoc = gql`
     banner
     attach_css
     attach_js
-    mailgun_region
-    mailgun_domain
-    mailgun_api_key
+    newsletter_provider
+    newsletter_setting1
+    newsletter_setting2
+    newsletter_setting3
     social_twitter
     social_youtube
     social_github

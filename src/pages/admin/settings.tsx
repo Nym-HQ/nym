@@ -60,10 +60,11 @@ function AdminSettingsPage(props) {
     social_github: '',
     social_other1: '',
     social_other1_label: '',
-    mailgun_domain: '',
-    mailgun_api_key: '',
+    newsletter_provider: '',
+    newsletter_setting1: '',
+    newsletter_setting2: '',
+    newsletter_setting3: '',
     ...(context?.context?.site || {}),
-    mailgun_region: (context?.context?.site || {}).mailgun_region || 'US',
   })
 
   const [showSocialOther1, setShowSocialOther1] = React.useState(
@@ -87,9 +88,10 @@ function AdminSettingsPage(props) {
           attach_js: values.attach_js,
           banner: values.banner,
           logo: values.logo,
-          mailgun_api_key: values.mailgun_api_key,
-          mailgun_domain: values.mailgun_domain,
-          mailgun_region: values.mailgun_region,
+          newsletter_provider: values.newsletter_provider,
+          newsletter_setting1: values.newsletter_setting1,
+          newsletter_setting2: values.newsletter_setting2,
+          newsletter_setting3: values.newsletter_setting3,
           social_github: values.social_github,
           social_twitter: values.social_twitter,
           social_youtube: values.social_youtube,

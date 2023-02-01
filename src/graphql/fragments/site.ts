@@ -13,9 +13,10 @@ export const SiteInfoFragment = gql`
     banner
     attach_css
     attach_js
-    mailgun_region
-    mailgun_domain
-    mailgun_api_key
+    newsletter_provider
+    newsletter_setting1
+    newsletter_setting2
+    newsletter_setting3
     social_twitter
     social_youtube
     social_github

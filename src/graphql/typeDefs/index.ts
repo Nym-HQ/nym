@@ -14,9 +14,10 @@ const typeDefs = gql`
     banner: String
     attach_css: String
     attach_js: String
-    mailgun_region: String
-    mailgun_domain: String
-    mailgun_api_key: String
+    newsletter_provider: String
+    newsletter_setting1: String
+    newsletter_setting2: String
+    newsletter_setting3: String
     social_twitter: String
     social_youtube: String
     social_github: String
@@ -365,9 +366,10 @@ const typeDefs = gql`
     banner: String
     attach_css: String
     attach_js: String
-    mailgun_region: String
-    mailgun_domain: String
-    mailgun_api_key: String
+    newsletter_provider: String
+    newsletter_setting1: String
+    newsletter_setting2: String
+    newsletter_setting3: String
     social_twitter: String
     social_youtube: String
     social_github: String
