@@ -31,5 +31,8 @@ export default withRateLimit(async (req, res) => {
     context: async (ctx) => await getContext(ctx),
   })
 
-  await middleware(req, res, () => res.next())
+  await middleware(req, res, (e) => {
+    console.error('graphql endpoint error', e)
+    res.status(400).end()
+  })
 })
