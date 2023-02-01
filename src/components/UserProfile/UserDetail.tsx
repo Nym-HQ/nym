@@ -30,7 +30,9 @@ export function UserDetail({ username }) {
         <div className="flex flex-1 flex-col flex-start justify-start">
           <Detail.ContentContainer>
             <Detail.Header>
-              <Detail.Title ref={titleRef}>Profiles are coming soon</Detail.Title>
+              <Detail.Title ref={titleRef}>
+                Profiles are coming soon
+              </Detail.Title>
               <p className="text-tertiary text-xl">
                 Check back in the future to see questions, comments, and more...
               </p>
