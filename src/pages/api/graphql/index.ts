@@ -67,7 +67,7 @@ const graphqlHandler = async (req, res) => {
 
       if (httpGraphQLResponse.body.kind === 'complete') {
         res.send(httpGraphQLResponse.body.string)
-        res.end();
+        res.end()
         return
       }
 
