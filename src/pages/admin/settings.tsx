@@ -14,11 +14,6 @@ import {
   SubsectionSplitter,
 } from '~/components/admin-components'
 import Button, { DeleteButton, PrimaryButton } from '~/components/Button'
-import { CountrySelector } from '~/components/CountrySelector'
-import {
-  COUNTRIES,
-  SelectMenuOption,
-} from '~/components/CountrySelector/countries'
 import { Dropzone } from '~/components/Dropzone'
 import {
   ExternalLinkIcon,
@@ -33,21 +28,18 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { Tooltip } from '~/components/Tooltip'
-import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { useContextQuery, useEditSiteMutation } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import { newsletterProviderDetails, newsletterProviders } from '~/lib/consts'
 
 function AdminSettingsPage(props) {
   const { data: context } = useContextQuery()
 
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
-
-  const countrySelectorRef = React.createRef<HTMLDivElement>()
-  const [countrySelectorOpen, setCountrySelectorOpen] = React.useState(false)
 
   const [values, setValues] = React.useState({
     name: '',
@@ -60,11 +52,11 @@ function AdminSettingsPage(props) {
     social_github: '',
     social_other1: '',
     social_other1_label: '',
-    newsletter_provider: '',
-    newsletter_setting1: '',
-    newsletter_setting2: '',
-    newsletter_setting3: '',
     ...(context?.context?.site || {}),
+    newsletter_provider: context?.context?.site?.newsletter_provider || '',
+    newsletter_setting1: context?.context?.site?.newsletter_setting1 || '',
+    newsletter_setting2: context?.context?.site?.newsletter_setting2 || '',
+    newsletter_setting3: context?.context?.site?.newsletter_setting3 || '',
   })
 
   const [showSocialOther1, setShowSocialOther1] = React.useState(
@@ -100,6 +92,110 @@ function AdminSettingsPage(props) {
         },
       },
     })
+  }
+
+  const renderNewsletterProviderConfig = ({ newsletter_provider }) => {
+    const provider = newsletterProviders.includes(newsletter_provider)
+      ? newsletterProviderDetails[newsletter_provider]
+      : null
+
+    console.log('provider', newsletter_provider, provider)
+
+    return (
+      <Subsection title="Email newsletter settings">
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300"></p>
+
+        <div className="mt-10 sm:mt-0">
+          <div className="px-4 py-5 sm:p-6">
+            <div className="grid grid-cols-6 gap-6">
+              <div className="col-span-4">
+                <Label htmlFor="newsletter_provider">Newsletter Provider</Label>
+                <Select
+                  id="newsletter_provider"
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      newsletter_provider: e.target.value,
+                    })
+                  }
+                  value={values.newsletter_provider}
+                >
+                  <option disabled value="">
+                    Select a provider
+                  </option>
+                  {newsletterProviders.map((p) => (
+                    <option key={p} value={p}>
+                      {newsletterProviderDetails[p].name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+
+              {provider && provider.setting1 && (
+                <div className="col-span-6 sm:col-span-4">
+                  <Label htmlFor="newsletter_setting1">
+                    {provider.setting1}
+                  </Label>
+                  <Input
+                    type="text"
+                    name="newsletter_setting1"
+                    id="newsletter_setting1"
+                    autoComplete="disabled"
+                    value={values.newsletter_setting1}
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        newsletter_setting1: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              )}
+              {provider && provider.setting2 && (
+                <div className="col-span-6 sm:col-span-4">
+                  <Label htmlFor="newsletter_setting2">
+                    {provider.setting1}
+                  </Label>
+                  <Input
+                    type="text"
+                    name="newsletter_setting2"
+                    id="newsletter_setting2"
+                    autoComplete="disabled"
+                    value={values.newsletter_setting2}
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        newsletter_setting2: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              )}
+              {provider && provider.setting3 && (
+                <div className="col-span-6 sm:col-span-4">
+                  <Label htmlFor="newsletter_setting3">
+                    {provider.setting3}
+                  </Label>
+                  <Input
+                    type="text"
+                    name="newsletter_setting3"
+                    id="newsletter_setting3"
+                    autoComplete="disabled"
+                    value={values.newsletter_setting3}
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        newsletter_setting3: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </Subsection>
+    )
   }
 
   return (
@@ -436,72 +532,11 @@ function AdminSettingsPage(props) {
           </div>
         </Subsection>
 
-        {/* <SubsectionSplitter />
+        <SubsectionSplitter />
 
-        <Subsection title="Email newsletter settings">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            The Mailgun API is used for bulk email newsletter delivery.
-          </p>
-
-          <div className="mt-10 sm:mt-0">
-            <div className="px-4 py-5 sm:p-6">
-              <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-2 sm:col-span-2">
-                  <Label htmlFor="country">Mailgun region</Label>
-                  <CountrySelector
-                    id="country"
-                    ref={countrySelectorRef}
-                    open={countrySelectorOpen}
-                    onToggle={() => {
-                      setCountrySelectorOpen(!countrySelectorOpen)
-                    }}
-                    onChange={(e) =>
-                      setValues({ ...values, mailgun_region: e })
-                    }
-                    selectedValue={
-                      COUNTRIES.find(
-                        (option) => option.value === values.mailgun_region
-                      ) as SelectMenuOption
-                    }
-                  />
-                </div>
-
-                <div className="col-span-4 sm:col-span-4">
-                  <Label htmlFor="mailgun-domain">Mailgun domain</Label>
-                  <Input
-                    type="text"
-                    name="mailgun-domain"
-                    id="mailgun-domain"
-                    autoComplete="disabled"
-                    value={values.mailgun_domain}
-                    onChange={(e) =>
-                      setValues({ ...values, mailgun_domain: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="col-span-6">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Find your Mailgun region and domain.
-                  </p>
-                </div>
-
-                <div className="col-span-6 sm:col-span-4">
-                  <Label htmlFor="mailgun-api-key">Mailgun API Key</Label>
-                  <Input
-                    type="text"
-                    name="mailgun-api-key"
-                    id="mailgun-api-key"
-                    autoComplete="disabled"
-                    value={values.mailgun_api_key}
-                    onChange={(e) =>
-                      setValues({ ...values, mailgun_api_key: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </Subsection> */}
+        {renderNewsletterProviderConfig({
+          newsletter_provider: values.newsletter_provider,
+        })}
 
         <SubsectionSplitter />
 
