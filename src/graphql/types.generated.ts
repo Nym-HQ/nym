@@ -171,8 +171,15 @@ export type EditUserInput = {
 
 export type EmailSubscription = {
   __typename?: 'EmailSubscription'
-  subscribed?: Maybe<Scalars['Boolean']>
+  email?: Maybe<Scalars['String']>
   type?: Maybe<EmailSubscriptionType>
+  userId?: Maybe<Scalars['String']>
+}
+
+export type EmailSubscriptionEdge = {
+  __typename?: 'EmailSubscriptionEdge'
+  cursor?: Maybe<Scalars['String']>
+  node?: Maybe<EmailSubscription>
 }
 
 export type EmailSubscriptionInput = {
@@ -183,6 +190,12 @@ export type EmailSubscriptionInput = {
 
 export enum EmailSubscriptionType {
   Newsletter = 'NEWSLETTER',
+}
+
+export type EmailSubscriptionsConnection = {
+  __typename?: 'EmailSubscriptionsConnection'
+  edges: Array<Maybe<EmailSubscriptionEdge>>
+  pageInfo?: Maybe<PageInfo>
 }
 
 export type Mutation = {
@@ -364,6 +377,7 @@ export type Query = {
   comment?: Maybe<Comment>
   comments: Array<Maybe<Comment>>
   context: ViewerContext
+  emailSubscriptions: EmailSubscriptionsConnection
   homepage?: Maybe<Page>
   page?: Maybe<Page>
   pages: Array<Maybe<Page>>
@@ -393,6 +407,11 @@ export type QueryCommentArgs = {
 export type QueryCommentsArgs = {
   refId: Scalars['ID']
   type: CommentType
+}
+
+export type QueryEmailSubscriptionsArgs = {
+  after?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryPageArgs = {
@@ -516,7 +535,7 @@ export type User = {
   createdAt?: Maybe<Scalars['Date']>
   description?: Maybe<Scalars['String']>
   email?: Maybe<Scalars['String']>
-  emailSubscriptions?: Maybe<Array<Maybe<EmailSubscription>>>
+  emailSubscriptions?: Maybe<Array<Maybe<UserEmailSubscription>>>
   id: Scalars['ID']
   image?: Maybe<Scalars['String']>
   isAdmin?: Maybe<Scalars['Boolean']>
@@ -530,6 +549,12 @@ export type User = {
   social_twitter?: Maybe<Scalars['String']>
   social_youtube?: Maybe<Scalars['String']>
   username?: Maybe<Scalars['String']>
+}
+
+export type UserEmailSubscription = {
+  __typename?: 'UserEmailSubscription'
+  subscribed?: Maybe<Scalars['Boolean']>
+  type?: Maybe<EmailSubscriptionType>
 }
 
 export enum UserRole {
@@ -642,6 +667,50 @@ export type CommentInfoFragment = {
     role?: UserRole | null | undefined
     isAdmin?: boolean | null | undefined
   }
+}
+
+export type EmailSubscriptionDetailFragment = {
+  __typename: 'EmailSubscription'
+  email?: string | null | undefined
+  type?: EmailSubscriptionType | null | undefined
+  userId?: string | null | undefined
+}
+
+export type EmailSubscriptionListItemFragment = {
+  __typename: 'EmailSubscription'
+  email?: string | null | undefined
+  type?: EmailSubscriptionType | null | undefined
+  userId?: string | null | undefined
+}
+
+export type EmailSubscriptionsConnectionFragment = {
+  __typename?: 'EmailSubscriptionsConnection'
+  pageInfo?:
+    | {
+        __typename?: 'PageInfo'
+        hasNextPage?: boolean | null | undefined
+        totalCount?: number | null | undefined
+        endCursor?: string | null | undefined
+      }
+    | null
+    | undefined
+  edges: Array<
+    | {
+        __typename?: 'EmailSubscriptionEdge'
+        cursor?: string | null | undefined
+        node?:
+          | {
+              __typename: 'EmailSubscription'
+              email?: string | null | undefined
+              type?: EmailSubscriptionType | null | undefined
+              userId?: string | null | undefined
+            }
+          | null
+          | undefined
+      }
+    | null
+    | undefined
+  >
 }
 
 export type PageCoreFragment = {
@@ -902,7 +971,7 @@ export type UserSettingsFragment = {
   emailSubscriptions?:
     | Array<
         | {
-            __typename?: 'EmailSubscription'
+            __typename?: 'UserEmailSubscription'
             type?: EmailSubscriptionType | null | undefined
             subscribed?: boolean | null | undefined
           }
@@ -1053,7 +1122,7 @@ export type EditEmailSubscriptionMutation = {
         emailSubscriptions?:
           | Array<
               | {
-                  __typename?: 'EmailSubscription'
+                  __typename?: 'UserEmailSubscription'
                   subscribed?: boolean | null | undefined
                   type?: EmailSubscriptionType | null | undefined
                 }
@@ -1531,6 +1600,44 @@ export type GetCommentsQuery = {
   >
 }
 
+export type GetEmailSubscriptionsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>
+  after?: InputMaybe<Scalars['String']>
+}>
+
+export type GetEmailSubscriptionsQuery = {
+  __typename?: 'Query'
+  emailSubscriptions: {
+    __typename?: 'EmailSubscriptionsConnection'
+    pageInfo?:
+      | {
+          __typename?: 'PageInfo'
+          hasNextPage?: boolean | null | undefined
+          totalCount?: number | null | undefined
+          endCursor?: string | null | undefined
+        }
+      | null
+      | undefined
+    edges: Array<
+      | {
+          __typename?: 'EmailSubscriptionEdge'
+          cursor?: string | null | undefined
+          node?:
+            | {
+                __typename: 'EmailSubscription'
+                email?: string | null | undefined
+                type?: EmailSubscriptionType | null | undefined
+                userId?: string | null | undefined
+              }
+            | null
+            | undefined
+        }
+      | null
+      | undefined
+    >
+  }
+}
+
 export type GetPagesQueryVariables = Exact<{
   filter?: InputMaybe<PagesFilter>
 }>
@@ -1822,7 +1929,7 @@ export type GetViewerWithSettingsQuery = {
           emailSubscriptions?:
             | Array<
                 | {
-                    __typename?: 'EmailSubscription'
+                    __typename?: 'UserEmailSubscription'
                     type?: EmailSubscriptionType | null | undefined
                     subscribed?: boolean | null | undefined
                   }
@@ -1972,6 +2079,36 @@ export const CommentInfoFragmentDoc = gql`
     }
   }
   ${UserInfoFragmentDoc}
+`
+export const EmailSubscriptionDetailFragmentDoc = gql`
+  fragment EmailSubscriptionDetail on EmailSubscription {
+    __typename
+    email
+    type
+    userId
+  }
+`
+export const EmailSubscriptionListItemFragmentDoc = gql`
+  fragment EmailSubscriptionListItem on EmailSubscription {
+    ...EmailSubscriptionDetail
+  }
+  ${EmailSubscriptionDetailFragmentDoc}
+`
+export const EmailSubscriptionsConnectionFragmentDoc = gql`
+  fragment EmailSubscriptionsConnection on EmailSubscriptionsConnection {
+    pageInfo {
+      hasNextPage
+      totalCount
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        ...EmailSubscriptionListItem
+      }
+    }
+  }
+  ${EmailSubscriptionListItemFragmentDoc}
 `
 export const PageCoreFragmentDoc = gql`
   fragment PageCore on Page {
@@ -3454,6 +3591,66 @@ export type GetCommentsLazyQueryHookResult = ReturnType<
 export type GetCommentsQueryResult = Apollo.QueryResult<
   GetCommentsQuery,
   GetCommentsQueryVariables
+>
+export const GetEmailSubscriptionsDocument = gql`
+  query getEmailSubscriptions($first: Int, $after: String) {
+    emailSubscriptions(first: $first, after: $after) {
+      ...EmailSubscriptionsConnection
+    }
+  }
+  ${EmailSubscriptionsConnectionFragmentDoc}
+`
+
+/**
+ * __useGetEmailSubscriptionsQuery__
+ *
+ * To run a query within a React component, call `useGetEmailSubscriptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEmailSubscriptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEmailSubscriptionsQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useGetEmailSubscriptionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
+  >(GetEmailSubscriptionsDocument, options)
+}
+export function useGetEmailSubscriptionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
+  >(GetEmailSubscriptionsDocument, options)
+}
+export type GetEmailSubscriptionsQueryHookResult = ReturnType<
+  typeof useGetEmailSubscriptionsQuery
+>
+export type GetEmailSubscriptionsLazyQueryHookResult = ReturnType<
+  typeof useGetEmailSubscriptionsLazyQuery
+>
+export type GetEmailSubscriptionsQueryResult = Apollo.QueryResult<
+  GetEmailSubscriptionsQuery,
+  GetEmailSubscriptionsQueryVariables
 >
 export const GetPagesDocument = gql`
   query getPages($filter: PagesFilter) {

@@ -9,6 +9,7 @@ import { getUserSites } from './site'
 import { getTags } from './tags'
 import { getUser } from './user'
 import { getViewerContext } from './viewer'
+import { getEmailSubscriptions } from './emailSubscriptions'
 
 export default {
   context: getViewerContext,
@@ -26,4 +27,5 @@ export default {
   comment: getComment,
   comments: getComments,
   tags: getTags,
+  emailSubscriptions: getEmailSubscriptions,
 }

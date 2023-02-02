@@ -132,6 +132,12 @@ const typeDefs = gql`
   }
 
   type EmailSubscription {
+    email: String
+    type: EmailSubscriptionType
+    userId: String
+  }
+
+  type UserEmailSubscription {
     type: EmailSubscriptionType
     subscribed: Boolean
   }
@@ -153,7 +159,7 @@ const typeDefs = gql`
     social_github: String
     social_other1: String
     social_other1_label: String
-    emailSubscriptions: [EmailSubscription]
+    emailSubscriptions: [UserEmailSubscription]
 
     isAdmin: Boolean
   }
@@ -202,6 +208,11 @@ const typeDefs = gql`
     cursor: String
   }
 
+  type EmailSubscriptionEdge {
+    node: EmailSubscription
+    cursor: String
+  }
+
   type PageInfo {
     hasNextPage: Boolean
     totalCount: Int
@@ -217,6 +228,12 @@ const typeDefs = gql`
     pageInfo: PageInfo
     edges: [QuestionEdge]!
   }
+
+  type EmailSubscriptionsConnection {
+    pageInfo: PageInfo
+    edges: [EmailSubscriptionEdge]!
+  }
+
 
   type ViewerContext {
     viewer: User
@@ -249,6 +266,10 @@ const typeDefs = gql`
       filter: QuestionFilter
     ): QuestionsConnection!
     tags: [Tag]!
+    emailSubscriptions(
+      first: Int
+      after: String
+    ): EmailSubscriptionsConnection!
   }
 
   input EditUserInput {
