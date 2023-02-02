@@ -39,18 +39,11 @@ export function EmailSubscriptionForm({ subscription }: Props) {
 
   function getTitleSubtitle(type) {
     switch (type) {
-      case EmailSubscriptionType.HackerNews: {
-        return {
-          title: 'Hacker News Daily Digest',
-          subtitle:
-            'A daily email with the top stories in tech discussed on Hacker News.',
-        }
-      }
       case EmailSubscriptionType.Newsletter: {
         return {
-          title: 'Overthought Newsletter',
+          title: 'Newsletter',
           subtitle:
-            'A curated newsletter of design, development, and technology news. Delivered weekly-ish.',
+            'A curated newsletter.',
         }
       }
       default: {

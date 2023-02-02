@@ -33,7 +33,7 @@ enum SiteRole {
 }
 
 enum EmailSubscriptionType {
-  HACKER_NEWS
+  NEWSLETTER
 }
 
 //

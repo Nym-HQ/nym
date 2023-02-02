@@ -169,30 +169,6 @@ const typeDefs = gql`
     viewerCanDelete: Boolean
   }
 
-  type HackerNewsComment {
-    id: ID
-    user: String
-    comments_count: String
-    comments: [HackerNewsComment]
-    time_ago: String
-    time: Int
-    level: Int
-    content: String
-  }
-
-  type HackerNewsPost {
-    id: ID
-    title: String
-    user: String
-    time: Int
-    time_ago: String
-    comments: [HackerNewsComment]
-    comments_count: String
-    url: String
-    domain: String
-    content: String
-  }
-
   input BookmarkFilter {
     tag: String
     host: String
@@ -273,8 +249,6 @@ const typeDefs = gql`
       after: String
       filter: QuestionFilter
     ): QuestionsConnection!
-    hackerNewsPosts: [HackerNewsPost]!
-    hackerNewsPost(id: ID!): HackerNewsPost
     tags: [Tag]!
   }
 

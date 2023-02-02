@@ -15,7 +15,7 @@ export async function editEmailSubscription(
   ctx: Context
 ) {
   const { data } = args
-  const { subscribed, type, email } = data
+  const { subscribed, type = EmailSubscriptionType.Newsletter, email } = data
   const { prisma, viewer, site } = ctx
 
   if (!viewer?.email && !email) {
@@ -35,45 +35,35 @@ export async function editEmailSubscription(
   }
 
   const emailToUse = viewer && viewer.email ? viewer.email : email
-  if (type === EmailSubscriptionType.HackerNews) {
-    if (subscribed) {
-      try {
-        await prisma.emailSubscription.create({
-          data: {
+  if (subscribed) {
+    try {
+      await prisma.emailSubscription.create({
+        data: {
+          email: emailToUse,
+          type: type,
+          siteId: site.id,
+        },
+      })
+    } catch (err) {
+      console.error({ err })
+      // nothing to do here
+    }
+  } else {
+    try {
+      await prisma.emailSubscription.delete({
+        where: {
+          emailAndType: {
             email: emailToUse,
-            type: EmailSubscriptionType.HackerNews,
+            type: type,
             siteId: site.id,
           },
-        })
-      } catch (err) {
-        console.error({ err })
-        // nothing to do here
-      }
-    } else {
-      try {
-        await prisma.emailSubscription.delete({
-          where: {
-            emailAndType: {
-              email: emailToUse,
-              type: EmailSubscriptionType.HackerNews,
-              siteId: site.id,
-            },
-          },
-        })
-      } catch (err) {
-        console.error({ err })
-        // nothing to do here
-      }
+        },
+      })
+    } catch (err) {
+      console.error({ err })
+      // nothing to do here
     }
   }
-
-  // if (type === EmailSubscriptionType.Newsletter) {
-  //   if (subscribed) {
-  //     revue.addSubscriber({ email: emailToUse, doubleOptIn: !viewer })
-  //   } else {
-  //     revue.removeSubscriber({ email: emailToUse, doubleOptIn: !viewer })
-  //   }
-  // }
 
   return viewer
     ? await prisma.user.findUnique({ where: { id: viewer.id } })
