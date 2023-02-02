@@ -6,7 +6,7 @@ import { baseEmail } from '~/config/seo'
 import { CLIENT_URL, IS_PROD } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import { MutationEditUserArgs } from '~/graphql/types.generated'
-import { client as postmark } from '~/lib/postmark'
+import { sendEmailWithTemplate } from '~/lib/system_emails'
 import { validEmail, validUsername } from '~/lib/validators'
 
 export async function deleteUser(_req, _args, ctx: Context) {
@@ -95,11 +95,10 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
     const url = `${CLIENT_URL}/api/email/confirm?token=${token}`
 
     if (IS_PROD) {
-      postmark.sendEmailWithTemplate({
-        From: baseEmail,
-        To: email,
-        TemplateId: 25539089,
-        TemplateModel: { url },
+      sendEmailWithTemplate({
+        email,
+        templateId: 25539089,
+        url,
       })
     } else {
       console.log('Sending confirmation email', {

@@ -73,7 +73,7 @@ export const NewsletterSubscribersListItem =
             title={emailSubscription.email}
             byline={
               <div className="flex items-center space-x-2">
-                <span>{emailSubscription.email}</span>
+                {/* <span>{emailSubscription.email}</span> */}
               </div>
             }
             active={active}
@@ -116,9 +116,15 @@ function NewsletterSubscribers(props) {
     if (isVisible) handleFetchMore()
   }, [isVisible])
 
+  const listContainerClassNames =
+    'relative w-full max-h-screen-safe min-h-[100px] pb-safe flex-none overflow-y-auto border-r border-gray-150 bg-white dark:border-gray-800 dark:bg-gray-900 lg:bg-gray-50 lg:dark:bg-gray-900'
+
   if (loading && !data?.emailSubscriptions) {
     return (
-      <ListContainer onRef={setScrollContainerRef}>
+      <ListContainer
+        onRef={setScrollContainerRef}
+        className={listContainerClassNames}
+      >
         <div className="flex flex-1 items-center justify-center">
           <LoadingSpinner />
         </div>
@@ -132,7 +138,11 @@ function NewsletterSubscribers(props) {
 
   return (
     <NewsletterSubscribersContext.Provider value={defaultContextValue}>
-      <ListContainer data-cy="bookmarks-list" onRef={setScrollContainerRef}>
+      <ListContainer
+        data-cy="subscriber-list"
+        onRef={setScrollContainerRef}
+        className={listContainerClassNames}
+      >
         <LayoutGroup>
           <div className="lg:space-y-1 lg:p-3">
             {emailSubscriptions.edges.map((es) => {
@@ -211,26 +221,21 @@ function AdminNewslettersPage(props) {
               />
             </div>
           </div>
+          <div className="px-4 py-3 sm:px-6">
+            <PrimaryButton
+              type="submit"
+              onClick={sendNewsletter}
+              disabled={sending}
+            >
+              {sending && <LoadingSpinner />} Send Newsletter
+            </PrimaryButton>
+          </div>
         </Subsection>
 
         <SubsectionSplitter />
 
-        <div className="px-4 py-3 sm:px-6">
-          <PrimaryButton
-            type="submit"
-            onClick={sendNewsletter}
-            disabled={sending}
-          >
-            {sending && <LoadingSpinner />} Send Newsletter
-          </PrimaryButton>
-        </div>
-
-        <SubsectionSplitter />
-
         <Subsection title="Subscribers">
-          <div className="grid grid-cols-6 gap-6">
-            <NewsletterSubscribers />
-          </div>
+          <NewsletterSubscribers />
         </Subsection>
       </Detail.ContentContainer>
     </Detail.Container>

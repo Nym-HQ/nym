@@ -9,7 +9,7 @@ import {
   MutationEditQuestionArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
-import { emailMe } from '~/lib/postmark'
+import { emailMe } from '~/lib/system_emails'
 
 export async function editQuestion(
   _,
