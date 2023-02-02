@@ -328,8 +328,9 @@ model Reaction {
 }
 
 model EmailSubscription {
-  email String
-  type  EmailSubscriptionType
+  email  String
+  type   EmailSubscriptionType
+  userId String?
 
   // multi-tenancy
   siteId String
