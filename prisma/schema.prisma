@@ -328,7 +328,7 @@ model Reaction {
 }
 
 model EmailSubscription {
-  id     String?               @default(cuid())
+  id     String                @id @default(cuid())
   email  String
   type   EmailSubscriptionType
   userId String?

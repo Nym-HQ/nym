@@ -22,8 +22,7 @@ export async function getEmailSubscriptions(
     Ref https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination
   */
   const skip = after ? 1 : 0
-  // const cursor = after ? { id: after } : undefined // TODO: support cursor-based pagination
-  const cursor = undefined
+  const cursor = after ? { id: after } : undefined // TODO: support cursor-based pagination
 
   /*
     Not sure how to handle combined filters, but for now we can essentially 

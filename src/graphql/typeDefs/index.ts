@@ -132,7 +132,7 @@ const typeDefs = gql`
   }
 
   type EmailSubscription {
-    id: String
+    id: ID!
     email: String
     type: EmailSubscriptionType
     userId: String
