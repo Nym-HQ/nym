@@ -28,11 +28,7 @@ export function PageTitlebar({ scrollContainerRef }) {
   }
 
   function trailingAccessory() {
-    return (
-      <div className="flex space-x-2">
-        {getAddButton()}
-      </div>
-    )
+    return <div className="flex space-x-2">{getAddButton()}</div>
   }
 
   function getChildren() {

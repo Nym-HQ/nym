@@ -1,5 +1,6 @@
 import { IS_PROD } from '~/graphql/constants'
 import { useLocalFiles } from '~/graphql/helpers/useLocalFiles'
+
 import NewsletterProviderBase from './ProviderBase'
 
 const MAILCHIMP_BASE_URL = 'https://www.getMailchimp.co/api/v2'
@@ -9,7 +10,9 @@ interface AddItemToIssueProps {
   url: string
 }
 
-export default class MailchimpNewsletterProvider implements NewsletterProviderBase {
+export default class MailchimpNewsletterProvider
+  implements NewsletterProviderBase
+{
   private headers = {
     Authorization: `Token `,
   }
@@ -79,14 +82,17 @@ export default class MailchimpNewsletterProvider implements NewsletterProviderBa
 
   async removeSubscriber({ email, doubleOptIn }) {
     try {
-      const result = await fetch(`${MAILCHIMP_BASE_URL}/subscribers/unsubscribe`, {
-        method: 'POST',
-        headers: {
-          ...this.headers,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, double_opt_in: doubleOptIn }),
-      })
+      const result = await fetch(
+        `${MAILCHIMP_BASE_URL}/subscribers/unsubscribe`,
+        {
+          method: 'POST',
+          headers: {
+            ...this.headers,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, double_opt_in: doubleOptIn }),
+        }
+      )
       const data = await result.json()
       return data
     } catch (e) {

@@ -1,4 +1,5 @@
 import { Site } from '@prisma/client'
+
 import MailchimpNewsletterProvider from './providers/mailchimp'
 import NewsletterProviderBase from './providers/ProviderBase'
 import RevueNewsletterProvider from './providers/revue'

@@ -5,7 +5,10 @@ import { ErrorAlert, SuccessAlert } from '~/components/Alert'
 import { PrimaryButton } from '~/components/Button'
 import { Input } from '~/components/Input'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { EmailSubscriptionType, useEditEmailSubscriptionMutation } from '~/graphql/types.generated'
+import {
+  EmailSubscriptionType,
+  useEditEmailSubscriptionMutation,
+} from '~/graphql/types.generated'
 import { validEmail } from '~/lib/validators'
 
 export function WritingSubscriptionForm({ defaultValue = '' }) {
@@ -75,9 +78,7 @@ export function WritingSubscriptionForm({ defaultValue = '' }) {
             {status === 'saving' ? <LoadingSpinner /> : 'Subscribe'}
           </PrimaryButton>
         </form>
-        <p className="text-quaternary text-sm">
-          Unsubscribe at any time.
-        </p>
+        <p className="text-quaternary text-sm">Unsubscribe at any time.</p>
         {status === 'invalid-email' && (
           <ErrorAlert>That email doesn’t look valid, try another?</ErrorAlert>
         )}

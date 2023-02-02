@@ -1,5 +1,6 @@
 import { IS_PROD } from '~/graphql/constants'
 import { useLocalFiles } from '~/graphql/helpers/useLocalFiles'
+
 import NewsletterProviderBase from './ProviderBase'
 
 const REVUE_BASE_URL = 'https://www.getrevue.co/api/v2'

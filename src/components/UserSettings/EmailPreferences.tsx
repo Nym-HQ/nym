@@ -42,8 +42,7 @@ export function EmailSubscriptionForm({ subscription }: Props) {
       case EmailSubscriptionType.Newsletter: {
         return {
           title: 'Newsletter',
-          subtitle:
-            'A curated newsletter.',
+          subtitle: 'A curated newsletter.',
         }
       }
       default: {
