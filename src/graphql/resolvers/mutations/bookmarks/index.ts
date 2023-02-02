@@ -9,7 +9,7 @@ import {
   MutationEditBookmarkArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
-import { revue } from '~/lib/revue'
+import { revue } from '~/lib/newsletter/providers/revue'
 import { validUrl } from '~/lib/validators'
 
 import getBookmarkMetaData from './getBookmarkMetaData'

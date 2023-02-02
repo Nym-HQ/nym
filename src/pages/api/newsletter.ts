@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { revue } from '~/lib/revue'
+import { revue } from '~/lib/newsletter/providers/revue'
 import { validEmail } from '~/lib/validators'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

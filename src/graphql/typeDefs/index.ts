@@ -128,7 +128,6 @@ const typeDefs = gql`
   }
 
   enum EmailSubscriptionType {
-    HACKER_NEWS
     NEWSLETTER
   }
 

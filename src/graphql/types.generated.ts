@@ -182,7 +182,6 @@ export type EmailSubscriptionInput = {
 }
 
 export enum EmailSubscriptionType {
-  HackerNews = 'HACKER_NEWS',
   Newsletter = 'NEWSLETTER',
 }
 

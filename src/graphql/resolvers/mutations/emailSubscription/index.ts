@@ -6,7 +6,6 @@ import {
   EmailSubscriptionType,
   MutationEditEmailSubscriptionArgs,
 } from '~/graphql/types.generated'
-import { revue } from '~/lib/revue'
 import { validEmail } from '~/lib/validators'
 
 export async function editEmailSubscription(
@@ -34,16 +33,26 @@ export async function editEmailSubscription(
     })
   }
 
-  const emailToUse = viewer && viewer.email ? viewer.email : email
+  const emailToUse = email || (viewer && viewer.email)
   if (subscribed) {
     try {
-      await prisma.emailSubscription.create({
-        data: {
+      let existingSubscription = await prisma.emailSubscription.findFirst({
+        where: {
           email: emailToUse,
           type: type,
           siteId: site.id,
-        },
-      })
+        }
+      });
+      if (!existingSubscription) {
+        await prisma.emailSubscription.create({
+          data: {
+            email: emailToUse,
+            type: type,
+            userId: viewer?.id,
+            siteId: site.id,
+          },
+        })
+      }
     } catch (err) {
       console.error({ err })
       // nothing to do here
