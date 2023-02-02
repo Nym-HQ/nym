@@ -132,6 +132,7 @@ const typeDefs = gql`
   }
 
   type EmailSubscription {
+    id: String
     email: String
     type: EmailSubscriptionType
     userId: String
@@ -234,7 +235,6 @@ const typeDefs = gql`
     edges: [EmailSubscriptionEdge]!
   }
 
-
   type ViewerContext {
     viewer: User
     site: Site
@@ -266,10 +266,7 @@ const typeDefs = gql`
       filter: QuestionFilter
     ): QuestionsConnection!
     tags: [Tag]!
-    emailSubscriptions(
-      first: Int
-      after: String
-    ): EmailSubscriptionsConnection!
+    emailSubscriptions(first: Int, after: String): EmailSubscriptionsConnection!
   }
 
   input EditUserInput {

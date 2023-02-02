@@ -2,16 +2,16 @@ import * as React from 'react'
 import toast from 'react-hot-toast'
 
 import {
-  EmailSubscription,
   EmailSubscriptionType,
   GetViewerWithSettingsQuery,
   useEditEmailSubscriptionMutation,
+  UserEmailSubscription,
 } from '~/graphql/types.generated'
 
 import { WritingSubscriptionForm } from '../Writing/SubscriptionForm'
 
 interface Props {
-  subscription: EmailSubscription
+  subscription: UserEmailSubscription
 }
 
 export function EmailSubscriptionForm({ subscription }: Props) {

@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 export const EmailSubscriptionDetailFragment = gql`
   fragment EmailSubscriptionDetail on EmailSubscription {
     __typename
+    id
     email
     type
     userId
@@ -17,18 +18,18 @@ export const EmailSubscriptionListItemFragment = gql`
 `
 
 export const EmailSubscriptionsConnectionFragment = gql`
-fragment EmailSubscriptionsConnection on EmailSubscriptionsConnection {
-  pageInfo {
-    hasNextPage
-    totalCount
-    endCursor
-  }
-  edges {
-    cursor
-    node {
-      ...EmailSubscriptionListItem
+  fragment EmailSubscriptionsConnection on EmailSubscriptionsConnection {
+    pageInfo {
+      hasNextPage
+      totalCount
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        ...EmailSubscriptionListItem
+      }
     }
   }
-}
-${EmailSubscriptionListItemFragment}
+  ${EmailSubscriptionListItemFragment}
 `

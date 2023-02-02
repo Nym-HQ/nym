@@ -1,6 +1,9 @@
 import { NYM_APP_SITE, PAGINATION_AMOUNT } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
-import { EmailSubscriptionType, GetEmailSubscriptionsQueryVariables } from '~/graphql/types.generated'
+import {
+  EmailSubscriptionType,
+  GetEmailSubscriptionsQueryVariables,
+} from '~/graphql/types.generated'
 
 export async function getEmailSubscriptions(
   _,
@@ -19,7 +22,8 @@ export async function getEmailSubscriptions(
     Ref https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination
   */
   const skip = after ? 1 : 0
-  const cursor = after ? { id: after } : undefined // TODO: support cursor-based pagination
+  // const cursor = after ? { id: after } : undefined // TODO: support cursor-based pagination
+  const cursor = undefined
 
   /*
     Not sure how to handle combined filters, but for now we can essentially 

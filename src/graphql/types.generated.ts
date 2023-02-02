@@ -172,6 +172,7 @@ export type EditUserInput = {
 export type EmailSubscription = {
   __typename?: 'EmailSubscription'
   email?: Maybe<Scalars['String']>
+  id?: Maybe<Scalars['String']>
   type?: Maybe<EmailSubscriptionType>
   userId?: Maybe<Scalars['String']>
 }
@@ -671,6 +672,7 @@ export type CommentInfoFragment = {
 
 export type EmailSubscriptionDetailFragment = {
   __typename: 'EmailSubscription'
+  id?: string | null | undefined
   email?: string | null | undefined
   type?: EmailSubscriptionType | null | undefined
   userId?: string | null | undefined
@@ -678,6 +680,7 @@ export type EmailSubscriptionDetailFragment = {
 
 export type EmailSubscriptionListItemFragment = {
   __typename: 'EmailSubscription'
+  id?: string | null | undefined
   email?: string | null | undefined
   type?: EmailSubscriptionType | null | undefined
   userId?: string | null | undefined
@@ -701,6 +704,7 @@ export type EmailSubscriptionsConnectionFragment = {
         node?:
           | {
               __typename: 'EmailSubscription'
+              id?: string | null | undefined
               email?: string | null | undefined
               type?: EmailSubscriptionType | null | undefined
               userId?: string | null | undefined
@@ -1625,6 +1629,7 @@ export type GetEmailSubscriptionsQuery = {
           node?:
             | {
                 __typename: 'EmailSubscription'
+                id?: string | null | undefined
                 email?: string | null | undefined
                 type?: EmailSubscriptionType | null | undefined
                 userId?: string | null | undefined
@@ -2083,6 +2088,7 @@ export const CommentInfoFragmentDoc = gql`
 export const EmailSubscriptionDetailFragmentDoc = gql`
   fragment EmailSubscriptionDetail on EmailSubscription {
     __typename
+    id
     email
     type
     userId

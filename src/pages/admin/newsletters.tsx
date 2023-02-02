@@ -34,11 +34,15 @@ import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { Tooltip } from '~/components/Tooltip'
 import { getContext } from '~/graphql/context'
-import { EmailSubscriptionListItemFragment, useContextQuery, useEditSiteMutation, useGetEmailSubscriptionsQuery } from '~/graphql/types.generated'
+import {
+  EmailSubscriptionListItemFragment,
+  useContextQuery,
+  useEditSiteMutation,
+  useGetEmailSubscriptionsQuery,
+} from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
-
 
 export const NewsletterSubscribersContext = React.createContext({})
 
@@ -47,35 +51,40 @@ interface NewsletterSubscribersListItemProps {
   active: boolean
 }
 
+export const NewsletterSubscribersListItem =
+  React.memo<NewsletterSubscribersListItemProps>(
+    ({ emailSubscription, active }) => {
+      const [isVisible, setIsVisible] = React.useState(false)
 
-export const NewsletterSubscribersListItem = React.memo<NewsletterSubscribersListItemProps>(({ emailSubscription, active }) => {
-  const [isVisible, setIsVisible] = React.useState(false)
+      function handleClick(e) {
+        if (e.metaKey) {
+          e.preventDefault()
+          e.stopPropagation()
+        }
+      }
 
-  function handleClick(e) {
-    if (e.metaKey) {
-      e.preventDefault()
-      e.stopPropagation()
+      return (
+        <ReactVisibilitySensor
+          partialVisibility
+          onChange={(visible: boolean) => !isVisible && setIsVisible(visible)}
+        >
+          <ListItem
+            key={emailSubscription.id}
+            title={emailSubscription.email}
+            byline={
+              <div className="flex items-center space-x-2">
+                <span>{emailSubscription.email}</span>
+              </div>
+            }
+            active={active}
+            onClick={(e) => handleClick(e)}
+            href={''}
+            as={''}
+          />
+        </ReactVisibilitySensor>
+      )
     }
-  }
-
-  return (
-    <ReactVisibilitySensor
-      partialVisibility
-      onChange={(visible: boolean) => !isVisible && setIsVisible(visible)}
-    >
-      <ListItem
-        key={emailSubscription.id}
-        title={emailSubscription.email}
-        byline={<div className="flex items-center space-x-2">
-          <span>{emailSubscription.email}</span>
-        </div>}
-        active={active}
-        onClick={(e) => handleClick(e)} href={''} as={''}
-         />
-    </ReactVisibilitySensor>
   )
-})
-
 
 function NewsletterSubscribers(props) {
   const router = useRouter()
@@ -130,7 +139,10 @@ function NewsletterSubscribers(props) {
               const active = router.query.id === es.node.id
               return (
                 <motion.div layout key={es.node.id}>
-                  <NewsletterSubscribersListItem active={active} emailSubscription={es.node} />
+                  <NewsletterSubscribersListItem
+                    active={active}
+                    emailSubscription={es.node}
+                  />
                 </motion.div>
               )
             })}
@@ -204,7 +216,11 @@ function AdminNewslettersPage(props) {
         <SubsectionSplitter />
 
         <div className="px-4 py-3 sm:px-6">
-          <PrimaryButton type="submit" onClick={sendNewsletter} disabled={sending}>
+          <PrimaryButton
+            type="submit"
+            onClick={sendNewsletter}
+            disabled={sending}
+          >
             {sending && <LoadingSpinner />} Send Newsletter
           </PrimaryButton>
         </div>
