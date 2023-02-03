@@ -6,7 +6,7 @@ import TwitterProvider, {
   TwitterProfile,
 } from 'next-auth/providers/twitter'
 
-import { prisma } from '~/lib/prisma'
+import prisma from '~/lib/prisma'
 
 const providers = []
 
