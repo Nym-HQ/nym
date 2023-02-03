@@ -12,7 +12,11 @@ import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { GET_HOME_PAGE } from '~/graphql/queries/pages'
 import { GET_USER_SITES } from '~/graphql/queries/site'
-import { SiteRole, useContextQuery, useGetSitesQuery } from '~/graphql/types.generated'
+import {
+  SiteRole,
+  useContextQuery,
+  useGetSitesQuery,
+} from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
