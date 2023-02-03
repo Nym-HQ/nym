@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic'
 import * as React from 'react'
 
 import { EditorJSPreviewer } from '~/components/EditorJS'

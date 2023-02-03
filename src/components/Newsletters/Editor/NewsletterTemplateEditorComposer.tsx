@@ -12,8 +12,8 @@ export function NewsletterTemplateEditorComposer({ site }) {
   const editorJsRef = React.useRef(null)
 
   function handleSubjectChange(e) {
-    let v = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
-    setDraftState((draft) => ({ ...draft, title: v }))
+    let v = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the subject
+    setDraftState((draft) => ({ ...draft, subject: v }))
 
     // on press enter, focus the editor
     if ((e.target.value || '') !== v) {
@@ -38,7 +38,7 @@ export function NewsletterTemplateEditorComposer({ site }) {
           value={draftState.subject}
           onChange={handleSubjectChange}
           placeholder={'Newsletter Subject'}
-          className="block w-full p-0 text-2xl font-bold border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black md:text-3xl"
+          className="block w-full p-0 text-lg font-bold border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black md:text-2xl"
         />
       </Detail.Header>
 

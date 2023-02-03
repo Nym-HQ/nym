@@ -1,7 +1,11 @@
+import edjsParser from '@herii/editorjs-parser'
 import * as React from 'react'
+import toast from 'react-hot-toast'
 
+import { PrimaryButton } from '~/components/Button'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
+import { LoadingSpinner } from '~/components/LoadingSpinner'
 
 import { NewsletterTemplateEditorComposer } from './NewsletterTemplateEditorComposer'
 import { NewsletterTemplateEditorPreview } from './NewsletterTemplateEditorPreview'
@@ -44,6 +48,12 @@ function checkIfDraftIsValid(
       message: 'Subject is required',
     } as NewsletterTemplateDraftError)
   }
+  if (!draftState.data || draftState.data.length == 0) {
+    errors.push({
+      field: 'body',
+      message: 'Please enter some content of the newsletter',
+    } as NewsletterTemplateDraftError)
+  }
 
   return {
     isDraftValid: errors.length == 0,
@@ -51,11 +61,7 @@ function checkIfDraftIsValid(
   }
 }
 
-export function NewsletterTemplateEditor({
-  slug: propsSlug = '',
-  site,
-  template,
-}) {
+export function NewsletterTemplateEditor({ site, template }) {
   const scrollContainerRef = React.useRef(null)
 
   const defaultDraftState = {
@@ -66,6 +72,7 @@ export function NewsletterTemplateEditor({
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)
   const [isPreviewing, setIsPreviewing] = React.useState(false)
+  const [sending, setSending] = React.useState(false)
 
   const existingNewsletterTemplate = template
   let validInit = checkIfDraftIsValid(
@@ -83,12 +90,6 @@ export function NewsletterTemplateEditor({
     setDraftErrors(validNext.draftErrors)
   }, [draftState])
 
-  React.useEffect(() => {
-    // if navigating between drafts, reset the state each time with the correct
-    // template data
-    setDraftState(defaultDraftState)
-  }, [propsSlug])
-
   const defaultContextValue = {
     existingNewsletterTemplate,
     draftState,
@@ -99,6 +100,51 @@ export function NewsletterTemplateEditor({
     setIsPreviewing,
     isDraftValid,
     draftErrors,
+  }
+
+  const sendNewsletter = async () => {
+    try {
+      setSending(true)
+
+      const parser = new edjsParser()
+      const blockHTML = parser.parse(draftState.data)
+      const text = blockHTML.replace(/<[^>]*>?/gm, '')
+
+      // Send out newsletter
+      return await fetch('/api/newsletters', {
+        method: 'POST',
+        body: JSON.stringify({
+          subject: draftState.subject,
+          html: blockHTML,
+          text: text,
+        }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(
+          (res) => {
+            if (res.status < 300) {
+              toast.success('Newsletter sent out! 🎉')
+            } else {
+              toast.error("Couldn't send out newsletter. 😢")
+            }
+          },
+          (err) => {
+            toast.error("Couldn't send out newsletter. 😢")
+          }
+        )
+        .finally(() => {
+          setSending(false)
+        })
+    } catch (error) {
+      console.error('Failed to send out newsletter', error)
+    } finally {
+      setTimeout(() => {
+        setSending(false)
+      })
+    }
   }
 
   return (
@@ -119,6 +165,15 @@ export function NewsletterTemplateEditor({
         ) : (
           <NewsletterTemplateEditorComposer site={site} />
         )}
+        <div className="px-4 py-3 sm:px-6 items-end">
+          <PrimaryButton
+            type="submit"
+            onClick={sendNewsletter}
+            disabled={sending || !isDraftValid}
+          >
+            {sending && <LoadingSpinner />} Send Newsletter
+          </PrimaryButton>
+        </div>
       </Detail.Container>
     </NewsletterTemplateEditorContext.Provider>
   )

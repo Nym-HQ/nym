@@ -5,21 +5,13 @@
  */
 
 import * as React from 'react'
-import { BiInfoCircle } from 'react-icons/bi'
 
-import {
-  Label,
-  Subsection,
-  SubsectionSplitter,
-} from '~/components/admin-components'
-import { PrimaryButton } from '~/components/Button'
-import { Textarea } from '~/components/Input'
+import { Subsection, SubsectionSplitter } from '~/components/admin-components'
 import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { NewsletterTemplateEditor } from '~/components/Newsletters/Editor/NewsletterTemplateEditor'
 import NewsletterSubscribers from '~/components/Newsletters/NewsletterSubscribers'
-import { Tooltip } from '~/components/Tooltip'
 import { getContext } from '~/graphql/context'
 import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
@@ -28,20 +20,9 @@ import { getCommonPageProps } from '~/lib/commonProps'
 
 function AdminNewslettersPage(props) {
   const { data: context } = useContextQuery()
-  const [sending, setSending] = React.useState(false)
 
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
-
-  const [template, setTemplate] = React.useState({
-    subject: '',
-    body: '',
-  })
-
-  const sendNewsletter = () => {
-    // TODO: validate template
-    // TODO: send out newsletter
-  }
 
   return (
     <Detail.Container ref={scrollContainerRef}>
@@ -61,33 +42,11 @@ function AdminNewslettersPage(props) {
         <Subsection title="Write and Publish a Newsletter">
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6">
-              <Label htmlFor="template-body">
-                Email body
-                <Tooltip content="Use this with caution!">
-                  <span className="relative ml-1 inline-block">
-                    <BiInfoCircle />
-                  </span>
-                </Tooltip>
-              </Label>
-              <Textarea
-                id="template-body"
-                name="template-body"
-                rows={4}
-                value={template.body || ''}
-                onChange={(e) =>
-                  setTemplate({ ...template, body: e.target.value })
-                }
+              <NewsletterTemplateEditor
+                site={context?.context?.site}
+                template={null}
               />
             </div>
-          </div>
-          <div className="px-4 py-3 sm:px-6">
-            <PrimaryButton
-              type="submit"
-              onClick={sendNewsletter}
-              disabled={sending}
-            >
-              {sending && <LoadingSpinner />} Send Newsletter
-            </PrimaryButton>
           </div>
         </Subsection>
 

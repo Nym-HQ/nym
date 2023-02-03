@@ -19,6 +19,8 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
     this.headers.Authorization = `Token ${API_TOKEN}`
   }
 
+  async init({ fromEmail, fromName }) {}
+
   send: ({
     subject,
     htmlBody,
@@ -28,13 +30,8 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
     htmlBody: any
     textBody: any
   }) => Promise<any>
-  sendWithTemplate({
-    templateId,
-    templateModel,
-  }: {
-    templateId: any
-    templateModel: any
-  }): Promise<any> {
+
+  sendWithTemplate({ templateId, templateModel, subject }): Promise<any> {
     throw new Error('Method not implemented.')
   }
 

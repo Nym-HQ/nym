@@ -16,7 +16,7 @@ export async function editEmailSubscription(
 ) {
   const { data } = args
   const { subscribed, type = EmailSubscriptionType.Newsletter, email } = data
-  const { prisma, viewer, site } = ctx
+  const { prisma, viewer, site, owner } = ctx
 
   if (!viewer?.email && !email) {
     throw new GraphQLError('No email', {
@@ -56,10 +56,11 @@ export async function editEmailSubscription(
 
         // Add subscriber to the provider
         if (type === EmailSubscriptionType.Newsletter) {
-          const provider = getNewsletterProvider(site)
+          console.log('Adding subscriber to newletter provider')
+          const provider = await getNewsletterProvider(ctx)
 
           if (provider) {
-            provider.addSubscriber({ email: emailToUse })
+            await provider.addSubscriber({ email: emailToUse })
           }
         }
       }
@@ -81,7 +82,8 @@ export async function editEmailSubscription(
 
       // Add subscriber to the provider
       if (type === EmailSubscriptionType.Newsletter) {
-        const provider = getNewsletterProvider(site)
+        console.log('Removing subscriber from newletter provider')
+        const provider = await getNewsletterProvider(ctx)
 
         if (provider) {
           provider.removeSubscriber({ email: emailToUse })

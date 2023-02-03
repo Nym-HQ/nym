@@ -1,4 +1,8 @@
+import { Context } from '~/graphql/context'
+
 interface NewsletterProviderBase {
+  init: ({ fromEmail, fromName }) => Promise<any>
+
   /**
    * Add a new subscriber
    * @param param0
@@ -26,7 +30,7 @@ interface NewsletterProviderBase {
    * @param param0
    * @returns
    */
-  sendWithTemplate: ({ templateId, templateModel }) => Promise<any>
+  sendWithTemplate: ({ templateId, templateModel, subject }) => Promise<any>
 
   getSubscribers: () => Promise<any>
   getSubscriber: ({ email }) => Promise<any>

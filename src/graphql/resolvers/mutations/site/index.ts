@@ -11,6 +11,7 @@ import {
 } from '~/graphql/types.generated'
 import { preservedSubdomains } from '~/lib/consts'
 import { graphcdn } from '~/lib/graphcdn'
+import { getNewsletterProvider } from '~/lib/newsletter'
 import { addDomainToProject, removeDomainFromProject } from '~/lib/vercel'
 
 export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
@@ -70,6 +71,9 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     })
     .then((site) => {
       graphcdn.purgeList('sites')
+      if (site.newsletter_provider) {
+        getNewsletterProvider(ctx)
+      }
       return site
     })
     .catch((err) => {
