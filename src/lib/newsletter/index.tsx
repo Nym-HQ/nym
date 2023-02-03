@@ -1,4 +1,5 @@
 import { Context } from '~/graphql/context'
+import { prisma } from '~/lib/prisma'
 
 import MailchimpNewsletterProvider from './providers/mailchimp'
 import NewsletterProviderBase from './providers/ProviderBase'
