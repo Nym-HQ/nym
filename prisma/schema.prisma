@@ -258,7 +258,9 @@ model Post {
   author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   slug         String
   title        String     @db.VarChar(280)
+  // markdown
   text         String     @default("") @db.Text
+  // json
   data         String     @default("") @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
@@ -278,7 +280,9 @@ model Post {
 model PostEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
+  // markdown
   text         String   @default("") @db.Text
+  // json
   data         String   @default("") @db.Text
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
@@ -350,7 +354,9 @@ model Page {
   path         String
   slug         String
   title        String     @db.VarChar(280)
+  // markdown
   text         String     @default("") @db.Text
+  // json
   data         String     @default("") @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
@@ -369,7 +375,9 @@ model Page {
 model PageEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
+  // markdown
   text         String   @default("") @db.Text
+  // json
   data         String   @default("") @db.Text
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)

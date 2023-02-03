@@ -19,6 +19,25 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
     this.headers.Authorization = `Token ${API_TOKEN}`
   }
 
+  send: ({
+    subject,
+    htmlBody,
+    textBody,
+  }: {
+    subject: any
+    htmlBody: any
+    textBody: any
+  }) => Promise<any>
+  sendWithTemplate({
+    templateId,
+    templateModel,
+  }: {
+    templateId: any
+    templateModel: any
+  }): Promise<any> {
+    throw new Error('Method not implemented.')
+  }
+
   async getSubscribers() {
     const res = await fetch(`${REVUE_BASE_URL}/subscribers`, {
       method: 'GET',
@@ -40,7 +59,6 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
     body: any
   }) => Promise<any>
   removeTemplate: ({ templateId }: { templateId: any }) => Promise<any>
-  send: ({ templateId }: { templateId: any }) => Promise<any>
 
   async getSubscriber({ email }) {
     try {

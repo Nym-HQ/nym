@@ -21,47 +21,11 @@ export default class MailchimpNewsletterProvider
     this.headers.Authorization = `Token ${API_TOKEN}`
   }
 
-  async getSubscribers() {
-    const res = await fetch(`${MAILCHIMP_BASE_URL}/subscribers`, {
-      method: 'GET',
-      headers: this.headers,
-    })
-
-    return await res.json()
-  }
-
-  getTemplates: () => Promise<any>
-  addTemplate: ({ subject, body }: { subject: any; body: any }) => Promise<any>
-  editTemplate: ({
-    templateId,
-    subject,
-    body,
-  }: {
-    templateId: any
-    subject: any
-    body: any
-  }) => Promise<any>
-  removeTemplate: ({ templateId }: { templateId: any }) => Promise<any>
-  send: ({ templateId }: { templateId: any }) => Promise<any>
-
-  async getSubscriber({ email }) {
-    try {
-      if (IS_PROD) {
-        const subscribers = await this.getSubscribers()
-        return subscribers.find((sub) => sub.email === email)
-      } else {
-        const subscribers = await useLocalFiles({
-          path: 'MailchimpSubscribers',
-          fetch: this.getSubscribers,
-        })
-        return subscribers.find((sub) => sub.email === email)
-      }
-    } catch (e) {
-      console.error({ e })
-      return null
-    }
-  }
-
+  /**
+   * Add a new subscriber
+   * @param param0
+   * @returns
+   */
   async addSubscriber({ email, doubleOptIn }) {
     try {
       const result = await fetch(`${MAILCHIMP_BASE_URL}/subscribers`, {
@@ -80,6 +44,11 @@ export default class MailchimpNewsletterProvider
     }
   }
 
+  /**
+   * Remove a subscriber
+   * @param param0
+   * @returns
+   */
   async removeSubscriber({ email, doubleOptIn }) {
     try {
       const result = await fetch(
@@ -101,35 +70,69 @@ export default class MailchimpNewsletterProvider
     }
   }
 
-  async getCurrentIssue() {
-    try {
-      const result = await fetch(`${MAILCHIMP_BASE_URL}/issues/current`, {
-        headers: {
-          ...this.headers,
-        },
-      })
-      const data = await result.json()
-      // this should return a single object, but Mailchimp returns an array containing
-      // a single issue object
-      return data[0]
-    } catch (e) {
-      console.error({ e })
-      return null
-    }
+  /**
+   * Send a newsletter with a subject and body
+   *
+   */
+  send: ({
+    subject,
+    htmlBody,
+    textBody,
+  }: {
+    subject: any
+    htmlBody: any
+    textBody: any
+  }) => Promise<any>
+
+  /**
+   * Send a newsletter with a template
+   *
+   * @param param0
+   */
+  sendWithTemplate({
+    templateId,
+    templateModel,
+  }: {
+    templateId: any
+    templateModel: any
+  }): Promise<any> {
+    throw new Error('Method not implemented.')
   }
 
-  async addItemToIssue({ id, url }: AddItemToIssueProps) {
+  async getSubscribers() {
+    const res = await fetch(`${MAILCHIMP_BASE_URL}/subscribers`, {
+      method: 'GET',
+      headers: this.headers,
+    })
+
+    return await res.json()
+  }
+
+  getTemplates: () => Promise<any>
+  addTemplate: ({ subject, body }: { subject: any; body: any }) => Promise<any>
+  editTemplate: ({
+    templateId,
+    subject,
+    body,
+  }: {
+    templateId: any
+    subject: any
+    body: any
+  }) => Promise<any>
+  removeTemplate: ({ templateId }: { templateId: any }) => Promise<any>
+
+  async getSubscriber({ email }) {
     try {
-      const result = await fetch(`${MAILCHIMP_BASE_URL}/issues/${id}/items`, {
-        method: 'POST',
-        headers: {
-          ...this.headers,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ issue_id: id, url }),
-      })
-      const data = await result.json()
-      return data
+      if (IS_PROD) {
+        const subscribers = await this.getSubscribers()
+        return subscribers.find((sub) => sub.email === email)
+      } else {
+        const subscribers = await useLocalFiles({
+          path: 'MailchimpSubscribers',
+          fetch: this.getSubscribers,
+        })
+        return subscribers.find((sub) => sub.email === email)
+      }
     } catch (e) {
       console.error({ e })
       return null

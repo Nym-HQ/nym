@@ -33,7 +33,10 @@ import { useContextQuery, useEditSiteMutation } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
-import { newsletterProviderDetails, newsletterProviders } from '~/lib/consts'
+import {
+  newsletterProviderDetails,
+  newsletterProviders,
+} from '~/lib/newsletter'
 
 function AdminSettingsPage(props) {
   const { data: context } = useContextQuery()
@@ -103,7 +106,9 @@ function AdminSettingsPage(props) {
 
     return (
       <Subsection title="Email newsletter settings">
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300"></p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          {provider && provider.help_text && provider.help_text}
+        </p>
 
         <div className="mt-10 sm:mt-0">
           <div className="px-4 py-5 sm:p-6">
@@ -154,7 +159,7 @@ function AdminSettingsPage(props) {
               {provider && provider.setting2 && (
                 <div className="col-span-6 sm:col-span-4">
                   <Label htmlFor="newsletter_setting2">
-                    {provider.setting1}
+                    {provider.setting2}
                   </Label>
                   <Input
                     type="text"
