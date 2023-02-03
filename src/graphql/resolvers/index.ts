@@ -113,17 +113,17 @@ const resolvers = {
       )
         return [
           {
-            type: EmailSubscriptionType.HackerNews,
+            type: EmailSubscriptionType.Newsletter,
             subscribed: false,
           },
         ]
 
-      const [hn] = await Promise.all([
+      const [newsletter] = await Promise.all([
         prisma.emailSubscription.findUnique({
           where: {
             emailAndType: {
               email: viewer.email,
-              type: EmailSubscriptionType.HackerNews,
+              type: EmailSubscriptionType.Newsletter,
               siteId: site.id,
             },
           },
@@ -132,13 +132,9 @@ const resolvers = {
       ])
 
       return [
-        // {
-        //   type: EmailSubscriptionType.Newsletter,
-        //   subscribed: !!newsletter,
-        // },
         {
-          type: EmailSubscriptionType.HackerNews,
-          subscribed: !!hn,
+          type: EmailSubscriptionType.Newsletter,
+          subscribed: !!newsletter,
         },
       ]
     },

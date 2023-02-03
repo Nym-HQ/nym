@@ -33,7 +33,7 @@ enum SiteRole {
 }
 
 enum EmailSubscriptionType {
-  HACKER_NEWS
+  NEWSLETTER
 }
 
 //
@@ -90,11 +90,11 @@ model User {
   description String?  @db.VarChar(256)
   location    String?  @db.VarChar(32)
 
-  social_twitter String? @db.Text
-  social_youtube String? @db.Text
-  social_github  String? @db.Text
-  social_other1  String? @db.Text
-  social_other1_label  String? @db.Text
+  social_twitter      String? @db.Text
+  social_youtube      String? @db.Text
+  social_github       String? @db.Text
+  social_other1       String? @db.Text
+  social_other1_label String? @db.Text
 
   comments     Comment[]
   questions    Question[]
@@ -121,24 +121,26 @@ model VerificationToken {
 //
 
 model Site {
-  id              String   @id @default(cuid())
-  subdomain       String   @unique @db.VarChar(128)
-  parkedDomain    String?  @unique @db.VarChar(255)
-  plan            SitePlan @default(FREE)
-  name            String?  @db.VarChar(255)
-  description     String?  @db.Text
-  logo            String?  @db.Text
-  banner          String?  @db.Text
-  attach_css      String?  @db.Text
-  attach_js       String?  @db.Text
-  mailgun_region  String?  @db.VarChar(2)
-  mailgun_domain  String?  @db.VarChar(255)
-  mailgun_api_key String?  @db.VarChar(255)
-  social_twitter  String?  @db.Text
-  social_youtube  String?  @db.Text
-  social_github   String?  @db.Text
-  social_other1   String?  @db.Text
-  social_other1_label  String? @db.Text
+  id                  String   @id @default(cuid())
+  subdomain           String   @unique @db.VarChar(128)
+  parkedDomain        String?  @unique @db.VarChar(255)
+  plan                SitePlan @default(FREE)
+  name                String?  @db.VarChar(255)
+  description         String?  @db.Text
+  logo                String?  @db.Text
+  banner              String?  @db.Text
+  attach_css          String?  @db.Text
+  attach_js           String?  @db.Text
+  social_twitter      String?  @db.Text
+  social_youtube      String?  @db.Text
+  social_github       String?  @db.Text
+  social_other1       String?  @db.Text
+  social_other1_label String?  @db.Text
+
+  newsletter_provider String? @db.VarChar(30)
+  newsletter_setting1 String? @db.VarChar(255)
+  newsletter_setting2 String? @db.VarChar(255)
+  newsletter_setting3 String? @db.VarChar(255)
 
   userSites         UserSite[]
   Bookmark          Bookmark[]
@@ -256,7 +258,9 @@ model Post {
   author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   slug         String
   title        String     @db.VarChar(280)
+  // markdown
   text         String     @default("") @db.Text
+  // json
   data         String     @default("") @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
@@ -276,7 +280,9 @@ model Post {
 model PostEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
+  // markdown
   text         String   @default("") @db.Text
+  // json
   data         String   @default("") @db.Text
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
@@ -326,8 +332,10 @@ model Reaction {
 }
 
 model EmailSubscription {
-  email String
-  type  EmailSubscriptionType
+  id     String                @id @default(cuid())
+  email  String
+  type   EmailSubscriptionType
+  userId String?
 
   // multi-tenancy
   siteId String
@@ -346,7 +354,9 @@ model Page {
   path         String
   slug         String
   title        String     @db.VarChar(280)
+  // markdown
   text         String     @default("") @db.Text
+  // json
   data         String     @default("") @db.Text
   excerpt      String     @db.VarChar(280)
   featureImage String?
@@ -365,7 +375,9 @@ model Page {
 model PageEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
+  // markdown
   text         String   @default("") @db.Text
+  // json
   data         String   @default("") @db.Text
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)

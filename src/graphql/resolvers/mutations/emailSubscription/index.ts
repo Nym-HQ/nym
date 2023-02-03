@@ -6,7 +6,7 @@ import {
   EmailSubscriptionType,
   MutationEditEmailSubscriptionArgs,
 } from '~/graphql/types.generated'
-import { revue } from '~/lib/revue'
+import { getNewsletterProvider } from '~/lib/newsletter'
 import { validEmail } from '~/lib/validators'
 
 export async function editEmailSubscription(
@@ -15,8 +15,8 @@ export async function editEmailSubscription(
   ctx: Context
 ) {
   const { data } = args
-  const { subscribed, type, email } = data
-  const { prisma, viewer, site } = ctx
+  const { subscribed, type = EmailSubscriptionType.Newsletter, email } = data
+  const { prisma, viewer, site, owner } = ctx
 
   if (!viewer?.email && !email) {
     throw new GraphQLError('No email', {
@@ -34,46 +34,66 @@ export async function editEmailSubscription(
     })
   }
 
-  const emailToUse = viewer && viewer.email ? viewer.email : email
-  if (type === EmailSubscriptionType.HackerNews) {
-    if (subscribed) {
-      try {
+  const emailToUse = email || (viewer && viewer.email)
+  if (subscribed) {
+    try {
+      let existingSubscription = await prisma.emailSubscription.findFirst({
+        where: {
+          email: emailToUse,
+          type: type,
+          siteId: site.id,
+        },
+      })
+      if (!existingSubscription) {
         await prisma.emailSubscription.create({
           data: {
             email: emailToUse,
-            type: EmailSubscriptionType.HackerNews,
+            type: type,
+            userId: viewer?.id,
             siteId: site.id,
           },
         })
-      } catch (err) {
-        console.error({ err })
-        // nothing to do here
+
+        // Add subscriber to the provider
+        if (type === EmailSubscriptionType.Newsletter) {
+          console.log('Adding subscriber to newletter provider')
+          const provider = await getNewsletterProvider(ctx)
+
+          if (provider) {
+            await provider.addSubscriber({ email: emailToUse })
+          }
+        }
       }
-    } else {
-      try {
-        await prisma.emailSubscription.delete({
-          where: {
-            emailAndType: {
-              email: emailToUse,
-              type: EmailSubscriptionType.HackerNews,
-              siteId: site.id,
-            },
+    } catch (err) {
+      console.error({ err })
+      // nothing to do here
+    }
+  } else {
+    try {
+      await prisma.emailSubscription.delete({
+        where: {
+          emailAndType: {
+            email: emailToUse,
+            type: type,
+            siteId: site.id,
           },
-        })
-      } catch (err) {
-        console.error({ err })
-        // nothing to do here
+        },
+      })
+
+      // Add subscriber to the provider
+      if (type === EmailSubscriptionType.Newsletter) {
+        console.log('Removing subscriber from newletter provider')
+        const provider = await getNewsletterProvider(ctx)
+
+        if (provider) {
+          provider.removeSubscriber({ email: emailToUse })
+        }
       }
+    } catch (err) {
+      console.error({ err })
+      // nothing to do here
     }
   }
-
-  // if (type === EmailSubscriptionType.Newsletter) {
-  //   if (subscribed) {
-  //     revue.addSubscriber({ email: emailToUse, doubleOptIn: !viewer })
-  //   } else {
-  //     revue.removeSubscriber({ email: emailToUse, doubleOptIn: !viewer })
-  //   }
-  // }
 
   return viewer
     ? await prisma.user.findUnique({ where: { id: viewer.id } })

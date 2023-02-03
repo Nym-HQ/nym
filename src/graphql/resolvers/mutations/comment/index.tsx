@@ -10,7 +10,7 @@ import {
   MutationEditCommentArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
-import { emailMe } from '~/lib/postmark'
+import { emailMe } from '~/lib/system_emails'
 
 export async function editComment(
   _,

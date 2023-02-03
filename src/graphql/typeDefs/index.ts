@@ -14,9 +14,10 @@ const typeDefs = gql`
     banner: String
     attach_css: String
     attach_js: String
-    mailgun_region: String
-    mailgun_domain: String
-    mailgun_api_key: String
+    newsletter_provider: String
+    newsletter_setting1: String
+    newsletter_setting2: String
+    newsletter_setting3: String
     social_twitter: String
     social_youtube: String
     social_github: String
@@ -127,11 +128,17 @@ const typeDefs = gql`
   }
 
   enum EmailSubscriptionType {
-    HACKER_NEWS
     NEWSLETTER
   }
 
   type EmailSubscription {
+    id: ID!
+    email: String
+    type: EmailSubscriptionType
+    userId: String
+  }
+
+  type UserEmailSubscription {
     type: EmailSubscriptionType
     subscribed: Boolean
   }
@@ -153,7 +160,7 @@ const typeDefs = gql`
     social_github: String
     social_other1: String
     social_other1_label: String
-    emailSubscriptions: [EmailSubscription]
+    emailSubscriptions: [UserEmailSubscription]
 
     isAdmin: Boolean
   }
@@ -166,30 +173,6 @@ const typeDefs = gql`
     author: User!
     viewerCanEdit: Boolean
     viewerCanDelete: Boolean
-  }
-
-  type HackerNewsComment {
-    id: ID
-    user: String
-    comments_count: String
-    comments: [HackerNewsComment]
-    time_ago: String
-    time: Int
-    level: Int
-    content: String
-  }
-
-  type HackerNewsPost {
-    id: ID
-    title: String
-    user: String
-    time: Int
-    time_ago: String
-    comments: [HackerNewsComment]
-    comments_count: String
-    url: String
-    domain: String
-    content: String
   }
 
   input BookmarkFilter {
@@ -226,6 +209,11 @@ const typeDefs = gql`
     cursor: String
   }
 
+  type EmailSubscriptionEdge {
+    node: EmailSubscription
+    cursor: String
+  }
+
   type PageInfo {
     hasNextPage: Boolean
     totalCount: Int
@@ -240,6 +228,11 @@ const typeDefs = gql`
   type QuestionsConnection {
     pageInfo: PageInfo
     edges: [QuestionEdge]!
+  }
+
+  type EmailSubscriptionsConnection {
+    pageInfo: PageInfo
+    edges: [EmailSubscriptionEdge]!
   }
 
   type ViewerContext {
@@ -272,9 +265,8 @@ const typeDefs = gql`
       after: String
       filter: QuestionFilter
     ): QuestionsConnection!
-    hackerNewsPosts: [HackerNewsPost]!
-    hackerNewsPost(id: ID!): HackerNewsPost
     tags: [Tag]!
+    emailSubscriptions(first: Int, after: String): EmailSubscriptionsConnection!
   }
 
   input EditUserInput {
@@ -365,9 +357,10 @@ const typeDefs = gql`
     banner: String
     attach_css: String
     attach_js: String
-    mailgun_region: String
-    mailgun_domain: String
-    mailgun_api_key: String
+    newsletter_provider: String
+    newsletter_setting1: String
+    newsletter_setting2: String
+    newsletter_setting3: String
     social_twitter: String
     social_youtube: String
     social_github: String

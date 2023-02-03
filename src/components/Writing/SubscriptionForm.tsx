@@ -1,14 +1,24 @@
 import * as React from 'react'
+import toast from 'react-hot-toast'
 
 import { ErrorAlert, SuccessAlert } from '~/components/Alert'
 import { PrimaryButton } from '~/components/Button'
 import { Input } from '~/components/Input'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import {
+  EmailSubscriptionType,
+  useEditEmailSubscriptionMutation,
+} from '~/graphql/types.generated'
 import { validEmail } from '~/lib/validators'
 
 export function WritingSubscriptionForm({ defaultValue = '' }) {
   const [email, setEmail] = React.useState(defaultValue)
   const [status, setStatus] = React.useState('default')
+  const [editEmailSubscription] = useEditEmailSubscriptionMutation({
+    onCompleted() {
+      toast.success('Subscribed!')
+    },
+  })
 
   function onChange(e) {
     setStatus('default')
@@ -20,14 +30,18 @@ export function WritingSubscriptionForm({ defaultValue = '' }) {
     setStatus('saving')
 
     if (!validEmail(email)) {
-      setStatus('saving')
       return setStatus('invalid-email')
     }
 
-    await fetch(`/api/newsletter`, {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    }).then((res) => res.json())
+    await editEmailSubscription({
+      variables: {
+        data: {
+          email: email,
+          type: EmailSubscriptionType.Newsletter,
+          subscribed: true,
+        },
+      },
+    })
 
     setStatus('success')
   }
@@ -64,18 +78,7 @@ export function WritingSubscriptionForm({ defaultValue = '' }) {
             {status === 'saving' ? <LoadingSpinner /> : 'Subscribe'}
           </PrimaryButton>
         </form>
-        <p className="text-quaternary text-sm">
-          Unsubscribe at any time. Powered by{' '}
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.getrevue.co/profile/brian_lovin"
-            className="text-primary"
-          >
-            Revue
-          </a>
-          .
-        </p>
+        <p className="text-quaternary text-sm">Unsubscribe at any time.</p>
         {status === 'invalid-email' && (
           <ErrorAlert>That email doesn’t look valid, try another?</ErrorAlert>
         )}

@@ -11,6 +11,7 @@ import {
 } from '~/graphql/types.generated'
 import { preservedSubdomains } from '~/lib/consts'
 import { graphcdn } from '~/lib/graphcdn'
+import { getNewsletterProvider } from '~/lib/newsletter'
 import { addDomainToProject, removeDomainFromProject } from '~/lib/vercel'
 
 export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
@@ -22,9 +23,10 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     banner = '',
     attach_css = '',
     attach_js = '',
-    mailgun_region = '',
-    mailgun_domain = '',
-    mailgun_api_key = '',
+    newsletter_provider = '',
+    newsletter_setting1 = '',
+    newsletter_setting2 = '',
+    newsletter_setting3 = '',
     social_twitter = '',
     social_youtube = '',
     social_github = '',
@@ -56,9 +58,10 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
         banner,
         attach_css,
         attach_js,
-        mailgun_region,
-        mailgun_domain,
-        mailgun_api_key,
+        newsletter_provider,
+        newsletter_setting1,
+        newsletter_setting2,
+        newsletter_setting3,
         social_twitter,
         social_youtube,
         social_github,
@@ -68,6 +71,9 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     })
     .then((site) => {
       graphcdn.purgeList('sites')
+      if (site.newsletter_provider) {
+        getNewsletterProvider(ctx)
+      }
       return site
     })
     .catch((err) => {

@@ -148,10 +148,31 @@ export async function getServerSideProps(ctx) {
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
+  // require login
+  if (!context.viewer) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    }
+  }
+
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
         destination: '/create-your-site',
+        permanent: false,
+      },
+    }
+  }
+
+  // require to be admin
+  if (!context.viewer.isAdmin) {
+    return {
+      redirect: {
+        destination: '/',
         permanent: false,
       },
     }

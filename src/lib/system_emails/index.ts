@@ -32,3 +32,12 @@ export function emailMe({ subject, body }: EmailMeProps) {
     TextBody: body,
   })
 }
+
+export function sendEmailWithTemplate({ email, templateId, url }: any) {
+  client.sendEmailWithTemplate({
+    From: baseEmail,
+    To: email,
+    TemplateId: templateId,
+    TemplateModel: { url },
+  })
+}

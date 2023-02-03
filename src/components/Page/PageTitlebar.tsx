@@ -1,14 +1,12 @@
 import * as React from 'react'
-import { Plus, Radio } from 'react-feather'
+import { Plus } from 'react-feather'
 
-import Button, { GhostButton } from '~/components/Button'
+import { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { useContextQuery } from '~/graphql/types.generated'
 
-import { DialogComponent } from '../Dialog'
 import SegmentedControl from '../SegmentedController'
 import { PageContext } from './PagesList'
-import { PageSubscriptionForm } from './SubscriptionForm'
 
 export function PageTitlebar({ scrollContainerRef }) {
   const { data } = useContextQuery()
@@ -29,29 +27,8 @@ export function PageTitlebar({ scrollContainerRef }) {
     return null
   }
 
-  function getSubscribeButton() {
-    if (data?.context?.viewer?.isAdmin) return null
-    return (
-      <DialogComponent
-        title="Newsletter"
-        trigger={
-          <Button data-cy="open-subscribe-hn-dialog" size="small">
-            <Radio size={16} />
-            <span>Subscribe</span>
-          </Button>
-        }
-        modalContent={() => <PageSubscriptionForm />}
-      />
-    )
-  }
-
   function trailingAccessory() {
-    return (
-      <div className="flex space-x-2">
-        {getSubscribeButton()}
-        {getAddButton()}
-      </div>
-    )
+    return <div className="flex space-x-2">{getAddButton()}</div>
   }
 
   function getChildren() {

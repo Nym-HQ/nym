@@ -43,8 +43,12 @@ async function getSite(ctx) {
 export async function getContext(ctx) {
   const site = await getSite(ctx)
   const viewer = await getViewer(ctx)
+
+  // for a new visitor, create a user-site record with the role USER
   const userSite =
-    site && viewer ? await getUserSiteById(viewer.id, site.id) : null
+    site && viewer
+      ? await getUserSiteById(viewer.id, site.id, SiteRole.USER)
+      : null
   if (viewer) {
     // on app site, check user role
     viewer.isAdmin =

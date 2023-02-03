@@ -2,16 +2,16 @@ import * as React from 'react'
 import toast from 'react-hot-toast'
 
 import {
-  EmailSubscription,
   EmailSubscriptionType,
   GetViewerWithSettingsQuery,
   useEditEmailSubscriptionMutation,
+  UserEmailSubscription,
 } from '~/graphql/types.generated'
 
 import { WritingSubscriptionForm } from '../Writing/SubscriptionForm'
 
 interface Props {
-  subscription: EmailSubscription
+  subscription: UserEmailSubscription
 }
 
 export function EmailSubscriptionForm({ subscription }: Props) {
@@ -39,18 +39,10 @@ export function EmailSubscriptionForm({ subscription }: Props) {
 
   function getTitleSubtitle(type) {
     switch (type) {
-      case EmailSubscriptionType.HackerNews: {
-        return {
-          title: 'Hacker News Daily Digest',
-          subtitle:
-            'A daily email with the top stories in tech discussed on Hacker News.',
-        }
-      }
       case EmailSubscriptionType.Newsletter: {
         return {
-          title: 'Overthought Newsletter',
-          subtitle:
-            'A curated newsletter of design, development, and technology news. Delivered weekly-ish.',
+          title: 'Newsletter',
+          subtitle: 'A curated newsletter.',
         }
       }
       default: {

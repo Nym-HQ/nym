@@ -2,7 +2,7 @@ import { requiresUser } from '~/graphql/helpers/requiresUser'
 
 import { getBookmark, getBookmarks } from './bookmarks'
 import { getComment, getComments } from './comment'
-import { getHackerNewsPost, getHackerNewsPosts } from './hackerNews'
+import { getEmailSubscriptions } from './emailSubscriptions'
 import { getHomePage, getPage, getPages } from './pages'
 import { getPost, getPosts } from './posts'
 import { getQuestion, getQuestions } from './questions'
@@ -27,6 +27,5 @@ export default {
   comment: getComment,
   comments: getComments,
   tags: getTags,
-  hackerNewsPosts: getHackerNewsPosts,
-  hackerNewsPost: getHackerNewsPost,
+  emailSubscriptions: getEmailSubscriptions,
 }

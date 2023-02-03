@@ -32,6 +32,13 @@ export function SiteIntro() {
       <NextSeo {...seo} />
       {data?.homepage ? (
         <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
+          <TitleBar
+            magicTitle
+            titleRef={titleRef}
+            scrollContainerRef={scrollContainerRef}
+            title="Home"
+          />
+
           <div className="flex flex-1 flex-col flex-start justify-start">
             <Detail.ContentContainer>
               <div>

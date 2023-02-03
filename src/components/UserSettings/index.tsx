@@ -49,12 +49,12 @@ export function UserSettings() {
               <UsernameForm viewer={data?.context?.viewer} />
             </div>
 
-            {/* {data?.context?.viewer.email && (
-            <div className="space-y-8 py-12">
-              <h3 className="text-primary text-lg font-bold">Emails</h3>
-              <EmailPreferences viewer={data?.context?.viewer} />
-            </div>
-          )} */}
+            {data?.context?.viewer.email && (
+              <div className="space-y-8 py-12">
+                <h3 className="text-primary text-lg font-bold">Emails</h3>
+                <EmailPreferences viewer={data?.context?.viewer} />
+              </div>
+            )}
 
             <UserSettingsFooter />
           </div>

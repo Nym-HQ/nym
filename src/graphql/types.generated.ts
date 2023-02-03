@@ -152,10 +152,11 @@ export type EditSiteInput = {
   banner?: InputMaybe<Scalars['String']>
   description?: InputMaybe<Scalars['String']>
   logo?: InputMaybe<Scalars['String']>
-  mailgun_api_key?: InputMaybe<Scalars['String']>
-  mailgun_domain?: InputMaybe<Scalars['String']>
-  mailgun_region?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
+  newsletter_provider?: InputMaybe<Scalars['String']>
+  newsletter_setting1?: InputMaybe<Scalars['String']>
+  newsletter_setting2?: InputMaybe<Scalars['String']>
+  newsletter_setting3?: InputMaybe<Scalars['String']>
   social_github?: InputMaybe<Scalars['String']>
   social_other1?: InputMaybe<Scalars['String']>
   social_other1_label?: InputMaybe<Scalars['String']>
@@ -170,8 +171,16 @@ export type EditUserInput = {
 
 export type EmailSubscription = {
   __typename?: 'EmailSubscription'
-  subscribed?: Maybe<Scalars['Boolean']>
+  email?: Maybe<Scalars['String']>
+  id: Scalars['ID']
   type?: Maybe<EmailSubscriptionType>
+  userId?: Maybe<Scalars['String']>
+}
+
+export type EmailSubscriptionEdge = {
+  __typename?: 'EmailSubscriptionEdge'
+  cursor?: Maybe<Scalars['String']>
+  node?: Maybe<EmailSubscription>
 }
 
 export type EmailSubscriptionInput = {
@@ -181,34 +190,13 @@ export type EmailSubscriptionInput = {
 }
 
 export enum EmailSubscriptionType {
-  HackerNews = 'HACKER_NEWS',
   Newsletter = 'NEWSLETTER',
 }
 
-export type HackerNewsComment = {
-  __typename?: 'HackerNewsComment'
-  comments?: Maybe<Array<Maybe<HackerNewsComment>>>
-  comments_count?: Maybe<Scalars['String']>
-  content?: Maybe<Scalars['String']>
-  id?: Maybe<Scalars['ID']>
-  level?: Maybe<Scalars['Int']>
-  time?: Maybe<Scalars['Int']>
-  time_ago?: Maybe<Scalars['String']>
-  user?: Maybe<Scalars['String']>
-}
-
-export type HackerNewsPost = {
-  __typename?: 'HackerNewsPost'
-  comments?: Maybe<Array<Maybe<HackerNewsComment>>>
-  comments_count?: Maybe<Scalars['String']>
-  content?: Maybe<Scalars['String']>
-  domain?: Maybe<Scalars['String']>
-  id?: Maybe<Scalars['ID']>
-  time?: Maybe<Scalars['Int']>
-  time_ago?: Maybe<Scalars['String']>
-  title?: Maybe<Scalars['String']>
-  url?: Maybe<Scalars['String']>
-  user?: Maybe<Scalars['String']>
+export type EmailSubscriptionsConnection = {
+  __typename?: 'EmailSubscriptionsConnection'
+  edges: Array<Maybe<EmailSubscriptionEdge>>
+  pageInfo?: Maybe<PageInfo>
 }
 
 export type Mutation = {
@@ -390,8 +378,7 @@ export type Query = {
   comment?: Maybe<Comment>
   comments: Array<Maybe<Comment>>
   context: ViewerContext
-  hackerNewsPost?: Maybe<HackerNewsPost>
-  hackerNewsPosts: Array<Maybe<HackerNewsPost>>
+  emailSubscriptions: EmailSubscriptionsConnection
   homepage?: Maybe<Page>
   page?: Maybe<Page>
   pages: Array<Maybe<Page>>
@@ -423,8 +410,9 @@ export type QueryCommentsArgs = {
   type: CommentType
 }
 
-export type QueryHackerNewsPostArgs = {
-  id: Scalars['ID']
+export type QueryEmailSubscriptionsArgs = {
+  after?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryPageArgs = {
@@ -509,10 +497,11 @@ export type Site = {
   description?: Maybe<Scalars['String']>
   id: Scalars['ID']
   logo?: Maybe<Scalars['String']>
-  mailgun_api_key?: Maybe<Scalars['String']>
-  mailgun_domain?: Maybe<Scalars['String']>
-  mailgun_region?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+  newsletter_provider?: Maybe<Scalars['String']>
+  newsletter_setting1?: Maybe<Scalars['String']>
+  newsletter_setting2?: Maybe<Scalars['String']>
+  newsletter_setting3?: Maybe<Scalars['String']>
   parkedDomain?: Maybe<Scalars['String']>
   plan?: Maybe<Scalars['String']>
   social_github?: Maybe<Scalars['String']>
@@ -547,7 +536,7 @@ export type User = {
   createdAt?: Maybe<Scalars['Date']>
   description?: Maybe<Scalars['String']>
   email?: Maybe<Scalars['String']>
-  emailSubscriptions?: Maybe<Array<Maybe<EmailSubscription>>>
+  emailSubscriptions?: Maybe<Array<Maybe<UserEmailSubscription>>>
   id: Scalars['ID']
   image?: Maybe<Scalars['String']>
   isAdmin?: Maybe<Scalars['Boolean']>
@@ -561,6 +550,12 @@ export type User = {
   social_twitter?: Maybe<Scalars['String']>
   social_youtube?: Maybe<Scalars['String']>
   username?: Maybe<Scalars['String']>
+}
+
+export type UserEmailSubscription = {
+  __typename?: 'UserEmailSubscription'
+  subscribed?: Maybe<Scalars['Boolean']>
+  type?: Maybe<EmailSubscriptionType>
 }
 
 export enum UserRole {
@@ -675,102 +670,51 @@ export type CommentInfoFragment = {
   }
 }
 
-export type HackerNewsListItemInfoFragment = {
-  __typename?: 'HackerNewsPost'
-  id?: string | null | undefined
-  title?: string | null | undefined
-  domain?: string | null | undefined
-  url?: string | null | undefined
+export type EmailSubscriptionDetailFragment = {
+  __typename: 'EmailSubscription'
+  id: string
+  email?: string | null | undefined
+  type?: EmailSubscriptionType | null | undefined
+  userId?: string | null | undefined
 }
 
-export type HackerNewsCommentInfoFragment = {
-  __typename?: 'HackerNewsComment'
-  id?: string | null | undefined
-  user?: string | null | undefined
-  comments_count?: string | null | undefined
-  time_ago?: string | null | undefined
-  level?: number | null | undefined
-  content?: string | null | undefined
+export type EmailSubscriptionListItemFragment = {
+  __typename: 'EmailSubscription'
+  id: string
+  email?: string | null | undefined
+  type?: EmailSubscriptionType | null | undefined
+  userId?: string | null | undefined
 }
 
-export type HackerNewsPostInfoFragment = {
-  __typename?: 'HackerNewsPost'
-  user?: string | null | undefined
-  time?: number | null | undefined
-  time_ago?: string | null | undefined
-  comments_count?: string | null | undefined
-  url?: string | null | undefined
-  domain?: string | null | undefined
-  content?: string | null | undefined
-  id?: string | null | undefined
-  title?: string | null | undefined
-  comments?:
-    | Array<
-        | {
-            __typename?: 'HackerNewsComment'
-            id?: string | null | undefined
-            user?: string | null | undefined
-            comments_count?: string | null | undefined
-            time_ago?: string | null | undefined
-            level?: number | null | undefined
-            content?: string | null | undefined
-            comments?:
-              | Array<
-                  | {
-                      __typename?: 'HackerNewsComment'
-                      id?: string | null | undefined
-                      user?: string | null | undefined
-                      comments_count?: string | null | undefined
-                      time_ago?: string | null | undefined
-                      level?: number | null | undefined
-                      content?: string | null | undefined
-                      comments?:
-                        | Array<
-                            | {
-                                __typename?: 'HackerNewsComment'
-                                id?: string | null | undefined
-                                user?: string | null | undefined
-                                comments_count?: string | null | undefined
-                                time_ago?: string | null | undefined
-                                level?: number | null | undefined
-                                content?: string | null | undefined
-                                comments?:
-                                  | Array<
-                                      | {
-                                          __typename?: 'HackerNewsComment'
-                                          id?: string | null | undefined
-                                          user?: string | null | undefined
-                                          comments_count?:
-                                            | string
-                                            | null
-                                            | undefined
-                                          time_ago?: string | null | undefined
-                                          level?: number | null | undefined
-                                          content?: string | null | undefined
-                                        }
-                                      | null
-                                      | undefined
-                                    >
-                                  | null
-                                  | undefined
-                              }
-                            | null
-                            | undefined
-                          >
-                        | null
-                        | undefined
-                    }
-                  | null
-                  | undefined
-                >
-              | null
-              | undefined
-          }
-        | null
-        | undefined
-      >
+export type EmailSubscriptionsConnectionFragment = {
+  __typename?: 'EmailSubscriptionsConnection'
+  pageInfo?:
+    | {
+        __typename?: 'PageInfo'
+        hasNextPage?: boolean | null | undefined
+        totalCount?: number | null | undefined
+        endCursor?: string | null | undefined
+      }
     | null
     | undefined
+  edges: Array<
+    | {
+        __typename?: 'EmailSubscriptionEdge'
+        cursor?: string | null | undefined
+        node?:
+          | {
+              __typename: 'EmailSubscription'
+              id: string
+              email?: string | null | undefined
+              type?: EmailSubscriptionType | null | undefined
+              userId?: string | null | undefined
+            }
+          | null
+          | undefined
+      }
+    | null
+    | undefined
+  >
 }
 
 export type PageCoreFragment = {
@@ -962,9 +906,10 @@ export type SiteInfoFragment = {
   banner?: string | null | undefined
   attach_css?: string | null | undefined
   attach_js?: string | null | undefined
-  mailgun_region?: string | null | undefined
-  mailgun_domain?: string | null | undefined
-  mailgun_api_key?: string | null | undefined
+  newsletter_provider?: string | null | undefined
+  newsletter_setting1?: string | null | undefined
+  newsletter_setting2?: string | null | undefined
+  newsletter_setting3?: string | null | undefined
   social_twitter?: string | null | undefined
   social_youtube?: string | null | undefined
   social_github?: string | null | undefined
@@ -998,9 +943,10 @@ export type UserSiteInfoFragment = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1029,7 +975,7 @@ export type UserSettingsFragment = {
   emailSubscriptions?:
     | Array<
         | {
-            __typename?: 'EmailSubscription'
+            __typename?: 'UserEmailSubscription'
             type?: EmailSubscriptionType | null | undefined
             subscribed?: boolean | null | undefined
           }
@@ -1180,7 +1126,7 @@ export type EditEmailSubscriptionMutation = {
         emailSubscriptions?:
           | Array<
               | {
-                  __typename?: 'EmailSubscription'
+                  __typename?: 'UserEmailSubscription'
                   subscribed?: boolean | null | undefined
                   type?: EmailSubscriptionType | null | undefined
                 }
@@ -1443,9 +1389,10 @@ export type EditSiteDomainMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1476,9 +1423,10 @@ export type EditSiteMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1517,9 +1465,10 @@ export type AddSiteMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        mailgun_region?: string | null | undefined
-        mailgun_domain?: string | null | undefined
-        mailgun_api_key?: string | null | undefined
+        newsletter_provider?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
@@ -1655,120 +1604,43 @@ export type GetCommentsQuery = {
   >
 }
 
-export type GetHackerNewsPostsQueryVariables = Exact<{ [key: string]: never }>
-
-export type GetHackerNewsPostsQuery = {
-  __typename?: 'Query'
-  hackerNewsPosts: Array<
-    | {
-        __typename?: 'HackerNewsPost'
-        id?: string | null | undefined
-        title?: string | null | undefined
-        domain?: string | null | undefined
-        url?: string | null | undefined
-      }
-    | null
-    | undefined
-  >
-}
-
-export type GetHackerNewsPostQueryVariables = Exact<{
-  id: Scalars['ID']
+export type GetEmailSubscriptionsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>
+  after?: InputMaybe<Scalars['String']>
 }>
 
-export type GetHackerNewsPostQuery = {
+export type GetEmailSubscriptionsQuery = {
   __typename?: 'Query'
-  hackerNewsPost?:
-    | {
-        __typename?: 'HackerNewsPost'
-        user?: string | null | undefined
-        time?: number | null | undefined
-        time_ago?: string | null | undefined
-        comments_count?: string | null | undefined
-        url?: string | null | undefined
-        domain?: string | null | undefined
-        content?: string | null | undefined
-        id?: string | null | undefined
-        title?: string | null | undefined
-        comments?:
-          | Array<
-              | {
-                  __typename?: 'HackerNewsComment'
-                  id?: string | null | undefined
-                  user?: string | null | undefined
-                  comments_count?: string | null | undefined
-                  time_ago?: string | null | undefined
-                  level?: number | null | undefined
-                  content?: string | null | undefined
-                  comments?:
-                    | Array<
-                        | {
-                            __typename?: 'HackerNewsComment'
-                            id?: string | null | undefined
-                            user?: string | null | undefined
-                            comments_count?: string | null | undefined
-                            time_ago?: string | null | undefined
-                            level?: number | null | undefined
-                            content?: string | null | undefined
-                            comments?:
-                              | Array<
-                                  | {
-                                      __typename?: 'HackerNewsComment'
-                                      id?: string | null | undefined
-                                      user?: string | null | undefined
-                                      comments_count?: string | null | undefined
-                                      time_ago?: string | null | undefined
-                                      level?: number | null | undefined
-                                      content?: string | null | undefined
-                                      comments?:
-                                        | Array<
-                                            | {
-                                                __typename?: 'HackerNewsComment'
-                                                id?: string | null | undefined
-                                                user?: string | null | undefined
-                                                comments_count?:
-                                                  | string
-                                                  | null
-                                                  | undefined
-                                                time_ago?:
-                                                  | string
-                                                  | null
-                                                  | undefined
-                                                level?:
-                                                  | number
-                                                  | null
-                                                  | undefined
-                                                content?:
-                                                  | string
-                                                  | null
-                                                  | undefined
-                                              }
-                                            | null
-                                            | undefined
-                                          >
-                                        | null
-                                        | undefined
-                                    }
-                                  | null
-                                  | undefined
-                                >
-                              | null
-                              | undefined
-                          }
-                        | null
-                        | undefined
-                      >
-                    | null
-                    | undefined
-                }
-              | null
-              | undefined
-            >
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+  emailSubscriptions: {
+    __typename?: 'EmailSubscriptionsConnection'
+    pageInfo?:
+      | {
+          __typename?: 'PageInfo'
+          hasNextPage?: boolean | null | undefined
+          totalCount?: number | null | undefined
+          endCursor?: string | null | undefined
+        }
+      | null
+      | undefined
+    edges: Array<
+      | {
+          __typename?: 'EmailSubscriptionEdge'
+          cursor?: string | null | undefined
+          node?:
+            | {
+                __typename: 'EmailSubscription'
+                id: string
+                email?: string | null | undefined
+                type?: EmailSubscriptionType | null | undefined
+                userId?: string | null | undefined
+              }
+            | null
+            | undefined
+        }
+      | null
+      | undefined
+    >
+  }
 }
 
 export type GetPagesQueryVariables = Exact<{
@@ -1994,9 +1866,10 @@ export type GetSitesQuery = {
               banner?: string | null | undefined
               attach_css?: string | null | undefined
               attach_js?: string | null | undefined
-              mailgun_region?: string | null | undefined
-              mailgun_domain?: string | null | undefined
-              mailgun_api_key?: string | null | undefined
+              newsletter_provider?: string | null | undefined
+              newsletter_setting1?: string | null | undefined
+              newsletter_setting2?: string | null | undefined
+              newsletter_setting3?: string | null | undefined
               social_twitter?: string | null | undefined
               social_youtube?: string | null | undefined
               social_github?: string | null | undefined
@@ -2061,7 +1934,7 @@ export type GetViewerWithSettingsQuery = {
           emailSubscriptions?:
             | Array<
                 | {
-                    __typename?: 'EmailSubscription'
+                    __typename?: 'UserEmailSubscription'
                     type?: EmailSubscriptionType | null | undefined
                     subscribed?: boolean | null | undefined
                   }
@@ -2108,9 +1981,10 @@ export type ContextQuery = {
           banner?: string | null | undefined
           attach_css?: string | null | undefined
           attach_js?: string | null | undefined
-          mailgun_region?: string | null | undefined
-          mailgun_domain?: string | null | undefined
-          mailgun_api_key?: string | null | undefined
+          newsletter_provider?: string | null | undefined
+          newsletter_setting1?: string | null | undefined
+          newsletter_setting2?: string | null | undefined
+          newsletter_setting3?: string | null | undefined
           social_twitter?: string | null | undefined
           social_youtube?: string | null | undefined
           social_github?: string | null | undefined
@@ -2211,49 +2085,36 @@ export const CommentInfoFragmentDoc = gql`
   }
   ${UserInfoFragmentDoc}
 `
-export const HackerNewsListItemInfoFragmentDoc = gql`
-  fragment HackerNewsListItemInfo on HackerNewsPost {
+export const EmailSubscriptionDetailFragmentDoc = gql`
+  fragment EmailSubscriptionDetail on EmailSubscription {
+    __typename
     id
-    title
-    domain
-    url
+    email
+    type
+    userId
   }
 `
-export const HackerNewsCommentInfoFragmentDoc = gql`
-  fragment HackerNewsCommentInfo on HackerNewsComment {
-    id
-    user
-    comments_count
-    time_ago
-    level
-    content
+export const EmailSubscriptionListItemFragmentDoc = gql`
+  fragment EmailSubscriptionListItem on EmailSubscription {
+    ...EmailSubscriptionDetail
   }
+  ${EmailSubscriptionDetailFragmentDoc}
 `
-export const HackerNewsPostInfoFragmentDoc = gql`
-  fragment HackerNewsPostInfo on HackerNewsPost {
-    ...HackerNewsListItemInfo
-    user
-    time
-    time_ago
-    comments_count
-    url
-    domain
-    content
-    comments {
-      ...HackerNewsCommentInfo
-      comments {
-        ...HackerNewsCommentInfo
-        comments {
-          ...HackerNewsCommentInfo
-          comments {
-            ...HackerNewsCommentInfo
-          }
-        }
+export const EmailSubscriptionsConnectionFragmentDoc = gql`
+  fragment EmailSubscriptionsConnection on EmailSubscriptionsConnection {
+    pageInfo {
+      hasNextPage
+      totalCount
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        ...EmailSubscriptionListItem
       }
     }
   }
-  ${HackerNewsListItemInfoFragmentDoc}
-  ${HackerNewsCommentInfoFragmentDoc}
+  ${EmailSubscriptionListItemFragmentDoc}
 `
 export const PageCoreFragmentDoc = gql`
   fragment PageCore on Page {
@@ -2378,9 +2239,10 @@ export const SiteInfoFragmentDoc = gql`
     banner
     attach_css
     attach_js
-    mailgun_region
-    mailgun_domain
-    mailgun_api_key
+    newsletter_provider
+    newsletter_setting1
+    newsletter_setting2
+    newsletter_setting3
     social_twitter
     social_youtube
     social_github
@@ -3736,122 +3598,65 @@ export type GetCommentsQueryResult = Apollo.QueryResult<
   GetCommentsQuery,
   GetCommentsQueryVariables
 >
-export const GetHackerNewsPostsDocument = gql`
-  query getHackerNewsPosts {
-    hackerNewsPosts {
-      ...HackerNewsListItemInfo
+export const GetEmailSubscriptionsDocument = gql`
+  query getEmailSubscriptions($first: Int, $after: String) {
+    emailSubscriptions(first: $first, after: $after) {
+      ...EmailSubscriptionsConnection
     }
   }
-  ${HackerNewsListItemInfoFragmentDoc}
+  ${EmailSubscriptionsConnectionFragmentDoc}
 `
 
 /**
- * __useGetHackerNewsPostsQuery__
+ * __useGetEmailSubscriptionsQuery__
  *
- * To run a query within a React component, call `useGetHackerNewsPostsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetHackerNewsPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetEmailSubscriptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEmailSubscriptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetHackerNewsPostsQuery({
+ * const { data, loading, error } = useGetEmailSubscriptionsQuery({
  *   variables: {
+ *      first: // value for 'first'
+ *      after: // value for 'after'
  *   },
  * });
  */
-export function useGetHackerNewsPostsQuery(
+export function useGetEmailSubscriptionsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetHackerNewsPostsQuery,
-    GetHackerNewsPostsQueryVariables
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<
-    GetHackerNewsPostsQuery,
-    GetHackerNewsPostsQueryVariables
-  >(GetHackerNewsPostsDocument, options)
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
+  >(GetEmailSubscriptionsDocument, options)
 }
-export function useGetHackerNewsPostsLazyQuery(
+export function useGetEmailSubscriptionsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetHackerNewsPostsQuery,
-    GetHackerNewsPostsQueryVariables
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<
-    GetHackerNewsPostsQuery,
-    GetHackerNewsPostsQueryVariables
-  >(GetHackerNewsPostsDocument, options)
+    GetEmailSubscriptionsQuery,
+    GetEmailSubscriptionsQueryVariables
+  >(GetEmailSubscriptionsDocument, options)
 }
-export type GetHackerNewsPostsQueryHookResult = ReturnType<
-  typeof useGetHackerNewsPostsQuery
+export type GetEmailSubscriptionsQueryHookResult = ReturnType<
+  typeof useGetEmailSubscriptionsQuery
 >
-export type GetHackerNewsPostsLazyQueryHookResult = ReturnType<
-  typeof useGetHackerNewsPostsLazyQuery
+export type GetEmailSubscriptionsLazyQueryHookResult = ReturnType<
+  typeof useGetEmailSubscriptionsLazyQuery
 >
-export type GetHackerNewsPostsQueryResult = Apollo.QueryResult<
-  GetHackerNewsPostsQuery,
-  GetHackerNewsPostsQueryVariables
->
-export const GetHackerNewsPostDocument = gql`
-  query getHackerNewsPost($id: ID!) {
-    hackerNewsPost(id: $id) {
-      ...HackerNewsPostInfo
-    }
-  }
-  ${HackerNewsPostInfoFragmentDoc}
-`
-
-/**
- * __useGetHackerNewsPostQuery__
- *
- * To run a query within a React component, call `useGetHackerNewsPostQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetHackerNewsPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetHackerNewsPostQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetHackerNewsPostQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetHackerNewsPostQuery,
-    GetHackerNewsPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    GetHackerNewsPostQuery,
-    GetHackerNewsPostQueryVariables
-  >(GetHackerNewsPostDocument, options)
-}
-export function useGetHackerNewsPostLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetHackerNewsPostQuery,
-    GetHackerNewsPostQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    GetHackerNewsPostQuery,
-    GetHackerNewsPostQueryVariables
-  >(GetHackerNewsPostDocument, options)
-}
-export type GetHackerNewsPostQueryHookResult = ReturnType<
-  typeof useGetHackerNewsPostQuery
->
-export type GetHackerNewsPostLazyQueryHookResult = ReturnType<
-  typeof useGetHackerNewsPostLazyQuery
->
-export type GetHackerNewsPostQueryResult = Apollo.QueryResult<
-  GetHackerNewsPostQuery,
-  GetHackerNewsPostQueryVariables
+export type GetEmailSubscriptionsQueryResult = Apollo.QueryResult<
+  GetEmailSubscriptionsQuery,
+  GetEmailSubscriptionsQueryVariables
 >
 export const GetPagesDocument = gql`
   query getPages($filter: PagesFilter) {

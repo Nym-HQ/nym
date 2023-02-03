@@ -40,14 +40,28 @@ export async function getSiteByDomain(domain: string) {
  * @param domain
  * @returns
  */
-export async function getUserSiteById(userId: string, siteId: string) {
+export async function getUserSiteById(
+  userId: string,
+  siteId: string,
+  createIfNotExistsWithRole: SiteRole = null
+) {
   if (siteId === NYM_APP_SITE.id) return null
-  return await prisma.userSite.findFirst({
+  let userSite = await prisma.userSite.findFirst({
     where: {
       userId: userId,
       siteId: siteId,
     },
   })
+  if (!userSite && createIfNotExistsWithRole) {
+    userSite = await prisma.userSite.create({
+      data: {
+        userId: userId,
+        siteId: siteId,
+        siteRole: createIfNotExistsWithRole,
+      },
+    })
+  }
+  return userSite
 }
 
 /**
