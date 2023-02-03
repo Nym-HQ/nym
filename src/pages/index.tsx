@@ -1,4 +1,3 @@
-import { SiteRole } from '@prisma/client'
 import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
 import * as React from 'react'
@@ -13,7 +12,7 @@ import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { GET_HOME_PAGE } from '~/graphql/queries/pages'
 import { GET_USER_SITES } from '~/graphql/queries/site'
-import { useContextQuery, useGetSitesQuery } from '~/graphql/types.generated'
+import { SiteRole, useContextQuery, useGetSitesQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
@@ -24,9 +23,9 @@ function UserSitesList({ sites }) {
 
   const memberSites = sites?.filter(
     (site) =>
-      site.siteRole === SiteRole.ADMIN || site.siteRole === SiteRole.OWNER
+      site.siteRole === SiteRole.Admin || site.siteRole === SiteRole.Owner
   )
-  const visitorSites = sites?.filter((site) => site.siteRole === SiteRole.USER)
+  const visitorSites = sites?.filter((site) => site.siteRole === SiteRole.User)
 
   if (!sites || sites.length == 0) {
     return (
