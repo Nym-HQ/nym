@@ -8,7 +8,7 @@ import {
   getSiteOwner,
   getUserSiteById,
 } from '~/lib/multitenancy/server'
-import { prisma } from '~/lib/prisma'
+import prisma from '~/lib/prisma'
 
 import { NYM_APP_SITE } from '../constants'
 

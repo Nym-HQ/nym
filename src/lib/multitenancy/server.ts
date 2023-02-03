@@ -2,7 +2,7 @@ import { SiteRole } from '@prisma/client'
 
 import { PRESERVED_SUBDOMAINS } from '~/config/tenants'
 import { NYM_APP_SITE } from '~/graphql/constants'
-import { prisma } from '~/lib/prisma'
+import prisma from '~/lib/prisma'
 
 import { getSubdomain } from './client'
 
