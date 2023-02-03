@@ -36,7 +36,7 @@ import { getCommonPageProps } from '~/lib/commonProps'
 import {
   newsletterProviderDetails,
   newsletterProviders,
-} from '~/lib/newsletter'
+} from '~/lib/newsletter/consts'
 
 function AdminSettingsPage(props) {
   const { data: context } = useContextQuery()
