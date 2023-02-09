@@ -33,11 +33,11 @@ module.exports = removeImports({
   },
   async redirects() {
     return [
-      {
-        source: '/uses',
-        destination: '/stack',
-        permanent: true,
-      }
+      // {
+      //   source: '/uses',
+      //   destination: '/stack',
+      //   permanent: true,
+      // }
     ]
   },
   async rewrites() {
