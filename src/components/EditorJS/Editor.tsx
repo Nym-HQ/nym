@@ -14,6 +14,7 @@ import Raw from '@editorjs/raw'
 import SimpleImage from '@editorjs/simple-image'
 import Table from '@editorjs/table'
 import Warning from '@editorjs/warning'
+import AnyButton from 'editorjs-button'
 import { debounce } from 'lodash'
 import React, { useCallback, useRef } from 'react'
 import { createReactEditorJS } from 'react-editor-js'
@@ -38,6 +39,7 @@ const DEFAULT_EDITOR_JS_TOOLS = {
   delimiter: Delimiter,
   inlineCode: InlineCode,
   simpleImage: SimpleImage,
+  AnyButton: AnyButton,
 }
 
 export default function CustomizedEditorJS({
