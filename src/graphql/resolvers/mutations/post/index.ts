@@ -99,7 +99,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
         }
       }
     } catch (err) {
-      console.error({ err })
+      console.error('Unable to publish newsletter', err)
       throw new GraphQLError('Unable to publish newsletter', {
         extensions: {
           code: ApolloServerErrorCode.INTERNAL_SERVER_ERROR,
