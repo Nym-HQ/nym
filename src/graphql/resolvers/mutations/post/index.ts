@@ -83,7 +83,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
       })
     })
 
-  if (data.publishNewsletter) {
+  if (publishedAt && data.publishNewsletter) {
     try {
       const html = parseEditorJsDataIntoHtml(parseEditorJsData(data.data))
 
