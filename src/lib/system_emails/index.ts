@@ -72,8 +72,9 @@ const confirmChangedEmailAddress = async (
       site
     )}/api/email/confirm?token=${token}`
 
+    let sent;
     if (process.env.SYSTEM_EMAIL_TEMPLATE_ID_CONFIRM_CHANGED_EMAIL_ADDRESS) {
-      return client.sendEmailWithTemplate({
+      sent = await client.sendEmailWithTemplate({
         From: baseEmail,
         To: email,
         TemplateId: Number.parseInt(
@@ -82,15 +83,17 @@ const confirmChangedEmailAddress = async (
         TemplateModel: { url },
       })
     } else {
-      return client.sendEmail({
+      sent = await client.sendEmail({
         From: baseEmail,
-        To: baseEmail,
+        To: email,
         Subject: 'Please confirm your new email address!',
         HtmlBody: `<p>Please confirm your new email address by clicking <a href='${encodeURI(
           url
         )}'>here</a></p>`,
       })
     }
+    console.log('Sent "confirm-changed-email-address" email: ', sent)
+    return true
   } catch (err) {
     console.log('Failed to send "confirm-changed-email-address" email: ', err)
     return false
