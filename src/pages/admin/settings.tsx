@@ -148,12 +148,14 @@ function AdminSettingsPage(props) {
                     </option>
                   ))}
                 </Select>
-                <div className="flex text-gray-700 dark:text-gray-300">
-                  <LightBulbWithElectricIcon />
-                  <p className="text-sm ml-1 mt-1 font-medium">
-                    {provider && provider.help_text && provider.help_text}
-                  </p>
-                </div>
+                {provider && (
+                  <div className="flex text-gray-700 dark:text-gray-300">
+                    <LightBulbWithElectricIcon />
+                    <p className="text-sm ml-1 mt-1 font-medium">
+                      {provider.help_text && provider.help_text}
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="col-span-5">
                 <Label className="flex items-start space-x-3">
