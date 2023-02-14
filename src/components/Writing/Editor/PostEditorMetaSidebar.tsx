@@ -175,7 +175,9 @@ export function PostEditorMetaSidebar({ site }) {
                   defaultChecked={publishNewsletter}
                   className="relative top-1 h-4 w-4 rounded border border-gray-300 dark:border-gray-700"
                 />
-                <span className='pt-1 text-primary text-sm font-semibold'>Publish Newsletter on Save</span>
+                <span className="pt-1 text-primary text-sm font-semibold">
+                  Publish Newsletter on Save
+                </span>
               </label>
             </div>
           )}

@@ -95,7 +95,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
           textBody: null,
         })
         if (!sent) {
-          throw new Error("Unable to send newsletter")
+          throw new Error('Unable to send newsletter')
         }
       }
     } catch (err) {
