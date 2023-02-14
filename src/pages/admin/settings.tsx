@@ -106,8 +106,6 @@ function AdminSettingsPage(props) {
       ? newsletterProviderDetails[newsletter_provider]
       : null
 
-    console.log('provider', newsletter_provider, provider)
-
     return (
       <Subsection title="Email newsletter settings">
         <div className="mt-10 sm:mt-0">
