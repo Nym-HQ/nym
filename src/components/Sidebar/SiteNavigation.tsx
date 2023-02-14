@@ -213,7 +213,7 @@ export function SiteSidebarNavigation() {
         },
         {
           href: '/admin/newsletters',
-          label: 'Newsletters',
+          label: 'Newsletter',
           icon: NewsletterIcon,
           trailingAccessory: null,
           isActive: router.asPath === '/admin/newsletters',

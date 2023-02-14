@@ -50,7 +50,7 @@ export default function NewsletterSubscribers(props) {
         onRef={setScrollContainerRef}
         className={listContainerClassNames}
       >
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex flex-1 items-center justify-center pt-3">
           <LoadingSpinner />
         </div>
       </ListContainer>
