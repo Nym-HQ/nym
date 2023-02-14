@@ -7,8 +7,10 @@ import {
   MutationDeletePostArgs,
   MutationEditPostArgs,
 } from '~/graphql/types.generated'
-import { extractFeatureImage } from '~/lib/compat/data'
+import { extractFeatureImage, parseEditorJsData } from '~/lib/compat/data'
+import { parseEditorJsDataIntoHtml } from '~/lib/editorjs'
 import { graphcdn } from '~/lib/graphcdn'
+import { getNewsletterProvider } from '~/lib/newsletter'
 
 export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
   const { id, data } = args
@@ -55,7 +57,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
     publishedAt = null
   }
 
-  return await prisma.post
+  const result = await prisma.post
     .update({
       where: { id },
       data: {
@@ -80,6 +82,33 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
         },
       })
     })
+
+  if (publishedAt && data.publishNewsletter) {
+    try {
+      const html = parseEditorJsDataIntoHtml(parseEditorJsData(data.data))
+
+      const newsletterProvider = await getNewsletterProvider(ctx)
+      if (newsletterProvider) {
+        const sent = await newsletterProvider.send({
+          subject: data.title,
+          htmlBody: html,
+          textBody: null,
+        })
+        if (!sent) {
+          throw new Error('Unable to send newsletter')
+        }
+      }
+    } catch (err) {
+      console.error({ err })
+      throw new GraphQLError('Unable to publish newsletter', {
+        extensions: {
+          code: ApolloServerErrorCode.INTERNAL_SERVER_ERROR,
+        },
+      })
+    }
+  }
+
+  return result
 }
 
 export async function addPost(_, args: MutationAddPostArgs, ctx: Context) {

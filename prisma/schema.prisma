@@ -137,10 +137,13 @@ model Site {
   social_other1       String?  @db.Text
   social_other1_label String?  @db.Text
 
-  newsletter_provider String? @db.VarChar(30)
-  newsletter_setting1 String? @db.VarChar(255)
-  newsletter_setting2 String? @db.VarChar(255)
-  newsletter_setting3 String? @db.VarChar(255)
+  // newsletter configurations
+  newsletter_provider     String?  @db.VarChar(30)
+  newsletter_description  String?  @db.VarChar(255)
+  newsletter_double_optin Boolean? @default(true)
+  newsletter_setting1     String?  @db.VarChar(255)
+  newsletter_setting2     String?  @db.VarChar(255)
+  newsletter_setting3     String?  @db.VarChar(255)
 
   userSites         UserSite[]
   Bookmark          Bookmark[]

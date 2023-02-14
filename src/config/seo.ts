@@ -2,7 +2,7 @@ import { Site } from '~/graphql/types.generated'
 
 export const baseUrl =
   process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : ''
-export const baseEmail = 'hi@nymhq.com'
+export const baseEmail = process.env.BASE_EMAIL || 'hello@nymhq.com'
 
 export const defaultSEO = {
   title: '',

@@ -28,6 +28,8 @@ export function PostEditorMetaSidebar({ site }) {
     setDraftState,
     sidebarIsOpen,
     setSidebarIsOpen,
+    publishNewsletter,
+    setPublishNewsletter,
     isDraftValid,
     draftErrors,
   } = context
@@ -87,6 +89,7 @@ export function PostEditorMetaSidebar({ site }) {
           data: JSON.stringify(draftState.data),
           slug: slugifyString(draftState.slug),
           published,
+          publishNewsletter,
         },
       },
       refetchQueries: [GET_POSTS],
@@ -165,6 +168,17 @@ export function PostEditorMetaSidebar({ site }) {
                   setDraftState({ ...draftState, publishedAt: v })
                 }
               />
+              <label className="flex items-start space-x-3 py-1">
+                <input
+                  type="checkbox"
+                  onChange={(e) => setPublishNewsletter(e.target.checked)}
+                  defaultChecked={publishNewsletter}
+                  className="relative top-1 h-4 w-4 rounded border border-gray-300 dark:border-gray-700"
+                />
+                <span className="pt-1 text-primary text-sm font-semibold">
+                  Publish Newsletter on Save
+                </span>
+              </label>
             </div>
           )}
         </div>

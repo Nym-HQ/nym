@@ -15,6 +15,8 @@ const typeDefs = gql`
     attach_css: String
     attach_js: String
     newsletter_provider: String
+    newsletter_description: String
+    newsletter_double_optin: Boolean
     newsletter_setting1: String
     newsletter_setting2: String
     newsletter_setting3: String
@@ -340,6 +342,7 @@ const typeDefs = gql`
     excerpt: String
     published: Boolean
     publishedAt: Date
+    publishNewsletter: Boolean
   }
 
   input AddSiteInput {
@@ -358,6 +361,8 @@ const typeDefs = gql`
     attach_css: String
     attach_js: String
     newsletter_provider: String
+    newsletter_description: String
+    newsletter_double_optin: Boolean
     newsletter_setting1: String
     newsletter_setting2: String
     newsletter_setting3: String

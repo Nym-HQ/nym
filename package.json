@@ -59,6 +59,7 @@
     "cryptr": "^6.0.2",
     "date-fns": "^2.28.0",
     "deepmerge": "^4.2.2",
+    "editorjs-button": "^1.0.4",
     "fathom-client": "^3.2.0",
     "feed": "^4.2.2",
     "framer-motion": "^6.2.1",

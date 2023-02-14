@@ -4922,6 +4922,11 @@ ecdsa-sig-formatter@1.0.11:
   dependencies:
     safe-buffer "^5.0.1"
 
+editorjs-button@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/editorjs-button/-/editorjs-button-1.0.4.tgz#14fa4750f420278f9963177d38ea618c1997bfbb"
+  integrity sha512-3wn8VrcGgil0gCTrgJNktiYnsC8YdS1TueNOyWr2geZLSUE9KPSVyQpPAduCdVEy+wbWQqrftczENNdLpxDGsQ==
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"

@@ -1,7 +1,6 @@
 import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
 
-import { baseUrl } from '~/config/seo'
 import { Context } from '~/graphql/context'
 import {
   MutationAddQuestionArgs,
@@ -9,7 +8,8 @@ import {
   MutationEditQuestionArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
-import { emailMe } from '~/lib/system_emails'
+import { getSiteDomain } from '~/lib/multitenancy/client'
+import { emailToSiteOwner } from '~/lib/system_emails'
 
 export async function editQuestion(
   _,
@@ -69,7 +69,7 @@ export async function addQuestion(
 ) {
   const { data } = args
   const { title, description } = data
-  const { viewer, prisma, site } = ctx
+  const { viewer, prisma, site, owner } = ctx
 
   const question = await prisma.question
     .create({
@@ -100,9 +100,11 @@ export async function addQuestion(
       })
     })
 
-  emailMe({
+  emailToSiteOwner({
+    site,
+    owner,
     subject: `Q&A: ${title}`,
-    body: `${title}\n\n${baseUrl}/qa/${question.id}`,
+    body: `${title}\n\nhttps://${getSiteDomain(site)}/qa/${question.id}`,
   })
 
   return question

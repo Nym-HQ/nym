@@ -14,9 +14,17 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
   private headers = {
     Authorization: `Token `,
   }
+  useDoubleOptin: boolean
 
-  constructor(API_TOKEN: string) {
+  constructor({
+    useDoubleOptin,
+    API_TOKEN,
+  }: {
+    useDoubleOptin?: boolean
+    API_TOKEN: string
+  }) {
     this.headers.Authorization = `Token ${API_TOKEN}`
+    this.useDoubleOptin = useDoubleOptin || true
   }
 
   async init({ fromEmail, fromName }) {}
@@ -75,7 +83,8 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
     }
   }
 
-  async addSubscriber({ email, doubleOptIn }) {
+  async addSubscriber({ email }) {
+    const doubleOptIn = this.useDoubleOptin
     try {
       const result = await fetch(`${REVUE_BASE_URL}/subscribers`, {
         method: 'POST',
@@ -93,7 +102,8 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
     }
   }
 
-  async removeSubscriber({ email, doubleOptIn }) {
+  async removeSubscriber({ email }) {
+    const doubleOptIn = this.useDoubleOptin
     try {
       const result = await fetch(`${REVUE_BASE_URL}/subscribers/unsubscribe`, {
         method: 'POST',

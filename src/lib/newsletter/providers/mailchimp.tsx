@@ -11,6 +11,7 @@ export default class MailchimpNewsletterProvider
   private apiKey: string
   private instanceId: string
   private audienceListId: string = null
+  private useDoubleOptin: boolean = true
 
   // constants
   private headers = {
@@ -20,7 +21,16 @@ export default class MailchimpNewsletterProvider
   private fromName: string
   private fromEmail: string
 
-  constructor(API_TOKEN: string, audienceListId?: string) {
+  constructor({
+    useDoubleOptin,
+    API_TOKEN,
+    audienceListId,
+  }: {
+    useDoubleOptin?: boolean
+    API_TOKEN: string
+    audienceListId?: string
+  }) {
+    this.useDoubleOptin = useDoubleOptin || true
     this.apiKey = API_TOKEN
     this.instanceId = API_TOKEN.slice(API_TOKEN.indexOf('-') + 1)
     if (audienceListId) this.audienceListId = audienceListId

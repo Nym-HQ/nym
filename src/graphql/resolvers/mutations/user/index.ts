@@ -2,11 +2,9 @@ import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
 import jwt from 'jsonwebtoken'
 
-import { baseEmail } from '~/config/seo'
-import { CLIENT_URL, IS_PROD } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import { MutationEditUserArgs } from '~/graphql/types.generated'
-import { sendEmailWithTemplate } from '~/lib/system_emails'
+import { predefinedEmails } from '~/lib/system_emails'
 import { validEmail, validUsername } from '~/lib/validators'
 
 export async function deleteUser(_req, _args, ctx: Context) {
@@ -28,7 +26,7 @@ export async function deleteUser(_req, _args, ctx: Context) {
 }
 
 export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
-  const { prisma, viewer } = ctx
+  const { prisma, viewer, site } = ctx
   const { data } = args
   const { username, email } = data
 
@@ -87,41 +85,20 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
       }
     }
 
-    // TODO: We don't have any transactional email yet.
-    //       Until we have it, just update the user's email with the new one.
-    return await prisma.user.update({
-      where: { id: viewer.id },
-      data: { email: email, pendingEmail: null },
+    const token = jwt.sign(
+      { userId: viewer.id, pendingEmail: email },
+      process.env.JWT_SIGNING_KEY
+    )
+
+    await predefinedEmails.confirmChangedEmailAddress(site, viewer, {
+      email,
+      token,
     })
 
-    // {
-    //   const token = jwt.sign(
-    //     { userId: viewer.id, pendingEmail: email },
-    //     process.env.JWT_SIGNING_KEY
-    //   )
-
-    //   const url = `${CLIENT_URL}/api/email/confirm?token=${token}`
-
-    //   if (IS_PROD) {
-    //     sendEmailWithTemplate({
-    //       email,
-    //       templateId: 25539089,
-    //       url,
-    //     })
-    //   } else {
-    //     console.log('Sending confirmation email', {
-    //       From: baseEmail,
-    //       To: email,
-    //       TemplateId: 25539089,
-    //       TemplateModel: { url },
-    //     })
-    //   }
-
-    //   return await prisma.user.update({
-    //     where: { id: viewer.id },
-    //     data: { pendingEmail: email },
-    //   })
-    // }
+    return await prisma.user.update({
+      where: { id: viewer.id },
+      data: { pendingEmail: email },
+    })
   }
 
   // if no email or username were passed, the user is trying to cancel the pending email request

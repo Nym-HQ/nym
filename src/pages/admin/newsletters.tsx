@@ -6,11 +6,9 @@
 
 import * as React from 'react'
 
-import { Subsection, SubsectionSplitter } from '~/components/admin-components'
 import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { NewsletterTemplateEditor } from '~/components/Newsletters/Editor/NewsletterTemplateEditor'
 import NewsletterSubscribers from '~/components/Newsletters/NewsletterSubscribers'
 import { getContext } from '~/graphql/context'
 import { useContextQuery } from '~/graphql/types.generated'
@@ -27,7 +25,7 @@ function AdminNewslettersPage(props) {
   return (
     <Detail.Container ref={scrollContainerRef}>
       <TitleBar
-        title="Publish Newsletter"
+        title="Your subscribers"
         backButton
         globalMenu={false}
         backButtonHref={'/admin'}
@@ -37,24 +35,11 @@ function AdminNewslettersPage(props) {
       />
 
       <Detail.ContentContainer>
-        <Detail.Title ref={titleRef}>Publish Newsletter</Detail.Title>
+        <Detail.Title ref={titleRef}>Your subscribers</Detail.Title>
 
-        <Subsection title="Write and Publish a Newsletter">
-          <div className="grid grid-cols-6 gap-6">
-            <div className="col-span-6">
-              <NewsletterTemplateEditor
-                site={context?.context?.site}
-                template={null}
-              />
-            </div>
-          </div>
-        </Subsection>
-
-        <SubsectionSplitter />
-
-        <Subsection title="Subscribers">
+        <div className="pt-3">
           <NewsletterSubscribers />
-        </Subsection>
+        </div>
       </Detail.ContentContainer>
     </Detail.Container>
   )

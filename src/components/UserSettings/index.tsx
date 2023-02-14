@@ -2,7 +2,10 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { useGetViewerWithSettingsQuery } from '~/graphql/types.generated'
+import {
+  useContextQuery,
+  useGetViewerWithSettingsQuery,
+} from '~/graphql/types.generated'
 
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { EmailForm } from './Email'
@@ -15,6 +18,7 @@ export function UserSettings() {
   const { data, loading } = useGetViewerWithSettingsQuery({
     fetchPolicy: 'network-only',
   })
+  const { data: context } = useContextQuery()
 
   const titleRef = React.useRef(null)
   const scrollContainerRef = React.useRef(null)
@@ -52,7 +56,13 @@ export function UserSettings() {
             {data?.context?.viewer.email && (
               <div className="space-y-8 py-12">
                 <h3 className="text-primary text-lg font-bold">Emails</h3>
-                <EmailPreferences viewer={data?.context?.viewer} />
+                <EmailPreferences
+                  viewer={data?.context?.viewer}
+                  newsletterDescription={
+                    context?.context?.site?.newsletter_description
+                  }
+                  doubleOptin={context?.context?.site?.newsletter_double_optin}
+                />
               </div>
             )}
 

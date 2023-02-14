@@ -14,6 +14,8 @@ export const SiteInfoFragment = gql`
     attach_css
     attach_js
     newsletter_provider
+    newsletter_description
+    newsletter_double_optin
     newsletter_setting1
     newsletter_setting2
     newsletter_setting3

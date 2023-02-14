@@ -37,6 +37,8 @@ export const PostEditorContext = React.createContext({
   setSidebarIsOpen: (isOpen: boolean) => {},
   isPreviewing: false,
   setIsPreviewing: (isPreviewing: boolean) => {},
+  publishNewsletter: false,
+  setPublishNewsletter: (publishNewsletter: boolean) => {},
   isDraftValid: false,
   draftErrors: [] as PostDraftError[],
 })
@@ -76,6 +78,7 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)
   const [isPreviewing, setIsPreviewing] = React.useState(false)
+  const [publishNewsletter, setPublishNewsletter] = React.useState(false)
 
   const existingPost = post
   let validInit = checkIfDraftIsValid(defaultDraftState, existingPost)
@@ -104,6 +107,8 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
     setSidebarIsOpen,
     isPreviewing,
     setIsPreviewing,
+    publishNewsletter,
+    setPublishNewsletter,
     isDraftValid,
     draftErrors,
   }

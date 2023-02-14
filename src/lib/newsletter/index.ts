@@ -13,14 +13,18 @@ export async function getNewsletterProvider(
   switch (site.newsletter_provider) {
     case 'Mailchimp':
       if (site.newsletter_setting1)
-        provider = new MailchimpNewsletterProvider(
-          site.newsletter_setting1,
-          site.newsletter_setting2
-        )
+        provider = new MailchimpNewsletterProvider({
+          useDoubleOptin: site.newsletter_double_optin,
+          API_TOKEN: site.newsletter_setting1,
+          audienceListId: site.newsletter_setting2,
+        })
       break
     case 'revue':
       if (site.newsletter_setting1)
-        provider = new RevueNewsletterProvider(site.newsletter_setting1)
+        provider = new RevueNewsletterProvider({
+          useDoubleOptin: site.newsletter_double_optin,
+          API_TOKEN: site.newsletter_setting1,
+        })
       break
   }
 

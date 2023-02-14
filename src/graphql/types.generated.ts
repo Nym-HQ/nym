@@ -130,6 +130,7 @@ export type EditPageInput = {
 export type EditPostInput = {
   data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
+  publishNewsletter?: InputMaybe<Scalars['Boolean']>
   published?: InputMaybe<Scalars['Boolean']>
   publishedAt?: InputMaybe<Scalars['Date']>
   slug: Scalars['String']
@@ -153,6 +154,8 @@ export type EditSiteInput = {
   description?: InputMaybe<Scalars['String']>
   logo?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
+  newsletter_description?: InputMaybe<Scalars['String']>
+  newsletter_double_optin?: InputMaybe<Scalars['Boolean']>
   newsletter_provider?: InputMaybe<Scalars['String']>
   newsletter_setting1?: InputMaybe<Scalars['String']>
   newsletter_setting2?: InputMaybe<Scalars['String']>
@@ -498,6 +501,8 @@ export type Site = {
   id: Scalars['ID']
   logo?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+  newsletter_description?: Maybe<Scalars['String']>
+  newsletter_double_optin?: Maybe<Scalars['Boolean']>
   newsletter_provider?: Maybe<Scalars['String']>
   newsletter_setting1?: Maybe<Scalars['String']>
   newsletter_setting2?: Maybe<Scalars['String']>
@@ -907,6 +912,8 @@ export type SiteInfoFragment = {
   attach_css?: string | null | undefined
   attach_js?: string | null | undefined
   newsletter_provider?: string | null | undefined
+  newsletter_description?: string | null | undefined
+  newsletter_double_optin?: boolean | null | undefined
   newsletter_setting1?: string | null | undefined
   newsletter_setting2?: string | null | undefined
   newsletter_setting3?: string | null | undefined
@@ -944,6 +951,8 @@ export type UserSiteInfoFragment = {
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
@@ -1390,6 +1399,8 @@ export type EditSiteDomainMutation = {
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
@@ -1424,6 +1435,8 @@ export type EditSiteMutation = {
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
@@ -1466,6 +1479,8 @@ export type AddSiteMutation = {
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
@@ -1867,6 +1882,8 @@ export type GetSitesQuery = {
               attach_css?: string | null | undefined
               attach_js?: string | null | undefined
               newsletter_provider?: string | null | undefined
+              newsletter_description?: string | null | undefined
+              newsletter_double_optin?: boolean | null | undefined
               newsletter_setting1?: string | null | undefined
               newsletter_setting2?: string | null | undefined
               newsletter_setting3?: string | null | undefined
@@ -1982,6 +1999,8 @@ export type ContextQuery = {
           attach_css?: string | null | undefined
           attach_js?: string | null | undefined
           newsletter_provider?: string | null | undefined
+          newsletter_description?: string | null | undefined
+          newsletter_double_optin?: boolean | null | undefined
           newsletter_setting1?: string | null | undefined
           newsletter_setting2?: string | null | undefined
           newsletter_setting3?: string | null | undefined
@@ -2240,6 +2259,8 @@ export const SiteInfoFragmentDoc = gql`
     attach_css
     attach_js
     newsletter_provider
+    newsletter_description
+    newsletter_double_optin
     newsletter_setting1
     newsletter_setting2
     newsletter_setting3

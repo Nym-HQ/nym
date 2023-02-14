@@ -1,7 +1,6 @@
 import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
 
-import { IS_PROD } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import {
   MutationAddBookmarkArgs,
