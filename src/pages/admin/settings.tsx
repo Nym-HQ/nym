@@ -148,12 +148,18 @@ function AdminSettingsPage(props) {
                     </option>
                   ))}
                 </Select>
-                <div className="flex text-gray-700 dark:text-gray-300">
-                  <LightBulbWithElectricIcon />
-                  <p className="text-sm ml-1 mt-1 font-medium">
-                    {provider && provider.help_text && provider.help_text}
-                  </p>
-                </div>
+                {provider && (
+                  <div className="flex pl-2 mt-2 text-gray-700 dark:text-gray-300">
+                    <LightBulbWithElectricIcon
+                      width={18}
+                      height={18}
+                      className="flex-shrink-0"
+                    />
+                    <p className="text-sm ml-1 mt-1 font-medium">
+                      {provider.help_text && provider.help_text}
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="col-span-5">
                 <Label className="flex items-start space-x-3">
@@ -172,6 +178,17 @@ function AdminSettingsPage(props) {
                     Uses double opt-in for the subscribers
                   </span>
                 </Label>
+                <div className="flex pl-2 mt-2 text-gray-700 dark:text-gray-300">
+                  <LightBulbWithElectricIcon
+                    width={18}
+                    height={18}
+                    className="flex-shrink-0"
+                  />
+                  <p className="text-sm ml-1 mt-1 font-medium">
+                    Double opt-in means that the user has to confirm their
+                    subscription (a confirmation email will be sent).
+                  </p>
+                </div>
               </div>
 
               {provider && provider.setting1 && (

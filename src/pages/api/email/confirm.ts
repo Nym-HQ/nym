@@ -59,17 +59,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (user.email) {
-      // if the user already had an existing email address, they are updating it
-      // so make sure any of their existing email subscriptions reflect the
-      // new address
-      await prisma.emailSubscription.updateMany({
-        where: {
-          email: user.email,
-        },
-        data: {
-          email: pendingEmail,
-        },
-      })
+      // TODO: if the user already had an existing email address, they are updating it
+      //
+      //
+      // try {
+      //   // if the user already had an existing email address, they are updating it
+      //   // so make sure any of their existing email subscriptions reflect the
+      //   // new address
+      //   await prisma.emailSubscription.updateMany({
+      //     where: {
+      //       email: user.email,
+      //     },
+      //     data: {
+      //       email: pendingEmail,
+      //     },
+      //   })
+      // } catch (err) {
+      //   console.log(
+      //     "Failed to update the user's email subscriptions after email address changed",
+      //     err
+      //   )
+      // }
     }
 
     await prisma.user.update({
