@@ -72,7 +72,7 @@ const confirmChangedEmailAddress = async (
       site
     )}/api/email/confirm?token=${token}`
 
-    let sent;
+    let sent
     if (process.env.SYSTEM_EMAIL_TEMPLATE_ID_CONFIRM_CHANGED_EMAIL_ADDRESS) {
       sent = await client.sendEmailWithTemplate({
         From: baseEmail,
