@@ -176,7 +176,7 @@ export function PostEditorMetaSidebar({ site }) {
                   className="relative top-1 h-4 w-4 rounded border border-gray-300 dark:border-gray-700"
                 />
                 <span className="pt-1 text-primary text-sm font-semibold">
-                  Publish Newsletter on Save
+                  Publish to newsletter
                 </span>
               </label>
             </div>
