@@ -1,7 +1,6 @@
 import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
 
-import { CLIENT_URL } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import {
   CommentType,
@@ -10,7 +9,8 @@ import {
   MutationEditCommentArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
-import { emailMe } from '~/lib/system_emails'
+import { getSiteDomain } from '~/lib/multitenancy/client'
+import { emailToSiteOwner } from '~/lib/system_emails'
 
 export async function editComment(
   _,
@@ -71,7 +71,7 @@ export async function addComment(
   ctx: Context
 ) {
   const { refId, type, text } = args
-  const { viewer, prisma, site } = ctx
+  const { viewer, prisma, site, owner } = ctx
 
   const trimmedText = text.trim()
 
@@ -89,19 +89,19 @@ export async function addComment(
     case CommentType.Bookmark: {
       field = 'bookmarkId'
       table = 'bookmark'
-      route = `${CLIENT_URL}/bookmarks/${refId}`
+      route = `https://${getSiteDomain(site)}/bookmarks/${refId}`
       break
     }
     case CommentType.Post: {
       field = 'postId'
       table = 'post'
-      route = `${CLIENT_URL}/writing/${refId}`
+      route = `https://${getSiteDomain(site)}/writing/${refId}`
       break
     }
     case CommentType.Question: {
       field = 'questionId'
       table = 'question'
-      route = `${CLIENT_URL}/qa/${refId}`
+      route = `https://${getSiteDomain(site)}/qa/${refId}`
       break
     }
     default: {
@@ -124,7 +124,9 @@ export async function addComment(
   }
 
   if (!viewer.isAdmin) {
-    emailMe({
+    emailToSiteOwner({
+      site,
+      owner,
       subject: `New comment on ${table}`,
       body: `${text}\n\n${route}`,
     })

@@ -40,7 +40,11 @@ export function WritingTitlebar({ scrollContainerRef }) {
             <span>Subscribe</span>
           </Button>
         }
-        modalContent={() => <WritingSubscriptionForm />}
+        modalContent={() => (
+          <WritingSubscriptionForm
+            doubleOptin={data?.context?.site?.newsletter_double_optin}
+          />
+        )}
       />
     )
   }

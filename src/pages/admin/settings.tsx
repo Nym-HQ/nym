@@ -3,7 +3,6 @@
  * These pages will be used to manage the user's contents on the site
  *
  */
-import { NextSeo } from 'next-seo'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 import { BiInfoCircle } from 'react-icons/bi'
@@ -13,12 +12,12 @@ import {
   Subsection,
   SubsectionSplitter,
 } from '~/components/admin-components'
-import Button, { DeleteButton, PrimaryButton } from '~/components/Button'
+import { DeleteButton, PrimaryButton } from '~/components/Button'
 import { Dropzone } from '~/components/Dropzone'
 import {
-  ExternalLinkIcon,
   GitHubIcon,
   GlobeIcon,
+  LightBulbWithElectricIcon,
   TwitterIcon,
   YouTubeIcon,
 } from '~/components/Icon'
@@ -57,6 +56,9 @@ function AdminSettingsPage(props) {
     social_other1_label: '',
     ...(context?.context?.site || {}),
     newsletter_provider: context?.context?.site?.newsletter_provider || '',
+    newsletter_description:
+      context?.context?.site?.newsletter_description || '',
+    newsletter_double_optin: context?.context?.site?.newsletter_double_optin,
     newsletter_setting1: context?.context?.site?.newsletter_setting1 || '',
     newsletter_setting2: context?.context?.site?.newsletter_setting2 || '',
     newsletter_setting3: context?.context?.site?.newsletter_setting3 || '',
@@ -84,6 +86,8 @@ function AdminSettingsPage(props) {
           banner: values.banner,
           logo: values.logo,
           newsletter_provider: values.newsletter_provider,
+          newsletter_description: values.newsletter_description,
+          newsletter_double_optin: values.newsletter_double_optin,
           newsletter_setting1: values.newsletter_setting1,
           newsletter_setting2: values.newsletter_setting2,
           newsletter_setting3: values.newsletter_setting3,
@@ -106,14 +110,26 @@ function AdminSettingsPage(props) {
 
     return (
       <Subsection title="Email newsletter settings">
-        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          {provider && provider.help_text && provider.help_text}
-        </p>
-
         <div className="mt-10 sm:mt-0">
           <div className="px-4 py-5 sm:p-6">
             <div className="grid grid-cols-6 gap-6">
-              <div className="col-span-4">
+              <div className="col-span-5">
+                <Label htmlFor="newsletter_description">
+                  Describe your newletter
+                </Label>
+                <Textarea
+                  id="newsletter_description"
+                  rows={3}
+                  onChange={(e) =>
+                    setValues({
+                      ...values,
+                      newsletter_description: e.target.value,
+                    })
+                  }
+                  value={values.newsletter_description}
+                />
+              </div>
+              <div className="col-span-5">
                 <Label htmlFor="newsletter_provider">Newsletter Provider</Label>
                 <Select
                   id="newsletter_provider"
@@ -134,10 +150,34 @@ function AdminSettingsPage(props) {
                     </option>
                   ))}
                 </Select>
+                <div className="flex text-gray-700 dark:text-gray-300">
+                  <LightBulbWithElectricIcon />
+                  <p className="text-sm ml-1 mt-1 font-medium">
+                    {provider && provider.help_text && provider.help_text}
+                  </p>
+                </div>
+              </div>
+              <div className="col-span-5">
+                <Label className="flex items-start space-x-3">
+                  <input
+                    type="checkbox"
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        newsletter_double_optin: e.target.checked,
+                      })
+                    }
+                    defaultChecked={values.newsletter_double_optin}
+                    className="relative top-1 h-4 w-4 rounded border border-gray-300 dark:border-gray-700"
+                  />
+                  <span className="text-primary">
+                    Uses double opt-in for the subscribers
+                  </span>
+                </Label>
               </div>
 
               {provider && provider.setting1 && (
-                <div className="col-span-6 sm:col-span-4">
+                <div className="col-span-6 sm:col-span-5">
                   <Label htmlFor="newsletter_setting1">
                     {provider.setting1}
                   </Label>
@@ -157,7 +197,7 @@ function AdminSettingsPage(props) {
                 </div>
               )}
               {provider && provider.setting2 && (
-                <div className="col-span-6 sm:col-span-4">
+                <div className="col-span-6 sm:col-span-5">
                   <Label htmlFor="newsletter_setting2">
                     {provider.setting2}
                   </Label>
@@ -177,7 +217,7 @@ function AdminSettingsPage(props) {
                 </div>
               )}
               {provider && provider.setting3 && (
-                <div className="col-span-6 sm:col-span-4">
+                <div className="col-span-6 sm:col-span-5">
                   <Label htmlFor="newsletter_setting3">
                     {provider.setting3}
                   </Label>

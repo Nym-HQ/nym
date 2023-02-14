@@ -408,3 +408,53 @@ export function GlobeIcon({ width = 15, height = 15, fill = 'currentColor' }) {
     </svg>
   )
 }
+
+export function InfoIcon({ width = 15, height = 15 }) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M12 3.538a8.462 8.462 0 1 0 0 16.924 8.462 8.462 0 0 0 0-16.924ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Z"
+        fill="#030D45"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M12 16.359a.77.77 0 0 0 .77-.77v-4.102a.77.77 0 1 0-1.54 0v4.103a.77.77 0 0 0 .77.769Z"
+        fill="#030D45"
+      />
+      <path
+        d="M13.026 8.41a1.026 1.026 0 1 0-2.052 0 1.026 1.026 0 0 0 2.052 0Z"
+        fill="#030D45"
+      />
+    </svg>
+  )
+}
+
+export function LightBulbWithElectricIcon({
+  width = 24,
+  height = 24,
+  fill = 'currentColor',
+}) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path
+        fill={fill}
+        d="M9.973 18h4.054c.132-1.202.745-2.194 1.74-3.277.113-.122.832-.867.917-.973a6 6 0 1 0-9.37-.002c.086.107.807.853.918.974.996 1.084 1.609 2.076 1.741 3.278zM14 20h-4v1h4v-1zm-8.246-5a8 8 0 1 1 12.49.002C17.624 15.774 16 17 16 18.5V21a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-2.5C8 17 6.375 15.774 5.754 15zM13 10.004h2.5l-4.5 6v-4H8.5L13 6v4.005z"
+      />
+    </svg>
+  )
+}

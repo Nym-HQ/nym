@@ -11,7 +11,10 @@ import {
 } from '~/graphql/types.generated'
 import { validEmail } from '~/lib/validators'
 
-export function WritingSubscriptionForm({ defaultValue = '' }) {
+export function WritingSubscriptionForm({
+  defaultValue = '',
+  doubleOptin = false,
+}) {
   const [email, setEmail] = React.useState(defaultValue)
   const [status, setStatus] = React.useState('default')
   const [editEmailSubscription] = useEditEmailSubscriptionMutation({
@@ -49,11 +52,6 @@ export function WritingSubscriptionForm({ defaultValue = '' }) {
   return (
     <div className="space-y-4 p-4">
       <div className="flex flex-col space-y-4">
-        <p className="text-tertiary">
-          Get an email whenever I publish new posts. I also publish semi-regular
-          newsletters containing links to interesting articles about design,
-          technology, and startups.
-        </p>
         <form
           data-cy="subscribe-hn-form"
           onSubmit={submit}
@@ -82,9 +80,14 @@ export function WritingSubscriptionForm({ defaultValue = '' }) {
         {status === 'invalid-email' && (
           <ErrorAlert>That email doesn’t look valid, try another?</ErrorAlert>
         )}
-        {status === 'success' && (
+        {status === 'success' && doubleOptin && (
           <SuccessAlert>
             A confirmation email was sent to {email} — go click the link!
+          </SuccessAlert>
+        )}
+        {status === 'success' && !doubleOptin && (
+          <SuccessAlert>
+            Thank you for subscribing to the newsletter!
           </SuccessAlert>
         )}
       </div>

@@ -34,9 +34,11 @@ export const NYM_APP_SITE = {
   attach_css: null,
   attach_js: null,
   newsletter_provider: null,
-  newsletter_setting1: null,
-  newsletter_setting2: null,
-  newsletter_setting3: null,
+  newsletter_description: null, // description of the newsletter
+  newsletter_double_optin: true, // newsletter requires double-optin of the subscribers.
+  newsletter_setting1: null, // setting 1 - depends on provider
+  newsletter_setting2: null, // setting 2 - depends on provider
+  newsletter_setting3: null, // setting 3 - depends on provider
   social_twitter: 'nym_xyz',
   social_youtube: '',
   social_github: 'alpha8eta',

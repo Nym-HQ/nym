@@ -12,13 +12,17 @@ import { WritingSubscriptionForm } from '../Writing/SubscriptionForm'
 
 interface Props {
   subscription: UserEmailSubscription
+  newsletterDescription?: string
 }
 
-export function EmailSubscriptionForm({ subscription }: Props) {
+export function EmailSubscriptionForm({
+  subscription,
+  newsletterDescription,
+}: Props) {
   const [subscribed, setSubscribed] = React.useState(subscription.subscribed)
   const [editEmailSubscription] = useEditEmailSubscriptionMutation({
     onCompleted() {
-      toast.success('Saved')
+      toast.success('Saved your subscription preference!')
     },
   })
 
@@ -42,7 +46,7 @@ export function EmailSubscriptionForm({ subscription }: Props) {
       case EmailSubscriptionType.Newsletter: {
         return {
           title: 'Newsletter',
-          subtitle: 'A curated newsletter.',
+          subtitle: newsletterDescription || 'A curated newsletter.',
         }
       }
       default: {
@@ -74,8 +78,10 @@ export function EmailSubscriptionForm({ subscription }: Props) {
 
 export function EmailPreferences(props: {
   viewer: GetViewerWithSettingsQuery['context']['viewer']
+  newsletterDescription?: string
+  doubleOptin?: boolean
 }) {
-  const { viewer } = props
+  const { viewer, newsletterDescription, doubleOptin } = props
 
   return (
     <div className="flex flex-col space-y-8">
@@ -83,11 +89,14 @@ export function EmailPreferences(props: {
         <EmailSubscriptionForm
           key={subscription.type}
           subscription={subscription}
+          newsletterDescription={newsletterDescription}
         />
       ))}
       <div className="pl-3">
-        <p className="text-primary -mb-3 pl-4 font-medium">Newsletter</p>
-        <WritingSubscriptionForm defaultValue={viewer.email} />
+        <WritingSubscriptionForm
+          defaultValue={viewer.email}
+          doubleOptin={doubleOptin}
+        />
       </div>
     </div>
   )
