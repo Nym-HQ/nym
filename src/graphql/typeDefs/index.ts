@@ -340,6 +340,7 @@ const typeDefs = gql`
     excerpt: String
     published: Boolean
     publishedAt: Date
+    publishNewsletter: Boolean
   }
 
   input AddSiteInput {
