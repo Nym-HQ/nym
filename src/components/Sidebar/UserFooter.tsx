@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Router from 'next/router'
 import * as React from 'react'
-import { Settings } from 'react-feather'
+import { Settings, User } from 'react-feather'
 
 import { Avatar } from '~/components/Avatar'
 import { GhostButton } from '~/components/Button'
@@ -90,7 +90,7 @@ export function UserFooter() {
           size="small-square"
           href="/profile"
         >
-          <Settings size={16} />
+          <User size={16} />
         </GhostButton>
       </Container>
     )

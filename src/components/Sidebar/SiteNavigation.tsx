@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import { Plus } from 'react-feather'
+import { Mail, Plus, Settings } from 'react-feather'
 
 import { AddBookmarkDialog } from '~/components/Bookmarks/AddBookmarkDialog'
 import { GhostButton } from '~/components/Button'
@@ -8,13 +8,12 @@ import {
   AMAIcon,
   BookAtlasIcon,
   BookmarksIcon,
+  DomainWwwIcon,
   ExternalLinkIcon,
   GitHubIcon,
   GlobeIcon,
   HomeIcon,
-  NewsletterIcon,
   PageIcon,
-  StaffDesignIcon,
   TwitterIcon,
   WritingIcon,
   YouTubeIcon,
@@ -196,7 +195,7 @@ export function SiteSidebarNavigation() {
         {
           href: '/admin/domain-mapping',
           label: 'Domain Mapping',
-          icon: StaffDesignIcon,
+          icon: DomainWwwIcon,
           trailingAccessory: null,
           isActive: router.asPath === '/admin/domain-mapping',
           trailingAction: null,
@@ -204,8 +203,8 @@ export function SiteSidebarNavigation() {
         },
         {
           href: '/admin/settings',
-          label: 'Settings',
-          icon: StaffDesignIcon,
+          label: 'Site Settings',
+          icon: () => <Settings />,
           trailingAccessory: null,
           isActive: router.asPath === '/admin/settings',
           trailingAction: null,
@@ -214,7 +213,7 @@ export function SiteSidebarNavigation() {
         {
           href: '/admin/newsletters',
           label: 'Newsletter',
-          icon: NewsletterIcon,
+          icon: () => <Mail />,
           trailingAccessory: null,
           isActive: router.asPath === '/admin/newsletters',
           trailingAction: null,
