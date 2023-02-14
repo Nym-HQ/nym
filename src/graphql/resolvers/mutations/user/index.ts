@@ -2,7 +2,6 @@ import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
 import jwt from 'jsonwebtoken'
 
-import { IS_PROD } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import { MutationEditUserArgs } from '~/graphql/types.generated'
 import { predefinedEmails } from '~/lib/system_emails'
@@ -91,14 +90,10 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
       process.env.JWT_SIGNING_KEY
     )
 
-    if (IS_PROD) {
-      await predefinedEmails.confirmChangedEmailAddress(site, viewer, {
-        email,
-        token,
-      })
-    } else {
-      console.log('Sending confirmation email to the user: ', viewer.username)
-    }
+    await predefinedEmails.confirmChangedEmailAddress(site, viewer, {
+      email,
+      token,
+    })
 
     return await prisma.user.update({
       where: { id: viewer.id },

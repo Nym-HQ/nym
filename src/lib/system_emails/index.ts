@@ -2,10 +2,10 @@ import { Site } from '@prisma/client'
 import * as postmark from 'postmark'
 
 import { baseEmail } from '~/config/seo'
-import { IS_PROD } from '~/graphql/constants'
 import { User } from '~/graphql/types.generated'
 
 import { getSiteDomain } from '../multitenancy/client'
+import { validEmail } from '../validators'
 
 export const client = process.env.POSTMARK_CLIENT_ID
   ? new postmark.ServerClient(process.env.POSTMARK_CLIENT_ID)
@@ -27,17 +27,7 @@ export function emailToSiteOwner({
   site,
   owner,
 }: EmailToSiteOwnerProps) {
-  if (!IS_PROD) {
-    console.log('Sending Postmark email: ', {
-      From: baseEmail,
-      To: owner.email,
-      Subject: subject,
-      TextBody: body,
-    })
-    return true
-  }
-
-  if (owner.email) {
+  if (validEmail(owner.email)) {
     return client.sendEmail({
       From: baseEmail,
       To: owner.email,
@@ -74,6 +64,7 @@ const confirmChangedEmailAddress = async (
   user: User,
   data: { email: string; token: string }
 ) => {
+  console.log('Sending confirmation email to the user: ', user.username)
   const { email, token } = data
 
   try {
@@ -82,7 +73,7 @@ const confirmChangedEmailAddress = async (
     )}/api/email/confirm?token=${token}`
 
     if (process.env.SYSTEM_EMAIL_TEMPLATE_ID_CONFIRM_CHANGED_EMAIL_ADDRESS) {
-      client.sendEmailWithTemplate({
+      return client.sendEmailWithTemplate({
         From: baseEmail,
         To: email,
         TemplateId: Number.parseInt(
@@ -100,8 +91,10 @@ const confirmChangedEmailAddress = async (
         )}'>here</a></p>`,
       })
     }
-  } catch (err) {}
-  return true
+  } catch (err) {
+    console.log('Failed to send "confirm-changed-email-address" email: ', err)
+    return false
+  }
 }
 
 export const predefinedEmails = {
