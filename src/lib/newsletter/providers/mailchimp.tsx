@@ -95,7 +95,7 @@ export default class MailchimpNewsletterProvider
         this.audienceListId,
         {
           email_address: email,
-          status: 'subscribed',
+          status: this.useDoubleOptin ? 'pending' : 'subscribed',
           merge_fields: {},
           tags: ['nym'],
         }
