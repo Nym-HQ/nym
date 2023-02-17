@@ -67,6 +67,7 @@ const typeDefs = gql`
     createdAt: Date
     updatedAt: Date
     publishedAt: Date
+    newsletterAt: Date
     author: User
     title: String
     slug: String

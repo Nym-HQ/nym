@@ -26,6 +26,7 @@ export const PostDetailFragment = gql`
     featureImage
     reactionCount
     viewerHasReacted
+    newsletterAt
   }
   ${PostCoreFragment}
 `

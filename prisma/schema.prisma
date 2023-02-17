@@ -258,6 +258,7 @@ model Post {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   publishedAt  DateTime?
+  newsletterAt DateTime?
   author       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   slug         String
   title        String     @db.VarChar(280)

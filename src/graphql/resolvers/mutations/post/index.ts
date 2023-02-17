@@ -83,7 +83,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
       })
     })
 
-  if (publishedAt && data.publishNewsletter) {
+  if (!existing.newsletterAt && publishedAt && data.publishNewsletter) {
     try {
       const html = parseEditorJsDataIntoHtml(parseEditorJsData(data.data))
 
@@ -97,6 +97,12 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
         if (!sent) {
           throw new Error('Unable to send newsletter')
         }
+        await prisma.post.update({
+          where: { id },
+          data: {
+            newsletterAt: new Date(),
+          },
+        })
       }
     } catch (err) {
       console.error('Unable to publish newsletter', err)

@@ -171,14 +171,29 @@ export function PostEditorMetaSidebar({ site }) {
               <label className="flex items-start space-x-3 py-1">
                 <input
                   type="checkbox"
+                  disabled={!!existingPost.newsletterAt}
                   onChange={(e) => setPublishNewsletter(e.target.checked)}
-                  defaultChecked={publishNewsletter}
+                  defaultChecked={
+                    existingPost.newsletterAt ? false : publishNewsletter
+                  }
                   className="relative top-1 h-4 w-4 rounded border border-gray-300 dark:border-gray-700"
                 />
-                <span className="pt-1 text-primary text-sm font-semibold">
+                <span
+                  className={`pt-1 text-sm font-semibold ${
+                    existingPost.newsletterAt
+                      ? 'line-through text-gray-400'
+                      : 'text-primary'
+                  }`}
+                >
                   Publish to newsletter
                 </span>
               </label>
+              {existingPost.newsletterAt && (
+                <p className="text-primary text-xs">
+                  Newsletter was published at:{' '}
+                  {new Date(existingPost.newsletterAt).toLocaleDateString()}
+                </p>
+              )}
             </div>
           )}
         </div>

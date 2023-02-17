@@ -365,6 +365,7 @@ export type Post = {
   excerpt?: Maybe<Scalars['String']>
   featureImage?: Maybe<Scalars['String']>
   id: Scalars['ID']
+  newsletterAt?: Maybe<Scalars['Date']>
   publishedAt?: Maybe<Scalars['Date']>
   reactionCount?: Maybe<Scalars['Int']>
   slug?: Maybe<Scalars['String']>
@@ -783,6 +784,7 @@ export type PostDetailFragment = {
   featureImage?: string | null | undefined
   reactionCount?: number | null | undefined
   viewerHasReacted?: boolean | null | undefined
+  newsletterAt?: any | null | undefined
   id: string
   publishedAt?: any | null | undefined
   title?: string | null | undefined
@@ -1222,6 +1224,7 @@ export type EditPostMutation = {
         featureImage?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
+        newsletterAt?: any | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1255,6 +1258,7 @@ export type AddPostMutation = {
         featureImage?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
+        newsletterAt?: any | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1760,6 +1764,7 @@ export type GetPostQuery = {
         featureImage?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
+        newsletterAt?: any | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -2186,6 +2191,7 @@ export const PostDetailFragmentDoc = gql`
     featureImage
     reactionCount
     viewerHasReacted
+    newsletterAt
   }
   ${PostCoreFragmentDoc}
 `
