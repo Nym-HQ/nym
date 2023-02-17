@@ -97,13 +97,12 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
         if (!sent) {
           throw new Error('Unable to send newsletter')
         }
-        await prisma.post
-          .update({
-            where: { id },
-            data: {
-              newsletterAt: new Date()
-            }
-          });
+        await prisma.post.update({
+          where: { id },
+          data: {
+            newsletterAt: new Date(),
+          },
+        })
       }
     } catch (err) {
       console.error('Unable to publish newsletter', err)

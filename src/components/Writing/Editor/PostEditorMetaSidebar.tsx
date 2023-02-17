@@ -180,7 +180,9 @@ export function PostEditorMetaSidebar({ site }) {
                 />
                 <span
                   className={`pt-1 text-sm font-semibold ${
-                    existingPost.newsletterAt ? 'line-through text-gray-400' : 'text-primary'
+                    existingPost.newsletterAt
+                      ? 'line-through text-gray-400'
+                      : 'text-primary'
                   }`}
                 >
                   Publish to newsletter
