@@ -6,11 +6,11 @@ import '@uiw/react-markdown-preview/markdown.css'
 import '~/styles/react-md-editor.css'
 import '~/styles/editor-js.css'
 
+import { Analytics } from '@vercel/analytics/react'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { SessionProvider } from 'next-auth/react'
-import * as React from 'react'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { SiteLayout } from '~/components/Layouts'
 import { LoginErrorToast } from '~/components/LoginErrorToast'
@@ -92,6 +92,7 @@ export default function App({ Component, session, pageProps }) {
           )}
         </Providers>
       </SessionProvider>
+      <Analytics />
     </>
   )
 

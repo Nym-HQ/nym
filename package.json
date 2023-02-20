@@ -53,6 +53,7 @@
     "@types/mailchimp__mailchimp_marketing": "^3.0.6",
     "@types/mailchimp__mailchimp_transactional": "^1.0.5",
     "@uiw/react-md-editor": "^3.20.0",
+    "@vercel/analytics": "^0.1.10",
     "babel-plugin-transform-remove-imports": "^1.7.0",
     "cheerio": "^1.0.0-rc.10",
     "cloudinary": "^1.32.0",

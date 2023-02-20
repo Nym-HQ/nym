@@ -232,6 +232,7 @@ export default class MailchimpNewsletterProvider
       mailchimpUntyped.campaigns &&
       typeof mailchimpUntyped.campaigns.create === 'function'
     ) {
+      // first create a campaign
       const campaignResponse = await mailchimpUntyped.campaigns.create({
         type: 'regular',
         recipients: {
