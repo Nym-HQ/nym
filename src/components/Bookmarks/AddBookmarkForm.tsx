@@ -54,31 +54,31 @@ export function AddBookmarkForm({ closeModal }) {
         }
       },
       onError() {},
-    }).then(
-      ({
-        data: {
-          addBookmark: { id },
-        },
-      }) => {
-        track('Bookmark Added', {
-          site_id: context?.context?.site?.id,
-          subdomain: context?.context?.site?.subdomain,
-          bookmark_id: id,
-          url: url,
-        })
-
-        closeModal()
-
-        // if I'm already viewing bookmarks, push me to the one I just created.
-        // otherwise, this was triggered from the sidebar shortcut and
-        // don't redirect
-        if (router.asPath.indexOf('/bookmarks') >= 0) {
-          return router.push(`/bookmarks/${id}`)
-        } else {
-          toast.success('Bookmark created')
-        }
+    }).then(({ data }) => {
+      const { addBookmark } = data ? data : { addBookmark: null }
+      if (!addBookmark) {
+        toast.error('Error creating bookmark')
+        return
       }
-    )
+      const { id } = addBookmark
+      track('Bookmark Added', {
+        site_id: context?.context?.site?.id,
+        subdomain: context?.context?.site?.subdomain,
+        bookmark_id: id,
+        url: url,
+      })
+
+      closeModal()
+
+      // if I'm already viewing bookmarks, push me to the one I just created.
+      // otherwise, this was triggered from the sidebar shortcut and
+      // don't redirect
+      if (router.asPath.indexOf('/bookmarks') >= 0) {
+        return router.push(`/bookmarks/${id}`)
+      } else {
+        toast.success('Bookmark created')
+      }
+    })
   }
 
   function onUrlChange(e) {

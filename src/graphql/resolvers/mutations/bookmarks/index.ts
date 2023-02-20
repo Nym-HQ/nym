@@ -60,7 +60,7 @@ export async function editBookmark(
       return bookmark
     })
     .catch((err) => {
-      console.error({ err })
+      console.error('Failed to edit bookmark', err)
       throw new GraphQLError('Unable to edit bookmark', {
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
@@ -135,7 +135,8 @@ export async function addBookmark(
       return bookmark
     })
     .catch((err) => {
-      console.error({ err })
+      console.error('Failed to create bookmark', err)
+      console.error('Failed bookmark metadata', metadata)
       throw new GraphQLError('Unable to create bookmark', {
         extensions: {
           code: ApolloServerErrorCode.BAD_REQUEST,
