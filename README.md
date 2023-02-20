@@ -93,7 +93,7 @@ yarn prisma migrate dev
 - Make sure you connect to the `dev` branch only, not to the `main` branch directly.
 - When you want to deploy changes from `dev` to `main`, go to https://app.planetscale.com/sov-ventures/nymhq/deploy-requests and create deployment request from `dev` branch to `main` branch.
 
-### Splitbee tracking
+### Splitbee tracking (Deprecated and disabled in preference of Vercel's Analytics)
 
 - Page View
     ```json

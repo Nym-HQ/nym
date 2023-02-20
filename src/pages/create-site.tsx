@@ -9,13 +9,12 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { extendSEO } from '~/config/seo'
 import { useAddSiteMutation, useContextQuery } from '~/graphql/types.generated'
-import * as bee from '~/lib/bee'
+// import * as bee from '~/lib/bee'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
 function CreateYourWebsitePage() {
-  const { data: context } = useContextQuery()
+  // const { data: context } = useContextQuery()
   const router = useRouter()
   const [subdomain, setSubdomain] = useState('')
 
@@ -34,10 +33,10 @@ function CreateYourWebsitePage() {
         },
       },
     }).then((resp) => {
-      bee.track('Site Created', {
-        site_id: resp.data.addSite.id,
-        subdomain,
-      })
+      // bee.track('Site Created', {
+      //   site_id: resp.data.addSite.id,
+      //   subdomain,
+      // })
     })
   }
 

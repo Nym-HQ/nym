@@ -2,7 +2,7 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { GlobalNavigationContext } from '~/components/Providers/GlobalNavigation'
-import { track } from '~/lib/bee'
+// import { track } from '~/lib/bee'
 
 export function NavigationLink({
   link: {
@@ -21,12 +21,12 @@ export function NavigationLink({
     <li
       className="flex items-stretch space-x-1"
       onClick={() => {
-        track(isExternal ? 'External Link' : 'Internal Link', {
-          site_id: site?.id,
-          subdomain: site?.subdomain,
-          destination: label,
-          url: href,
-        })
+        // track(isExternal ? 'External Link' : 'Internal Link', {
+        //   site_id: site?.id,
+        //   subdomain: site?.subdomain,
+        //   destination: label,
+        //   url: href,
+        // })
         setIsOpen(false)
       }}
     >

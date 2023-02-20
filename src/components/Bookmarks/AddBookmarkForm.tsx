@@ -12,7 +12,7 @@ import {
   useContextQuery,
   useGetBookmarksQuery,
 } from '~/graphql/types.generated'
-import { track } from '~/lib/bee'
+// import { track } from '~/lib/bee'
 
 export function AddBookmarkForm({ closeModal }) {
   const { data: context } = useContextQuery()
@@ -61,12 +61,12 @@ export function AddBookmarkForm({ closeModal }) {
         return
       }
       const { id } = addBookmark
-      track('Bookmark Added', {
-        site_id: context?.context?.site?.id,
-        subdomain: context?.context?.site?.subdomain,
-        bookmark_id: id,
-        url: url,
-      })
+      // track('Bookmark Added', {
+      //   site_id: context?.context?.site?.id,
+      //   subdomain: context?.context?.site?.subdomain,
+      //   bookmark_id: id,
+      //   url: url,
+      // })
 
       closeModal()
 
