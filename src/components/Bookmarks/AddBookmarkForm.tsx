@@ -20,9 +20,7 @@ export function AddBookmarkForm({ closeModal }) {
   const [tag, setTag] = React.useState('reading')
   const router = useRouter()
 
-  const query = GET_BOOKMARKS
-
-  const [addBookmark, { loading }] = useAddBookmarkMutation()
+  const [addBookmarkMutate, { loading }] = useAddBookmarkMutation()
 
   // fetch all bookmarks in the background so that we can update the cache
   // immediately when the bookmark is saved
@@ -31,26 +29,29 @@ export function AddBookmarkForm({ closeModal }) {
   function onSubmit(e) {
     e.preventDefault()
 
-    addBookmark({
+    addBookmarkMutate({
       variables: { data: { url, tag } },
-      update(cache, { data: { addBookmark } }) {
-        const { bookmarks } = cache.readQuery({ query }) as any
-        return cache.writeQuery({
-          query,
-          data: {
-            bookmarks: {
-              ...bookmarks,
-              edges: [
-                {
-                  __typename: 'BookmarkEdge',
-                  cursor: addBookmark.id,
-                  node: addBookmark,
-                },
-                ...bookmarks.edges,
-              ],
+      update(cache, { data }) {
+        const { addBookmark } = data ? data : { addBookmark: null }
+        if (addBookmark) {
+          const { bookmarks } = cache.readQuery({ query: GET_BOOKMARKS }) as any
+          return cache.writeQuery({
+            query: GET_BOOKMARKS,
+            data: {
+              bookmarks: {
+                ...bookmarks,
+                edges: [
+                  {
+                    __typename: 'BookmarkEdge',
+                    cursor: addBookmark.id,
+                    node: addBookmark,
+                  },
+                  ...bookmarks.edges,
+                ],
+              },
             },
-          },
-        })
+          })
+        }
       },
       onError() {},
     }).then(
