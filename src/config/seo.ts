@@ -1,3 +1,4 @@
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { Site } from '~/graphql/types.generated'
 
 export const baseUrl =
@@ -34,11 +35,11 @@ interface SEOProps {
 }
 
 export function extendSEO(options: SEOProps, site?: Site) {
-  const images = options.image
-    ? [{ url: `${baseUrl}/static/${options.image}` }]
-    : site && site.logo
-    ? [{ url: site.logo }]
-    : defaultSEO.openGraph.images
+  let images = []
+  if (options.image) images = [{ url: `${baseUrl}/static/${options.image}` }]
+  else if (site && site.logo) images = [{ url: site.logo }]
+  else if (!site || site.id === NYM_APP_SITE.id)
+    images = defaultSEO.openGraph.images
 
   const seo = {
     ...defaultSEO,

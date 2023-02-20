@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 import { Link as LinkIcon } from 'react-feather'
 
@@ -14,8 +13,6 @@ import {
 } from '~/graphql/types.generated'
 
 export function EditBookmarkForm({ closeModal, bookmark }) {
-  const router = useRouter()
-
   const initialState = {
     error: '',
     title: bookmark.title || bookmark.url,

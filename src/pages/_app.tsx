@@ -6,17 +6,17 @@ import '@uiw/react-markdown-preview/markdown.css'
 import '~/styles/react-md-editor.css'
 import '~/styles/editor-js.css'
 
+import { Analytics } from '@vercel/analytics/react'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { SessionProvider } from 'next-auth/react'
-import * as React from 'react'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { SiteLayout } from '~/components/Layouts'
 import { LoginErrorToast } from '~/components/LoginErrorToast'
 import { Providers } from '~/components/Providers'
 import { Toast } from '~/components/Providers/Toaster'
-import * as bee from '~/lib/bee'
+// import * as bee from '~/lib/bee'
 import * as gtag from '~/lib/gtag'
 
 export default function App({ Component, session, pageProps }) {
@@ -24,11 +24,11 @@ export default function App({ Component, session, pageProps }) {
   useEffect(() => {
     const handleRouteChange = (url) => {
       gtag.pageview(url)
-      bee.track('Page View', {
-        site_id: pageProps?.site?.id,
-        subdomain: pageProps?.site?.subdomain,
-        url: url,
-      })
+      // bee.track('Page View', {
+      //   site_id: pageProps?.site?.id,
+      //   subdomain: pageProps?.site?.subdomain,
+      //   url: url,
+      // })
     }
     router.events.on('routeChangeComplete', handleRouteChange)
     router.events.on('hashChangeComplete', handleRouteChange)
@@ -70,15 +70,15 @@ export default function App({ Component, session, pageProps }) {
          * Splitbee Tracker
          * https://splitbee.io/docs/embed-the-script
          */
-        bee.SPLITBEE_TOKEN && (
-          <Script
-            async
-            data-no-cookie
-            data-token={bee.SPLITBEE_TOKEN}
-            data-api="/_hive"
-            src="/bee.js"
-          />
-        )
+        // bee.SPLITBEE_TOKEN && (
+        //   <Script
+        //     async
+        //     data-no-cookie
+        //     data-token={bee.SPLITBEE_TOKEN}
+        //     data-api="/_hive"
+        //     src="/bee.js"
+        //   />
+        // )
       }
 
       <SessionProvider session={session}>
@@ -92,6 +92,7 @@ export default function App({ Component, session, pageProps }) {
           )}
         </Providers>
       </SessionProvider>
+      <Analytics />
     </>
   )
 

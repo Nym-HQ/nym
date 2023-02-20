@@ -12,7 +12,7 @@ import {
   useContextQuery,
   useGetBookmarksQuery,
 } from '~/graphql/types.generated'
-import { track } from '~/lib/bee'
+// import { track } from '~/lib/bee'
 
 export function AddBookmarkForm({ closeModal }) {
   const { data: context } = useContextQuery()
@@ -20,9 +20,7 @@ export function AddBookmarkForm({ closeModal }) {
   const [tag, setTag] = React.useState('reading')
   const router = useRouter()
 
-  const query = GET_BOOKMARKS
-
-  const [addBookmark, { loading }] = useAddBookmarkMutation()
+  const [addBookmarkMutate, { loading }] = useAddBookmarkMutation()
 
   // fetch all bookmarks in the background so that we can update the cache
   // immediately when the bookmark is saved
@@ -31,53 +29,56 @@ export function AddBookmarkForm({ closeModal }) {
   function onSubmit(e) {
     e.preventDefault()
 
-    addBookmark({
+    addBookmarkMutate({
       variables: { data: { url, tag } },
-      update(cache, { data: { addBookmark } }) {
-        const { bookmarks } = cache.readQuery({ query }) as any
-        return cache.writeQuery({
-          query,
-          data: {
-            bookmarks: {
-              ...bookmarks,
-              edges: [
-                {
-                  __typename: 'BookmarkEdge',
-                  cursor: addBookmark.id,
-                  node: addBookmark,
-                },
-                ...bookmarks.edges,
-              ],
+      update(cache, { data }) {
+        const { addBookmark } = data ? data : { addBookmark: null }
+        if (addBookmark) {
+          const { bookmarks } = cache.readQuery({ query: GET_BOOKMARKS }) as any
+          return cache.writeQuery({
+            query: GET_BOOKMARKS,
+            data: {
+              bookmarks: {
+                ...bookmarks,
+                edges: [
+                  {
+                    __typename: 'BookmarkEdge',
+                    cursor: addBookmark.id,
+                    node: addBookmark,
+                  },
+                  ...bookmarks.edges,
+                ],
+              },
             },
-          },
-        })
+          })
+        }
       },
       onError() {},
-    }).then(
-      ({
-        data: {
-          addBookmark: { id },
-        },
-      }) => {
-        track('Bookmark Added', {
-          site_id: context?.context?.site?.id,
-          subdomain: context?.context?.site?.subdomain,
-          bookmark_id: id,
-          url: url,
-        })
-
-        closeModal()
-
-        // if I'm already viewing bookmarks, push me to the one I just created.
-        // otherwise, this was triggered from the sidebar shortcut and
-        // don't redirect
-        if (router.asPath.indexOf('/bookmarks') >= 0) {
-          return router.push(`/bookmarks/${id}`)
-        } else {
-          toast.success('Bookmark created')
-        }
+    }).then(({ data }) => {
+      const { addBookmark } = data ? data : { addBookmark: null }
+      if (!addBookmark) {
+        toast.error('Error creating bookmark')
+        return
       }
-    )
+      const { id } = addBookmark
+      // track('Bookmark Added', {
+      //   site_id: context?.context?.site?.id,
+      //   subdomain: context?.context?.site?.subdomain,
+      //   bookmark_id: id,
+      //   url: url,
+      // })
+
+      closeModal()
+
+      // if I'm already viewing bookmarks, push me to the one I just created.
+      // otherwise, this was triggered from the sidebar shortcut and
+      // don't redirect
+      if (router.asPath.indexOf('/bookmarks') >= 0) {
+        return router.push(`/bookmarks/${id}`)
+      } else {
+        toast.success('Bookmark created')
+      }
+    })
   }
 
   function onUrlChange(e) {
