@@ -312,65 +312,43 @@ function DatePicker1(props) {
   )
 }
 
-function InputGroup6({
-  label,
-  name,
-  value,
-  onChange,
-  type = 'text',
-  decoration,
-  inputClassName = '',
-  decorationClassName = '',
-  disabled,
-}) {
-  return (
-    <div className="flex flex-row items-stretch w-full">
-      <input
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        type={type}
-        title={label}
-        placeholder={label}
-        aria-label={label}
-        className={`peer block w-full px-2 py-1 text-primary text-sm font-medium bg-gray-100 border border-r-0 focus:border-gray-400 dark:bg-white dark:bg-opacity-10 focus:outline-none focus:ring-0 appearance-none rounded-tr-none rounded-br-none rounded transition-colors duration-300 ${
-          disabled ? 'bg-gray-200' : ''
-        } ${inputClassName}`}
-        disabled={disabled}
-      />
-      <div
-        className={`flex items-center rounded-tl-none rounded-bl-none rounded px-1 py-1 text-primary bg-gray-100 dark:bg-white dark:bg-opacity-10 border border-l-0 border-gray-600 peer-focus:border-gray-400 peer-focus:bg-white peer-focus:text-secondary transition-colors duration-300 ${
-          disabled ? 'bg-gray-200' : ''
-        } ${decorationClassName}`}
-      >
-        {decoration}
-      </div>
-    </div>
-  )
-}
-
-const CustomInputField = forwardRef<HTMLButtonElement, any>((el, ref) => {
+const CustomInputField = forwardRef<HTMLButtonElement, any>((props, ref) => {
   const {
     name,
     value,
     label,
+    onChange,
     onClick,
     disabled,
     inputClassName,
     icon = <BiCalendar size="1rem" />,
-  } = el as any
+  } = props as any
+
   return (
     <button className="w-full " onClick={onClick} ref={ref} disabled={disabled}>
-      <InputGroup6
-        name={name}
-        value={value}
-        onChange={() => null}
-        label={label}
-        decoration={icon}
-        disabled={disabled}
-        inputClassName={inputClassName}
-      />
+      <div className="flex flex-row items-stretch w-full">
+        <input
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          type="text"
+          title={label}
+          placeholder={label}
+          aria-label={label}
+          className={`peer block w-full px-2 py-1 text-primary text-sm font-medium bg-gray-100 border border-r-0 focus:border-gray-400 dark:bg-white dark:bg-opacity-10 focus:outline-none focus:ring-0 appearance-none rounded-tr-none rounded-br-none rounded transition-colors duration-300 ${
+            disabled ? 'bg-gray-200' : ''
+          } ${inputClassName}`}
+          disabled={disabled}
+        />
+        <div
+          className={`flex items-center rounded-tl-none rounded-bl-none rounded px-1 py-1 text-primary bg-gray-100 dark:bg-white dark:bg-opacity-10 border border-l-0 border-gray-600 peer-focus:border-gray-400 peer-focus:bg-white peer-focus:text-secondary transition-colors duration-300 ${
+            disabled ? 'bg-gray-200' : ''
+          }`}
+        >
+          {icon}
+        </div>
+      </div>
     </button>
   )
 })
@@ -401,7 +379,7 @@ function TextWithDatePicker({
   label = '',
   value = new Date(),
   onChange,
-  dateFormat = 'MMMM d, yyyy',
+  dateFormat = 'MM/dd/yyyy',
 }) {
   return (
     <DatePicker1
@@ -419,7 +397,7 @@ function TextWithDateTimePicker({
   label = '',
   value = new Date(),
   onChange,
-  dateFormat = 'MMMM d, yyyy h:mm aa',
+  dateFormat = 'MM/dd/yyyy h:mm aa',
 }) {
   return (
     <DatePicker1
@@ -430,7 +408,7 @@ function TextWithDateTimePicker({
       popperPlacement="bottom"
       showTimeInput
       customTimeInput={<TimeInputSelect date={value} onChange={onChange} />}
-      dateFormat="MMMM d, yyyy h:mm aa"
+      dateFormat={dateFormat}
     />
   )
 }
