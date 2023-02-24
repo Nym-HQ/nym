@@ -12,6 +12,7 @@ export default class MailchimpNewsletterProvider
   private instanceId: string
   private audienceListId: string = null
   private useDoubleOptin: boolean = true
+  private lastError = null
 
   // constants
   private headers = {
@@ -107,29 +108,8 @@ export default class MailchimpNewsletterProvider
         // success
         return true
       } else {
-        return false
+        throw new Error('Failed to subscribe')
       }
-
-      // const response = await fetch(`${this.baseUrl}/3.0/lists/${this.audienceListId}/members/`, {
-      //   method: 'POST',
-      //   headers: {
-      //     ...this.headers,
-      //     'Content-Type': 'application/json;charset=utf-8'
-      //   },
-      //   body: JSON.stringify({
-      //     'email_address': email,
-      //     'status': 'subscribed',
-      //     'merge_fields': {}
-      //   })
-      // });
-      // const data = await response.json()
-      // if (response.status < 300 || (response.status === 400 && data.title === "Member Exists")) {
-      //   // success
-      //   return true
-      // } else {
-      //   // failed to subscribe
-      //   return false;
-      // }
     } catch (e) {
       console.error({ e })
       return false
@@ -163,11 +143,16 @@ export default class MailchimpNewsletterProvider
         // success
         return true
       } else {
+        this.lastError = response
         return false
       }
     } catch (e) {
-      console.error({ e })
-      return null
+      console.error(
+        'Unexpected exception occured while adding a new member to a list',
+        e
+      )
+      this.lastError = e
+      return false
     }
   }
 
@@ -228,53 +213,49 @@ export default class MailchimpNewsletterProvider
       server: this.instanceId,
     })
     const mailchimpUntyped = mailchimp as any
-    if (
-      mailchimpUntyped.campaigns &&
-      typeof mailchimpUntyped.campaigns.create === 'function'
-    ) {
-      // first create a campaign
-      const campaignResponse = await mailchimpUntyped.campaigns.create({
-        type: 'regular',
-        recipients: {
-          list_id: this.audienceListId,
-        },
-        settings: {
-          title: `Nym newsletter - ${new Date().toDateString()}`,
-          template_id: templateId,
-          subject_line: subject,
-          reply_to: this.fromEmail,
-          from_name: this.fromName,
-          auto_footer: true,
-        },
-      })
-      if (campaignResponse.id) {
-        // successfully created a campagin, let's send it out
-        let sendResponse
-        if (IS_PROD) {
-          sendResponse = await mailchimpUntyped.campaigns.send(
-            campaignResponse.id
-          )
-        } else {
-          sendResponse = await mailchimpUntyped.campaigns.sendTestEmail(
-            campaignResponse.id,
-            {
-              test_emails: ['klokt.valg@gmail.com'],
-              send_type: 'html',
-            }
-          )
-        }
-        if (sendResponse && sendResponse.status < 300) {
-          // success
-          return true
-        } else {
-          console.log('Sent campaign', sendResponse)
-          return false
-        }
-      } else {
-        console.log('Failed to create campaign', campaignResponse)
-        return false
-      }
+
+    // first create a campaign
+    const campaignResponse = await mailchimpUntyped.campaigns.create({
+      type: 'regular',
+      recipients: {
+        list_id: this.audienceListId,
+      },
+      settings: {
+        title: `Nym newsletter - ${new Date().toDateString()}`,
+        template_id: templateId,
+        subject_line: subject,
+        reply_to: this.fromEmail,
+        from_name: this.fromName,
+        auto_footer: true,
+      },
+    })
+
+    // failed to create a campaign?
+    if (!campaignResponse.id) {
+      console.error('Failed to create campaign', campaignResponse)
+      this.lastError = campaignResponse
+      return false
+    }
+
+    // successfully created a campagin, let's send it out
+    let sendResponse
+    if (IS_PROD) {
+      sendResponse = await mailchimpUntyped.campaigns.send(campaignResponse.id)
     } else {
+      sendResponse = await mailchimpUntyped.campaigns.sendTestEmail(
+        campaignResponse.id,
+        {
+          test_emails: ['klokt.valg@gmail.com'],
+          send_type: 'html',
+        }
+      )
+    }
+    if (sendResponse && sendResponse.status < 300) {
+      // success
+      return true
+    } else {
+      this.lastError = sendResponse
+      console.error('Failed to create campaign', sendResponse)
       return false
     }
   }
