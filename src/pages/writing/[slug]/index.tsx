@@ -24,6 +24,7 @@ function WritingPostPage(props) {
   const post = parsePostData(data?.post)
   if (post && !post.publishedAt)
     return <PostEditor slug={slug} site={context.context.site} post={post} />
+
   return (
     <PostDetail
       slug={slug}

@@ -26,7 +26,7 @@ export function PostDetail({ slug, site, post, error, loading }) {
     return <Detail.Null type="Post" />
   }
 
-  if (editorJsRef.current != null) {
+  if (editorJsRef.current) {
     editorJsRef.current.render(post.data)
   }
 

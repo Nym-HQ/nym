@@ -1,12 +1,12 @@
 import { Page, Post } from '~/graphql/types.generated'
 
 export function parseEditorJsData(data: string) {
-  if (!data) return {}
+  if (!data) return { blocks: [] }
 
   try {
-    return JSON.parse(data)
+    return typeof data === 'string' ? JSON.parse(data) : data
   } catch {
-    return {}
+    return { blocks: [] }
   }
 }
 

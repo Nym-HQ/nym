@@ -24,7 +24,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
     return <Detail.Null type="Page" />
   }
 
-  if (editorJsRef.current != null) {
+  if (editorJsRef.current) {
     editorJsRef.current.render(page.data)
   }
 
