@@ -38,7 +38,9 @@ export function SiteSidebarNavigation() {
   const router = useRouter()
   const { data } = useContextQuery()
   const { data: pagesData } = useGetPagesQuery({
-    variables: { filter: { published: true, featuredOnly: true } },
+    variables: {
+      filter: { published: true, featuredOnly: true, includeHomepage: true },
+    },
   })
   const sections = [
     {
