@@ -25,7 +25,6 @@ export async function getServerSideProps(ctx) {
 
   const graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),
-
     apolloClient.query({
       query: GET_PAGES,
       variables: {

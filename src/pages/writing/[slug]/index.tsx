@@ -24,6 +24,7 @@ function WritingPostPage(props) {
   const post = parsePostData(data?.post)
   if (post && !post.publishedAt)
     return <PostEditor slug={slug} site={context.context.site} post={post} />
+
   return (
     <PostDetail
       slug={slug}
@@ -46,6 +47,15 @@ export async function getServerSideProps(ctx) {
     query: GET_POST,
     variables: { slug },
   })
+
+  // post is found, but found by id, not by slug
+  if (data.post && data.post.slug !== slug && data.post.path !== slug)
+    return {
+      redirect: {
+        destination: `/writing/${data.post.slug}`,
+        permanent: true,
+      },
+    }
 
   const graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),

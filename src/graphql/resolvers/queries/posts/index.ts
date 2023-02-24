@@ -49,7 +49,7 @@ export async function getPost(
     return null
   }
 
-  const post = await prisma.post.findFirst({
+  let post = await prisma.post.findFirst({
     where: {
       slug: slug,
       siteId: site.id,
@@ -63,6 +63,24 @@ export async function getPost(
     },
   })
 
+  // if not found by slug, fallback to id
+  if (!post) {
+    post = await prisma.post.findFirst({
+      where: {
+        id: slug,
+        siteId: site.id,
+      },
+      include: {
+        _count: {
+          select: {
+            reactions: true,
+          },
+        },
+      },
+    })
+  }
+
+  // Unpublished posts are only visible to admins
   if (!post?.publishedAt && !viewer?.isAdmin) {
     return null
   }

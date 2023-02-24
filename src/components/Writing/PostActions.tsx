@@ -23,7 +23,7 @@ function getReactionButton(post) {
         __typename: 'Mutation',
         toggleReaction: {
           __typename: 'Post',
-          ...post,
+          id: post.id,
           reactionCount: post.viewerHasReacted
             ? post.reactionCount - 1
             : post.reactionCount + 1,

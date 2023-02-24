@@ -6,7 +6,7 @@ import { PageDetail } from '~/components/Page/PageDetail'
 import { PagesList } from '~/components/Page/PagesList'
 import { getContext } from '~/graphql/context'
 import { GET_COMMENTS } from '~/graphql/queries/comments'
-import { GET_PAGE, GET_PAGES } from '~/graphql/queries/pages'
+import { GET_PAGE } from '~/graphql/queries/pages'
 import {
   CommentType,
   useContextQuery,
@@ -49,9 +49,17 @@ export async function getServerSideProps(ctx) {
     variables: { slug },
   })
 
+  // page is found, but found by id, not by slug
+  if (data.page && data.page.slug !== slug && data.page.path !== slug)
+    return {
+      redirect: {
+        destination: data.page.path || `/pages/${data.page.slug}`,
+        permanent: true,
+      },
+    }
+
   const graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),
-    apolloClient.query({ query: GET_PAGES }),
 
     data?.page?.id &&
       apolloClient.query({

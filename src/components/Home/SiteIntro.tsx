@@ -42,12 +42,14 @@ export function SiteIntro() {
           <div className="flex flex-1 flex-col flex-start justify-start">
             <Detail.ContentContainer>
               <div>
-                <span
-                  title={data.homepage.publishedAt.raw}
-                  className="text-tertiary inline-block leading-snug"
-                >
-                  {data.homepage.publishedAt.formatted}
-                </span>
+                {data.homepage.publishedAt && (
+                  <span
+                    title={data.homepage.publishedAt.raw}
+                    className="text-tertiary inline-block leading-snug"
+                  >
+                    {data.homepage.publishedAt.formatted}
+                  </span>
+                )}
 
                 {homepage.text && !homepage.data?.blocks ? (
                   <div className="mt-8">
