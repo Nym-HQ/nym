@@ -48,13 +48,24 @@ export async function getPage(
     return null
   }
 
-  const page = await prisma.page.findFirst({
+  let page = await prisma.page.findFirst({
     where: {
       OR: [{ slug }, { path: slug }],
       siteId: site.id,
     },
   })
 
+  // if not found by slug, fallback to id
+  if (!page) {
+    page = await prisma.page.findFirst({
+      where: {
+        id: slug,
+        siteId: site.id,
+      },
+    })
+  }
+
+  // Unpublished pages are only visible to admins
   if (!page?.publishedAt && !viewer?.isAdmin) {
     return null
   }

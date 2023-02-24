@@ -47,6 +47,15 @@ export async function getServerSideProps(ctx) {
     variables: { slug },
   })
 
+  // post is found, but found by id, not by slug
+  if (data.post && data.post.slug !== slug && data.post.path !== slug)
+    return {
+      redirect: {
+        destination: `/writing/${data.post.slug}`,
+        permanent: true,
+      },
+    }
+
   const graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),
     apolloClient.query({ query: GET_POSTS }),
