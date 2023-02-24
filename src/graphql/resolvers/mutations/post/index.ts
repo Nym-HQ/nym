@@ -96,9 +96,11 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
           htmlBody: html,
           textBody: null,
         })
-        if (!sent) {
-          throw new Error('Unable to send newsletter')
-        }
+
+        // TODO: handle error
+        // if (!sent) {
+        //   throw new Error('Unable to send newsletter')
+        // }
         await prisma.post.update({
           where: { id },
           data: {
