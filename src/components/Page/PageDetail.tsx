@@ -54,12 +54,14 @@ export function PageDetail({ slug, site, page, error, loading }) {
               }}
             >
               <Detail.Title ref={titleRef}>{page.title}</Detail.Title>
-              <span
-                title={publishedAt.raw}
-                className="text-tertiary inline-block leading-snug"
-              >
-                {publishedAt.formatted}
-              </span>
+              {publishedAt && (
+                <span
+                  title={publishedAt.raw}
+                  className="text-tertiary inline-block leading-snug"
+                >
+                  {publishedAt.formatted}
+                </span>
+              )}
             </Detail.Header>
 
             {page.text && !page.data?.blocks ? (

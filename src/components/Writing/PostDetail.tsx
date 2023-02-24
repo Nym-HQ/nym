@@ -56,12 +56,14 @@ export function PostDetail({ slug, site, post, error, loading }) {
               }}
             >
               <Detail.Title ref={titleRef}>{post.title}</Detail.Title>
-              <span
-                title={publishedAt.raw}
-                className="text-tertiary inline-block leading-snug"
-              >
-                {publishedAt.formatted}
-              </span>
+              {publishedAt && (
+                <span
+                  title={publishedAt.raw}
+                  className="text-tertiary inline-block leading-snug"
+                >
+                  {publishedAt.formatted}
+                </span>
+              )}
             </Detail.Header>
 
             {post.text && !post.data?.blocks ? (
