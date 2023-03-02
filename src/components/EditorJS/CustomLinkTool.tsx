@@ -64,4 +64,28 @@ export class CustomLinkTool extends LinkTool {
       super.showLinkPreview(meta)
     }
   }
+
+  /**
+   * Paste configuration to enable pasted URLs processing by Editor
+   *
+   * @returns {object} - object of patterns which contain regx for pasteConfig
+   */
+  static get pasteConfig() {
+    return {
+      patterns: {
+        twitter:
+          /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+?.*)?$/,
+      },
+    }
+  }
+
+  /**
+   * Handle pasted url and return Service object
+   *
+   * @param {PasteEvent} event - event with pasted data
+   */
+  async onPaste(event) {
+    const { key: service, data: url } = event.detail
+    await this.fetchLinkData(url)
+  }
 }

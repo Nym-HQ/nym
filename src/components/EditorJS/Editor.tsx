@@ -119,6 +119,28 @@ export default function CustomizedEditorJS({
         },
       },
     },
+    embed: {
+      class: Embed,
+      config: {
+        services: {
+          facebook: true,
+          instagram: true,
+          youtube: true,
+          twitter: false, // disable twitter service, as we deal with it in linkTool
+          'twitch-video': true,
+          miro: true,
+          vime: true,
+          gfycat: true,
+          imgur: true,
+          vine: true,
+          aparat: true,
+          'yandex-music-track': true,
+          coub: true,
+          codepen: true,
+          pinterest: true,
+        },
+      },
+    },
     linkTool: {
       class: CustomLinkTool,
       config: {

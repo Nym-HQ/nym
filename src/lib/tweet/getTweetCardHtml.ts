@@ -9,6 +9,7 @@ export const getTweetCardHtml = async (
     layout: 'default',
     css: 'tailwind',
     enable_twemoji: true,
+    show_media: true,
     show_card: false,
     inline_styles: true,
   }
