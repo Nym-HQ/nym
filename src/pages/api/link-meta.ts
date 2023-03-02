@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
+import { getTweetCardHtml } from '~/lib/tweet/getTweetCardHtml'
+
 /**
  * Extract Link's metadata
  */
@@ -16,13 +18,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     typeof urlQueryParam === 'string' ? urlQueryParam : urlQueryParam[0]
 
   if (url.startsWith('https://twitter.com/')) {
-    const resp = await fetch(
-      `https://publish.twitter.com/oembed?url=${encodeURI(url)}`
-    )
-    const json = await resp.json()
+    const { html, meta } = await getTweetCardHtml(url)
     return res.status(200).json({
       success: 1,
-      meta: json,
+      link: url,
+      meta: meta,
+      html: html,
     })
   } else if (process.env.IFRAMELY_API_KEY) {
     const resp = await fetch(
@@ -34,6 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     return res.status(200).json({
       success: 1,
+      link: url,
       meta: {
         title: json?.title,
         description: json?.description,

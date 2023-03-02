@@ -20,6 +20,7 @@ import React, { useCallback, useRef } from 'react'
 import { createReactEditorJS } from 'react-editor-js'
 
 import { Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
+import { CustomLinkTool } from './CustomLinkTool'
 
 const DEFAULT_EDITOR_JS_TOOLS = {
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
@@ -119,7 +120,7 @@ export default function CustomizedEditorJS({
       },
     },
     linkTool: {
-      class: LinkTool,
+      class: CustomLinkTool,
       config: {
         endpoint: '/api/link-meta', // endpoint for url data fetching,
       },
@@ -135,7 +136,7 @@ export default function CustomizedEditorJS({
     <ReactEditorJS
       onInitialize={handleInitialize}
       defaultValue={value}
-      tools={EDITOR_JS_TOOLS}
+      tools={EDITOR_JS_TOOLS as typeof DEFAULT_EDITOR_JS_TOOLS}
       {...editorProps}
     />
   )

@@ -15,7 +15,7 @@ export const config = {
   api: {},
 }
 
-let started = false
+let apolloServerStatus = 'stopped'
 
 const graphqlHandler = async (req, res) => {
   if (!req.body) {
@@ -90,11 +90,35 @@ const graphqlHandler = async (req, res) => {
     })
 }
 
+const lockForApolloServerStart = () => {
+  if (apolloServerStatus == 'started') return Promise.resolve()
+  if (apolloServerStatus == 'stopped') return Promise.reject()
+
+  return new Promise((resolve, reject) => {
+    const interval = setInterval(() => {
+      if (apolloServerStatus == 'started') {
+        clearInterval(interval)
+        resolve(null)
+      } else if (apolloServerStatus == 'stopped') {
+        clearInterval(interval)
+        reject(null)
+      }
+    }, 100)
+  })
+}
+
 export default withRateLimit(async (req, res) => {
   console.log('/api/graphql request')
-  if (!started) {
-    await apolloServer.start()
-    started = true
+  try {
+    if (apolloServerStatus == 'stopped') {
+      apolloServerStatus = 'starting'
+      await apolloServer.start()
+      apolloServerStatus = 'started'
+    } else {
+      await lockForApolloServerStart()
+    }
+  } catch (e) {
+    apolloServerStatus = 'stopped'
   }
 
   await graphqlHandler(req, res)
