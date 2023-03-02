@@ -18,14 +18,14 @@ const tailwindBorder = 'border border-gray-200 dark:border-gray-700 rounded-2xl'
 
 const tailwindClassDefaultReference = {
   ...tailwindClassBasic,
-  tweet: `w-[500px] p-8 text-black dark:text-white ${tailwindBorder} bg-white dark:bg-black`,
+  tweet: `w-[500px] p-8 xs:p-4 text-black dark:text-white ${tailwindBorder} bg-white dark:bg-black`,
   'tweet-author-title': 'flex items-center',
   'tweet-author-verified': 'ml-1 w-5 h-5 text-blue-400',
   'tweet-logo': 'text-blue-400',
 }
 const tailwindClassSupabaseReference = {
   ...tailwindClassBasic,
-  tweet: `w-[400px] p-8 text-black dark:text-white ${tailwindBorder} bg-white dark:bg-black`,
+  tweet: `w-[400px] p-8 xs:p-4 text-black dark:text-white ${tailwindBorder} bg-white dark:bg-black`,
   'tweet-logo':
     'bg-blue-400 text-white w-5 h-5 absolute -top-1 -left-2 rounded-full p-[0.2rem]',
 }
