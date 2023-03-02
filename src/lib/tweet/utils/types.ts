@@ -14,7 +14,8 @@ export interface TweetOembed {
 
 export interface TweetOptions {
   layout?: string
-  css?: string
+  css?: 'tailwind' | 'custom'
+  inline_styles?: boolean
   show_original_link?: boolean
   enable_twemoji?: boolean
   show_media?: boolean

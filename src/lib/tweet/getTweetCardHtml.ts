@@ -10,6 +10,7 @@ export const getTweetCardHtml = async (
     css: 'tailwind',
     enable_twemoji: true,
     show_card: false,
+    inline_styles: true,
   }
 ) => {
   const id = getTwitterId(url)
@@ -20,11 +21,12 @@ export const getTweetCardHtml = async (
   const {
     layout,
     css,
-    enable_twemoji = false,
+    enable_twemoji,
     show_media = false,
     show_quoted_tweet = false,
     show_info = false,
-    show_card = false,
+    show_card,
+    inline_styles,
   } = config || {}
 
   const options: TweetOptions = {
@@ -35,6 +37,7 @@ export const getTweetCardHtml = async (
     show_quoted_tweet: JSON.parse(show_quoted_tweet.toString()),
     show_info: JSON.parse(show_info.toString()),
     show_card: JSON.parse(show_card.toString()),
+    inline_styles: JSON.parse(inline_styles.toString()),
   }
 
   let data: TweetSyndication
