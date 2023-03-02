@@ -104,7 +104,6 @@ export const mapStyles = (classes: string | string[], styles?: string) => {
     if (classToStylesMap[c]) {
       finalStyles.push(classToStylesMap[c])
     } else {
-      console.log(c)
       leftClasses.push(c)
     }
   })
