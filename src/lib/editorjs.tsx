@@ -9,11 +9,9 @@ export const parseEditorJsDataIntoHtml = (data: any) => {
     linkTool: (data, config) => {
       if (data.meta) {
         if (data.meta.html) {
-          return `<a href="${data.link}" target="_blank" rel="noopener noreferrer"><div style="border: solid 1px #aaa; border-radius: 16px; padding: 1.5rem;">${data.meta.html}</div></a>`
+          return `<div style="margin-top: 1rem; margin-bottom: 1rem; border: solid 1px #aaa; border-radius: 16px; overflow: hidden;">${data.meta.html}</div>`
         } else {
-          return `<a href="${
-            data.link
-          }" target="_blank" rel="noopener noreferrer"><div style="border: solid 1px #aaa; border-radius: 12px; padding: 1.5rem;">${
+          return `<a href="${data.link}" target="_blank" rel="noopener noreferrer"><div style="border: solid 1px #aaa; border-radius: 12px; padding: 1.5rem;">${
             data.meta.title ? `<h4>${data.meta.title}</h4>` : ''
           }${
             data.meta.description ? `<p>${data.meta.description}</p>` : ''
