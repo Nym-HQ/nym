@@ -174,7 +174,7 @@ export function PageEditorMetaSidebar({ site }) {
         <div className="filter-blur sticky bottom-0 z-10 flex flex-col items-center justify-between border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60">
           {existingPage?.id && (
             <Tooltip content={isDraftValid ? 'Save' : draftErrors[0].message}>
-              <span className="w-full mt-1">
+              <span className="w-full mt-2">
                 <PrimaryButton
                   addclassname="w-full"
                   disabled={editingPage || !isDraftValid}
@@ -190,7 +190,7 @@ export function PageEditorMetaSidebar({ site }) {
             <Tooltip
               content={isDraftValid ? 'Publish' : draftErrors[0].message}
             >
-              <span className="w-full mt-1">
+              <span className="w-full mt-2">
                 <PrimaryButton
                   addclassname="w-full"
                   disabled={editingPage || !isDraftValid}
@@ -205,7 +205,7 @@ export function PageEditorMetaSidebar({ site }) {
             <Tooltip
               content={isDraftValid ? 'Unpublish' : draftErrors[0].message}
             >
-              <span className="w-full mt-1">
+              <span className="w-full mt-2">
                 <Button
                   addclassname="w-full"
                   disabled={editingPage || !isDraftValid}
@@ -220,7 +220,7 @@ export function PageEditorMetaSidebar({ site }) {
             <Tooltip
               content={isDraftValid ? 'Save draft' : draftErrors[0].message}
             >
-              <span className="w-full mt-1">
+              <span className="w-full mt-2">
                 <Button
                   addclassname="w-full"
                   disabled={creatingPage || !isDraftValid}
