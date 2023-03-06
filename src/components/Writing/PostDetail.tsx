@@ -68,7 +68,7 @@ export function PostDetail({ slug, site, post, error, loading }) {
               )}
             </Detail.Header>
 
-            {post.text && !post.data?.blocks ? (
+            {post.text && !post.data?.blocks?.length ? (
               <div className="mt-8">
                 <MDEditorPreviewer source={post.text} />
               </div>
