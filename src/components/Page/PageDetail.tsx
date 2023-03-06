@@ -64,7 +64,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
               )}
             </Detail.Header>
 
-            {page.text && !page.data?.blocks ? (
+            {page.text && !page.data?.blocks?.length ? (
               <div className="mt-8">
                 <MDEditorPreviewer source={page.text} />
               </div>
