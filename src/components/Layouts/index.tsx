@@ -39,13 +39,6 @@ export function SiteLayout({ children }) {
           `}
         </style>
       )}
-      {context?.context?.site?.attach_js && (
-        <script
-          dangerouslySetInnerHTML={{
-            __html: context.context.site.attach_js,
-          }}
-        />
-      )}
       <div className="relative flex h-full min-h-screen-safe pb-safe w-full">
         <Sidebar />
 
