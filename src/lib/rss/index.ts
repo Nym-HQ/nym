@@ -1,14 +1,18 @@
 import { Feed } from 'feed'
 
 import routes from '~/config/routes'
-import { baseEmail, baseUrl } from '~/config/seo'
+import { Context } from '~/graphql/context'
 
-export async function generateRSS(posts) {
+import { getSiteDomain } from '../multitenancy/client'
+
+export async function generateRSS(posts, context: Context) {
+  const baseUrl = `https://${getSiteDomain(context.site)}`
+
   const date = new Date()
   const updated = new Date(posts[0].publishedAt)
   const author = {
-    name: 'Nym',
-    email: baseEmail,
+    name: context.site.name,
+    email: context.owner.email,
     link: baseUrl,
   }
 
@@ -32,13 +36,17 @@ export async function generateRSS(posts) {
 
   posts.forEach((post) => {
     const url = `${baseUrl}/writing/${post.slug}`
+    const postAuthor = {
+      name: post.author.name,
+      email: post.author.email,
+    }
     feed.addItem({
       title: post.title,
       id: url,
       link: url,
       description: post.excerpt,
-      author: [author],
-      contributor: [author],
+      author: [postAuthor],
+      contributor: [postAuthor],
       date: new Date(post.publishedAt),
     })
   })
