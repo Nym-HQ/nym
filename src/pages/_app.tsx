@@ -40,7 +40,7 @@ export default function App({ Component, session, pageProps }) {
 
   const getLayout = (page) => (
     <>
-      <Script src="/api/assets/attach_js" strategy="beforeInteractive" />
+      <Script src="/api/assets/attach.js" strategy="beforeInteractive" />
       {
         /* Global Site Tag (gtag.js) - Google Analytics */
         gtag.GA_TRACKING_ID && (
