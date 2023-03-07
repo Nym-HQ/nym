@@ -4,8 +4,12 @@ import { getContext } from '~/graphql/context'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const context = await getContext({ req, res })
-  res
-    .setHeader('Content-Type', 'application/javascript')
-    .send(context.site?.attach_js || '')
+
+  // remove <script> tags
+  const js = (context.site?.attach_js || '').replace(
+    /^(\s*<script[^>]*>)|(<\/script>\s*)$/g,
+    ''
+  )
+  res.setHeader('Content-Type', 'application/javascript').send(js)
   res.end()
 }
