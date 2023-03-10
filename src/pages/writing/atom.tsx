@@ -17,7 +17,7 @@ export async function getServerSideProps(ctx) {
     query: GET_POSTS,
     variables: { filter: { published: true } },
   })
-  const { atom } = await generateRSS(posts)
+  const { atom } = await generateRSS(posts, context)
 
   if (res) {
     res.setHeader('Content-Type', 'text/xml')
