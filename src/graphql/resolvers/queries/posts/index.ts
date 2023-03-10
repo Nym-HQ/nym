@@ -34,6 +34,13 @@ export async function getPosts(_, args: GetPostsQueryVariables, ctx: Context) {
           reactions: true,
         },
       },
+      author: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      },
     },
   })
 }

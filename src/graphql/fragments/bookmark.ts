@@ -9,6 +9,8 @@ export const BookmarkCoreFragment = gql`
     title
     description
     faviconUrl
+    createdAt
+    updatedAt
   }
 `
 

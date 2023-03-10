@@ -28,7 +28,7 @@ export const NYM_APP_SITE = {
   parkedDomain: '',
   plan: 'free',
   name: 'Nym App',
-  description: '',
+  description: 'Nym is a personal website maker.',
   logo: `${PUBLIC_URL}/static/meta-icon-192.png`,
   banner: null,
   attach_css: null,
