@@ -21,12 +21,7 @@ export function SiteIntro() {
 
   const homepage = parsePageData(data?.homepage)
 
-  const seo = extendSEO(
-    {
-      ...routes.home.seo,
-    },
-    context.context.site
-  )
+  const seo = extendSEO(routes.home.seo, context.context.site)
   return (
     <>
       <NextSeo {...seo} />

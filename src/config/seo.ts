@@ -1,5 +1,5 @@
-import { NYM_APP_SITE } from '~/graphql/constants'
 import { Site } from '~/graphql/types.generated'
+import { getSiteDomain } from '~/lib/multitenancy/client'
 
 export const baseUrl =
   process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : ''
@@ -34,21 +34,57 @@ interface SEOProps {
   url?: string
 }
 
+function getSiteDefaultSEO(site: Site) {
+  const domain = getSiteDomain(site)
+  const twitterHandle = site.social_twitter
+    ? site.social_twitter.replace('https://twitter.com/', '')
+    : null
+  const twitter = {
+    ...(twitterHandle ? { handle: `@${twitterHandle}` } : {}),
+    site: domain,
+    cardType: 'summary_large_image',
+  }
+
+  return {
+    title: site.name,
+    description: site.description || '',
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: `https://${domain}`,
+      site_name: site.name,
+      images: [
+        {
+          url: site.logo ? site.logo : `${baseUrl}/static/og/default.png`,
+          alt: site.name,
+        },
+      ],
+    },
+    twitter,
+  }
+}
+
 export function extendSEO(options: SEOProps, site?: Site) {
+  const baseUrl = site
+    ? `https://${getSiteDomain(site)}`
+    : process.env.PUBLIC_URL || 'https://nymhq.com'
+  const siteSEO = site ? getSiteDefaultSEO(site) : defaultSEO
+
   let images = []
   if (options.image) images = [{ url: `${baseUrl}/static/${options.image}` }]
   else if (site && site.logo) images = [{ url: site.logo }]
-  else if (!site || site.id === NYM_APP_SITE.id)
-    images = defaultSEO.openGraph.images
+  else images = siteSEO.openGraph.images
+
+  const url = `${baseUrl}/${options.url}`
 
   const seo = {
-    ...defaultSEO,
+    ...siteSEO,
     ...options,
-    url: `${baseUrl}/${options.url}`,
+    url,
     openGraph: {
-      ...defaultSEO.openGraph,
+      ...siteSEO.openGraph,
       images,
-      url: `${baseUrl}/${options.url}`,
+      url,
     },
   }
 
@@ -59,14 +95,6 @@ export function extendSEO(options: SEOProps, site?: Site) {
   seo.description = `${seo.description || ''}${
     site?.description ? `\n${site.description}` : ''
   }`
-
-  if (site) {
-    seo.twitter = {
-      handle: `@${site.social_twitter || 'nym_xyz'}`,
-      site: `@${site.parkedDomain || `${site.subdomain}.nymhq.com`}`,
-      cardType: 'summary_large_image',
-    }
-  }
 
   return seo
 }
