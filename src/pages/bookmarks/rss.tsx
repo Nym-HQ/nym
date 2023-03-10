@@ -1,7 +1,8 @@
 import * as React from 'react'
 
 import { getContext } from '~/graphql/context'
-import { getPosts } from '~/graphql/resolvers/queries/posts'
+import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
+import { initApolloClient } from '~/lib/apollo'
 import { generateBookmarkRSS } from '~/lib/rss'
 
 const RSSFeed: React.FC = () => null
@@ -9,8 +10,14 @@ const RSSFeed: React.FC = () => null
 export async function getServerSideProps(ctx) {
   const { req, res } = ctx
   const context = await getContext(ctx)
-  const posts = await getPosts(null, { filter: { published: true } }, context)
-  const { rss } = await generateBookmarkRSS(posts, context)
+  const apolloClient = initApolloClient({ context })
+  const {
+    data: { bookmarks },
+  } = await apolloClient.query({
+    query: GET_BOOKMARKS,
+    variables: { filter: { published: true } },
+  })
+  const { rss } = await generateBookmarkRSS(bookmarks, context)
 
   if (res) {
     res.setHeader('Content-Type', 'text/xml')
