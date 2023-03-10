@@ -1,68 +1,58 @@
-import { defaultSEO, extendSEO } from './seo'
-
 const routes = {
   home: {
     label: 'Home',
     path: '/',
-    seo: defaultSEO,
-  },
-  about: {
-    label: 'About',
-    path: '/about',
-    seo: extendSEO({
-      title: 'About',
-      url: 'about',
-    }),
+    seo: {},
   },
   writing: {
     label: 'Writing',
     path: '/writing',
-    seo: extendSEO({
+    seo: {
       title: 'Writing',
       description: 'Express yourself.',
       image: 'og/writing.png',
       url: 'writing',
-    }),
+    },
   },
   bookmarks: {
     label: 'Bookmarks',
     path: '/bookmarks',
-    seo: extendSEO({
+    seo: {
       title: 'Bookmarks',
       description: 'Internet things, saved for later.',
       image: 'og/bookmarks.png',
       url: 'bookmarks',
-    }),
+    },
   },
   ama: {
     label: 'Q&A',
     path: '/qa',
-    seo: extendSEO({
+    seo: {
       title: 'Q&A',
       description: 'Q&A',
       image: 'og/ama.png',
       url: 'ama',
-    }),
+    },
   },
   pages: {
     label: 'Pages',
     path: '/pages',
-    seo: extendSEO({
+    seo: {
       title: 'Pages',
       description: 'Navigate to published pages',
       image: 'og/writing.png',
       url: 'writing',
-    }),
+    },
   },
   profile: {
     label: 'Profile',
     path: '/profile',
-    seo: extendSEO({
+    seo: {
       title: 'Profile',
       description: 'Manage your profile.',
       image: 'og/settings.png',
       url: 'profile',
-    }),
+    },
   },
 }
 

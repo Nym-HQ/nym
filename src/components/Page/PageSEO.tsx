@@ -12,9 +12,10 @@ interface Props {
 export function PageSEO({ page, site }: Props) {
   const seo = extendSEO(
     {
-      title: `${page.title}${site ? ' - ' : ''}${site?.name || ''}`,
+      title: page.title,
       description: page.excerpt,
       image: page.featureImage,
+      url: page.path || `pages/${page.slug}`,
     },
     site
   )

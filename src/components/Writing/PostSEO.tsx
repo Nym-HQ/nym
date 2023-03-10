@@ -15,6 +15,7 @@ export function PostSEO({ post, site }: Props) {
       title: `${post.title}`,
       description: post.excerpt,
       image: post.featureImage,
+      url: `writing/${post.slug}`,
     },
     site
   )
