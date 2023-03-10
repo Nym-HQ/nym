@@ -1,27 +1,26 @@
 import * as React from 'react'
 
 import { getContext } from '~/graphql/context'
-import { GET_POSTS } from '~/graphql/queries/posts'
+import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
 import { initApolloClient } from '~/lib/apollo'
-import { generatePostRSS } from '~/lib/rss'
+import { generateBookmarkRSS } from '~/lib/rss'
 
-const AtomFeed: React.FC = () => null
+const JSONFeed: React.FC = () => null
 
 export async function getServerSideProps(ctx) {
   const { req, res } = ctx
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
   const {
-    data: { posts },
+    data: { bookmarks },
   } = await apolloClient.query({
-    query: GET_POSTS,
-    variables: { filter: { published: true } },
+    query: GET_BOOKMARKS,
   })
-  const { atom } = await generatePostRSS(posts, context)
+  const { json } = await generateBookmarkRSS(bookmarks?.edges || [], context)
 
   if (res) {
-    res.setHeader('Content-Type', 'text/xml')
-    res.write(atom)
+    res.setHeader('Content-Type', 'application/json')
+    res.write(json)
     res.end()
   }
 
@@ -30,4 +29,4 @@ export async function getServerSideProps(ctx) {
   }
 }
 
-export default AtomFeed
+export default JSONFeed
