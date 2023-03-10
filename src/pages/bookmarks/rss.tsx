@@ -15,9 +15,8 @@ export async function getServerSideProps(ctx) {
     data: { bookmarks },
   } = await apolloClient.query({
     query: GET_BOOKMARKS,
-    variables: { filter: { published: true } },
   })
-  const { rss } = await generateBookmarkRSS(bookmarks, context)
+  const { rss } = await generateBookmarkRSS(bookmarks?.edges, context)
 
   if (res) {
     res.setHeader('Content-Type', 'text/xml')
