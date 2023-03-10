@@ -49,18 +49,11 @@ export async function generateRSS(bookmarks: BookmarkEdge[], context: Context) {
   bookmarks
     ?.map((b) => b.node)
     .forEach((bookmark) => {
-      const url = `${baseUrl}/bookmarks/${bookmark.id}`
-      const bookmarkAuthor = {
-        name: context.owner.name,
-        email: context.owner.email,
-      }
       feed.addItem({
         title: bookmark.title,
-        id: url,
+        id: bookmark.url,
         link: bookmark.url,
         description: bookmark.description,
-        author: [bookmarkAuthor],
-        contributor: [bookmarkAuthor],
         date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
       })
     })
