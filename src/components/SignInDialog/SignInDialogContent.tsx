@@ -16,7 +16,9 @@ export function SignInDialogContent() {
   const getSignInUrl = () => {
     const url = new URL(window.location.href)
     if (url.host != MAIN_APP_DOMAIN) {
-      return `http://${MAIN_APP_DOMAIN}/signin?redirect=true&next=${encodeURIComponent(
+      return `${
+        url.protocol
+      }//${MAIN_APP_DOMAIN}/signin?redirect=true&next=${encodeURIComponent(
         window.location.href
       )}`
     } else if (url.pathname != '/signin') {

@@ -23,11 +23,11 @@ export default function SignInPage(props) {
 export async function getServerSideProps(ctx: NextPageContext) {
   const { req, res } = ctx
 
-  const url = new URL(req.url, `http://${req.headers.host}`)
+  const url = new URL(req.url, `https://${req.headers.host}`)
   const searchParams = new URLSearchParams(url.search)
   const _nextUrl = new URL(
     searchParams.get('next') || '/',
-    `http://${req.headers.host}`
+    `https://${req.headers.host}`
   )
 
   // check if user has already signed-in, and if he did, process cross-signin automatically
@@ -37,7 +37,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     if (_nextUrl.host != MAIN_APP_DOMAIN) {
       nextUrl = new URL(
         `/signin-complete?next=${encodeURIComponent(_nextUrl.toString())}`,
-        `http://${req.headers.host}`
+        `${url.protocol}//${req.headers.host}`
       )
     } else if (_nextUrl.pathname != '/signin') {
       nextUrl = _nextUrl
