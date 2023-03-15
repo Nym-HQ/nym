@@ -4,20 +4,27 @@ import { EditorJSEditor } from '~/components/EditorJS'
 import { Textarea } from '~/components/Input'
 import { Detail } from '~/components/ListDetail/Detail'
 import { CustomizedMDEditor } from '~/components/ReactMdEditor'
+import { slugifyString } from '~/lib/utils'
 
 import { PostEditorContext } from './PostEditor'
 
 export function PostEditorComposer({ site }) {
   const context = React.useContext(PostEditorContext)
-  const { draftState, setDraftState } = context
+  const { draftState, setDraftState, existingPost } = context
   const editorJsRef = React.useRef(null)
 
   function handleTitleChange(e) {
-    let v = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
-    setDraftState((draft) => ({ ...draft, title: v }))
+    let title = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
+    var slug = draftState.slug
+    if (!existingPost) {
+      // if we are creating a new post, automatically generate slug based on the title
+      slug = slugifyString(title)
+    }
+    
+    setDraftState((draft) => ({ ...draft, title, slug }))
 
     // on press enter, focus the editor
-    if ((e.target.value || '') !== v) {
+    if ((e.target.value || '') !== title) {
       editorJsRef.current &&
         editorJsRef.current._editorJS &&
         editorJsRef.current._editorJS.focus()
