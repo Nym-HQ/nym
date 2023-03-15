@@ -15,7 +15,7 @@ export async function getTags(_, __, ctx: Context) {
     })
     dbTags.forEach((tag) => {
       const index = tags.findIndex((t) => t.name === tag.name)
-      if (index === -1) tags.push(tag)
+      if (index === -1) tags.push({ name: tag.name })
     })
   } catch (e) {}
   return tags

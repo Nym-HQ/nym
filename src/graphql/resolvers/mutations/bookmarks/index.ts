@@ -18,7 +18,7 @@ export async function editBookmark(
   ctx: Context
 ) {
   const { id, data } = args
-  const { title, description, tag, faviconUrl } = data
+  const { title, description, tag, faviconUrl, tags } = data
   const { prisma, site } = ctx
 
   if (!title || title.length === 0)
@@ -47,10 +47,12 @@ export async function editBookmark(
         description,
         faviconUrl,
         tags: {
-          connectOrCreate: {
-            where: { name_siteId: { name: tag, siteId: site.id } },
-            create: { name: tag, siteId: site.id },
-          },
+          connectOrCreate: (tags || (tag ? [tag] : [])).map((tag) => ({
+            where: {
+              name_siteId: { name: tag.toLocaleLowerCase(), siteId: site.id },
+            },
+            create: { name: tag.toLocaleLowerCase(), siteId: site.id },
+          })),
         },
       },
       include: { tags: true },
@@ -75,7 +77,7 @@ export async function addBookmark(
   ctx: Context
 ) {
   const { data } = args
-  const { url, tag } = data
+  const { url, tag, tags } = data
   const { prisma, site } = ctx
 
   if (!validUrl(url))
@@ -112,18 +114,14 @@ export async function addBookmark(
         image,
         description,
         faviconUrl,
-        tags:
-          tag !== null
-            ? {
-                connectOrCreate: {
-                  where: { name_siteId: { name: tag, siteId: site.id } },
-                  create: {
-                    name: tag.toLocaleLowerCase(),
-                    siteId: site.id,
-                  },
-                },
-              }
-            : undefined,
+        tags: {
+          connectOrCreate: (tags || (tag ? [tag] : [])).map((tag) => ({
+            where: {
+              name_siteId: { name: tag.toLocaleLowerCase(), siteId: site.id },
+            },
+            create: { name: tag.toLocaleLowerCase(), siteId: site.id },
+          })),
+        },
         site: {
           connect: { id: site.id },
         },
