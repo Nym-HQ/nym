@@ -54,7 +54,7 @@ function handleCrossSiteAuth(request: NextRequest) {
           `${
             request.nextUrl.protocol
           }//${MAIN_APP_DOMAIN}/signin?next=${encodeURIComponent(
-            `http://${requestHost}`
+            `https://${requestHost}`
           )}`,
           request.nextUrl
         )

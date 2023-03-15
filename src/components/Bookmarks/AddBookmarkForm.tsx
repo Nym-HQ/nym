@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import Button from '~/components/Button'
 import { Input } from '~/components/Input'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { TagPicker } from '~/components/Tag/TagPicker'
+import TagPicker from '~/components/Tag/TagPicker'
 import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
 import {
   useAddBookmarkMutation,
@@ -17,7 +17,7 @@ import {
 export function AddBookmarkForm({ closeModal }) {
   const { data: context } = useContextQuery()
   const [url, setUrl] = React.useState('')
-  const [tag, setTag] = React.useState('reading')
+  const [tags, setTags] = React.useState(['reading'])
   const router = useRouter()
 
   const [addBookmarkMutate, { loading }] = useAddBookmarkMutation()
@@ -30,7 +30,7 @@ export function AddBookmarkForm({ closeModal }) {
     e.preventDefault()
 
     addBookmarkMutate({
-      variables: { data: { url, tag } },
+      variables: { data: { url, tags } },
       update(cache, { data }) {
         const { addBookmark } = data ? data : { addBookmark: null }
         if (addBookmark) {
@@ -91,11 +91,6 @@ export function AddBookmarkForm({ closeModal }) {
     }
   }
 
-  const tagFilter = (t) => {
-    const allowedBookmarkTags = ['website', 'reading', 'portfolio']
-    return allowedBookmarkTags.indexOf(t.name) >= 0
-  }
-
   return (
     <form className="space-y-3 p-4" onSubmit={onSubmit}>
       <Input
@@ -106,9 +101,9 @@ export function AddBookmarkForm({ closeModal }) {
         onKeyDown={onKeyDown}
       />
 
-      <TagPicker filter={tagFilter} defaultValue={tag} onChange={setTag} />
+      <TagPicker defaultValue={tags} onChange={setTags} />
 
-      <div className="flex justify-end pt-24">
+      <div className="flex justify-end pt-2">
         <Button disabled={!url || loading} onClick={onSubmit}>
           {loading ? <LoadingSpinner /> : 'Save'}
         </Button>

@@ -4,7 +4,7 @@ import { Link as LinkIcon } from 'react-feather'
 
 import Button, { DeleteButton } from '~/components/Button'
 import { Input, Textarea } from '~/components/Input'
-import { TagPicker } from '~/components/Tag/TagPicker'
+import TagPicker from '~/components/Tag/TagPicker'
 import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
 import { GET_BOOKMARK } from '~/graphql/queries/bookmarks'
 import {
@@ -17,7 +17,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
     error: '',
     title: bookmark.title || bookmark.url,
     description: bookmark.description || '',
-    tag: bookmark.tags[0]?.name || 'reading',
+    tags: bookmark.tags?.map((t) => t.name) || ['reading'],
     faviconUrl: bookmark.faviconUrl,
   }
 
@@ -48,7 +48,11 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
         return {
           ...state,
           error: '',
-          tag: action.value,
+          tag:
+            action.value && !Array.isArray(action.value)
+              ? undefined
+              : action.value,
+          tags: action.value && Array.isArray(action.value) ? action.value : [],
         }
       }
       case 'error': {
@@ -70,7 +74,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
       data: {
         title: state.title,
         description: state.description,
-        tag: state.tag,
+        tags: state.tags,
         faviconUrl: state.faviconUrl,
       },
     },
@@ -81,7 +85,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
         ...bookmark,
         title: state.title,
         description: state.description,
-        tags: [{ name: state.tag }],
+        tags: state.tags.map((t) => ({ __typename: 'Tag', name: t })),
         faviconUrl: state.faviconUrl,
       },
     },
@@ -185,7 +189,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
 
         <TagPicker
           filter={tagFilter}
-          defaultValue={initialState.tag}
+          defaultValue={initialState.tags}
           onChange={onTagChange}
         />
 

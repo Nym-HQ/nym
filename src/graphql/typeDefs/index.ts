@@ -286,12 +286,14 @@ const typeDefs = gql`
   input AddBookmarkInput {
     url: String!
     tag: String
+    tags: [String]
   }
 
   input EditBookmarkInput {
     title: String!
     description: String
     tag: String
+    tags: [String]
     faviconUrl: String
   }
 

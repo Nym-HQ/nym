@@ -50,7 +50,7 @@ const graphqlHandler = async (req, res) => {
   const httpGraphQLRequest: HTTPGraphQLRequest = {
     method: req.method.toUpperCase(),
     headers,
-    search: new URL(req.url, `http://${req.headers.host}`).search ?? '',
+    search: new URL(req.url, `https://${req.headers.host}`).search ?? '',
     body: req.body,
   }
 

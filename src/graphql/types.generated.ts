@@ -28,6 +28,7 @@ export type Scalars = {
 
 export type AddBookmarkInput = {
   tag?: InputMaybe<Scalars['String']>
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>
   url: Scalars['String']
 }
 
@@ -112,6 +113,7 @@ export type EditBookmarkInput = {
   description?: InputMaybe<Scalars['String']>
   faviconUrl?: InputMaybe<Scalars['String']>
   tag?: InputMaybe<Scalars['String']>
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>
   title: Scalars['String']
 }
 
@@ -598,6 +600,8 @@ export type BookmarkCoreFragment = {
   title?: string | null | undefined
   description?: string | null | undefined
   faviconUrl?: string | null | undefined
+  createdAt: any
+  updatedAt: any
 }
 
 export type BookmarkListItemFragment = {
@@ -608,6 +612,8 @@ export type BookmarkListItemFragment = {
   title?: string | null | undefined
   description?: string | null | undefined
   faviconUrl?: string | null | undefined
+  createdAt: any
+  updatedAt: any
 }
 
 export type BookmarkDetailFragment = {
@@ -620,6 +626,8 @@ export type BookmarkDetailFragment = {
   title?: string | null | undefined
   description?: string | null | undefined
   faviconUrl?: string | null | undefined
+  createdAt: any
+  updatedAt: any
   tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
 }
 
@@ -647,6 +655,8 @@ export type BookmarksConnectionFragment = {
               title?: string | null | undefined
               description?: string | null | undefined
               faviconUrl?: string | null | undefined
+              createdAt: any
+              updatedAt: any
             }
           | null
           | undefined
@@ -766,6 +776,19 @@ export type PostCoreFragment = {
   title?: string | null | undefined
   slug?: string | null | undefined
   excerpt?: string | null | undefined
+  author?:
+    | {
+        __typename: 'User'
+        id: string
+        username?: string | null | undefined
+        image?: string | null | undefined
+        avatar?: string | null | undefined
+        name?: string | null | undefined
+        role?: UserRole | null | undefined
+        isAdmin?: boolean | null | undefined
+      }
+    | null
+    | undefined
 }
 
 export type PostListItemFragment = {
@@ -775,6 +798,19 @@ export type PostListItemFragment = {
   title?: string | null | undefined
   slug?: string | null | undefined
   excerpt?: string | null | undefined
+  author?:
+    | {
+        __typename: 'User'
+        id: string
+        username?: string | null | undefined
+        image?: string | null | undefined
+        avatar?: string | null | undefined
+        name?: string | null | undefined
+        role?: UserRole | null | undefined
+        isAdmin?: boolean | null | undefined
+      }
+    | null
+    | undefined
 }
 
 export type PostDetailFragment = {
@@ -790,6 +826,19 @@ export type PostDetailFragment = {
   title?: string | null | undefined
   slug?: string | null | undefined
   excerpt?: string | null | undefined
+  author?:
+    | {
+        __typename: 'User'
+        id: string
+        username?: string | null | undefined
+        image?: string | null | undefined
+        avatar?: string | null | undefined
+        name?: string | null | undefined
+        role?: UserRole | null | undefined
+        isAdmin?: boolean | null | undefined
+      }
+    | null
+    | undefined
 }
 
 export type QuestionCoreFragment = {
@@ -1015,6 +1064,8 @@ export type EditBookmarkMutation = {
         title?: string | null | undefined
         description?: string | null | undefined
         faviconUrl?: string | null | undefined
+        createdAt: any
+        updatedAt: any
         tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
       }
     | null
@@ -1047,6 +1098,8 @@ export type AddBookmarkMutation = {
         title?: string | null | undefined
         description?: string | null | undefined
         faviconUrl?: string | null | undefined
+        createdAt: any
+        updatedAt: any
         tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
       }
     | null
@@ -1230,6 +1283,19 @@ export type EditPostMutation = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        author?:
+          | {
+              __typename: 'User'
+              id: string
+              username?: string | null | undefined
+              image?: string | null | undefined
+              avatar?: string | null | undefined
+              name?: string | null | undefined
+              role?: UserRole | null | undefined
+              isAdmin?: boolean | null | undefined
+            }
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -1264,6 +1330,19 @@ export type AddPostMutation = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        author?:
+          | {
+              __typename: 'User'
+              id: string
+              username?: string | null | undefined
+              image?: string | null | undefined
+              avatar?: string | null | undefined
+              name?: string | null | undefined
+              role?: UserRole | null | undefined
+              isAdmin?: boolean | null | undefined
+            }
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -1558,6 +1637,8 @@ export type GetBookmarksQuery = {
                 title?: string | null | undefined
                 description?: string | null | undefined
                 faviconUrl?: string | null | undefined
+                createdAt: any
+                updatedAt: any
               }
             | null
             | undefined
@@ -1585,6 +1666,8 @@ export type GetBookmarkQuery = {
         title?: string | null | undefined
         description?: string | null | undefined
         faviconUrl?: string | null | undefined
+        createdAt: any
+        updatedAt: any
         tags: Array<{ __typename?: 'Tag'; name: string } | null | undefined>
       }
     | null
@@ -1744,6 +1827,19 @@ export type GetPostsQuery = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        author?:
+          | {
+              __typename: 'User'
+              id: string
+              username?: string | null | undefined
+              image?: string | null | undefined
+              avatar?: string | null | undefined
+              name?: string | null | undefined
+              role?: UserRole | null | undefined
+              isAdmin?: boolean | null | undefined
+            }
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -1770,6 +1866,19 @@ export type GetPostQuery = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        author?:
+          | {
+              __typename: 'User'
+              id: string
+              username?: string | null | undefined
+              image?: string | null | undefined
+              avatar?: string | null | undefined
+              name?: string | null | undefined
+              role?: UserRole | null | undefined
+              isAdmin?: boolean | null | undefined
+            }
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -2047,6 +2156,8 @@ export const BookmarkCoreFragmentDoc = gql`
     title
     description
     faviconUrl
+    createdAt
+    updatedAt
   }
 `
 export const BookmarkDetailFragmentDoc = gql`
@@ -2175,7 +2286,11 @@ export const PostCoreFragmentDoc = gql`
     title
     slug
     excerpt
+    author {
+      ...UserInfo
+    }
   }
+  ${UserInfoFragmentDoc}
 `
 export const PostListItemFragmentDoc = gql`
   fragment PostListItem on Post {

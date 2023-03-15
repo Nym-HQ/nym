@@ -4,20 +4,27 @@ import { EditorJSEditor } from '~/components/EditorJS'
 import { Textarea } from '~/components/Input'
 import { Detail } from '~/components/ListDetail/Detail'
 import { CustomizedMDEditor } from '~/components/ReactMdEditor'
+import { slugifyString } from '~/lib/utils'
 
 import { PageEditorContext } from './PageEditor'
 
 export function PageEditorComposer({ site }) {
   const context = React.useContext(PageEditorContext)
-  const { draftState, setDraftState } = context
+  const { draftState, setDraftState, existingPage } = context
   const editorJsRef = React.useRef(null)
 
   function handleTitleChange(e) {
-    let v = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
-    setDraftState((draft) => ({ ...draft, title: v }))
+    let title = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
+    var slug = draftState.slug
+    if (!existingPage) {
+      // if we are creating a new page, automatically generate slug based on the title
+      slug = slugifyString(title)
+    }
+
+    setDraftState((draft) => ({ ...draft, title, slug }))
 
     // on press enter, focus the editor
-    if ((e.target.value || '') !== v) {
+    if ((e.target.value || '') !== title) {
       // line changes?
       editorJsRef.current &&
         editorJsRef.current._editorJS &&
