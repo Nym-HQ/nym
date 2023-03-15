@@ -20,7 +20,7 @@ export function PostEditorComposer({ site }) {
       // if we are creating a new post, automatically generate slug based on the title
       slug = slugifyString(title)
     }
-    
+
     setDraftState((draft) => ({ ...draft, title, slug }))
 
     // on press enter, focus the editor
