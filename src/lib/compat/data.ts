@@ -53,7 +53,7 @@ export function extractFeatureImage(text: string, data: string) {
     if (match) return match[1]
 
     // markdown
-    const regex1 = /![]\(([^">]+)\)/g
+    const regex1 = /!\[\]\(([^">\)]+)\)/g
     const match1 = regex1.exec(text)
     if (match1) return match1[1]
 
