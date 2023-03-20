@@ -5,13 +5,13 @@ import Button, { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { useContextQuery } from '~/graphql/types.generated'
 
-import { DialogComponent } from '../Dialog'
+import { GlobalNavigationContext } from '../Providers/GlobalNavigation'
 import SegmentedControl from '../SegmentedController'
 import { WritingContext } from './PostsList'
-import { WritingSubscriptionForm } from './SubscriptionForm'
 
 export function WritingTitlebar({ scrollContainerRef }) {
   const { data } = useContextQuery()
+  const { setSubscribeFormOpen } = React.useContext(GlobalNavigationContext)
 
   function getAddButton() {
     if (data?.context?.viewer?.isAdmin) {
@@ -30,22 +30,17 @@ export function WritingTitlebar({ scrollContainerRef }) {
   }
 
   function getSubscribeButton() {
-    if (data?.context?.viewer?.isAdmin) return null
     return (
-      <DialogComponent
-        title="Newsletter"
-        trigger={
-          <Button data-cy="open-subscribe-hn-dialog" size="small">
-            <Radio size={16} />
-            <span>Subscribe</span>
-          </Button>
-        }
-        modalContent={() => (
-          <WritingSubscriptionForm
-            doubleOptin={data?.context?.site?.newsletter_double_optin}
-          />
-        )}
-      />
+      <Button
+        data-cy="open-subscribe-hn-dialog"
+        size="small"
+        onClick={() => {
+          setSubscribeFormOpen(true)
+        }}
+      >
+        <Radio size={16} />
+        <span>Subscribe</span>
+      </Button>
     )
   }
 

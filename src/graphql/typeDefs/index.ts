@@ -89,6 +89,7 @@ const typeDefs = gql`
     image: String
     faviconUrl: String
     description: String
+    html: String
     tags: [Tag]!
     reactionCount: Int
     viewerHasReacted: Boolean

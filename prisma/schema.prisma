@@ -183,6 +183,7 @@ model Bookmark {
   description   String?    @db.VarChar(2048)
   twitterHandle String?
   faviconUrl    String?    @db.VarChar(512)
+  html          String?    @db.Text
   comments      Comment[]
   reactions     Reaction[]
   tags          Tag[]

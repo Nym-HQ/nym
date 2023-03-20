@@ -53,7 +53,7 @@ export function PostEditorComposer({ site }) {
         />
       </Detail.Header>
 
-      {draftState.text && !draftState.data?.blocks ? (
+      {draftState.text && !draftState.data?.blocks?.length ? (
         <CustomizedMDEditor
           value={draftState.text}
           onChange={handleTextChange}

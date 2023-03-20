@@ -65,6 +65,7 @@ export type Bookmark = {
   description?: Maybe<Scalars['String']>
   faviconUrl?: Maybe<Scalars['String']>
   host: Scalars['String']
+  html?: Maybe<Scalars['String']>
   id: Scalars['ID']
   image?: Maybe<Scalars['String']>
   reactionCount?: Maybe<Scalars['Int']>
@@ -598,7 +599,6 @@ export type BookmarkCoreFragment = {
   url: string
   host: string
   title?: string | null | undefined
-  description?: string | null | undefined
   faviconUrl?: string | null | undefined
   createdAt: any
   updatedAt: any
@@ -610,7 +610,6 @@ export type BookmarkListItemFragment = {
   url: string
   host: string
   title?: string | null | undefined
-  description?: string | null | undefined
   faviconUrl?: string | null | undefined
   createdAt: any
   updatedAt: any
@@ -618,13 +617,14 @@ export type BookmarkListItemFragment = {
 
 export type BookmarkDetailFragment = {
   __typename: 'Bookmark'
+  description?: string | null | undefined
+  html?: string | null | undefined
   reactionCount?: number | null | undefined
   viewerHasReacted?: boolean | null | undefined
   id: string
   url: string
   host: string
   title?: string | null | undefined
-  description?: string | null | undefined
   faviconUrl?: string | null | undefined
   createdAt: any
   updatedAt: any
@@ -653,7 +653,6 @@ export type BookmarksConnectionFragment = {
               url: string
               host: string
               title?: string | null | undefined
-              description?: string | null | undefined
               faviconUrl?: string | null | undefined
               createdAt: any
               updatedAt: any
@@ -1056,13 +1055,14 @@ export type EditBookmarkMutation = {
   editBookmark?:
     | {
         __typename: 'Bookmark'
+        description?: string | null | undefined
+        html?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
         id: string
         url: string
         host: string
         title?: string | null | undefined
-        description?: string | null | undefined
         faviconUrl?: string | null | undefined
         createdAt: any
         updatedAt: any
@@ -1090,13 +1090,14 @@ export type AddBookmarkMutation = {
   addBookmark?:
     | {
         __typename: 'Bookmark'
+        description?: string | null | undefined
+        html?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
         id: string
         url: string
         host: string
         title?: string | null | undefined
-        description?: string | null | undefined
         faviconUrl?: string | null | undefined
         createdAt: any
         updatedAt: any
@@ -1635,7 +1636,6 @@ export type GetBookmarksQuery = {
                 url: string
                 host: string
                 title?: string | null | undefined
-                description?: string | null | undefined
                 faviconUrl?: string | null | undefined
                 createdAt: any
                 updatedAt: any
@@ -1658,13 +1658,14 @@ export type GetBookmarkQuery = {
   bookmark?:
     | {
         __typename: 'Bookmark'
+        description?: string | null | undefined
+        html?: string | null | undefined
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
         id: string
         url: string
         host: string
         title?: string | null | undefined
-        description?: string | null | undefined
         faviconUrl?: string | null | undefined
         createdAt: any
         updatedAt: any
@@ -2154,7 +2155,6 @@ export const BookmarkCoreFragmentDoc = gql`
     url
     host
     title
-    description
     faviconUrl
     createdAt
     updatedAt
@@ -2163,6 +2163,8 @@ export const BookmarkCoreFragmentDoc = gql`
 export const BookmarkDetailFragmentDoc = gql`
   fragment BookmarkDetail on Bookmark {
     ...BookmarkCore
+    description
+    html
     reactionCount
     viewerHasReacted
     tags {

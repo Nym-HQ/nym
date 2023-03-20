@@ -71,7 +71,16 @@ export function extendSEO(options: SEOProps, site?: Site) {
   const siteSEO = site ? getSiteDefaultSEO(site) : defaultSEO
 
   let images = []
-  if (options.image) images = [{ url: `${baseUrl}/static/${options.image}` }]
+  if (options.image)
+    images = [
+      {
+        url:
+          options.image.startsWith('http:') ||
+          options.image.startsWith('https:')
+            ? options.image
+            : `${baseUrl}/static/${options.image}`,
+      },
+    ]
   else if (site && site.logo) images = [{ url: site.logo }]
   else images = siteSEO.openGraph.images
 

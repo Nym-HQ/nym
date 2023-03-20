@@ -8,6 +8,7 @@ import {
   MutationEditBookmarkArgs,
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
+import { getTweetCardHtml } from '~/lib/tweet/getTweetCardHtml'
 import { validUrl } from '~/lib/validators'
 
 import getBookmarkMetaData from './getBookmarkMetaData'
@@ -87,9 +88,19 @@ export async function addBookmark(
       },
     })
 
-  let metadata
+  let metadata,
+    html = null
   try {
-    metadata = await getBookmarkMetaData(url)
+    if (url.startsWith('https://twitter.com/')) {
+      const tweet = await getTweetCardHtml(url)
+      html = tweet.html
+      metadata = tweet.meta
+      metadata.title =
+        metadata.title || `Tweet from ${metadata.name || metadata.screen_name}`
+    } else {
+      metadata = await getBookmarkMetaData(url)
+      html
+    }
   } catch (err) {
     console.error('Unable to get metadata for bookmark: ' + url, { err })
     metadata = {
@@ -113,6 +124,7 @@ export async function addBookmark(
         title,
         image,
         description,
+        html,
         faviconUrl,
         tags: {
           connectOrCreate: (tags || (tag ? [tag] : [])).map((tag) => ({
