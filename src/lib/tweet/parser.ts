@@ -200,6 +200,9 @@ export const getTweetContent = (
       created_at: data.created_at,
       favorite_count: data.favorite_count,
       conversation_count: data.conversation_count,
+      host: 'twitter.com',
+      title: card?.binding_values?.title?.string_value,
+      description: card?.binding_values?.description?.string_value,
     }
 
     const stylerAttrOptions = (classes: string, styles?: string) =>

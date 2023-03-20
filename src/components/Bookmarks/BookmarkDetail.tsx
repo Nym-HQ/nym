@@ -31,7 +31,7 @@ export function BookmarkDetail({ id, bookmark, site, loading, error }) {
   const seo = extendSEO(
     {
       ...routes.bookmarks.seo,
-      title: `Bookmark:${bookmark.title}`,
+      title: `Bookmark${bookmark.title ? `:${bookmark.title}` : ''}`,
       description: bookmark.description,
     },
     site
@@ -85,6 +85,9 @@ export function BookmarkDetail({ id, bookmark, site, loading, error }) {
                   children={bookmark.description}
                   variant="comment"
                 />
+              )}
+              {bookmark.html && (
+                <div dangerouslySetInnerHTML={{ __html: bookmark.html }}></div>
               )}
             </Detail.Header>
             <div className="mt-6">

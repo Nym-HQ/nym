@@ -7,7 +7,6 @@ export const BookmarkCoreFragment = gql`
     url
     host
     title
-    description
     faviconUrl
     createdAt
     updatedAt
@@ -24,6 +23,8 @@ export const BookmarkListItemFragment = gql`
 export const BookmarkDetailFragment = gql`
   fragment BookmarkDetail on Bookmark {
     ...BookmarkCore
+    description
+    html
     reactionCount
     viewerHasReacted
     tags {
