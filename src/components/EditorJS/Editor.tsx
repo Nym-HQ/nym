@@ -8,6 +8,7 @@ import InlineCode from '@editorjs/inline-code'
 import LinkTool from '@editorjs/link'
 import List from '@editorjs/list'
 import Marker from '@editorjs/marker'
+import NestedList from '@editorjs/nested-list'
 import Paragraph from '@editorjs/paragraph'
 import Quote from '@editorjs/quote'
 import Raw from '@editorjs/raw'
@@ -21,6 +22,7 @@ import { createReactEditorJS } from 'react-editor-js'
 
 import { Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
 import { CustomLinkTool } from './CustomLinkTool'
+import SubscribeButtonTool from './SubscribeButtonTool'
 
 const DEFAULT_EDITOR_JS_TOOLS = {
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
@@ -28,6 +30,16 @@ const DEFAULT_EDITOR_JS_TOOLS = {
   embed: Embed,
   table: Table,
   list: List,
+  // !TODO: Replace @editorjs/list with @editorjs/nested-list,
+  //        But we should wait for [the PR](https://github.com/editor-js/nested-list/pull/39) to be merged.
+  //        Otherwise, the nested list is not compatible with the old list.
+  // list: {
+  //   class: NestedList,
+  //   inlineToolbar: true,
+  //   config: {
+  //     defaultStyle: 'unordered'
+  //   },
+  // },
   warning: Warning,
   code: Code,
   linkTool: LinkTool,
@@ -147,6 +159,7 @@ export default function CustomizedEditorJS({
         endpoint: '/api/link-meta', // endpoint for url data fetching,
       },
     },
+    subscribe: SubscribeButtonTool,
   }
 
   const ReactEditorJS = createReactEditorJS()
