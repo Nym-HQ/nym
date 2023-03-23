@@ -22,8 +22,6 @@ function WritingPostPage(props) {
   const { data: context } = useContextQuery({ variables: {} })
   const { data, error, loading } = useGetPostQuery({ variables: { slug } })
   const post = parsePostData(data?.post)
-  if (post && !post.publishedAt)
-    return <PostEditor slug={slug} site={context.context.site} post={post} />
 
   return (
     <PostDetail

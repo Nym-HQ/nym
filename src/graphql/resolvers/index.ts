@@ -89,7 +89,7 @@ const resolvers = {
   SiteOwner: {
     hasEmail: (_, __, { owner }) => {
       return !!owner?.email && validEmail(owner.email)
-    }
+    },
   },
   User: {
     isAdmin: ({ role }, _, { viewer, userSite }) => {
