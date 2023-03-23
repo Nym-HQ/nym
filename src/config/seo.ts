@@ -102,7 +102,7 @@ export function extendSEO(options: SEOProps, site?: Site) {
     title: options.title
       ? `${options.title}${site?.name ? ` - ${site.name}` : ''}`
       : `${site?.name || ''}`,
-    description: `${options.description || ''}${options.description && '\n'}${
+    description: `${options.description || ''}${options.description ? '\n' : ''}${
       site?.description || ''
     }`,
   }
