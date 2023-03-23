@@ -95,15 +95,13 @@ export function extendSEO(options: SEOProps, site?: Site) {
       images,
       url,
     },
+    title: options.title
+      ? `${options.title}${site?.name ? ` - ${site.name}` : ''}`
+      : `${site?.name || ''}`,
+    description: `${options.description || ''}${options.description && '\n'}${
+      site?.description || ''
+    }`,
   }
-
-  // override with site configuration
-  seo.title = seo.title
-    ? `${seo.title}${site?.name ? ` - ${site.name}` : ''}`
-    : `${site?.name || ''}`
-  seo.description = `${seo.description || ''}${
-    site?.description ? `\n${site.description}` : ''
-  }`
 
   return seo
 }

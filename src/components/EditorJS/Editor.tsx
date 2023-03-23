@@ -15,12 +15,12 @@ import Raw from '@editorjs/raw'
 import SimpleImage from '@editorjs/simple-image'
 import Table from '@editorjs/table'
 import Warning from '@editorjs/warning'
-import AnyButton from 'editorjs-button'
 import { debounce } from 'lodash'
 import React, { useCallback, useRef } from 'react'
 import { createReactEditorJS } from 'react-editor-js'
 
 import { Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
+import AnyButton from './AnyButtonTool'
 import { CustomLinkTool } from './CustomLinkTool'
 import SubscribeButtonTool from './SubscribeButtonTool'
 

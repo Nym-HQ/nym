@@ -3,6 +3,7 @@
  * These pages will be used to manage the user's contents on the site
  *
  */
+import Link from 'next/link'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 import { BiInfoCircle } from 'react-icons/bi'
@@ -114,9 +115,9 @@ function AdminSettingsPage(props) {
             {context.context.userSite?.siteRole === 'OWNER' ? (
               <>
                 Please set it in{' '}
-                <a className="underline" href="/profile">
+                <Link className="underline" href="/profile">
                   this page
-                </a>
+                </Link>
                 .
               </>
             ) : (
