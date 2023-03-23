@@ -3,6 +3,7 @@
  * These pages will be used to manage the user's contents on the site
  *
  */
+import Link from 'next/link'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 import { BiInfoCircle } from 'react-icons/bi'
@@ -108,6 +109,23 @@ function AdminSettingsPage(props) {
 
     return (
       <Subsection title="Email newsletter settings">
+        {!context.context.owner?.hasEmail && (
+          <p className="text-red-500 text-sm ml-1 mt-1 font-medium">
+            The email address of the site owner is not set.{' '}
+            {context.context.userSite?.siteRole === 'OWNER' ? (
+              <>
+                Please set it in{' '}
+                <Link className="underline" href="/profile">
+                  this page
+                </Link>
+                .
+              </>
+            ) : (
+              <>Please contact the site owner!</>
+            )}
+          </p>
+        )}
+
         <div className="mt-10 sm:mt-0">
           <div className="px-4 py-5 sm:p-6">
             <div className="grid grid-cols-6 gap-6">

@@ -22,8 +22,6 @@ function PagePagePage(props) {
   const { data, error, loading } = useGetPageQuery({ variables: { slug } })
   const { data: context } = useContextQuery({ variables: {} })
   const page = parsePageData(props.page)
-  if (page && !page.publishedAt)
-    return <PageEditor slug={slug} site={context.context.site} page={page} />
 
   return (
     <PageDetail
@@ -44,7 +42,7 @@ export async function getServerSideProps(ctx) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 
-  const { data } = await apolloClient.query({
+  const { data, loading } = await apolloClient.query({
     query: GET_PAGE,
     variables: { slug },
   })

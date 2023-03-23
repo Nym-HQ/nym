@@ -4,7 +4,7 @@ import '~/styles/prose-styles.css'
 import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 import '~/styles/react-md-editor.css'
-import '~/styles/editor-js.css'
+import '~/styles/editor-js.scss'
 
 import { Analytics } from '@vercel/analytics/react'
 import { useRouter } from 'next/router'

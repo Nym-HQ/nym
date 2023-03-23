@@ -1,9 +1,6 @@
-import AnyButton from 'editorjs-button'
+import AnyButton from './AnyButtonTool'
 
 export default class SubscribeButtonTool extends AnyButton {
-  public nodes: any
-  public api: any
-  public data: any
   /**
    *
    * @returns {{icon: string, title: string}}

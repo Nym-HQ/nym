@@ -5,7 +5,6 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import { CommentType } from '~/graphql/types.generated'
-import { parseEditorJsDataIntoHtml } from '~/lib/editorjs'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { EditorJSPreviewer } from '../EditorJS'
@@ -29,7 +28,6 @@ export function PostDetail({ slug, site, post, error, loading }) {
 
   if (editorJsRef.current) {
     editorJsRef.current.render(post.data)
-    console.log('html', parseEditorJsDataIntoHtml(post.data))
   }
 
   const publishedAt = timestampToCleanTime({ timestamp: post.publishedAt })

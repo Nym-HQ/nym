@@ -11,6 +11,7 @@ import {
   QuestionStatus,
   UserRole,
 } from '~/graphql/types.generated'
+import { validEmail } from '~/lib/validators'
 
 import { NYM_APP_SITE } from '../constants'
 
@@ -83,6 +84,11 @@ const resolvers = {
         .reactions()
 
       return reactions.length
+    },
+  },
+  SiteOwner: {
+    hasEmail: (_, __, { owner }) => {
+      return !!owner?.email && validEmail(owner.email)
     },
   },
   User: {

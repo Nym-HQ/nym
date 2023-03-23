@@ -524,6 +524,7 @@ export type Site = {
 export type SiteOwner = {
   __typename?: 'SiteOwner'
   avatar?: Maybe<Scalars['String']>
+  hasEmail?: Maybe<Scalars['Boolean']>
   image?: Maybe<Scalars['String']>
 }
 
@@ -2142,6 +2143,7 @@ export type ContextQuery = {
           __typename?: 'SiteOwner'
           image?: string | null | undefined
           avatar?: string | null | undefined
+          hasEmail?: boolean | null | undefined
         }
       | null
       | undefined
@@ -4408,6 +4410,7 @@ export const ContextDocument = gql`
       owner {
         image
         avatar
+        hasEmail
       }
     }
   }
