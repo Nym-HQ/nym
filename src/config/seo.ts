@@ -53,6 +53,7 @@ function getSiteDefaultSEO(site: Site) {
       locale: 'en_US',
       url: `https://${domain}`,
       site_name: site.name,
+      images: [],
     },
     twitter,
   }
@@ -88,7 +89,7 @@ export function extendSEO(options: SEOProps, site?: Site) {
   else if (site && site.logo) images = [{ url: site.logo }]
   else images = siteSEO.openGraph.images
 
-  const url = `${baseUrl}/${options.url}`
+  const url = `${baseUrl}/${options.url || ''}`
 
   const seo = {
     ...siteSEO,
@@ -102,9 +103,9 @@ export function extendSEO(options: SEOProps, site?: Site) {
     title: options.title
       ? `${options.title}${site?.name ? ` - ${site.name}` : ''}`
       : `${site?.name || ''}`,
-    description: `${options.description || ''}${options.description && '\n'}${
-      site?.description || ''
-    }`,
+    description: `${options.description || ''}${
+      options.description ? '\n' : ''
+    }${site?.description || ''}`,
   }
 
   return seo
