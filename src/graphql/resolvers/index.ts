@@ -88,7 +88,8 @@ const resolvers = {
   },
   SiteOwner: {
     hasEmail: (_, __, { owner }) => {
-      return !!owner?.email && validEmail(owner.email)
+      if (owner?.email) return validEmail(owner.email)
+      return false
     },
   },
   User: {

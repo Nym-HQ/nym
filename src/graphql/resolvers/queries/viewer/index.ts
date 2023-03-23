@@ -6,7 +6,7 @@ export function getViewerContext(_, __, { viewer, site, userSite, owner }) {
     owner: {
       avatar: owner?.avatar,
       image: owner?.image,
-      hasEmail: owner.hasEmail,
+      hasEmail: owner?.hasEmail,
     },
   }
 }
