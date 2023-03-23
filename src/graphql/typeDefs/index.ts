@@ -44,6 +44,7 @@ const typeDefs = gql`
   type SiteOwner {
     avatar: String
     image: String
+    hasEmail: Boolean
   }
 
   type Page {

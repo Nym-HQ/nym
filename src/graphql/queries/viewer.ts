@@ -35,6 +35,7 @@ export const GET_CONTEXT = gql`
       owner {
         image
         avatar
+        hasEmail
       }
     }
   }
