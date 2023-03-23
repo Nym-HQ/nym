@@ -45,7 +45,7 @@ function getSiteDefaultSEO(site: Site) {
     cardType: 'summary_large_image',
   }
 
-  return {
+  const seo: any = {
     title: site.name,
     description: site.description || '',
     openGraph: {
@@ -53,15 +53,19 @@ function getSiteDefaultSEO(site: Site) {
       locale: 'en_US',
       url: `https://${domain}`,
       site_name: site.name,
-      images: [
-        {
-          url: site.logo ? site.logo : `${baseUrl}/static/og/default.png`,
-          alt: site.name,
-        },
-      ],
     },
     twitter,
   }
+
+  if (site.logo)
+    seo.openGraph.images = [
+      {
+        url: site.logo,
+        alt: site.name,
+      },
+    ]
+
+  return seo
 }
 
 export function extendSEO(options: SEOProps, site?: Site) {
