@@ -57,7 +57,7 @@ export function AddBookmarkForm({ closeModal }) {
     }).then(({ data }) => {
       const { addBookmark } = data ? data : { addBookmark: null }
       if (!addBookmark) {
-        toast.error('Error creating bookmark')
+        // an error message must be shown by the Apollo client error handler already
         return
       }
       const { id } = addBookmark

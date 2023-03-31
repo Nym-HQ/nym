@@ -145,13 +145,24 @@ export async function addBookmark(
       return bookmark
     })
     .catch((err) => {
-      console.error('Failed to create bookmark', err)
-      console.error('Failed bookmark metadata', metadata)
-      throw new GraphQLError('Unable to create bookmark', {
-        extensions: {
-          code: ApolloServerErrorCode.BAD_REQUEST,
-        },
-      })
+      if (err.code === 'P2002') {
+        throw new GraphQLError(
+          'You already have a bookmark with the same URL.',
+          {
+            extensions: {
+              code: ApolloServerErrorCode.BAD_REQUEST,
+            },
+          }
+        )
+      } else {
+        console.error('Failed to create bookmark', err)
+        console.error('Failed bookmark metadata', metadata)
+        throw new GraphQLError('Unable to create bookmark', {
+          extensions: {
+            code: ApolloServerErrorCode.BAD_REQUEST,
+          },
+        })
+      }
     })
 }
 
