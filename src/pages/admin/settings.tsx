@@ -282,7 +282,7 @@ function AdminSettingsPage(props) {
         title="Site Settings"
         backButton
         globalMenu={false}
-        backButtonHref={'/admin'}
+        backButtonHref={'/'}
         titleRef={titleRef}
         scrollContainerRef={scrollContainerRef}
         magicTitle

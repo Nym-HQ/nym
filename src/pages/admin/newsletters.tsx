@@ -28,7 +28,7 @@ function AdminNewslettersPage(props) {
         title="Your subscribers"
         backButton
         globalMenu={false}
-        backButtonHref={'/admin'}
+        backButtonHref={'/'}
         titleRef={titleRef}
         scrollContainerRef={scrollContainerRef}
         magicTitle
