@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { TwitterApi } from 'twitter-api-v2'
 
 import { getContext } from '~/graphql/context'
+import { addBookmark } from '~/graphql/resolvers/mutations/bookmarks'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 /**
@@ -72,6 +73,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // TODO: save bookmark into our bookmark
     const tweetUrl = `https://twitter.com/${bookmark.author_id}/status/${bookmark}`
     console.debug('twitter bookmark', bookmark, tweetUrl)
+    // await addBookmark({}, { data: { url: tweetUrl, tags: [] } }, context)
   }
 
   console.debug(

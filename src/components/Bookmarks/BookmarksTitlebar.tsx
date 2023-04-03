@@ -25,7 +25,7 @@ export function BookmarksTitlebar({ scrollContainerRef }) {
   function trailingAccessory() {
     return (
       <div className="flex space-x-2">
-        {data?.context?.userSite?.siteRole === SiteRole.Owner && (
+        {/* {data?.context?.userSite?.siteRole === SiteRole.Owner && (
           <GhostButton
             title="Sync Twitter Bookmarks"
             aria-label="Sync Twitter Bookmarks"
@@ -35,7 +35,7 @@ export function BookmarksTitlebar({ scrollContainerRef }) {
           >
             <RefreshCw size={16} />
           </GhostButton>
-        )}
+        )} */}
 
         <BookmarksFilterMenu />
 
