@@ -31,7 +31,7 @@ function AdminProfilePage(props) {
         title="Domain Mappings"
         backButton
         globalMenu={false}
-        backButtonHref={'/admin'}
+        backButtonHref={'/'}
         magicTitle
       />
 

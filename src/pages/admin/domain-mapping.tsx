@@ -4,7 +4,6 @@
  *
  */
 
-import { NextSeo } from 'next-seo'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 
@@ -19,7 +18,6 @@ import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import {
   useContextQuery,
@@ -63,7 +61,7 @@ function AdminDomainMappingPage(props) {
         title="Domain Mappings"
         backButton
         globalMenu={false}
-        backButtonHref={'/admin'}
+        backButtonHref={'/'}
         titleRef={titleRef}
         scrollContainerRef={scrollContainerRef}
         magicTitle

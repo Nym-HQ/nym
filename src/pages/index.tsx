@@ -5,7 +5,6 @@ import * as React from 'react'
 import { PrimaryButton } from '~/components/Button'
 import { SiteIntro } from '~/components/Home/SiteIntro'
 import { Detail } from '~/components/ListDetail/Detail'
-import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { GlobalSiteContext } from '~/components/Providers/GlobalSite'
 import { SignIn } from '~/components/SignIn'
@@ -20,7 +19,7 @@ import {
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
-import { getSiteDomain } from '~/lib/multitenancy/client'
+import { getSiteDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 function UserSitesList({ sites }) {
   const router = useRouter()
@@ -185,7 +184,41 @@ export async function getServerSideProps(ctx: NextPageContext) {
   }
 
   if (graphqlData[0].data?.context?.viewer && commonProps.site.isAppDomain) {
-    await apolloClient.query({ query: GET_USER_SITES })
+    const userSites = await apolloClient.query({ query: GET_USER_SITES })
+
+    const resolvedUrl = (ctx as any).resolvedUrl
+    const url = new URL(resolvedUrl, `https://${MAIN_APP_DOMAIN}`)
+
+    if (
+      url.searchParams.get('next') &&
+      url.searchParams.get('next').startsWith('/bookmarks')
+    ) {
+      const nextUrl = new URL(url.searchParams.get('next'), url)
+
+      try {
+        const bookmarkUrl = new URL(nextUrl.searchParams.get('url'))
+        const sites = userSites.data.userSites
+          .filter((userSite) => userSite.siteRole === SiteRole.Owner)
+          .map((userSite) => userSite.site)
+        if (sites.length > 0) {
+          const siteDomain = getSiteDomain(sites[0])
+          return {
+            redirect: {
+              destination: `/signin-complete?next=${encodeURIComponent(
+                `https://${siteDomain}/bookmarks/add?url=${bookmarkUrl}`
+              )}`,
+              permanent: false,
+            },
+          }
+        } else {
+          console.warn(
+            'Bookmarking shortcut accessed, but the user has now site owned'
+          )
+        }
+      } catch {
+        console.warn('Invalid Bookmark URL: ', nextUrl.searchParams.get('url'))
+      }
+    }
   }
 
   return addApolloState(apolloClient, {

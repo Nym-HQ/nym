@@ -1289,6 +1289,13 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
+"@babel/runtime@^7.20.13":
+  version "7.21.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.21.0.tgz#5b55c9d394e5fcf304909a8b00c07dc217b56673"
+  integrity sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==
+  dependencies:
+    regenerator-runtime "^0.13.11"
+
 "@babel/template@^7.12.7", "@babel/template@^7.16.7":
   version "7.16.7"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.16.7.tgz"
@@ -2152,10 +2159,10 @@
   resolved "https://registry.npmjs.org/@n1ru4l/graphql-live-query/-/graphql-live-query-0.9.0.tgz"
   integrity sha512-BTpWy1e+FxN82RnLz4x1+JcEewVdfmUhV1C6/XYD5AjS7PQp9QFF7K8bCD6gzPTr2l+prvqOyVueQhFJxB1vfg==
 
-"@next-auth/prisma-adapter@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/@next-auth/prisma-adapter/-/prisma-adapter-1.0.4.tgz"
-  integrity sha512-jIOM6CzCbl2/Mzbx9kb2IjtHoJOeRN9wtQgLk4EUm5bhneSVGv1rtz5TDskvp2UfCa+EK9nDmug+lje41z80Gg==
+"@next-auth/prisma-adapter@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@next-auth/prisma-adapter/-/prisma-adapter-1.0.5.tgz#41a2fc7b44907054b81d456b426164e58becf4ed"
+  integrity sha512-VqMS11IxPXrPGXw6Oul6jcyS/n8GLOWzRMrPr3EMdtD6eOalM6zz05j08PcNiis8QzkfuYnCv49OvufTuaEwYQ==
 
 "@next/env@12.3.1":
   version "12.3.1"
@@ -2262,10 +2269,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@panva/hkdf@^1.0.1":
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/@panva/hkdf/-/hkdf-1.0.2.tgz"
-  integrity sha512-MSAs9t3Go7GUkMhpKC44T58DJ5KGk2vBo+h1cqQeqlMfdGkxaVB78ZWpv9gYi/g2fa4sopag9gJsNvS8XGgWJA==
+"@panva/hkdf@^1.0.2":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@panva/hkdf/-/hkdf-1.0.4.tgz#4e02bb248402ff6c5c024e23a68438e2b0e69d67"
+  integrity sha512-003xWiCuvePbLaPHT+CRuaV4GlyCAVm6XYSbBZDHoWZGn1mNkVKFaDbGJjjxmEFvizUwlCoM6O18FCBMMky2zQ==
 
 "@popperjs/core@^2.9.0", "@popperjs/core@^2.9.2":
   version "2.11.6"
@@ -7297,15 +7304,10 @@ jest-worker@^27.4.5:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jose@^4.1.4:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/jose/-/jose-4.9.2.tgz"
-  integrity sha512-EqKvu2PqJCD3Jrg3PvcYZVS7D21qMVLSYMDAFcOdGUEOpJSLNtJO7NjLANvu3SYHVl6pdP2ff7ve6EZW2nX7Nw==
-
-jose@^4.9.3:
-  version "4.10.4"
-  resolved "https://registry.npmjs.org/jose/-/jose-4.10.4.tgz"
-  integrity sha512-eBH77Xs9Yc/oTDvukhAEDVMijhekPuNktXJL4tUlB22jqKP1k48v5nmsUmc8feoJPsxB3HsfEt2LbVSoz+1mng==
+jose@^4.10.0, jose@^4.11.4:
+  version "4.13.1"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.13.1.tgz#449111bb5ab171db85c03f1bd2cb1647ca06db1c"
+  integrity sha512-MSJQC5vXco5Br38mzaQKiq9mwt7lwj2eXpgpRyQYNHYt2lq1PjkWa7DLXX0WVcQLE9HhMh3jPiufS7fhJf+CLQ==
 
 js-sdsl@^4.1.4:
   version "4.1.4"
@@ -8671,17 +8673,17 @@ netmask@^2.0.2:
   resolved "https://registry.npmjs.org/netmask/-/netmask-2.0.2.tgz"
   integrity sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==
 
-next-auth@^4.19.0:
-  version "4.19.0"
-  resolved "https://registry.npmjs.org/next-auth/-/next-auth-4.19.0.tgz"
-  integrity sha512-56Pc/Ni0cxfrVDAz2KeWdj+VXvABbHF1grgFR4+ktXbRmKQOiMU9uyMwhasBQkbL+pRrWujO0Ib/bwkP0oZS4g==
+next-auth@^4.20.1:
+  version "4.20.1"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.20.1.tgz#6e65c4fde14171f6ce64f05f672f80f39fc418c7"
+  integrity sha512-ZcTUN4qzzZ/zJYgOW0hMXccpheWtAol8QOMdMts+LYRcsPGsqf2hEityyaKyECQVw1cWInb9dF3wYwI5GZdEmQ==
   dependencies:
-    "@babel/runtime" "^7.16.3"
-    "@panva/hkdf" "^1.0.1"
+    "@babel/runtime" "^7.20.13"
+    "@panva/hkdf" "^1.0.2"
     cookie "^0.5.0"
-    jose "^4.9.3"
+    jose "^4.11.4"
     oauth "^0.9.15"
-    openid-client "^5.1.0"
+    openid-client "^5.4.0"
     preact "^10.6.3"
     preact-render-to-string "^5.1.19"
     uuid "^8.3.2"
@@ -8955,12 +8957,12 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-openid-client@^5.1.0:
-  version "5.1.9"
-  resolved "https://registry.npmjs.org/openid-client/-/openid-client-5.1.9.tgz"
-  integrity sha512-o/11Xos2fRPpK1zQrPfSIhIusFrAkqGSPwkD0UlUB+CCuRzd7zrrBJwIjgnVv3VUSif9ZGXh2d3GSJNH2Koh5g==
+openid-client@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/openid-client/-/openid-client-5.4.0.tgz#77f1cda14e2911446f16ea3f455fc7c405103eac"
+  integrity sha512-hgJa2aQKcM2hn3eyVtN12tEA45ECjTJPXCgUh5YzTzy9qwapCvmDTVPWOcWVL0d34zeQoQ/hbG9lJhl3AYxJlQ==
   dependencies:
-    jose "^4.1.4"
+    jose "^4.10.0"
     lru-cache "^6.0.0"
     object-hash "^2.0.1"
     oidc-token-hash "^5.0.1"

@@ -28,16 +28,26 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
       version: '2.0',
       clientId: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
+      authorization: {
+        url: 'https://twitter.com/i/oauth2/authorize',
+        params: {
+          scope: 'users.read tweet.read bookmark.read offline.access', // added bookmark.read
+        },
+      },
 
       // for OAuth 1.0 : Twitter prefers this
       // clientId: process.env.TWITTER_API_KEY,
       // clientSecret: process.env.TWITTER_API_SECRET,
 
-      profile: (profile: TwitterProfile | TwitterLegacyProfile) => {
+      profile: async (
+        profile: TwitterProfile | TwitterLegacyProfile,
+        tokens
+      ) => {
         console.debug('Got twitter profile data', profile)
+        let user: any
         if ('data' in profile) {
           // OAuth 2.0
-          return {
+          user = {
             id: profile.data.id,
             name: profile.data.name,
             // NOTE: E-mail is currently unsupported by OAuth 2 Twitter.
@@ -46,7 +56,7 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
             image: profile.data.profile_image_url,
           }
         } else {
-          return {
+          user = {
             id: profile.id_str,
             name: profile.name,
             email: (profile as any).email,
@@ -57,6 +67,18 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
             ),
           }
         }
+
+        // let's update Account model with new tokens, as next-auth library doesn't update the token
+        await prisma.account.updateMany({
+          where: {
+            provider: 'twitter',
+            providerAccountId: user.id,
+            type: 'oauth',
+          },
+          data: tokens,
+        })
+
+        return user
       },
     })
   )

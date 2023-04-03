@@ -7,7 +7,7 @@ function handleCrossSiteAuth(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const requestHost = request.headers.get('host')
   const isAppDomain = isMainAppDomain(requestHost)
-  const searchParams = new URLSearchParams(request.nextUrl.searchParams)
+  const searchParams = request.nextUrl.searchParams
 
   const secureCookie = process.env.NODE_ENV === 'production'
   const nextAuthSessionCookie = secureCookie
@@ -32,10 +32,10 @@ function handleCrossSiteAuth(request: NextRequest) {
       request.cookies.delete('next')
 
       if (_next && !_next.startsWith('/')) {
-        const nextUrl = new URL(_next, request.nextUrl)
+        const nextUrl = new URL(_next)
         const crossSigninUrl = new URL(
           `/signin-complete?next=${encodeURIComponent(
-            nextUrl.pathname
+            nextUrl.toString()
           )}&session-token=${request.cookies.get(nextAuthSessionCookie)}`,
           nextUrl
         )

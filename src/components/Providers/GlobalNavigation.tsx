@@ -12,6 +12,9 @@ const globalNavigationContext = {
   setIsOpen: (val: boolean) => {},
   isSubscribeFormOpen: false,
   setSubscribeFormOpen: (val: boolean) => {},
+  newBookmarkUrl: '',
+  isAddBookmarkFormOpen: false,
+  setAddBookmarkFormOpen: (val: boolean) => {},
 }
 
 export const GlobalNavigationContext = React.createContext(
@@ -26,27 +29,52 @@ export function GlobalNavigationContextProvider({
     return setState({ ...state, isOpen })
   }
 
-  function setSubscribeFormOpen(isSubscribeFormOpen) {
-    return setState({ ...state, isSubscribeFormOpen })
+  function setSubscribeFormOpen(isSubscribeFormOpen, url: string = '') {
+    return setState({ ...state, isSubscribeFormOpen, newBookmarkUrl: url })
+  }
+
+  function setAddBookmarkFormOpen(isAddBookmarkFormOpen) {
+    return setState({ ...state, isAddBookmarkFormOpen })
   }
 
   const initialState = {
     ...globalNavigationContext,
     setIsOpen,
     setSubscribeFormOpen,
+    setAddBookmarkFormOpen,
   }
 
   const [state, setState] = React.useState(initialState)
 
   useEffect(() => {
-    const eventListener = () => {
+    const openSubscribeFormEventListener = () => {
       setSubscribeFormOpen(true)
     }
-    window.addEventListener('custom.action.openSubscribeForm', eventListener)
+    const openAddBookmarkFormEventListener = (event) => {
+      setState({
+        ...state,
+        newBookmarkUrl: event.detail?.url || '',
+        isAddBookmarkFormOpen: true,
+      })
+    }
+
+    window.addEventListener(
+      'custom.action.openSubscribeForm',
+      openSubscribeFormEventListener
+    )
+    window.addEventListener(
+      'custom.action.openAddBookmarkForm',
+      openAddBookmarkFormEventListener
+    )
+
     return () => {
       window.removeEventListener(
         'custom.action.openSubscribeForm',
-        eventListener
+        openSubscribeFormEventListener
+      )
+      window.removeEventListener(
+        'custom.action.openAddBookmarkForm',
+        openAddBookmarkFormEventListener
       )
     }
   }, [])

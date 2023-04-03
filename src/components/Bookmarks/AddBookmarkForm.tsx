@@ -14,13 +14,17 @@ import {
 } from '~/graphql/types.generated'
 // import { track } from '~/lib/bee'
 
-export function AddBookmarkForm({ closeModal }) {
+export function AddBookmarkForm({ initUrl, closeModal }) {
   const { data: context } = useContextQuery()
   const [url, setUrl] = React.useState('')
   const [tags, setTags] = React.useState(['reading'])
   const router = useRouter()
 
   const [addBookmarkMutate, { loading }] = useAddBookmarkMutation()
+
+  React.useEffect(() => {
+    if (initUrl) setUrl(initUrl)
+  }, [initUrl])
 
   // fetch all bookmarks in the background so that we can update the cache
   // immediately when the bookmark is saved
@@ -57,7 +61,7 @@ export function AddBookmarkForm({ closeModal }) {
     }).then(({ data }) => {
       const { addBookmark } = data ? data : { addBookmark: null }
       if (!addBookmark) {
-        toast.error('Error creating bookmark')
+        // an error message must be shown by the Apollo client error handler already
         return
       }
       const { id } = addBookmark

@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { useApollo } from '~/lib/apollo'
 
-import { SubscribeDialog } from '../Dialog'
+import { AddBookmarkDialog, SubscribeDialog } from '../Dialog'
 import { FathomProvider } from './Fathom'
 import { GlobalNavigationContextProvider } from './GlobalNavigation'
 import { GlobalSiteContextProvider } from './GlobalSite'
@@ -27,6 +27,7 @@ export function Providers({ children, pageProps }: Props) {
         <GlobalNavigationContextProvider pageProps={pageProps}>
           {children}
           <SubscribeDialog />
+          <AddBookmarkDialog />
         </GlobalNavigationContextProvider>
       </GlobalSiteContextProvider>
     </ApolloProvider>

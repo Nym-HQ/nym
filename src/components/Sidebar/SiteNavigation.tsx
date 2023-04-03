@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { Mail, Plus, Settings } from 'react-feather'
 
-import { AddBookmarkDialog } from '~/components/Bookmarks/AddBookmarkDialog'
 import { GhostButton } from '~/components/Button'
 import {
   AMAIcon,
@@ -22,18 +21,6 @@ import { useContextQuery, useGetPagesQuery } from '~/graphql/types.generated'
 
 import { NavigationLink } from './NavigationLink'
 
-function ThisAddBookmarkDialog() {
-  return (
-    <AddBookmarkDialog
-      trigger={
-        <GhostButton aria-label="Add bookmark" size="small-square">
-          <Plus size={16} />
-        </GhostButton>
-      }
-    />
-  )
-}
-
 export function SiteSidebarNavigation() {
   const router = useRouter()
   const { data } = useContextQuery()
@@ -42,6 +29,25 @@ export function SiteSidebarNavigation() {
       filter: { published: true, featuredOnly: true, includeHomepage: true },
     },
   })
+
+  const AddBookmarkActionBtn = () => {
+    return data?.context?.viewer?.isAdmin ? (
+      <GhostButton
+        aria-label="Add bookmark"
+        size="small-square"
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          window.dispatchEvent(
+            new CustomEvent('custom.action.openAddBookmarkForm')
+          )
+        }}
+      >
+        <Plus size={16} />
+      </GhostButton>
+    ) : null
+  }
+
   const sections = [
     {
       label: null,
@@ -76,9 +82,7 @@ export function SiteSidebarNavigation() {
           icon: BookmarksIcon,
           trailingAccessory: null,
           isActive: router.asPath.indexOf('/bookmarks') >= 0,
-          trailingAction: data?.context?.viewer?.isAdmin
-            ? ThisAddBookmarkDialog
-            : null,
+          trailingAction: AddBookmarkActionBtn,
           isExternal: false,
         },
 
