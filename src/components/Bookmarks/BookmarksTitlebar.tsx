@@ -5,7 +5,6 @@ import { GhostButton } from '~/components/Button'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { SiteRole, useContextQuery } from '~/graphql/types.generated'
 
-import { AddBookmarkDialog } from './AddBookmarkDialog'
 import { BookmarksFilterMenu } from './FilterMenu'
 
 export function BookmarksTitlebar({ scrollContainerRef }) {
@@ -20,6 +19,12 @@ export function BookmarksTitlebar({ scrollContainerRef }) {
         'Content-Type': 'application/json',
       },
     }).then((res) => res.json())
+  }
+
+  const onAddBookmarkClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    window.dispatchEvent(new CustomEvent('custom.action.openAddBookmarkForm'))
   }
 
   function trailingAccessory() {
@@ -40,18 +45,15 @@ export function BookmarksTitlebar({ scrollContainerRef }) {
         <BookmarksFilterMenu />
 
         {data?.context?.viewer?.isAdmin && (
-          <AddBookmarkDialog
-            trigger={
-              <GhostButton
-                title="Add bookmark"
-                aria-label="Add bookmark"
-                data-cy="open-add-bookmark-dialog"
-                size="small-square"
-              >
-                <Plus size={16} />
-              </GhostButton>
-            }
-          />
+          <GhostButton
+            title="Add bookmark"
+            aria-label="Add bookmark"
+            data-cy="open-add-bookmark-dialog"
+            size="small-square"
+            onClick={onAddBookmarkClick}
+          >
+            <Plus size={16} />
+          </GhostButton>
         )}
       </div>
     )
