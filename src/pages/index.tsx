@@ -49,24 +49,41 @@ function UserSitesList({ sites }) {
         </h3>
         {memberSites.length > 0 ? (
           <ul className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
-            {memberSites.map((site, i) => (
-              <li
-                key={site.site.subdomain}
-                className={
-                  'text-base font-semibold px-6 py-2 border-b border-gray-200 w-full hover:bg-blue-600 hover:text-white' +
-                  (i === 0 ? ' rounded-t-lg' : '') +
-                  (i + 1 === memberSites.length ? ' rounded-b-lg' : '')
-                }
-              >
-                <a href={`//${getSiteDomain(site.site)}`}>
-                  <h4>{getSiteDomain(site.site, false)}</h4>
-                  {site.site.parkedDomain && <h4>{site.site.parkedDomain}</h4>}
-                  <span className="text-gray-400 text-xs font-light">
-                    {site.siteRole}
-                  </span>
-                </a>
-              </li>
-            ))}
+            {memberSites.map((site, i) => {
+              const siteUrl = `${window.location.protocol}//${getSiteDomain(
+                site.site
+              )}`
+
+              return (
+                <li
+                  key={site.site.subdomain}
+                  className={
+                    'text-base font-semibold px-6 py-2 border-b border-gray-200 w-full hover:bg-blue-600 hover:text-white' +
+                    (i === 0 ? ' rounded-t-lg' : '') +
+                    (i + 1 === memberSites.length ? ' rounded-b-lg' : '')
+                  }
+                >
+                  <a
+                    href={siteUrl}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      event.stopPropagation()
+                      location.href = `/signin-complete?next=${encodeURIComponent(
+                        siteUrl
+                      )}`
+                    }}
+                  >
+                    <h4>{getSiteDomain(site.site, false)}</h4>
+                    {site.site.parkedDomain && (
+                      <h4>{site.site.parkedDomain}</h4>
+                    )}
+                    <span className="text-gray-400 text-xs font-light">
+                      {site.siteRole}
+                    </span>
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         ) : (
           <p className="text-base dark:text-gray-200 text-gray-900">
