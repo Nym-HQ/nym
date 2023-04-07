@@ -6,7 +6,6 @@ import { PrimaryButton } from '~/components/Button'
 import { SiteIntro } from '~/components/Home/SiteIntro'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { GlobalSiteContext } from '~/components/Providers/GlobalSite'
 import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { GET_HOME_PAGE } from '~/graphql/queries/pages'
@@ -50,9 +49,11 @@ function UserSitesList({ sites }) {
         {memberSites.length > 0 ? (
           <ul className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
             {memberSites.map((site, i) => {
-              const siteUrl = `${window.location.protocol}//${getSiteDomain(
-                site.site
-              )}`
+              const siteUrl = `${
+                typeof window !== 'undefined'
+                  ? window.location.protocol
+                  : 'https:'
+              }//${getSiteDomain(site.site)}`
 
               return (
                 <li
