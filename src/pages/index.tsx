@@ -174,23 +174,20 @@ function AppIntro() {
 }
 
 export default function Home(props) {
-  const { isAppDomain } = React.useContext(GlobalSiteContext)
-
-  return isAppDomain ? <AppIntro /> : <SiteIntro />
+  return props.site.isAppDomain ? <AppIntro /> : <SiteIntro />
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 
-  const graphql = [...getCommonQueries(apolloClient)]
+  let graphqlData = await Promise.all(getCommonQueries(apolloClient))
 
-  let commonProps = await getCommonPageProps(ctx)
+  let commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain) {
-    graphql.push(apolloClient.query({ query: GET_HOME_PAGE }))
+    graphqlData.push(await apolloClient.query({ query: GET_HOME_PAGE }))
   }
-  const graphqlData = await Promise.all(graphql)
-  commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -217,7 +214,16 @@ export async function getServerSideProps(ctx: NextPageContext) {
         const sites = userSites.data.userSites
           .filter((userSite) => userSite.siteRole === SiteRole.Owner)
           .map((userSite) => userSite.site)
-        if (sites.length > 0) {
+        if (sites.length > 1) {
+          // if the user has multiple owned sites, go to the site selector
+          return {
+            redirect: {
+              destination: `/bookmarks?url=${bookmarkUrl}`,
+              permanent: false,
+            },
+          }
+        } else if (sites.length === 1) {
+          // if the user has just one site, redirect to it directly
           const siteDomain = getSiteDomain(sites[0])
           return {
             redirect: {
