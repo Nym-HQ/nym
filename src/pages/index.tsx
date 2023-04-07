@@ -6,7 +6,6 @@ import { PrimaryButton } from '~/components/Button'
 import { SiteIntro } from '~/components/Home/SiteIntro'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { GlobalSiteContext } from '~/components/Providers/GlobalSite'
 import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { GET_HOME_PAGE } from '~/graphql/queries/pages'
@@ -49,24 +48,43 @@ function UserSitesList({ sites }) {
         </h3>
         {memberSites.length > 0 ? (
           <ul className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
-            {memberSites.map((site, i) => (
-              <li
-                key={site.site.subdomain}
-                className={
-                  'text-base font-semibold px-6 py-2 border-b border-gray-200 w-full hover:bg-blue-600 hover:text-white' +
-                  (i === 0 ? ' rounded-t-lg' : '') +
-                  (i + 1 === memberSites.length ? ' rounded-b-lg' : '')
-                }
-              >
-                <a href={`//${getSiteDomain(site.site)}`}>
-                  <h4>{getSiteDomain(site.site, false)}</h4>
-                  {site.site.parkedDomain && <h4>{site.site.parkedDomain}</h4>}
-                  <span className="text-gray-400 text-xs font-light">
-                    {site.siteRole}
-                  </span>
-                </a>
-              </li>
-            ))}
+            {memberSites.map((site, i) => {
+              const siteUrl = `${
+                typeof window !== 'undefined'
+                  ? window.location.protocol
+                  : 'https:'
+              }//${getSiteDomain(site.site)}`
+
+              return (
+                <li
+                  key={site.site.subdomain}
+                  className={
+                    'text-base font-semibold px-6 py-2 border-b border-gray-200 w-full hover:bg-blue-600 hover:text-white' +
+                    (i === 0 ? ' rounded-t-lg' : '') +
+                    (i + 1 === memberSites.length ? ' rounded-b-lg' : '')
+                  }
+                >
+                  <a
+                    href={siteUrl}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      event.stopPropagation()
+                      location.href = `/signin-complete?next=${encodeURIComponent(
+                        siteUrl
+                      )}`
+                    }}
+                  >
+                    <h4>{getSiteDomain(site.site, false)}</h4>
+                    {site.site.parkedDomain && (
+                      <h4>{site.site.parkedDomain}</h4>
+                    )}
+                    <span className="text-gray-400 text-xs font-light">
+                      {site.siteRole}
+                    </span>
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         ) : (
           <p className="text-base dark:text-gray-200 text-gray-900">
@@ -157,23 +175,20 @@ function AppIntro() {
 }
 
 export default function Home(props) {
-  const { isAppDomain } = React.useContext(GlobalSiteContext)
-
-  return isAppDomain ? <AppIntro /> : <SiteIntro />
+  return props.site.isAppDomain ? <AppIntro /> : <SiteIntro />
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 
-  const graphql = [...getCommonQueries(apolloClient)]
+  let graphqlData = await Promise.all(getCommonQueries(apolloClient))
 
-  let commonProps = await getCommonPageProps(ctx)
+  let commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain) {
-    graphql.push(apolloClient.query({ query: GET_HOME_PAGE }))
+    graphqlData.push(await apolloClient.query({ query: GET_HOME_PAGE }))
   }
-  const graphqlData = await Promise.all(graphql)
-  commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -200,7 +215,16 @@ export async function getServerSideProps(ctx: NextPageContext) {
         const sites = userSites.data.userSites
           .filter((userSite) => userSite.siteRole === SiteRole.Owner)
           .map((userSite) => userSite.site)
-        if (sites.length > 0) {
+        if (sites.length > 1) {
+          // if the user has multiple owned sites, go to the site selector
+          return {
+            redirect: {
+              destination: `/bookmarks?url=${bookmarkUrl}`,
+              permanent: false,
+            },
+          }
+        } else if (sites.length === 1) {
+          // if the user has just one site, redirect to it directly
           const siteDomain = getSiteDomain(sites[0])
           return {
             redirect: {
