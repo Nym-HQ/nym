@@ -15,7 +15,7 @@ function handleCrossSiteAuth(req: NextRequest) {
     : 'next-auth.session-token'
 
   if (isAppDomain) {
-    if (pathname === '/signin') {
+    if (pathname === '/login') {
       if (searchParams && searchParams.get('next')) {
         const response = NextResponse.next()
         response.cookies.set('next', searchParams.get('next'))
@@ -47,7 +47,7 @@ function handleCrossSiteAuth(req: NextRequest) {
     }
   } else {
     // Sign-in page should always visible on the main app domain only
-    if (pathname === '/signin') {
+    if (pathname === '/login') {
       const response = NextResponse.redirect(
         new URL(
           `${
@@ -86,7 +86,7 @@ function handleCrossSiteAuth(req: NextRequest) {
         )
       )
 
-      if (pathname.includes('/signin')) {
+      if (pathname.includes('/login')) {
         response.cookies.set('next-auth.callback-url-host', hostname)
       }
 
@@ -108,7 +108,7 @@ export async function middleware(req: NextRequest) {
   const pathname = url.pathname
 
   if (
-    pathname.startsWith('/signin') ||
+    pathname.startsWith('/login') ||
     pathname.startsWith('/signin-complete') ||
     pathname.startsWith('/api/auth')
   ) {

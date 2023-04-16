@@ -39,7 +39,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
         `/signin-complete?next=${encodeURIComponent(_nextUrl.toString())}`,
         `${url.protocol}//${req.headers.host}`
       )
-    } else if (_nextUrl.pathname != '/signin') {
+    } else if (_nextUrl.pathname != '/login') {
       nextUrl = _nextUrl
     } else {
       nextUrl = new URL('/', _nextUrl)

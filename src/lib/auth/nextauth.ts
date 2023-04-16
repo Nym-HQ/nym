@@ -90,7 +90,7 @@ const authOptions = {
   pages: {
     signIn: `/signin`,
     verifyRequest: `/signin`,
-    error: '/signin', // Error code passed in query string as ?error=
+    error: '/login', // Error code passed in query string as ?error=
   },
   adapter: PrismaAdapter(prisma),
   // Configure one or more authentication providers

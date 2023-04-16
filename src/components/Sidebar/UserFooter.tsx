@@ -32,7 +32,7 @@ export function UserFooter() {
       }//${MAIN_APP_DOMAIN}/signin?redirect=true&next=${encodeURIComponent(
         window.location.href
       )}`
-    } else if (url.pathname != '/signin') {
+    } else if (url.pathname != '/login') {
       return `/signin?redirect=true&next=${encodeURIComponent(
         window.location.href
       )}`

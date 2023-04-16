@@ -151,7 +151,7 @@ export async function getServerSideProps(ctx) {
   if (!context.viewer) {
     return {
       redirect: {
-        destination: '/signin',
+        destination: '/login',
         permanent: false,
       },
     }
