@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { isMainAppDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
-function handleCrossSiteAuth(request: NextRequest) {
-  const pathname = request.nextUrl.pathname
-  const requestHost = request.headers.get('host')
-  const isAppDomain = isMainAppDomain(requestHost)
-  const searchParams = request.nextUrl.searchParams
+function handleCrossSiteAuth(req: NextRequest) {
+  const pathname = req.nextUrl.pathname
+  const hostname = req.headers.get('host')
+  const isAppDomain = isMainAppDomain(hostname)
+  const searchParams = req.nextUrl.searchParams
 
   const secureCookie = process.env.NODE_ENV === 'production'
   const nextAuthSessionCookie = secureCookie
@@ -27,23 +27,22 @@ function handleCrossSiteAuth(request: NextRequest) {
     // So when auth completes, it will be redirected to /signin-complete
     // Here we check the "next" param and redirect accordingly.
     if (pathname === '/signin-complete') {
-      const _next =
-        searchParams.get('next') || request.cookies.get('next') || '/'
-      request.cookies.delete('next')
+      const _next = searchParams.get('next') || req.cookies.get('next') || '/'
+      req.cookies.delete('next')
 
       if (_next && !_next.startsWith('/')) {
         const nextUrl = new URL(_next)
         const crossSigninUrl = new URL(
           `/signin-complete?next=${encodeURIComponent(
             nextUrl.toString()
-          )}&session-token=${request.cookies.get(nextAuthSessionCookie)}`,
+          )}&session-token=${req.cookies.get(nextAuthSessionCookie)}`,
           nextUrl
         )
         const response = NextResponse.redirect(crossSigninUrl)
         response.cookies.delete('next')
         return response
       } else {
-        return NextResponse.redirect(new URL(_next, request.nextUrl))
+        return NextResponse.redirect(new URL(_next, req.nextUrl))
       }
     }
   } else {
@@ -52,11 +51,11 @@ function handleCrossSiteAuth(request: NextRequest) {
       const response = NextResponse.redirect(
         new URL(
           `${
-            request.nextUrl.protocol
+            req.nextUrl.protocol
           }//${MAIN_APP_DOMAIN}/signin?next=${encodeURIComponent(
-            `https://${requestHost}`
+            `https://${hostname}`
           )}`,
-          request.nextUrl
+          req.nextUrl
         )
       )
       return response
@@ -65,10 +64,10 @@ function handleCrossSiteAuth(request: NextRequest) {
     if (pathname === '/signin-complete') {
       const next = searchParams.get('next') || '/'
       const sessionToken = searchParams.get('session-token')
-      const response = NextResponse.redirect(new URL(next, request.nextUrl))
+      const response = NextResponse.redirect(new URL(next, req.nextUrl))
       response.cookies.set(nextAuthSessionCookie, sessionToken, {
         secure: secureCookie,
-        domain: requestHost.split(':')[0],
+        domain: hostname.split(':')[0],
         httpOnly: true,
       })
       return response
@@ -76,19 +75,19 @@ function handleCrossSiteAuth(request: NextRequest) {
 
     // All authentication will occur on the main app domain
     if (pathname.startsWith('/api/auth')) {
-      searchParams.set('origin_host', requestHost)
+      searchParams.set('origin_host', hostname)
 
       const response = NextResponse.rewrite(
         new URL(
           `${
-            request.nextUrl.protocol
+            req.nextUrl.protocol
           }//${MAIN_APP_DOMAIN}${pathname}?${searchParams.toString()}`,
-          request.nextUrl
+          req.nextUrl
         )
       )
 
       if (pathname.includes('/signin')) {
-        response.cookies.set('next-auth.callback-url-host', requestHost)
+        response.cookies.set('next-auth.callback-url-host', hostname)
       }
 
       return response
@@ -99,48 +98,56 @@ function handleCrossSiteAuth(request: NextRequest) {
 }
 
 // This function can be marked `async` if using `await` inside
-export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname
+export async function middleware(req: NextRequest) {
+  const url = req.nextUrl
+
+  // Get hostname of req (e.g. demo.vercel.pub, demo.localhost:3000)
+  const hostname = req.headers.get('host') || 'app.nymhq.com'
+
+  // Get the pathname of the req (e.g. /, /about, /blog/first-post)
+  const pathname = url.pathname
 
   if (
     pathname.startsWith('/signin') ||
     pathname.startsWith('/signin-complete') ||
     pathname.startsWith('/api/auth')
   ) {
-    return handleCrossSiteAuth(request)
+    return handleCrossSiteAuth(req)
   }
 
-  const requestHost = request.headers.get('host')
-  const isAppDomain = isMainAppDomain(requestHost)
+  if (isMainAppDomain(hostname)) {
+    if (
+      url.pathname === '/login' &&
+      (req.cookies.get('next-auth.session-token') ||
+        req.cookies.get('__Secure-next-auth.session-token'))
+    ) {
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
 
-  if (isAppDomain) {
     // App Domain: Mapping of /account to /admin
-    if (pathname.startsWith('/admin')) {
-      return NextResponse.rewrite(new URL(`/account`, request.nextUrl))
-    }
-  } else {
-    // Some paths are only accessible on the main app domain
-    if (pathname.startsWith('/hq') || pathname.startsWith('/account')) {
-      return NextResponse.redirect(
-        new URL(
-          `${request.nextUrl.protocol}//${MAIN_APP_DOMAIN}${pathname}`,
-          request.nextUrl
-        )
-      )
-    }
+    url.pathname = pathname.replace('/admin', '/account')
+
+    url.pathname = `/app${url.pathname}`
+    return NextResponse.rewrite(url)
   }
 
-  return NextResponse.next()
+  // rewrite everything else to `/_sites/[site] dynamic route
+  return NextResponse.rewrite(
+    new URL(`/_sites/${hostname}${pathname}`, req.url)
+  )
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: [
-    '/hq/:path*',
-    '/account/:path*',
-    '/admin/:path*',
-    '/api/auth/:path*',
-    '/signin',
-    '/signin-complete',
+    /*
+     * Match all paths except for:
+     * 1. /api routes
+     * 2. /_next (Next.js internals)
+     * 3. /examples (inside /public)
+     * 4. all root files inside /public (e.g. /favicon.ico)
+     */
+    '/((?!api/|_next/|_static/|[\\w-]+\\.\\w+).*)',
   ],
 }

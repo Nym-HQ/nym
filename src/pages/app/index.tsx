@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { PrimaryButton } from '~/components/Button'
-import { SiteIntro } from '~/components/Home/SiteIntro'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { SignIn } from '~/components/SignIn'
@@ -134,7 +133,7 @@ function UserSitesList({ sites }) {
   )
 }
 
-function AppIntro() {
+export default function Home(props) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
   const { data } = useContextQuery()
@@ -172,10 +171,6 @@ function AppIntro() {
   } else {
     return <SignIn />
   }
-}
-
-export default function Home(props) {
-  return props.site.isAppDomain ? <AppIntro /> : <SiteIntro />
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
