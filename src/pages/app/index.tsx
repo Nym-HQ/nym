@@ -7,7 +7,6 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
-import { GET_HOME_PAGE } from '~/graphql/queries/pages'
 import { GET_USER_SITES } from '~/graphql/queries/site'
 import {
   SiteRole,
@@ -180,25 +179,14 @@ export async function getServerSideProps(ctx: NextPageContext) {
   let graphqlData = await Promise.all(getCommonQueries(apolloClient))
 
   let commonProps = await getCommonPageProps(ctx, graphqlData[0])
-  if (!commonProps.site.isAppDomain) {
-    graphqlData.push(await apolloClient.query({ query: GET_HOME_PAGE }))
-  }
 
-  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
-    return {
-      redirect: {
-        destination: '/create-your-site',
-        permanent: false,
-      },
-    }
-  }
-
-  if (graphqlData[0].data?.context?.viewer && commonProps.site.isAppDomain) {
+  if (graphqlData[0].data?.context?.viewer) {
     const userSites = await apolloClient.query({ query: GET_USER_SITES })
 
     const resolvedUrl = (ctx as any).resolvedUrl
     const url = new URL(resolvedUrl, `https://${MAIN_APP_DOMAIN}`)
 
+    // Bookmarklet redirect
     if (
       url.searchParams.get('next') &&
       url.searchParams.get('next').startsWith('/bookmarks')
