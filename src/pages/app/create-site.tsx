@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -9,12 +8,11 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
-import { useAddSiteMutation, useContextQuery } from '~/graphql/types.generated'
+import { useAddSiteMutation } from '~/graphql/types.generated'
 // import * as bee from '~/lib/bee'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
 function CreateYourWebsitePage() {
-  // const { data: context } = useContextQuery()
   const router = useRouter()
   const [subdomain, setSubdomain] = useState('')
 

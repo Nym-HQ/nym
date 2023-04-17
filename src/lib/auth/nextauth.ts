@@ -8,6 +8,8 @@ import TwitterProvider, {
 
 import prisma from '~/lib/prisma'
 
+const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
+
 const providers = []
 
 if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
@@ -85,9 +87,25 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
 }
 
 const authOptions = {
+  pages: {
+    signIn: `/signin`,
+    verifyRequest: `/signin`,
+    error: '/login', // Error code passed in query string as ?error=
+  },
   adapter: PrismaAdapter(prisma),
   // Configure one or more authentication providers
   providers: providers,
+  cookies: {
+    sessionToken: {
+      name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: VERCEL_DEPLOYMENT,
+      },
+    },
+  },
   callbacks: {
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token from a provider.

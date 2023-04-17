@@ -1,8 +1,6 @@
 import { NextPageContext } from 'next'
 
-import { isAuthenticatedServerSide } from './auth/nextauth'
 import { getSubdomain, isMainAppDomain } from './multitenancy/client'
-import { getSiteByDomain, getUserSiteById } from './multitenancy/server'
 
 export interface CommonPageProps {
   site: {

@@ -1,4 +1,3 @@
-import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
 import { PrimaryButton } from '~/components/Button'
@@ -6,12 +5,9 @@ import { ListDetailView } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { extendSEO } from '~/config/seo'
-import { useContextQuery } from '~/graphql/types.generated'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 function CreateYourSite() {
-  const { data: context } = useContextQuery()
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
 
