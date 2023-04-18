@@ -24,7 +24,10 @@ export default class RevueNewsletterProvider implements NewsletterProviderBase {
     API_TOKEN: string
   }) {
     this.headers.Authorization = `Token ${API_TOKEN}`
-    this.useDoubleOptin = useDoubleOptin || true
+    this.useDoubleOptin =
+      typeof useDoubleOptin === 'undefined' || useDoubleOptin === null
+        ? true
+        : useDoubleOptin
   }
 
   async init({ fromEmail, fromName }) {}
