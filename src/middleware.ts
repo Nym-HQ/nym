@@ -52,7 +52,7 @@ function handleCrossSiteAuth(req: NextRequest) {
         new URL(
           `${
             req.nextUrl.protocol
-          }//${MAIN_APP_DOMAIN}/signin?next=${encodeURIComponent(
+          }//${MAIN_APP_DOMAIN}/login?next=${encodeURIComponent(
             `https://${hostname}`
           )}`,
           req.nextUrl

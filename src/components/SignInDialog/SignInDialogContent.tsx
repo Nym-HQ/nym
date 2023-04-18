@@ -18,11 +18,11 @@ export function SignInDialogContent() {
     if (url.host != MAIN_APP_DOMAIN) {
       return `${
         url.protocol
-      }//${MAIN_APP_DOMAIN}/signin?redirect=true&next=${encodeURIComponent(
+      }//${MAIN_APP_DOMAIN}/login?redirect=true&next=${encodeURIComponent(
         window.location.href
       )}`
     } else if (url.pathname != '/login') {
-      return `/signin?redirect=true&next=${encodeURIComponent(
+      return `/login?redirect=true&next=${encodeURIComponent(
         window.location.href
       )}`
     } else {
