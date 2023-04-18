@@ -31,7 +31,10 @@ export default class MailchimpNewsletterProvider
     API_TOKEN: string
     audienceListId?: string
   }) {
-    this.useDoubleOptin = useDoubleOptin || true
+    this.useDoubleOptin =
+      typeof useDoubleOptin === 'undefined' || useDoubleOptin === null
+        ? true
+        : useDoubleOptin
     this.apiKey = API_TOKEN
     this.instanceId = API_TOKEN.slice(API_TOKEN.indexOf('-') + 1)
     if (audienceListId) this.audienceListId = audienceListId
@@ -102,7 +105,7 @@ export default class MailchimpNewsletterProvider
         }
       )
       if (
-        response.status < 300 ||
+        +response.status < 300 ||
         (response.status === 400 && (response as any).title === 'Member Exists')
       ) {
         // success
@@ -137,7 +140,7 @@ export default class MailchimpNewsletterProvider
         }
       )
       if (
-        response.status < 300 ||
+        +response.status < 300 ||
         (response.status === 400 && (response as any).title === 'Member Exists')
       ) {
         // success
