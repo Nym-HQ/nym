@@ -88,8 +88,8 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
 
 const authOptions = {
   pages: {
-    signIn: `/signin`,
-    verifyRequest: `/signin`,
+    signIn: `/login`,
+    verifyRequest: `/login`,
     error: '/login', // Error code passed in query string as ?error=
   },
   adapter: PrismaAdapter(prisma),

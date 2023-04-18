@@ -30,7 +30,7 @@ function CreateYourSite() {
             </h2>
             <PrimaryButton
               onClick={() =>
-                (window.location.href = `//${MAIN_APP_DOMAIN}/signin`)
+                (window.location.href = `//${MAIN_APP_DOMAIN}/login`)
               }
             >
               Create Site &gt;&gt;
