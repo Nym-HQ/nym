@@ -33,6 +33,15 @@ function UserSitesList({ sites }) {
         <p className="dark:text-gray-200 text-gray-900">
           Create your first site
         </p>
+        <div className="flex justify-center mt-4">
+          <PrimaryButton
+            onClick={() => {
+              router.push('/create-site')
+            }}
+          >
+            Create a Site
+          </PrimaryButton>
+        </div>
       </div>
     )
   }
