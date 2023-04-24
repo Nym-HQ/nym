@@ -8,7 +8,11 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { getContext } from '~/graphql/context'
 import { useAddSiteMutation } from '~/graphql/types.generated'
+import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { getCommonQueries } from '~/lib/apollo/common'
+import { getCommonPageProps } from '~/lib/commonProps'
 // import * as bee from '~/lib/bee'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
@@ -86,3 +90,27 @@ function CreateYourWebsitePage() {
 }
 
 export default CreateYourWebsitePage
+
+export async function getServerSideProps(ctx) {
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
+  // if not signed in, redirect to sign in page
+  if (!context.viewer) {
+    return {
+      redirect: {
+        destination: '/login?next=/create-site',
+        permanent: false,
+      },
+    }
+  }
+
+  return addApolloState(apolloClient, {
+    props: {
+      ...commonProps,
+    },
+  })
+}
