@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { UserInfoFragment } from './user'
+
 export const SiteInfoFragment = gql`
   fragment SiteInfo on Site {
     __typename
@@ -15,6 +17,7 @@ export const SiteInfoFragment = gql`
     attach_js
     newsletter_provider
     newsletter_description
+    newsletter_from_email
     newsletter_double_optin
     newsletter_setting1
     newsletter_setting2
@@ -48,4 +51,16 @@ export const UserSiteInfoFragment = gql`
     }
   }
   ${SiteInfoFragment}
+`
+
+export const SiteUserInfoFragment = gql`
+  fragment SiteUserInfo on SiteUser {
+    id
+    user {
+      ...UserInfo
+    }
+    siteRole
+    siteId
+  }
+  ${UserInfoFragment}
 `

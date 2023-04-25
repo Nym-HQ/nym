@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { DefaultSeo } from 'next-seo'
 import * as React from 'react'
+import { useEffect } from 'react'
 
 import { baseUrl, extendSEO } from '~/config/seo'
 import { useContextQuery } from '~/graphql/types.generated'

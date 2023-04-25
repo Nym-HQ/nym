@@ -59,6 +59,7 @@ function AdminSettingsPage(props) {
     newsletter_provider: context?.context?.site?.newsletter_provider || '',
     newsletter_description:
       context?.context?.site?.newsletter_description || '',
+    newsletter_from_email: context?.context?.site?.newsletter_from_email || '',
     newsletter_double_optin: context?.context?.site?.newsletter_double_optin,
     newsletter_setting1: context?.context?.site?.newsletter_setting1 || '',
     newsletter_setting2: context?.context?.site?.newsletter_setting2 || '',
@@ -88,6 +89,7 @@ function AdminSettingsPage(props) {
           logo: values.logo,
           newsletter_provider: values.newsletter_provider,
           newsletter_description: values.newsletter_description,
+          newsletter_from_email: values.newsletter_from_email,
           newsletter_double_optin: values.newsletter_double_optin,
           newsletter_setting1: values.newsletter_setting1,
           newsletter_setting2: values.newsletter_setting2,
@@ -209,6 +211,24 @@ function AdminSettingsPage(props) {
                 </div>
               </div>
 
+              {provider && (
+                <div className="col-span-6 sm:col-span-5">
+                  <Label htmlFor="newsletter_from_email">From Email</Label>
+                  <Input
+                    type="text"
+                    name="newsletter_from_email"
+                    id="newsletter_from_email"
+                    autoComplete="disabled"
+                    value={values.newsletter_from_email}
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        newsletter_from_email: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              )}
               {provider && provider.setting1 && (
                 <div className="col-span-6 sm:col-span-5">
                   <Label htmlFor="newsletter_setting1">

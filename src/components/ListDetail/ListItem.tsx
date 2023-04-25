@@ -25,7 +25,7 @@ export function ListItem({
   return (
     <Link href={href} as={as}>
       <a
-        onClick={onClick && onClick}
+        onClick={onClick}
         className={`flex space-x-3 border-b border-gray-100 py-3 px-3.5 text-sm dark:border-gray-900 lg:rounded-lg lg:border-none lg:py-2 ${
           active
             ? 'bg-black dark:bg-gray-700'

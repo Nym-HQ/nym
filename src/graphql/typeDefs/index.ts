@@ -16,6 +16,7 @@ const typeDefs = gql`
     attach_js: String
     newsletter_provider: String
     newsletter_description: String
+    newsletter_from_email: String
     newsletter_double_optin: Boolean
     newsletter_setting1: String
     newsletter_setting2: String
@@ -39,6 +40,13 @@ const typeDefs = gql`
     userId: String
     siteRole: SiteRole
     site: Site
+  }
+
+  type SiteUser {
+    id: ID!
+    user: User
+    siteRole: SiteRole
+    siteId: String
   }
 
   type SiteOwner {
@@ -250,6 +258,7 @@ const typeDefs = gql`
   type Query {
     context: ViewerContext!
     userSites: [UserSite!]
+    siteUsers: [SiteUser!]
     user(username: String!): User
     bookmark(id: ID!): Bookmark
     bookmarks(
@@ -367,6 +376,7 @@ const typeDefs = gql`
     attach_js: String
     newsletter_provider: String
     newsletter_description: String
+    newsletter_from_email: String
     newsletter_double_optin: Boolean
     newsletter_setting1: String
     newsletter_setting2: String
@@ -376,6 +386,11 @@ const typeDefs = gql`
     social_github: String
     social_other1: String
     social_other1_label: String
+  }
+
+  input EditSiteUserInput {
+    userId: String
+    siteRole: SiteRole
   }
 
   union Reactable = Bookmark | Question | Post
@@ -404,6 +419,7 @@ const typeDefs = gql`
     editSiteDomain(subdomain: String!, data: EditSiteDomainInput!): Site
     editSite(subdomain: String!, data: EditSiteInput!): Site
     deleteSite(subdomain: String!): Boolean
+    editSiteUser(data: EditSiteUserInput!): SiteUser
   }
 `
 

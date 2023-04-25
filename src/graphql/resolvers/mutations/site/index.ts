@@ -8,6 +8,7 @@ import {
   MutationDeleteSiteArgs,
   MutationEditSiteArgs,
   MutationEditSiteDomainArgs,
+  MutationEditSiteUserArgs,
 } from '~/graphql/types.generated'
 import { preservedSubdomains } from '~/lib/consts'
 import { graphcdn } from '~/lib/graphcdn'
@@ -25,6 +26,7 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     attach_js = '',
     newsletter_provider = '',
     newsletter_description = '',
+    newsletter_from_email = '',
     newsletter_double_optin = true,
     newsletter_setting1 = '',
     newsletter_setting2 = '',
@@ -62,6 +64,7 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
         attach_js,
         newsletter_provider,
         newsletter_description,
+        newsletter_from_email,
         newsletter_double_optin,
         newsletter_setting1,
         newsletter_setting2,
@@ -223,4 +226,48 @@ export async function deleteSite(
       subdomain,
     },
   })
+}
+
+export async function editSiteUser(
+  _,
+  args: MutationEditSiteUserArgs,
+  ctx: Context
+) {
+  const { data } = args
+  const { userId = '', siteRole } = data
+  const { prisma, site } = ctx
+  const existing = await prisma.userSite.findFirst({
+    where: { siteId: site.id, userId },
+  })
+
+  if (!existing)
+    throw new GraphQLError('User not found', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+
+  // nothing changed
+  if (existing.siteRole === siteRole) {
+    return existing
+  }
+
+  return await prisma.userSite
+    .update({
+      where: { id: existing.id },
+      data: {
+        siteRole,
+      },
+    })
+    .then((userSite) => {
+      return userSite
+    })
+    .catch((err) => {
+      console.error({ err })
+      throw new GraphQLError('Unable to update user', {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      })
+    })
 }

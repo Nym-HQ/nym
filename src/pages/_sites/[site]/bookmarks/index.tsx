@@ -1,11 +1,8 @@
 import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
-import AddBookmarkSiteList from '~/components/Bookmarks/AddBookmarkSiteList'
 import { BookmarksList } from '~/components/Bookmarks/BookmarksList'
 import { ListDetailView } from '~/components/Layouts'
-import { Detail } from '~/components/ListDetail/Detail'
-import { TitleBar } from '~/components/ListDetail/TitleBar'
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
@@ -17,32 +14,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 function BookmarksPage(props) {
-  const scrollContainerRef = React.useRef(null)
-  const titleRef = React.useRef(null)
   const { data: context } = useContextQuery()
   const seo = extendSEO(routes.bookmarks.seo, context.context.site)
 
-  return props.site.isAppDomain ? (
-    <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
-      <TitleBar
-        magicTitle
-        titleRef={titleRef}
-        scrollContainerRef={scrollContainerRef}
-        title="Add Bookmark"
-      />
-
-      {/* Keep this div to trigger the magic scroll */}
-      <div className="p-4" ref={titleRef} />
-
-      <Detail.ContentContainer>
-        <div className="flex flex-col items-center justify-center space-y-12">
-          <div className="w-96 mb-4">
-            <AddBookmarkSiteList />
-          </div>
-        </div>
-      </Detail.ContentContainer>
-    </Detail.Container>
-  ) : (
+  return (
     <ListDetailView
       list={<BookmarksList />}
       hasDetail={false}
@@ -58,9 +33,9 @@ export async function getServerSideProps(ctx) {
   let graphqlData = await Promise.all(getCommonQueries(apolloClient))
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])
 
-  if (commonProps.site.isAppDomain) {
-    //
-  } else if (!commonProps.site.siteId) {
+  if (!commonProps.site.siteId) {
+    // Visited through subdomain, but the domain is not occupied yet.
+    // Call-to-action to bu
     return {
       redirect: {
         destination: '/create-your-site',

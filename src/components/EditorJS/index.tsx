@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 
 const CustomizedEditorJS = dynamic(() => import('./Editor'), {
   ssr: false,
-  loading: () => <p>loading editor.js ...</p>,
+  loading: () => <p>Loading ...</p>,
 })
 
 export function EditorJSPreviewer({ value, editorRef = (el) => {}, ...props }) {

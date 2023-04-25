@@ -20,6 +20,7 @@ import * as gtag from '~/lib/gtag'
 
 export default function App({ Component, session, pageProps }) {
   const router = useRouter()
+
   useEffect(() => {
     const handleRouteChange = (url) => {
       gtag.pageview(url)
@@ -53,13 +54,13 @@ export default function App({ Component, session, pageProps }) {
               strategy="afterInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gtag.GA_TRACKING_ID}', {
-                  page_path: window.location.pathname,
-                });
-              `,
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gtag.GA_TRACKING_ID}', {
+                page_path: window.location.pathname,
+              });
+            `,
               }}
             />
           </>

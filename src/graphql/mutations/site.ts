@@ -34,3 +34,11 @@ export const ADD_SITE = gql`
   }
   ${SiteInfoFragment}
 `
+
+export const EDIT_SITE_USER = gql`
+  mutation editSiteUser($data: EditSiteUserInput!) {
+    editSiteUser(data: $data) {
+      siteRole
+    }
+  }
+`

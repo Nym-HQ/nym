@@ -6,7 +6,7 @@ import { getEmailSubscriptions } from './emailSubscriptions'
 import { getHomePage, getPage, getPages } from './pages'
 import { getPost, getPosts } from './posts'
 import { getQuestion, getQuestions } from './questions'
-import { getUserSites } from './site'
+import { getSiteUsers, getUserSites } from './site'
 import { getTags } from './tags'
 import { getUser } from './user'
 import { getViewerContext } from './viewer'
@@ -14,6 +14,7 @@ import { getViewerContext } from './viewer'
 export default {
   context: getViewerContext,
   userSites: requiresUser(getUserSites),
+  siteUsers: requiresUser(getSiteUsers),
   user: getUser,
   bookmark: getBookmark,
   bookmarks: getBookmarks,
