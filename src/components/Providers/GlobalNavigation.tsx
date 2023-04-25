@@ -1,6 +1,9 @@
 import { NextPageContext } from 'next'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useEffect } from 'react'
+
+import { useContextQuery } from '~/graphql/types.generated'
 
 interface Props {
   children?: any
@@ -45,6 +48,8 @@ export function GlobalNavigationContextProvider({
   }
 
   const [state, setState] = React.useState(initialState)
+  const { data: context } = useContextQuery()
+  const router = useRouter()
 
   useEffect(() => {
     const openSubscribeFormEventListener = () => {
@@ -78,6 +83,45 @@ export function GlobalNavigationContextProvider({
       )
     }
   }, [])
+
+  const addStyleClass = (className: string, newClassName: string) => {
+    return [...className.split(' ').filter((cls) => cls), 'home'].join(' ')
+  }
+
+  const removeStyleClass = (className: string, removeClassName: string) => {
+    const existingClasses = className.split(' ').filter((cls) => cls)
+    if (existingClasses.indexOf(removeClassName) > -1) {
+      return existingClasses.filter((cls) => cls !== removeClassName).join(' ')
+    }
+    return className
+  }
+
+  useEffect(() => {
+    // Set the body class to 'authenticated' if we're authenticated
+    if (context.context.viewer) {
+      document.body.className = addStyleClass(
+        document.body.className,
+        'authenticated'
+      )
+    } else {
+      document.body.className = removeStyleClass(
+        document.body.className,
+        'authenticated'
+      )
+    }
+  }, [context])
+
+  useEffect(() => {
+    // Set the body class to 'home' if we're on the home page
+    if (router.asPath === '/') {
+      document.body.className = addStyleClass(document.body.className, 'home')
+    } else {
+      document.body.className = removeStyleClass(
+        document.body.className,
+        'home'
+      )
+    }
+  }, [router.asPath])
 
   return (
     <GlobalNavigationContext.Provider value={state}>

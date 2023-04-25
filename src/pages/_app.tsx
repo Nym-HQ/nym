@@ -20,6 +20,7 @@ import * as gtag from '~/lib/gtag'
 
 export default function App({ Component, session, pageProps }) {
   const router = useRouter()
+
   useEffect(() => {
     const handleRouteChange = (url) => {
       gtag.pageview(url)
