@@ -29,11 +29,11 @@ function UserSitesList({ sites }) {
 
   if (!sites || sites.length == 0) {
     return (
-      <div className="flex justify-center">
+      <div className="flex flex-col justify-center items-center">
         <p className="dark:text-gray-200 text-gray-900">
           Create your first site
         </p>
-        <div className="flex justify-center mt-4">
+        <div className="mt-4">
           <PrimaryButton
             onClick={() => {
               router.push('/create-site')
@@ -48,6 +48,10 @@ function UserSitesList({ sites }) {
 
   return (
     <div className="flex flex-col items-center justify-center space-y-12">
+      <div className="text-primary text-center font-medium text-gray-700 dark:text-gray-300 font-sans">
+        Select a site to get started.
+      </div>
+
       <div className="w-96 mb-4">
         <h3 className="text-lg font-semibold text-gray-300 mb-2 text-center">
           {' '}
@@ -166,9 +170,6 @@ export default function Home(props) {
             <h1 className="text-primary text-center font-sans text-xl font-semibold">
               Welcome back!
             </h1>
-            <div className="text-primary text-center font-medium text-gray-700 dark:text-gray-300 font-sans">
-              Select a site to get started.
-            </div>
           </div>
           <section>
             <UserSitesList sites={userSites?.userSites} />
