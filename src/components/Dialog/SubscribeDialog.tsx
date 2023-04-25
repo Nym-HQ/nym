@@ -14,7 +14,7 @@ export default function SubscribeDialog() {
 
   return (
     <DialogComponent
-      title="Newsletter"
+      title="Subscribe"
       isOpen={isSubscribeFormOpen}
       onClose={() => setSubscribeFormOpen(false)}
       modalContent={() => (
