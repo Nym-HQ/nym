@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { Mail, Plus, Settings } from 'react-feather'
+import { User } from 'react-feather'
+import { Users } from 'react-feather'
 
 import { GhostButton } from '~/components/Button'
 import {
@@ -213,6 +215,15 @@ export function SiteSidebarNavigation() {
           icon: () => <Settings />,
           trailingAccessory: null,
           isActive: router.asPath === '/admin/settings',
+          trailingAction: null,
+          isExternal: false,
+        },
+        {
+          href: '/admin/members',
+          label: 'Members',
+          icon: () => <Users />,
+          trailingAccessory: null,
+          isActive: router.asPath === '/admin/members',
           trailingAction: null,
           isExternal: false,
         },

@@ -25,3 +25,24 @@ export async function getUserSites(_, __, { viewer, prisma }) {
     }
   })
 }
+
+export async function getSiteUsers(_, __, { viewer, site, prisma }) {
+  const userSites = await prisma.userSite.findMany({
+    where: { siteId: site.id },
+  })
+
+  const userIds = (userSites || []).map((userSite) => userSite.userId)
+  const users = await prisma.user.findMany({
+    where: {
+      id: { in: userIds },
+    },
+  })
+
+  return userSites.map((userSite) => {
+    const user = users.find((user) => user.id === userSite.userId)
+    return {
+      ...userSite,
+      user,
+    }
+  })
+}

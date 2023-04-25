@@ -42,6 +42,13 @@ const typeDefs = gql`
     site: Site
   }
 
+  type SiteUser {
+    id: ID!
+    user: User
+    siteRole: SiteRole
+    siteId: String
+  }
+
   type SiteOwner {
     avatar: String
     image: String
@@ -251,6 +258,7 @@ const typeDefs = gql`
   type Query {
     context: ViewerContext!
     userSites: [UserSite!]
+    siteUsers: [SiteUser!]
     user(username: String!): User
     bookmark(id: ID!): Bookmark
     bookmarks(

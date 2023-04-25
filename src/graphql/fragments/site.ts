@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { UserInfoFragment } from './user'
+
 export const SiteInfoFragment = gql`
   fragment SiteInfo on Site {
     __typename
@@ -49,4 +51,16 @@ export const UserSiteInfoFragment = gql`
     }
   }
   ${SiteInfoFragment}
+`
+
+export const SiteUserInfoFragment = gql`
+  fragment SiteUserInfo on SiteUser {
+    id
+    user {
+      ...UserInfo
+    }
+    siteRole
+    siteId
+  }
+  ${UserInfoFragment}
 `

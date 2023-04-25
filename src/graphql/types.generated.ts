@@ -394,6 +394,7 @@ export type Query = {
   posts: Array<Maybe<Post>>
   question?: Maybe<Question>
   questions: QuestionsConnection
+  siteUsers?: Maybe<Array<SiteUser>>
   tags: Array<Maybe<Tag>>
   user?: Maybe<User>
   userSites?: Maybe<Array<UserSite>>
@@ -535,6 +536,14 @@ export enum SiteRole {
   Blocked = 'BLOCKED',
   Owner = 'OWNER',
   User = 'USER',
+}
+
+export type SiteUser = {
+  __typename?: 'SiteUser'
+  id: Scalars['ID']
+  siteId?: Maybe<Scalars['String']>
+  siteRole?: Maybe<SiteRole>
+  user?: Maybe<User>
 }
 
 export type Tag = {
@@ -1016,6 +1025,26 @@ export type UserSiteInfoFragment = {
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+      }
+    | null
+    | undefined
+}
+
+export type SiteUserInfoFragment = {
+  __typename?: 'SiteUser'
+  id: string
+  siteRole?: SiteRole | null | undefined
+  siteId?: string | null | undefined
+  user?:
+    | {
+        __typename: 'User'
+        id: string
+        username?: string | null | undefined
+        image?: string | null | undefined
+        avatar?: string | null | undefined
+        name?: string | null | undefined
+        role?: UserRole | null | undefined
+        isAdmin?: boolean | null | undefined
       }
     | null
     | undefined
@@ -2024,6 +2053,34 @@ export type GetSitesQuery = {
     | undefined
 }
 
+export type GetSiteUsersQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetSiteUsersQuery = {
+  __typename?: 'Query'
+  siteUsers?:
+    | Array<{
+        __typename?: 'SiteUser'
+        id: string
+        siteRole?: SiteRole | null | undefined
+        siteId?: string | null | undefined
+        user?:
+          | {
+              __typename: 'User'
+              id: string
+              username?: string | null | undefined
+              image?: string | null | undefined
+              avatar?: string | null | undefined
+              name?: string | null | undefined
+              role?: UserRole | null | undefined
+              isAdmin?: boolean | null | undefined
+            }
+          | null
+          | undefined
+      }>
+    | null
+    | undefined
+}
+
 export type GetTagsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetTagsQuery = {
@@ -2416,6 +2473,17 @@ export const UserSiteInfoFragmentDoc = gql`
     }
   }
   ${SiteInfoFragmentDoc}
+`
+export const SiteUserInfoFragmentDoc = gql`
+  fragment SiteUserInfo on SiteUser {
+    id
+    user {
+      ...UserInfo
+    }
+    siteRole
+    siteId
+  }
+  ${UserInfoFragmentDoc}
 `
 export const UserSettingsFragmentDoc = gql`
   fragment UserSettings on User {
@@ -4246,6 +4314,64 @@ export type GetSitesLazyQueryHookResult = ReturnType<
 export type GetSitesQueryResult = Apollo.QueryResult<
   GetSitesQuery,
   GetSitesQueryVariables
+>
+export const GetSiteUsersDocument = gql`
+  query getSiteUsers {
+    siteUsers {
+      ...SiteUserInfo
+    }
+  }
+  ${SiteUserInfoFragmentDoc}
+`
+
+/**
+ * __useGetSiteUsersQuery__
+ *
+ * To run a query within a React component, call `useGetSiteUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSiteUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSiteUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSiteUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetSiteUsersQuery,
+    GetSiteUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetSiteUsersQuery, GetSiteUsersQueryVariables>(
+    GetSiteUsersDocument,
+    options
+  )
+}
+export function useGetSiteUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSiteUsersQuery,
+    GetSiteUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetSiteUsersQuery, GetSiteUsersQueryVariables>(
+    GetSiteUsersDocument,
+    options
+  )
+}
+export type GetSiteUsersQueryHookResult = ReturnType<
+  typeof useGetSiteUsersQuery
+>
+export type GetSiteUsersLazyQueryHookResult = ReturnType<
+  typeof useGetSiteUsersLazyQuery
+>
+export type GetSiteUsersQueryResult = Apollo.QueryResult<
+  GetSiteUsersQuery,
+  GetSiteUsersQueryVariables
 >
 export const GetTagsDocument = gql`
   query getTags {
