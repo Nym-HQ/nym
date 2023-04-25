@@ -224,7 +224,7 @@ export default class MailchimpNewsletterProvider
         list_id: this.audienceListId,
       },
       settings: {
-        title: `Nym newsletter - ${new Date().toDateString()}`,
+        title: `${subject} - ${new Date().toDateString()}`,
         template_id: templateId,
         subject_line: subject,
         reply_to: this.fromEmail,
@@ -238,6 +238,8 @@ export default class MailchimpNewsletterProvider
       console.error('Failed to create campaign', campaignResponse)
       this.lastError = campaignResponse
       return false
+    } else {
+      console.info('Mailchimp campaign created', campaignResponse)
     }
 
     // successfully created a campagin, let's send it out
@@ -253,12 +255,13 @@ export default class MailchimpNewsletterProvider
         }
       )
     }
-    if (sendResponse && sendResponse.status < 300) {
+
+    if (!sendResponse || (sendResponse && sendResponse.status < 300)) {
       // success
       return true
     } else {
       this.lastError = sendResponse
-      console.error('Failed to create campaign', sendResponse)
+      console.error('Failed to send the campaign', sendResponse)
       return false
     }
   }

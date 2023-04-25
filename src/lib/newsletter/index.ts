@@ -31,7 +31,7 @@ export async function getNewsletterProvider(
   if (provider != null) {
     const afterInit = await provider.init({
       fromName: site?.name,
-      fromEmail: owner?.email,
+      fromEmail: site?.newsletter_from_email || owner?.email,
     })
 
     if (
