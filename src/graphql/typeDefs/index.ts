@@ -388,6 +388,11 @@ const typeDefs = gql`
     social_other1_label: String
   }
 
+  input EditSiteUserInput {
+    userId: String
+    siteRole: SiteRole
+  }
+
   union Reactable = Bookmark | Question | Post
 
   type Mutation {
@@ -414,6 +419,7 @@ const typeDefs = gql`
     editSiteDomain(subdomain: String!, data: EditSiteDomainInput!): Site
     editSite(subdomain: String!, data: EditSiteInput!): Site
     deleteSite(subdomain: String!): Boolean
+    editSiteUser(data: EditSiteUserInput!): SiteUser
   }
 `
 

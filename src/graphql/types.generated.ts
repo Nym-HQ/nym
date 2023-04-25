@@ -171,6 +171,11 @@ export type EditSiteInput = {
   social_youtube?: InputMaybe<Scalars['String']>
 }
 
+export type EditSiteUserInput = {
+  siteRole?: InputMaybe<SiteRole>
+  userId?: InputMaybe<Scalars['String']>
+}
+
 export type EditUserInput = {
   email?: InputMaybe<Scalars['String']>
   username?: InputMaybe<Scalars['String']>
@@ -229,6 +234,7 @@ export type Mutation = {
   editQuestion?: Maybe<Question>
   editSite?: Maybe<Site>
   editSiteDomain?: Maybe<Site>
+  editSiteUser?: Maybe<SiteUser>
   editUser?: Maybe<User>
   toggleReaction?: Maybe<Reactable>
 }
@@ -320,6 +326,10 @@ export type MutationEditSiteArgs = {
 export type MutationEditSiteDomainArgs = {
   data: EditSiteDomainInput
   subdomain: Scalars['String']
+}
+
+export type MutationEditSiteUserArgs = {
+  data: EditSiteUserInput
 }
 
 export type MutationEditUserArgs = {
@@ -1611,6 +1621,18 @@ export type AddSiteMutation = {
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
       }
+    | null
+    | undefined
+}
+
+export type EditSiteUserMutationVariables = Exact<{
+  data: EditSiteUserInput
+}>
+
+export type EditSiteUserMutation = {
+  __typename?: 'Mutation'
+  editSiteUser?:
+    | { __typename?: 'SiteUser'; siteRole?: SiteRole | null | undefined }
     | null
     | undefined
 }
@@ -3551,6 +3573,56 @@ export type AddSiteMutationResult = Apollo.MutationResult<AddSiteMutation>
 export type AddSiteMutationOptions = Apollo.BaseMutationOptions<
   AddSiteMutation,
   AddSiteMutationVariables
+>
+export const EditSiteUserDocument = gql`
+  mutation editSiteUser($data: EditSiteUserInput!) {
+    editSiteUser(data: $data) {
+      siteRole
+    }
+  }
+`
+export type EditSiteUserMutationFn = Apollo.MutationFunction<
+  EditSiteUserMutation,
+  EditSiteUserMutationVariables
+>
+
+/**
+ * __useEditSiteUserMutation__
+ *
+ * To run a mutation, you first call `useEditSiteUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditSiteUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editSiteUserMutation, { data, loading, error }] = useEditSiteUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditSiteUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    EditSiteUserMutation,
+    EditSiteUserMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    EditSiteUserMutation,
+    EditSiteUserMutationVariables
+  >(EditSiteUserDocument, options)
+}
+export type EditSiteUserMutationHookResult = ReturnType<
+  typeof useEditSiteUserMutation
+>
+export type EditSiteUserMutationResult =
+  Apollo.MutationResult<EditSiteUserMutation>
+export type EditSiteUserMutationOptions = Apollo.BaseMutationOptions<
+  EditSiteUserMutation,
+  EditSiteUserMutationVariables
 >
 export const DeleteUserDocument = gql`
   mutation deleteUser {

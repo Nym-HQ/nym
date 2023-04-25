@@ -33,6 +33,7 @@ import {
   deleteSite,
   editSite,
   editSiteDomain,
+  editSiteUser,
 } from '~/graphql/resolvers/mutations/site'
 import { deleteUser, editUser } from '~/graphql/resolvers/mutations/user'
 
@@ -60,4 +61,5 @@ export default {
   editSiteDomain: requiresSiteAdmin(editSiteDomain),
   editSite: requiresSiteAdmin(editSite),
   deleteSite: requiresSiteAdmin(deleteSite),
+  editSiteUser: requiresSiteAdmin(editSiteUser),
 }
