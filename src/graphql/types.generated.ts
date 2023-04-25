@@ -159,6 +159,7 @@ export type EditSiteInput = {
   name?: InputMaybe<Scalars['String']>
   newsletter_description?: InputMaybe<Scalars['String']>
   newsletter_double_optin?: InputMaybe<Scalars['Boolean']>
+  newsletter_from_email?: InputMaybe<Scalars['String']>
   newsletter_provider?: InputMaybe<Scalars['String']>
   newsletter_setting1?: InputMaybe<Scalars['String']>
   newsletter_setting2?: InputMaybe<Scalars['String']>
@@ -507,6 +508,7 @@ export type Site = {
   name?: Maybe<Scalars['String']>
   newsletter_description?: Maybe<Scalars['String']>
   newsletter_double_optin?: Maybe<Scalars['Boolean']>
+  newsletter_from_email?: Maybe<Scalars['String']>
   newsletter_provider?: Maybe<Scalars['String']>
   newsletter_setting1?: Maybe<Scalars['String']>
   newsletter_setting2?: Maybe<Scalars['String']>
@@ -964,6 +966,7 @@ export type SiteInfoFragment = {
   attach_js?: string | null | undefined
   newsletter_provider?: string | null | undefined
   newsletter_description?: string | null | undefined
+  newsletter_from_email?: string | null | undefined
   newsletter_double_optin?: boolean | null | undefined
   newsletter_setting1?: string | null | undefined
   newsletter_setting2?: string | null | undefined
@@ -1003,6 +1006,7 @@ export type UserSiteInfoFragment = {
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
         newsletter_description?: string | null | undefined
+        newsletter_from_email?: string | null | undefined
         newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
@@ -1485,6 +1489,7 @@ export type EditSiteDomainMutation = {
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
         newsletter_description?: string | null | undefined
+        newsletter_from_email?: string | null | undefined
         newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
@@ -1521,6 +1526,7 @@ export type EditSiteMutation = {
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
         newsletter_description?: string | null | undefined
+        newsletter_from_email?: string | null | undefined
         newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
@@ -1565,6 +1571,7 @@ export type AddSiteMutation = {
         attach_js?: string | null | undefined
         newsletter_provider?: string | null | undefined
         newsletter_description?: string | null | undefined
+        newsletter_from_email?: string | null | undefined
         newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
@@ -1999,6 +2006,7 @@ export type GetSitesQuery = {
               attach_js?: string | null | undefined
               newsletter_provider?: string | null | undefined
               newsletter_description?: string | null | undefined
+              newsletter_from_email?: string | null | undefined
               newsletter_double_optin?: boolean | null | undefined
               newsletter_setting1?: string | null | undefined
               newsletter_setting2?: string | null | undefined
@@ -2116,6 +2124,7 @@ export type ContextQuery = {
           attach_js?: string | null | undefined
           newsletter_provider?: string | null | undefined
           newsletter_description?: string | null | undefined
+          newsletter_from_email?: string | null | undefined
           newsletter_double_optin?: boolean | null | undefined
           newsletter_setting1?: string | null | undefined
           newsletter_setting2?: string | null | undefined
@@ -2385,6 +2394,7 @@ export const SiteInfoFragmentDoc = gql`
     attach_js
     newsletter_provider
     newsletter_description
+    newsletter_from_email
     newsletter_double_optin
     newsletter_setting1
     newsletter_setting2
