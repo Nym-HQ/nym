@@ -98,7 +98,7 @@ export function GlobalNavigationContextProvider({
 
   useEffect(() => {
     // Set the body class to 'authenticated' if we're authenticated
-    if (context.context.viewer) {
+    if (context?.context?.viewer) {
       document.body.className = addStyleClass(
         document.body.className,
         'authenticated'
