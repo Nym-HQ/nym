@@ -1,10 +1,12 @@
 import Link from 'next/link'
 
 import { SiteRole, useGetSitesQuery } from '~/graphql/types.generated'
-import { getSiteDomain } from '~/lib/multitenancy/client'
+import { getSiteDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 export default function AddBookmarkSiteList() {
-  const currentUrl = new URL(window.location.href)
+  const currentUrl = new URL(
+    typeof window !== 'undefined' ? window.location.href : MAIN_APP_DOMAIN
+  )
   const bookmarkUrl = currentUrl.searchParams.get('url') || ''
 
   const { data } = useGetSitesQuery()
@@ -33,7 +35,11 @@ export default function AddBookmarkSiteList() {
         </h3>
         <ul className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
           {ownedSites.map((site, i) => {
-            const siteUrl = `${window.location.protocol}//${getSiteDomain(
+            const siteUrl = `${
+              typeof window !== 'undefined'
+                ? window.location.protocol
+                : 'https://'
+            }//${getSiteDomain(
               site.site
             )}/bookmarks/add?url=${encodeURIComponent(bookmarkUrl)}`
 
