@@ -24,9 +24,9 @@ function AddBookmarkSiteList({ ownedSites, bookmarkUrl }) {
 
   if (!ownedSites || ownedSites.length == 0) {
     return (
-      <div className="flex justify-center">
-        <p className="dark:text-gray-200 text-gray-900">
-          You don't own a site yet.
+      <div className="flex flex-col justify-center">
+        <p className="text-base dark:text-gray-200 text-gray-900">
+          You don't have your own site yet, wanna create one?
         </p>
         <PrimaryButton
           onClick={() => {
