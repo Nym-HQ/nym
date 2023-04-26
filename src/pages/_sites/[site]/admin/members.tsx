@@ -237,12 +237,6 @@ function AdminMembersPage(props) {
 
 export async function getServerSideProps(ctx) {
   const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-  const graphqlData = await Promise.all([
-    ...getCommonQueries(apolloClient),
-    apolloClient.query({ query: GET_SITE_USERS }),
-  ])
-  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
 
   // require login
   if (!context.viewer) {
@@ -254,20 +248,27 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
-    return {
-      redirect: {
-        destination: '/create-your-site',
-        permanent: false,
-      },
-    }
-  }
-
   // require to be admin
   if (!context.viewer.isAdmin) {
     return {
       redirect: {
         destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([
+    ...getCommonQueries(apolloClient),
+    apolloClient.query({ query: GET_SITE_USERS }),
+  ])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
+  if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
+    return {
+      redirect: {
+        destination: '/create-your-site',
         permanent: false,
       },
     }

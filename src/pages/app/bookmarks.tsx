@@ -131,8 +131,22 @@ function BookmarksPage(props) {
 
 export async function getServerSideProps(ctx) {
   const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
 
+  // if not signed in, redirect to sign in page
+  if (!context.viewer) {
+    const url = new URL(ctx.req.url, `https://${ctx.req.headers.host}`)
+
+    return {
+      redirect: {
+        destination: `/login?next=${encodeURIComponent(
+          `${url.pathname}${url.search}`
+        )}`,
+        permanent: false,
+      },
+    }
+  }
+
+  const apolloClient = initApolloClient({ context })
   let graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),
     apolloClient.query({ query: GET_USER_SITES }),
