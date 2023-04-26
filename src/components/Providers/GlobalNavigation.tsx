@@ -99,17 +99,19 @@ export function GlobalNavigationContextProvider({
   }
 
   useEffect(() => {
-    // Set the body class to 'authenticated' if we're authenticated
-    if (context?.context?.viewer) {
-      document.body.className = addStyleClass(
-        document.body.className,
-        'authenticated'
-      )
-    } else {
-      document.body.className = removeStyleClass(
-        document.body.className,
-        'authenticated'
-      )
+    if (document?.body) {
+      // Set the body class to 'authenticated' if we're authenticated
+      if (context?.context?.viewer) {
+        document.body.className = addStyleClass(
+          document.body.className,
+          'authenticated'
+        )
+      } else {
+        document.body.className = removeStyleClass(
+          document.body.className,
+          'authenticated'
+        )
+      }
     }
   }, [context])
 
