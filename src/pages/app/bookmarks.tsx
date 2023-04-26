@@ -1,7 +1,8 @@
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
+import { PrimaryButton } from '~/components/Button'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import routes from '~/config/routes'
@@ -19,15 +20,21 @@ import { getCommonPageProps } from '~/lib/commonProps'
 import { getSiteDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 function AddBookmarkSiteList({ ownedSites, bookmarkUrl }) {
+  const router = useRouter()
+
   if (!ownedSites || ownedSites.length == 0) {
     return (
       <div className="flex justify-center">
         <p className="dark:text-gray-200 text-gray-900">
-          You don't own a site yet.{' '}
-          <Link href={'/create-site'}>
-            <a>Create one?</a>
-          </Link>
+          You don't own a site yet.
         </p>
+        <PrimaryButton
+          onClick={() => {
+            router.push('/create-site')
+          }}
+        >
+          Create a Site
+        </PrimaryButton>
       </div>
     )
   }
