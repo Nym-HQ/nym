@@ -100,6 +100,7 @@
     "remark-rehype": "^10.1.0",
     "remove-markdown": "^0.3.0",
     "sass": "^1.59.3",
+    "sharp": "^0.32.0",
     "slugify": "^1.6.4",
     "string-replace-to-array": "^2.1.0",
     "turndown": "^7.1.1",
