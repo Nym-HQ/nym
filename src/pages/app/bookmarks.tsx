@@ -1,3 +1,4 @@
+import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
 import AddBookmarkSiteList from '~/components/Bookmarks/AddBookmarkSiteList'
@@ -19,25 +20,29 @@ function BookmarksPage(props) {
   const seo = extendSEO(routes.bookmarks.seo, context.context.site)
 
   return (
-    <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
-      <TitleBar
-        magicTitle
-        titleRef={titleRef}
-        scrollContainerRef={scrollContainerRef}
-        title="Add Bookmark"
-      />
+    <>
+      <NextSeo {...seo} />
 
-      {/* Keep this div to trigger the magic scroll */}
-      <div className="p-4" ref={titleRef} />
+      <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>
+        <TitleBar
+          magicTitle
+          titleRef={titleRef}
+          scrollContainerRef={scrollContainerRef}
+          title="Add Bookmark"
+        />
 
-      <Detail.ContentContainer>
-        <div className="flex flex-col items-center justify-center space-y-12">
-          <div className="w-96 mb-4">
-            <AddBookmarkSiteList />
+        {/* Keep this div to trigger the magic scroll */}
+        <div className="p-4" ref={titleRef} />
+
+        <Detail.ContentContainer>
+          <div className="flex flex-col items-center justify-center space-y-12">
+            <div className="w-96 mb-4">
+              <AddBookmarkSiteList />
+            </div>
           </div>
-        </div>
-      </Detail.ContentContainer>
-    </Detail.Container>
+        </Detail.ContentContainer>
+      </Detail.Container>
+    </>
   )
 }
 
