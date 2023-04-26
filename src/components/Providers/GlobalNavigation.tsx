@@ -85,11 +85,13 @@ export function GlobalNavigationContextProvider({
   }, [])
 
   const addStyleClass = (className: string, newClassName: string) => {
-    return [...className.split(' ').filter((cls) => cls), 'home'].join(' ')
+    return [...(className || '').split(' ').filter((cls) => cls), 'home'].join(
+      ' '
+    )
   }
 
   const removeStyleClass = (className: string, removeClassName: string) => {
-    const existingClasses = className.split(' ').filter((cls) => cls)
+    const existingClasses = (className || '').split(' ').filter((cls) => cls)
     if (existingClasses.indexOf(removeClassName) > -1) {
       return existingClasses.filter((cls) => cls !== removeClassName).join(' ')
     }
@@ -112,14 +114,16 @@ export function GlobalNavigationContextProvider({
   }, [context])
 
   useEffect(() => {
-    // Set the body class to 'home' if we're on the home page
-    if (router.asPath === '/') {
-      document.body.className = addStyleClass(document.body.className, 'home')
-    } else {
-      document.body.className = removeStyleClass(
-        document.body.className,
-        'home'
-      )
+    if (document?.body) {
+      // Set the body class to 'home' if we're on the home page
+      if (router.asPath === '/') {
+        document.body.className = addStyleClass(document.body.className, 'home')
+      } else {
+        document.body.className = removeStyleClass(
+          document.body.className,
+          'home'
+        )
+      }
     }
   }, [router.asPath])
 
