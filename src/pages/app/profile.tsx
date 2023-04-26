@@ -24,10 +24,6 @@ export default function Profile() {
 
 export async function getServerSideProps(ctx) {
   const context = await getContext(ctx)
-  const apolloClient = initApolloClient({ context })
-
-  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
-  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
 
   // if not signed in, redirect to sign in page
   if (!context.viewer) {
@@ -38,6 +34,10 @@ export async function getServerSideProps(ctx) {
       },
     }
   }
+
+  const apolloClient = initApolloClient({ context })
+  const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
+  const commonProps = await getCommonPageProps(ctx, graphqlData[0])
 
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
