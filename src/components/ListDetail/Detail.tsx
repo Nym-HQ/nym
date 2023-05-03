@@ -62,9 +62,7 @@ function Loading() {
   )
 }
 
-function Null({ type }: { type: '404' | 'Page' | 'Post' }) {
-  const { data } = useContextQuery()
-
+function Null({ type }: { type: '404' | 'Page' | 'Post' | 'Bookmark' }) {
   if (type === 'Page') {
     return (
       <Container>
@@ -95,6 +93,26 @@ function Null({ type }: { type: '404' | 'Page' | 'Post' }) {
           <Button href="/writing/new">Create new Post</Button>
         </div>
         <PoweredByNym />
+      </Container>
+    )
+  } else if (type === 'Bookmark') {
+    return (
+      <Container>
+        <TitleBar
+          backButton
+          globalMenu={false}
+          backButtonHref={'/bookmarks'}
+          magicTitle
+          title="Not found"
+        />
+        <div className="flex flex-1 flex-col items-center justify-center space-y-6 px-8 text-center lg:px-16">
+          <Compass className="text-secondary" size={32} />
+          <div className="flex flex-col space-y-1">
+            <p className="text-primary font-semibold">
+              The bookmark you are looking for does not exist anymore.
+            </p>
+          </div>
+        </div>
       </Container>
     )
   } else {

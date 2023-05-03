@@ -73,11 +73,6 @@ export function SiteSidebarNavigation() {
           trailingAction: null,
           isExternal: false,
         },
-      ],
-    },
-    {
-      label: 'Me',
-      items: [
         {
           href: '/bookmarks',
           label: 'Bookmarks',

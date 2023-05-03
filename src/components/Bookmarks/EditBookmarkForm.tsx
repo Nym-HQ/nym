@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 import { Link as LinkIcon } from 'react-feather'
 
@@ -13,6 +14,7 @@ import {
 } from '~/graphql/types.generated'
 
 export function EditBookmarkForm({ closeModal, bookmark }) {
+  const router = useRouter()
   const initialState = {
     error: '',
     title: bookmark.title || bookmark.url,
@@ -102,7 +104,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
       deleteBookmark: true,
     },
     update(cache) {
-      const { bookmarks } = cache.readQuery({
+      const cacheData = cache.readQuery({
         query: GET_BOOKMARKS,
       }) as any
 
@@ -114,7 +116,8 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
         },
       })
 
-      if (bookmarks) {
+      if (cacheData) {
+        const { bookmarks } = cacheData
         cache.writeQuery({
           query: GET_BOOKMARKS,
           data: {
@@ -125,6 +128,13 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
           },
         })
       }
+    },
+    onCompleted() {
+      router.push('/bookmarks')
+      closeModal()
+    },
+    onError() {
+      dispatch({ type: 'error', value: 'Failed to delete the bookmark' })
     },
   })
 
@@ -168,7 +178,10 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
 
   return (
     <div className="p-4">
-      <form className="space-y-3" onSubmit={handleSave}>
+      <form
+        className="space-y-3 flex flex-col items-stretch"
+        onSubmit={handleSave}
+      >
         <Input
           placeholder="Title"
           defaultValue={state.title}
@@ -180,7 +193,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="text-secondary inline-flex items-center space-x-2 pb-2 text-sm opacity-70 hover:opacity-100"
+            className="text-secondary flex items-center space-x-2 pb-2 text-sm opacity-70 hover:opacity-100"
           >
             <LinkIcon className="flex-none" size={12} />
             <span className="line-clamp-1">{bookmark.url}</span>
@@ -211,7 +224,6 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
       <div className="flex justify-between pt-24">
         <DeleteButton
           onClick={() => {
-            closeModal()
             handleDelete()
           }}
         >

@@ -25,7 +25,7 @@ export function BookmarkDetail({ id, bookmark, site, loading, error }) {
   }
 
   if (!bookmark || error) {
-    return <Detail.Null type="404" />
+    return <Detail.Null type="Bookmark" />
   }
 
   const seo = extendSEO(
