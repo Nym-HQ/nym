@@ -22,6 +22,7 @@ import { createReactEditorJS } from 'react-editor-js'
 import { Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
 import AnyButton from './AnyButtonTool'
 import { CustomLinkTool } from './CustomLinkTool'
+import HeaderExtended from './Header'
 import SubscribeButtonTool from './SubscribeButtonTool'
 
 const DEFAULT_EDITOR_JS_TOOLS = {
@@ -45,7 +46,7 @@ const DEFAULT_EDITOR_JS_TOOLS = {
   linkTool: LinkTool,
   image: Image,
   raw: Raw,
-  header: Header,
+  header: HeaderExtended as typeof Header,
   quote: Quote,
   marker: Marker,
   checklist: CheckList,

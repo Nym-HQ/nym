@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import * as React from 'react'
 
+import fallbackProfilePic from '../../assets/fallback-avatar.png'
+
 export function Avatar({ user, src, ...props }) {
-  const fallbackUrl = '/static/img/fallback-avatar.png'
-  const [srcState, setSrcState] = React.useState(src || fallbackUrl)
+  const [srcState, setSrcState] = React.useState(src || fallbackProfilePic)
 
   // forces avatars to update if the component is in the same place between
   // page loads, e.g. changing between AMA questions, the header avatar should
@@ -18,7 +19,7 @@ export function Avatar({ user, src, ...props }) {
       src={srcState}
       {...props}
       onError={() => {
-        setSrcState(fallbackUrl)
+        setSrcState(fallbackProfilePic)
       }}
     />
   )
