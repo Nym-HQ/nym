@@ -6,7 +6,6 @@
 
 import { LayoutGroup, motion } from 'framer-motion'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 
@@ -31,6 +30,7 @@ import {
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import { formatSiteRole } from '~/lib/formatters'
 
 interface MemberListItemProps {
   siteUser: SiteUser
@@ -67,7 +67,9 @@ export const MemberListItemItem = React.memo<MemberListItemProps>(
                 )}
               </div>
               <div className="flex-1"></div>
-              <div className="text-white text-opacity-60">{siteRole}</div>
+              <div className="text-white text-opacity-60">
+                {formatSiteRole(siteRole)}
+              </div>
             </div>
           </a>
         </Link>
@@ -180,9 +182,15 @@ function MemberList({ siteUsers, context }) {
                   value={editingSiteRole}
                   onChange={(e) => setEditingSiteRole(e.target.value)}
                 >
-                  <option value={SiteRole.Admin}>Administrator</option>
-                  <option value={SiteRole.User}>Member</option>
-                  <option value={SiteRole.PaidUser}>Paid Member</option>
+                  <option value={SiteRole.Admin}>
+                    {formatSiteRole(SiteRole.Admin)}
+                  </option>
+                  <option value={SiteRole.User}>
+                    {formatSiteRole(SiteRole.User)}
+                  </option>
+                  <option value={SiteRole.PaidUser}>
+                    {formatSiteRole(SiteRole.PaidUser)}
+                  </option>
                 </Select>
                 {error && <p className="text-red-500">{error}</p>}
                 <div className="flex justify-between pt-12">
