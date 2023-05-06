@@ -33,6 +33,7 @@ export type AddBookmarkInput = {
 }
 
 export type AddPageInput = {
+  access?: InputMaybe<PageAccess>
   data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   featured?: InputMaybe<Scalars['Boolean']>
@@ -43,6 +44,7 @@ export type AddPageInput = {
 }
 
 export type AddPostInput = {
+  access?: InputMaybe<PostAccess>
   data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   slug: Scalars['String']
@@ -119,6 +121,7 @@ export type EditBookmarkInput = {
 }
 
 export type EditPageInput = {
+  access?: InputMaybe<PageAccess>
   data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   featured?: InputMaybe<Scalars['Boolean']>
@@ -131,6 +134,7 @@ export type EditPageInput = {
 }
 
 export type EditPostInput = {
+  access?: InputMaybe<PostAccess>
   data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
   publishNewsletter?: InputMaybe<Scalars['Boolean']>
@@ -343,6 +347,7 @@ export type MutationToggleReactionArgs = {
 
 export type Page = {
   __typename?: 'Page'
+  access?: Maybe<PageAccess>
   author?: Maybe<User>
   createdAt?: Maybe<Scalars['Date']>
   data?: Maybe<Scalars['String']>
@@ -356,6 +361,12 @@ export type Page = {
   text?: Maybe<Scalars['String']>
   title?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['Date']>
+}
+
+export enum PageAccess {
+  Members = 'MEMBERS',
+  PaidMembers = 'PAID_MEMBERS',
+  Public = 'PUBLIC',
 }
 
 export type PageInfo = {
@@ -373,6 +384,7 @@ export type PagesFilter = {
 
 export type Post = {
   __typename?: 'Post'
+  access?: Maybe<PostAccess>
   author?: Maybe<User>
   createdAt?: Maybe<Scalars['Date']>
   data?: Maybe<Scalars['String']>
@@ -387,6 +399,12 @@ export type Post = {
   title?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['Date']>
   viewerHasReacted?: Maybe<Scalars['Boolean']>
+}
+
+export enum PostAccess {
+  Members = 'MEMBERS',
+  PaidMembers = 'PAID_MEMBERS',
+  Public = 'PUBLIC',
 }
 
 export type Query = {
@@ -545,6 +563,7 @@ export enum SiteRole {
   Admin = 'ADMIN',
   Blocked = 'BLOCKED',
   Owner = 'OWNER',
+  PaidUser = 'PAID_USER',
   User = 'USER',
 }
 
@@ -781,6 +800,7 @@ export type PageDetailFragment = {
   text?: string | null | undefined
   data?: string | null | undefined
   featureImage?: string | null | undefined
+  access?: PageAccess | null | undefined
   id: string
   publishedAt?: any | null | undefined
   title?: string | null | undefined
@@ -842,6 +862,7 @@ export type PostDetailFragment = {
   reactionCount?: number | null | undefined
   viewerHasReacted?: boolean | null | undefined
   newsletterAt?: any | null | undefined
+  access?: PostAccess | null | undefined
   id: string
   publishedAt?: any | null | undefined
   title?: string | null | undefined
@@ -1262,6 +1283,7 @@ export type EditPageMutation = {
         text?: string | null | undefined
         data?: string | null | undefined
         featureImage?: string | null | undefined
+        access?: PageAccess | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1295,6 +1317,7 @@ export type AddPageMutation = {
         text?: string | null | undefined
         data?: string | null | undefined
         featureImage?: string | null | undefined
+        access?: PageAccess | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1323,6 +1346,7 @@ export type EditPostMutation = {
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
         newsletterAt?: any | null | undefined
+        access?: PostAccess | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1370,6 +1394,7 @@ export type AddPostMutation = {
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
         newsletterAt?: any | null | undefined
+        access?: PostAccess | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1839,6 +1864,7 @@ export type GetPageQuery = {
         text?: string | null | undefined
         data?: string | null | undefined
         featureImage?: string | null | undefined
+        access?: PageAccess | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1861,6 +1887,7 @@ export type GetHomePageQuery = {
         text?: string | null | undefined
         data?: string | null | undefined
         featureImage?: string | null | undefined
+        access?: PageAccess | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -1921,6 +1948,7 @@ export type GetPostQuery = {
         reactionCount?: number | null | undefined
         viewerHasReacted?: boolean | null | undefined
         newsletterAt?: any | null | undefined
+        access?: PostAccess | null | undefined
         id: string
         publishedAt?: any | null | undefined
         title?: string | null | undefined
@@ -2367,6 +2395,7 @@ export const PageDetailFragmentDoc = gql`
     text
     data
     featureImage
+    access
   }
   ${PageCoreFragmentDoc}
 `
@@ -2399,6 +2428,7 @@ export const PostDetailFragmentDoc = gql`
     reactionCount
     viewerHasReacted
     newsletterAt
+    access
   }
   ${PostCoreFragmentDoc}
 `

@@ -33,6 +33,7 @@ const typeDefs = gql`
     USER
     ADMIN
     OWNER
+    PAID_USER
   }
 
   type UserSite {
@@ -55,6 +56,12 @@ const typeDefs = gql`
     hasEmail: Boolean
   }
 
+  enum PageAccess {
+    PUBLIC
+    MEMBERS
+    PAID_MEMBERS
+  }
+
   type Page {
     id: ID!
     createdAt: Date
@@ -69,6 +76,13 @@ const typeDefs = gql`
     excerpt: String
     featureImage: String
     featured: Boolean
+    access: PageAccess
+  }
+
+  enum PostAccess {
+    PUBLIC
+    MEMBERS
+    PAID_MEMBERS
   }
 
   type Post {
@@ -86,6 +100,7 @@ const typeDefs = gql`
     featureImage: String
     reactionCount: Int
     viewerHasReacted: Boolean
+    access: PostAccess
   }
 
   type Bookmark {
@@ -326,6 +341,7 @@ const typeDefs = gql`
     slug: String!
     excerpt: String
     featured: Boolean
+    access: PageAccess
   }
 
   input EditPageInput {
@@ -338,6 +354,7 @@ const typeDefs = gql`
     published: Boolean
     featured: Boolean
     publishedAt: Date
+    access: PageAccess
   }
 
   input AddPostInput {
@@ -346,6 +363,7 @@ const typeDefs = gql`
     data: String!
     slug: String!
     excerpt: String
+    access: PostAccess
   }
 
   input EditPostInput {
@@ -357,6 +375,7 @@ const typeDefs = gql`
     published: Boolean
     publishedAt: Date
     publishNewsletter: Boolean
+    access: PostAccess
   }
 
   input AddSiteInput {

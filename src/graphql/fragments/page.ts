@@ -26,6 +26,7 @@ export const PageDetailFragment = gql`
     text
     data
     featureImage
+    access
   }
   ${PageCoreFragment}
 `

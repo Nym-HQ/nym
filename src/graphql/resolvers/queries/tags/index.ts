@@ -1,10 +1,12 @@
-import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
+import { isUserSite } from '~/lib/multitenancy/server'
 
 export async function getTags(_, __, ctx: Context) {
   const { prisma, site } = ctx
 
-  if (!site || site.id === NYM_APP_SITE.id) return null
+  if (!isUserSite(site)) {
+    return null
+  }
 
   const tags = [{ name: 'website' }, { name: 'reading' }, { name: 'portfolio' }]
 

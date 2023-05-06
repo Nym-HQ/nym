@@ -1,9 +1,7 @@
-import { NYM_APP_SITE, PAGINATION_AMOUNT } from '~/graphql/constants'
+import { PAGINATION_AMOUNT } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
-import {
-  EmailSubscriptionType,
-  GetEmailSubscriptionsQueryVariables,
-} from '~/graphql/types.generated'
+import { GetEmailSubscriptionsQueryVariables } from '~/graphql/types.generated'
+import { isUserSite } from '~/lib/multitenancy/server'
 
 export async function getEmailSubscriptions(
   _,
@@ -13,7 +11,7 @@ export async function getEmailSubscriptions(
   const { first = PAGINATION_AMOUNT, after = undefined } = args
   const { prisma, site } = ctx
 
-  if (!site || site.id === NYM_APP_SITE.id) {
+  if (!isUserSite(site)) {
     return null
   }
 

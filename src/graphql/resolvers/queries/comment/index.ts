@@ -1,16 +1,16 @@
-import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import {
   Bookmark,
   CommentType,
   QueryCommentArgs,
 } from '~/graphql/types.generated'
+import { isUserSite } from '~/lib/multitenancy/server'
 
 export async function getComment(_, args: QueryCommentArgs, ctx: Context) {
   const { id } = args
   const { prisma, site } = ctx
 
-  if (!site || site.id === NYM_APP_SITE.id) {
+  if (!isUserSite(site)) {
     return null
   }
 
@@ -21,7 +21,7 @@ export async function getCommentAuthor(parent: Bookmark, _, ctx: Context) {
   const { id } = parent
   const { prisma, site } = ctx
 
-  if (!site || site.id === NYM_APP_SITE.id) {
+  if (!isUserSite(site)) {
     return null
   }
 
@@ -34,7 +34,7 @@ export async function getComments(_, args, ctx: Context) {
   const { refId, type } = args
   const { prisma, site } = ctx
 
-  if (!refId || !type || !site || site.id === NYM_APP_SITE.id) {
+  if (!refId || !type || !isUserSite(site)) {
     return []
   }
 

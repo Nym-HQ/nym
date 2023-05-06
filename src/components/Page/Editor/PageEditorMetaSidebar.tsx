@@ -5,12 +5,13 @@ import toast from 'react-hot-toast'
 
 import Button, { GhostButton, PrimaryButton } from '~/components/Button'
 import { TextWithDatePicker } from '~/components/DatePicker'
-import { Input, Textarea } from '~/components/Input'
+import { Input, Select, Textarea } from '~/components/Input'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { Tooltip } from '~/components/Tooltip'
 import { GET_PAGES } from '~/graphql/queries/pages'
 import {
+  PageAccess,
   useAddPageMutation,
   useEditPageMutation,
 } from '~/graphql/types.generated'
@@ -111,10 +112,6 @@ export function PageEditorMetaSidebar({ site }) {
     }))
   }
 
-  function handleExcerptChange(e) {
-    return setDraftState((draft) => ({ ...draft, excerpt: e.target.value }))
-  }
-
   return (
     <>
       <nav
@@ -154,8 +151,30 @@ export function PageEditorMetaSidebar({ site }) {
               placeholder="Excerpt"
               rows={8}
               maxRows={8}
-              onChange={handleExcerptChange}
+              onChange={(e) =>
+                setDraftState((draft) => ({
+                  ...draft,
+                  excerpt: e.target.value,
+                }))
+              }
             />
+          </div>
+
+          <div className="flex flex-col space-y-1">
+            <p className="text-primary text-sm font-semibold">Access</p>
+            <Select
+              value={draftState.access}
+              onChange={(e) =>
+                setDraftState((draft) => ({
+                  ...draft,
+                  access: e.target.value,
+                }))
+              }
+            >
+              <option value={PageAccess.Public}>Public</option>
+              <option value={PageAccess.Members}>Members Only</option>
+              <option value={PageAccess.PaidMembers}>Paid-members Only</option>
+            </Select>
           </div>
 
           {existingPage?.id && (

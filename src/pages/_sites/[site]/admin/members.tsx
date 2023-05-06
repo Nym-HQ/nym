@@ -181,7 +181,8 @@ function MemberList({ siteUsers, context }) {
                   onChange={(e) => setEditingSiteRole(e.target.value)}
                 >
                   <option value={SiteRole.Admin}>Administrator</option>
-                  <option value={SiteRole.User}>User</option>
+                  <option value={SiteRole.User}>Member</option>
+                  <option value={SiteRole.PaidUser}>Paid Member</option>
                 </Select>
                 {error && <p className="text-red-500">{error}</p>}
                 <div className="flex justify-between pt-12">
