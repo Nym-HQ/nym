@@ -75,10 +75,9 @@ export async function getPages(_, args: GetPagesQueryVariables, ctx: Context) {
   return await prisma.page.findMany({
     orderBy: published ? { publishedAt: 'desc' } : { createdAt: 'desc' },
     where: {
-      featured: featuredOnly ? true : undefined,
-      path: includeHomepage ? undefined : { not: '/' },
       siteId: site.id,
-
+      ...(featuredOnly ? { featured: true } : {}),
+      ...(includeHomepage ? {} : { path: { not: '/' } }),
       ...publishedFilter,
       ...accessFilter,
     },
