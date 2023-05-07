@@ -82,3 +82,7 @@ export async function getSiteOwner(siteId: string) {
     ? await prisma.user.findUnique({ where: { id: userSite.userId } })
     : null
 }
+
+export function isUserSite(site: any): boolean {
+  return site && site.id !== NYM_APP_SITE.id
+}

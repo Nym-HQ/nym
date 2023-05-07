@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
+import { PageAccess } from '~/graphql/types.generated'
 
 import { PageEditorActions } from './PageEditorActions'
 import { PageEditorComposer } from './PageEditorComposer'
@@ -18,6 +19,7 @@ interface PageDraftState {
   excerpt: string
   featured: boolean
   publishedAt: Date | null
+  access: PageAccess
 }
 interface PageDraftError {
   field: string
@@ -34,6 +36,7 @@ export const PageEditorContext = React.createContext({
     excerpt: '',
     featured: false,
     publishedAt: null,
+    access: PageAccess.Public,
   } as PageDraftState,
   setDraftState: (draftObj: unknown) => {},
   existingPage: null,
@@ -78,6 +81,7 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
     excerpt: page?.excerpt || '',
     featured: page?.featured || false,
     publishedAt: page?.publishedAt || null,
+    access: page?.access || PageAccess.Public,
   } as PageDraftState
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)

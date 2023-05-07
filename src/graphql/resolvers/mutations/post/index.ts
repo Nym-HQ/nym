@@ -6,6 +6,7 @@ import {
   MutationAddPostArgs,
   MutationDeletePostArgs,
   MutationEditPostArgs,
+  PostAccess,
 } from '~/graphql/types.generated'
 import { extractFeatureImage, parseEditorJsData } from '~/lib/compat/data'
 import { parseEditorJsDataIntoHtml } from '~/lib/editorjs'
@@ -21,6 +22,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
     slug = '',
     excerpt = '',
     published = undefined,
+    access = PostAccess.Public,
   } = data
   const { prisma, site } = ctx
 
@@ -68,6 +70,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
         slug,
         excerpt,
         publishedAt: publishedAt,
+        access: access || PostAccess.Public,
       },
     })
     .then((post) => {
@@ -123,7 +126,14 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
 
 export async function addPost(_, args: MutationAddPostArgs, ctx: Context) {
   const { data } = args
-  const { title, text, data: blocks, slug, excerpt = '' } = data
+  const {
+    title,
+    text,
+    data: blocks,
+    slug,
+    excerpt = '',
+    access = PostAccess.Public,
+  } = data
   const { prisma, viewer, site } = ctx
 
   return await prisma.post
@@ -135,6 +145,7 @@ export async function addPost(_, args: MutationAddPostArgs, ctx: Context) {
         data: blocks,
         slug,
         excerpt,
+        access: access || PostAccess.Public,
         author: {
           connect: { id: viewer.id },
         },

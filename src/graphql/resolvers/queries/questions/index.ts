@@ -6,11 +6,12 @@ import {
   Question,
   QuestionStatus,
 } from '~/graphql/types.generated'
+import { isUserSite } from '~/lib/multitenancy/server'
 
 export async function getQuestion(_, { id }: QueryQuestionArgs, ctx: Context) {
   const { prisma, viewer, site } = ctx
 
-  if (!site || site.id === NYM_APP_SITE.id) {
+  if (!isUserSite(site)) {
     return null
   }
 
@@ -57,7 +58,7 @@ export async function getQuestions(
 
   const { prisma, viewer, site } = ctx
 
-  if (!site || site.id === NYM_APP_SITE.id) {
+  if (!isUserSite(site)) {
     return null
   }
 

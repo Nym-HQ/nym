@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
+import { PostAccess } from '~/graphql/types.generated'
 
 import { PostEditorActions } from './PostEditorActions'
 import { PostEditorComposer } from './PostEditorComposer'
@@ -16,6 +17,7 @@ interface PostDraftState {
   slug: string
   excerpt: string
   publishedAt: Date | null
+  access: PostAccess
 }
 interface PostDraftError {
   field: string
@@ -30,6 +32,7 @@ export const PostEditorContext = React.createContext({
     slug: '',
     excerpt: '',
     publishedAt: null,
+    access: PostAccess.Public,
   } as PostDraftState,
   setDraftState: (draftObj: unknown) => {},
   existingPost: null,
@@ -74,6 +77,7 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
     slug: post?.slug || '',
     excerpt: post?.excerpt || '',
     publishedAt: post?.publishedAt || null,
+    access: post?.access || PostAccess.Public,
   } as PostDraftState
 
   const [draftState, setDraftState] = React.useState(defaultDraftState)

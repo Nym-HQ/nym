@@ -33,6 +33,7 @@ export const PostDetailFragment = gql`
     reactionCount
     viewerHasReacted
     newsletterAt
+    access
   }
   ${PostCoreFragment}
 `

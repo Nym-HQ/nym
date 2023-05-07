@@ -6,6 +6,7 @@ import {
   MutationAddPageArgs,
   MutationDeletePageArgs,
   MutationEditPageArgs,
+  PageAccess,
 } from '~/graphql/types.generated'
 import { extractFeatureImage } from '~/lib/compat/data'
 import { graphcdn } from '~/lib/graphcdn'
@@ -21,6 +22,7 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
     excerpt = '',
     published = undefined,
     featured = false,
+    access = PageAccess.Public,
   } = data
   const { prisma, site } = ctx
 
@@ -76,6 +78,7 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
         excerpt,
         featured,
         publishedAt: publishedAt,
+        access: access || PageAccess.Public,
       },
     })
     .then((page) => {
@@ -102,6 +105,7 @@ export async function addPage(_, args: MutationAddPageArgs, ctx: Context) {
     slug,
     excerpt = '',
     featured = false,
+    access = PageAccess.Public,
   } = data
   const { prisma, viewer, site } = ctx
 
@@ -116,6 +120,7 @@ export async function addPage(_, args: MutationAddPageArgs, ctx: Context) {
         slug,
         excerpt,
         featured,
+        access: access || PageAccess.Public,
         author: {
           connect: { id: viewer.id },
         },
