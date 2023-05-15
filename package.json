@@ -54,7 +54,7 @@
     "@uiw/react-md-editor": "^3.20.0",
     "@vercel/analytics": "^0.1.10",
     "babel-plugin-transform-remove-imports": "^1.7.0",
-    "cheerio": "^1.0.0-rc.10",
+    "cheerio": "^1.0.0-rc.12",
     "cloudinary": "^1.32.0",
     "cryptr": "^6.0.2",
     "date-fns": "^2.28.0",
