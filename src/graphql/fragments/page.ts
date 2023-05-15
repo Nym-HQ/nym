@@ -10,6 +10,7 @@ export const PageCoreFragment = gql`
     slug
     excerpt
     featured
+    _isMasked
   }
 `
 

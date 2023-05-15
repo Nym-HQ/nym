@@ -1,8 +1,9 @@
 const removeImports = require('next-remove-imports')({
-  options: { },
+  options: {},
 })
 
 module.exports = removeImports({
+  reactStrictMode: true,
   swcMinify: true,
   webpack: (
     config,
@@ -24,6 +25,8 @@ module.exports = removeImports({
       'abs.twimg.com',
       'overthought.ghost.io',
       'imagedelivery.net',
+      'res.cloudinary.com',
+      'avatars.githubusercontent.com',
     ],
   },
   publicRuntimeConfig: {
@@ -50,6 +53,6 @@ module.exports = removeImports({
       //   source: "/_hive/:slug",
       //   destination: "https://hive.splitbee.io/:slug",
       // },
-    ];
-  }
+    ]
+  },
 })

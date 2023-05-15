@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
-import { PostEditor } from '~/components/Writing/Editor/PostEditor'
 import { PostDetail } from '~/components/Writing/PostDetail'
 import { PostsList } from '~/components/Writing/PostsList'
 import { getContext } from '~/graphql/context'

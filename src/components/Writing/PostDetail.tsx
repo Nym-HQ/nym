@@ -8,6 +8,7 @@ import { CommentType } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { EditorJSPreviewer } from '../EditorJS'
+import { Paywall } from '../ListDetail/Paywall'
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PostActions } from './PostActions'
@@ -84,7 +85,11 @@ export function PostDetail({ slug, site, post, error, loading }) {
             <div className="py-6" />
           </Detail.ContentContainer>
 
-          <Comments refId={post.id} type={CommentType.Post} />
+          {post._isMasked ? (
+            <Paywall obj="Post" access={post.access} />
+          ) : (
+            <Comments refId={post.id} type={CommentType.Post} />
+          )}
         </div>
 
         <PoweredByNym scrollContainerRef={scrollContainerRef} />

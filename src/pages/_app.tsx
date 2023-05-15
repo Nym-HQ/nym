@@ -77,8 +77,8 @@ export default function App({ Component, session, pageProps }) {
             <SiteLayout>{page}</SiteLayout>
           )}
         </Providers>
+        <Analytics />
       </SessionProvider>
-      <Analytics />
     </>
   )
 

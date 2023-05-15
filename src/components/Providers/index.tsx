@@ -5,7 +5,7 @@ import * as React from 'react'
 import { useApollo } from '~/lib/apollo'
 
 import { AddBookmarkDialog, SubscribeDialog } from '../Dialog'
-import { FathomProvider } from './Fathom'
+// import { FathomProvider } from './Fathom'
 import { GlobalNavigationContextProvider } from './GlobalNavigation'
 import { GlobalSiteContextProvider } from './GlobalSite'
 import { SEO } from './SEO'
@@ -22,7 +22,7 @@ export function Providers({ children, pageProps }: Props) {
     <ApolloProvider client={apolloClient}>
       <GlobalSiteContextProvider pageProps={pageProps}>
         <SEO />
-        <FathomProvider />
+        {/* <FathomProvider /> */}
 
         <GlobalNavigationContextProvider pageProps={pageProps}>
           {children}

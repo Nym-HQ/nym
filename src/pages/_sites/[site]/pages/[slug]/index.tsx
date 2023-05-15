@@ -1,23 +1,17 @@
 import * as React from 'react'
 
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
-import { PageEditor } from '~/components/Page/Editor/PageEditor'
 import { PageDetail } from '~/components/Page/PageDetail'
 import { PagesList } from '~/components/Page/PagesList'
 import { getContext } from '~/graphql/context'
-import { GET_COMMENTS } from '~/graphql/queries/comments'
 import { GET_PAGE } from '~/graphql/queries/pages'
-import {
-  CommentType,
-  useContextQuery,
-  useGetPageQuery,
-} from '~/graphql/types.generated'
+import { useContextQuery, useGetPageQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { parsePageData } from '~/lib/compat/data'
 
-function PagePagePage(props) {
+function SinglePageViewPage(props) {
   const { slug } = props
   const { data, error, loading } = useGetPageQuery({ variables: { slug } })
   const { data: context } = useContextQuery({ variables: {} })
@@ -56,15 +50,7 @@ export async function getServerSideProps(ctx) {
       },
     }
 
-  const graphqlData = await Promise.all([
-    ...getCommonQueries(apolloClient),
-
-    data?.page?.id &&
-      apolloClient.query({
-        query: GET_COMMENTS,
-        variables: { refId: data.page.id, type: CommentType.Bookmark },
-      }),
-  ])
+  const graphqlData = await Promise.all(getCommonQueries(apolloClient))
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
@@ -84,7 +70,7 @@ export async function getServerSideProps(ctx) {
   })
 }
 
-PagePagePage.getLayout = function getLayout(page) {
+SinglePageViewPage.getLayout = function getLayout(page) {
   return (
     <SiteLayout>
       <ListDetailView list={<PagesList />} hasDetail detail={page} />
@@ -92,4 +78,4 @@ PagePagePage.getLayout = function getLayout(page) {
   )
 }
 
-export default PagePagePage
+export default SinglePageViewPage

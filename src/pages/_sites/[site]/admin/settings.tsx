@@ -118,7 +118,7 @@ function AdminSettingsPage(props) {
               <>
                 Please set it in{' '}
                 <Link className="underline" href="/profile">
-                  this page
+                  <a className="text-sky-500">this page</a>
                 </Link>
                 .
               </>
