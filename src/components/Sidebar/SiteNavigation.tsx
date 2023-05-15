@@ -117,7 +117,7 @@ export function SiteSidebarNavigation() {
   }
 
   pagesData?.pages
-    .filter((page) => page && page.featured)
+    ?.filter((page) => page && page.featured)
     .forEach((page) => {
       pagesSection.items.push({
         href: page.path,
@@ -130,7 +130,7 @@ export function SiteSidebarNavigation() {
       })
     })
 
-  if (!data?.context?.viewer?.isAdmin && pagesData.pages.length > 0) {
+  if (!data?.context?.viewer?.isAdmin && pagesData?.pages?.length > 0) {
     pagesSection.items.push({
       href: '/pages',
       label: 'All pages',
