@@ -49,7 +49,7 @@ export function Paywall({ access, obj }: Props) {
       <div
         style={{
           boxShadow: `0 1px 3px rgba(0,0,0,.2)`,
-          minHeight: 'calc(100vh - 196px)',
+          minHeight: 'calc(100dvh - 196px)',
         }}
         className={`w-full filter-blur absolute bottom-0 z-10 flex items-center justify-center space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60`}
       >

@@ -67,13 +67,13 @@
     padding-left: env(safe-area-inset-left);
   }
   .min-h-screen-safe {
-    min-height: calc(100vh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+    min-height: calc(100dvh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
   }
   .h-screen-safe {
-    height: calc(100vh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+    height: calc(100dvh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
   }
   .max-h-screen-safe {
-    max-height: calc(100vh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+    max-height: calc(100dvh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)));
   }
 
   .max-w-3xl-screen {
