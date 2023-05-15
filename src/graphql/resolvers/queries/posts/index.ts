@@ -10,13 +10,13 @@ import { isUserSite } from '~/lib/multitenancy/server'
 
 const getPublishedFilter = (viewer, userSite, published) => {
   let publishedFilter = {}
-  // If not logged in, only show published pages
-  // If user is a member (paid, non-paid), only show published pages
+  // If not logged in, only show published posts
+  // If user is a member (paid, non-paid), only show published posts
   if (!viewer || !viewer.isAdmin) {
     published = true
     publishedFilter = { publishedAt: { not: null, lt: new Date() } }
   }
-  // If user is an admin, show all pages, but the "published" filter will be strict
+  // If user is an admin, show all posts, but the "published" filter will be strict
   else if (viewer.isAdmin) {
     published = !!published
     publishedFilter = published
@@ -36,24 +36,59 @@ const getPublishedFilter = (viewer, userSite, published) => {
 }
 
 const getAccessFilter = (viewer, userSite) => {
-  // If not logged in, only show public pages
+  // If not logged in, only show public posts
   if (!viewer) {
     return { access: { equals: PostAccess.PUBLIC } }
   }
-  // If user is a plain member (not paid), restrict to public and members-only pages
+  // If user is a plain member (not paid), restrict to public and members-only posts
   else if (userSite?.siteRole === SiteRole.User) {
     return {
       access: { in: [PostAccess.PUBLIC, PostAccess.MEMBERS] },
     }
   }
-  // If user is a paid member, show all pages
+  // If user is a paid member, show all posts
   else if (userSite?.siteRole === SiteRole.PaidUser) {
     return {}
   }
-  // If user is a site admin, show all pages
+  // If user is a site admin, show all posts
   else if (viewer?.isAdmin) {
     return {}
   }
+}
+
+const filterContentByAccessPerm = (viewer, userSite, post) => {
+  if (
+    !post ||
+    post.access == PostAccess.PUBLIC ||
+    userSite?.siteRole === SiteRole.Owner ||
+    userSite?.siteRole === SiteRole.Admin ||
+    userSite?.siteRole === SiteRole.PaidUser
+  ) {
+    return post
+  }
+
+  if (
+    post.access == PostAccess.PAID_MEMBERS ||
+    (post.access == PostAccess.MEMBERS && !viewer)
+  ) {
+    return {
+      ...post,
+      _isMasked: true,
+      data: JSON.stringify({
+        time: new Date().getTime(),
+        blocks: [
+          {
+            id: 'maskedcontent',
+            type: 'paragraph',
+            data: { text: post.excerpt },
+          },
+        ],
+        version: '2.26.4',
+      }),
+    }
+  }
+
+  return post
 }
 
 export async function getPosts(_, args: GetPostsQueryVariables, ctx: Context) {

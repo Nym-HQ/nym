@@ -347,6 +347,7 @@ export type MutationToggleReactionArgs = {
 
 export type Page = {
   __typename?: 'Page'
+  _isMasked?: Maybe<Scalars['Boolean']>
   access?: Maybe<PageAccess>
   author?: Maybe<User>
   createdAt?: Maybe<Scalars['Date']>
@@ -384,6 +385,7 @@ export type PagesFilter = {
 
 export type Post = {
   __typename?: 'Post'
+  _isMasked?: Maybe<Scalars['Boolean']>
   access?: Maybe<PostAccess>
   author?: Maybe<User>
   createdAt?: Maybe<Scalars['Date']>
@@ -782,6 +784,7 @@ export type PageCoreFragment = {
   slug?: string | null | undefined
   excerpt?: string | null | undefined
   featured?: boolean | null | undefined
+  _isMasked?: boolean | null | undefined
 }
 
 export type PageListItemFragment = {
@@ -793,6 +796,7 @@ export type PageListItemFragment = {
   slug?: string | null | undefined
   excerpt?: string | null | undefined
   featured?: boolean | null | undefined
+  _isMasked?: boolean | null | undefined
 }
 
 export type PageDetailFragment = {
@@ -808,6 +812,7 @@ export type PageDetailFragment = {
   slug?: string | null | undefined
   excerpt?: string | null | undefined
   featured?: boolean | null | undefined
+  _isMasked?: boolean | null | undefined
 }
 
 export type PostCoreFragment = {
@@ -817,6 +822,7 @@ export type PostCoreFragment = {
   title?: string | null | undefined
   slug?: string | null | undefined
   excerpt?: string | null | undefined
+  _isMasked?: boolean | null | undefined
   author?:
     | {
         __typename: 'User'
@@ -839,6 +845,7 @@ export type PostListItemFragment = {
   title?: string | null | undefined
   slug?: string | null | undefined
   excerpt?: string | null | undefined
+  _isMasked?: boolean | null | undefined
   author?:
     | {
         __typename: 'User'
@@ -868,6 +875,7 @@ export type PostDetailFragment = {
   title?: string | null | undefined
   slug?: string | null | undefined
   excerpt?: string | null | undefined
+  _isMasked?: boolean | null | undefined
   author?:
     | {
         __typename: 'User'
@@ -1291,6 +1299,7 @@ export type EditPageMutation = {
         slug?: string | null | undefined
         excerpt?: string | null | undefined
         featured?: boolean | null | undefined
+        _isMasked?: boolean | null | undefined
       }
     | null
     | undefined
@@ -1325,6 +1334,7 @@ export type AddPageMutation = {
         slug?: string | null | undefined
         excerpt?: string | null | undefined
         featured?: boolean | null | undefined
+        _isMasked?: boolean | null | undefined
       }
     | null
     | undefined
@@ -1352,6 +1362,7 @@ export type EditPostMutation = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        _isMasked?: boolean | null | undefined
         author?:
           | {
               __typename: 'User'
@@ -1400,6 +1411,7 @@ export type AddPostMutation = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        _isMasked?: boolean | null | undefined
         author?:
           | {
               __typename: 'User'
@@ -1846,6 +1858,7 @@ export type GetPagesQuery = {
         slug?: string | null | undefined
         excerpt?: string | null | undefined
         featured?: boolean | null | undefined
+        _isMasked?: boolean | null | undefined
       }
     | null
     | undefined
@@ -1872,6 +1885,7 @@ export type GetPageQuery = {
         slug?: string | null | undefined
         excerpt?: string | null | undefined
         featured?: boolean | null | undefined
+        _isMasked?: boolean | null | undefined
       }
     | null
     | undefined
@@ -1895,6 +1909,7 @@ export type GetHomePageQuery = {
         slug?: string | null | undefined
         excerpt?: string | null | undefined
         featured?: boolean | null | undefined
+        _isMasked?: boolean | null | undefined
       }
     | null
     | undefined
@@ -1914,6 +1929,7 @@ export type GetPostsQuery = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        _isMasked?: boolean | null | undefined
         author?:
           | {
               __typename: 'User'
@@ -1954,6 +1970,7 @@ export type GetPostQuery = {
         title?: string | null | undefined
         slug?: string | null | undefined
         excerpt?: string | null | undefined
+        _isMasked?: boolean | null | undefined
         author?:
           | {
               __typename: 'User'
@@ -2381,6 +2398,7 @@ export const PageCoreFragmentDoc = gql`
     slug
     excerpt
     featured
+    _isMasked
   }
 `
 export const PageListItemFragmentDoc = gql`
@@ -2410,6 +2428,7 @@ export const PostCoreFragmentDoc = gql`
     author {
       ...UserInfo
     }
+    _isMasked
   }
   ${UserInfoFragmentDoc}
 `

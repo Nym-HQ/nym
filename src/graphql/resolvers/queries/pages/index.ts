@@ -56,6 +56,47 @@ const getAccessFilter = (viewer, userSite) => {
   }
 }
 
+const filterContentByAccessPerm = (viewer, userSite, page) => {
+  if (
+    !page ||
+    page.access == PageAccess.PUBLIC ||
+    userSite?.siteRole === SiteRole.Owner ||
+    userSite?.siteRole === SiteRole.Admin ||
+    userSite?.siteRole === SiteRole.PaidUser
+  ) {
+    return {
+      ...page,
+      _isMasked: false,
+    }
+  }
+
+  if (
+    page.access == PageAccess.PAID_MEMBERS ||
+    (page.access == PageAccess.MEMBERS && !viewer)
+  ) {
+    return {
+      ...page,
+      _isMasked: true,
+      data: JSON.stringify({
+        time: new Date().getTime(),
+        blocks: [
+          {
+            id: 'maskedcontent',
+            type: 'paragraph',
+            data: { text: page.excerpt },
+          },
+        ],
+        version: '2.26.4',
+      }),
+    }
+  }
+
+  return {
+    ...page,
+    _isMasked: false,
+  }
+}
+
 export async function getPages(_, args: GetPagesQueryVariables, ctx: Context) {
   const { filter } = args
   const { prisma, viewer, site, userSite } = ctx
@@ -70,18 +111,18 @@ export async function getPages(_, args: GetPagesQueryVariables, ctx: Context) {
     userSite,
     filter?.published
   )
-  const accessFilter = getAccessFilter(viewer, userSite)
 
-  return await prisma.page.findMany({
+  const pages = await prisma.page.findMany({
     orderBy: published ? { publishedAt: 'desc' } : { createdAt: 'desc' },
     where: {
       siteId: site.id,
       ...(featuredOnly ? { featured: true } : {}),
       ...(includeHomepage ? {} : { path: { not: '/' } }),
       ...publishedFilter,
-      ...accessFilter,
     },
   })
+
+  return pages.map((page) => filterContentByAccessPerm(viewer, userSite, page))
 }
 
 export async function getPage(
@@ -96,14 +137,12 @@ export async function getPage(
   }
 
   const publishedFilter = !viewer ? { publishedAt: { not: null } } : {}
-  const accessFilter = getAccessFilter(viewer, userSite)
 
   let page = await prisma.page.findFirst({
     where: {
       OR: [{ slug }, { path: slug }],
       siteId: site.id,
       ...publishedFilter,
-      ...accessFilter,
     },
   })
 
@@ -117,7 +156,7 @@ export async function getPage(
     })
   }
 
-  return page
+  return filterContentByAccessPerm(viewer, userSite, page)
 }
 
 /**

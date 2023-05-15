@@ -13,6 +13,7 @@ export const PostCoreFragment = gql`
     author {
       ...UserInfo
     }
+    _isMasked
   }
   ${UserInfoFragment}
 `

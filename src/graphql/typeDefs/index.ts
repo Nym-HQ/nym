@@ -77,6 +77,7 @@ const typeDefs = gql`
     featureImage: String
     featured: Boolean
     access: PageAccess
+    _isMasked: Boolean
   }
 
   enum PostAccess {
@@ -101,6 +102,7 @@ const typeDefs = gql`
     reactionCount: Int
     viewerHasReacted: Boolean
     access: PostAccess
+    _isMasked: Boolean
   }
 
   type Bookmark {

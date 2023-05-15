@@ -2,10 +2,10 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-// import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { EditorJSPreviewer } from '../EditorJS'
+import { Paywall } from '../ListDetail/Paywall'
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PageActions } from './PageActions'
@@ -76,11 +76,12 @@ export function PageDetail({ slug, site, page, error, loading }) {
                 }}
               />
             )}
-            {/* <MarkdownRenderer children={page.text} className="prose" /> */}
 
             {/* bottom padding to give space between page content and comments */}
             <div className="py-6" />
           </Detail.ContentContainer>
+
+          {page._isMasked && <Paywall obj="Page" access={page.access} />}
         </div>
 
         <PoweredByNym scrollContainerRef={scrollContainerRef} />

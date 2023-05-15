@@ -25,7 +25,6 @@ function LinkRenderer({ href, ...rest }: any) {
     )
   }
   try {
-    const url = new URL(href)
     return <a rel="noopener" href={href} {...rest} />
   } catch (e) {
     console.error(e)
