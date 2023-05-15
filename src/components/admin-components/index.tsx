@@ -13,7 +13,7 @@ function Label({ children, ...props }) {
 
 function Subsection({ title, children = null }) {
   return (
-    <section className="mt-4 shadow sm:rounded-md">
+    <section className="mt-4 sm:rounded-md">
       <h3 className="text-lg font-large font-bold mb-2 text-gray-700 dark:text-gray-300">
         {title}
       </h3>
