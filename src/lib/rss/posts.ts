@@ -59,6 +59,8 @@ export async function generateRSS(posts: Post[], context: Context) {
       author: [postAuthor],
       contributor: [postAuthor],
       date: new Date(post.publishedAt),
+      image: post.featureImage,
+      // content: post.data,
     })
   })
 
