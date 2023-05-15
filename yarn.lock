@@ -1424,6 +1424,11 @@
   resolved "https://registry.npmjs.org/@codexteam/icons/-/icons-0.0.6.tgz"
   integrity sha512-L7Q5PET8PjKcBT5wp7VR+FCjwCi5PUp7rd/XjsgQ0CI5FJz0DphyHGRILMuDUdCW2MQT9NHbVr4QP31vwAkS/A==
 
+"@codexteam/icons@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@codexteam/icons/-/icons-0.3.0.tgz#62380b4053d487a257de443864b5c72dafab95e6"
+  integrity sha512-fJE9dfFdgq8xU+sbsxjH0Kt8Yeatw9xHBJWb77DhRkEXz3OCoIS6hrRC1ewHEryxzIjxD8IyQrRq2f+Gz3BcmA==
+
 "@cypress/request@^2.88.10":
   version "2.88.10"
   resolved "https://registry.npmjs.org/@cypress/request/-/request-2.88.10.tgz"
@@ -1480,12 +1485,12 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@editorjs/checklist@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/@editorjs/checklist/-/checklist-1.4.0.tgz"
-  integrity sha512-KmkgWFYwkcFFvh7oBaUiqg8NBmJSnB87EC0P6obfqo3uDjCXXnen+KJfP+7JBcQx/OsiDlOS/lTxkyhxNtKtsA==
+"@editorjs/checklist@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@editorjs/checklist/-/checklist-1.5.0.tgz#9d8c74c95ba3c191d7b8f805ff678c0481621c6a"
+  integrity sha512-2QUKDvLmtOFDaQLX6C+D9A4hIGBhsYwZW+60fOghSwC80dD931zOAA71cf+xppCTEhcr4eT18C6BJkBGf/DjTw==
   dependencies:
-    "@codexteam/icons" "^0.0.4"
+    "@codexteam/icons" "^0.3.0"
 
 "@editorjs/code@^2.8.0":
   version "2.8.0"
@@ -1501,10 +1506,10 @@
   dependencies:
     "@codexteam/icons" "^0.0.5"
 
-"@editorjs/editorjs@^2.26.4":
-  version "2.26.4"
-  resolved "https://registry.npmjs.org/@editorjs/editorjs/-/editorjs-2.26.4.tgz"
-  integrity sha512-yuJ2NM1Y5+8DDNWr4C00tHMVHKy0uCqK1HS4pwFPVcXUawgJnU2Li2vKGvPLuf0Jj2ir7MVgADO6oC1TbYBOYQ==
+"@editorjs/editorjs@^2.26.5":
+  version "2.26.5"
+  resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.26.5.tgz#ee0f1dbd3a3c6ba97d3ed30f13ab7d2e7b29dbe4"
+  integrity sha512-imwXZi9NmzxKjNosa1xQf286liJYsTe2J2DWCiV5TwKhvYZ1INg5Y+FietcM2v65QmeLqP7wgBUhoI7wiCB+yQ==
   dependencies:
     "@codexteam/icons" "0.1.0"
     codex-notifier "^1.1.2"
@@ -1595,10 +1600,10 @@
   dependencies:
     "@codexteam/icons" "^0.0.6"
 
-"@editorjs/table@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/@editorjs/table/-/table-2.2.0.tgz"
-  integrity sha512-vVfiNEk1EHFj1ohObX4g7iB/mVhPkx0o8yMb+v5gV/XnOysbRk46hiLmntJfgYp/NZvbYxcZk3mPvrE/NAe+pg==
+"@editorjs/table@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@editorjs/table/-/table-2.2.1.tgz#10302ec89bf7f2134b982de900013b0ae4b6a6aa"
+  integrity sha512-6RJKF0DfPh7YuBVPmT5mHXjjhil2IJ8ytZpw2hTHAuduqoRlu6OJbaGzH2NTCdg7cgD4H4BbX0RB9kcVxRtB2w==
   dependencies:
     "@codexteam/icons" "^0.0.6"
 
@@ -7688,13 +7693,6 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-linkify-it@^2.0.3:
-  version "2.2.0"
-  resolved "https://registry.npmjs.org/linkify-it/-/linkify-it-2.2.0.tgz"
-  integrity sha512-GnAl/knGn+i1U/wjBz3akz2stz+HrHLsxMwHQGofCDfPvlf+gDKN58UtfmUquTY4/MXeE2x7k19KQmeoZi94Iw==
-  dependencies:
-    uc.micro "^1.0.1"
-
 lint-staged@^12.1.7:
   version "12.3.1"
   resolved "https://registry.npmjs.org/lint-staged/-/lint-staged-12.3.1.tgz"
@@ -10108,14 +10106,6 @@ react-is@^18.0.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-linkify@^1.0.0-alpha:
-  version "1.0.0-alpha"
-  resolved "https://registry.npmjs.org/react-linkify/-/react-linkify-1.0.0-alpha.tgz"
-  integrity sha512-7gcIUvJkAXXttt1fmBK9cwn+1jTa4hbKLGCZ9J1U6EOkyb2/+LKL1Z28d9rtDLMnpvImlNlLPdTPooorl5cpmg==
-  dependencies:
-    linkify-it "^2.0.3"
-    tlds "^1.199.0"
-
 react-markdown@^7.1.2:
   version "7.1.2"
   resolved "https://registry.npmjs.org/react-markdown/-/react-markdown-7.1.2.tgz"
@@ -11566,11 +11556,6 @@ string-env-interpolation@1.0.1, string-env-interpolation@^1.0.1:
   resolved "https://registry.npmjs.org/string-env-interpolation/-/string-env-interpolation-1.0.1.tgz"
   integrity sha512-78lwMoCcn0nNu8LszbP1UA7g55OeE4v7rCeWnM5B453rnNr4aq+5it3FEYtZrSEiMvHZOZ9Jlqb0OD0M2VInqg==
 
-string-replace-to-array@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/string-replace-to-array/-/string-replace-to-array-2.1.0.tgz"
-  integrity sha512-xG2w4fE5FsTXS4AFxoF3uctByqTIFBX8lFRNcPcIznTVCMXbYvbatkPVLpAo13tfuWtzbWEV6u5bjoE9bOv87w==
-
 string-width@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/string-width/-/string-width-1.0.2.tgz"
@@ -11964,11 +11949,6 @@ title-case@^3.0.3:
   dependencies:
     tslib "^2.0.3"
 
-tlds@^1.199.0:
-  version "1.228.0"
-  resolved "https://registry.npmjs.org/tlds/-/tlds-1.228.0.tgz"
-  integrity sha512-Q0TU9zh5hDs2CpRFNM7SOW3K7OSgUgJC/cMrq9t44ei4tu+G3KV8BZyIJuYVvryJHH96mKgc9WXdhgKVvGD7jg==
-
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.npmjs.org/tmp/-/tmp-0.0.33.tgz"
@@ -12254,11 +12234,6 @@ ua-parser-js@^0.7.30:
   version "0.7.31"
   resolved "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.31.tgz"
   integrity sha512-qLK/Xe9E2uzmYI3qLeOmI0tEOt+TBBQyUIAh4aAgU05FVYzeZrKUdkAZfBNVGRaHVgV0TDkdEngJSw/SyQchkQ==
-
-uc.micro@^1.0.1:
-  version "1.0.6"
-  resolved "https://registry.npmjs.org/uc.micro/-/uc.micro-1.0.6.tgz"
-  integrity sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
 
 unbox-primitive@^1.0.1:
   version "1.0.1"
