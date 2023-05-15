@@ -28,7 +28,7 @@ export function SiteSidebarNavigation() {
   const { data } = useContextQuery()
   const { data: pagesData } = useGetPagesQuery({
     variables: {
-      filter: { published: true, featuredOnly: true, includeHomepage: true },
+      filter: { published: true, featuredOnly: false, includeHomepage: true },
     },
   })
 
@@ -115,17 +115,32 @@ export function SiteSidebarNavigation() {
       isExternal: false,
     })
   }
-  pagesData?.pages.forEach((page) => {
+
+  pagesData?.pages
+    .filter((page) => page && page.featured)
+    .forEach((page) => {
+      pagesSection.items.push({
+        href: page.path,
+        label: page.title,
+        icon: PageIcon,
+        trailingAccessory: null,
+        isActive: router.asPath === page.path,
+        trailingAction: null,
+        isExternal: false,
+      })
+    })
+
+  if (!data?.context?.viewer?.isAdmin && pagesData.pages.length > 0) {
     pagesSection.items.push({
-      href: page.path,
-      label: page.title,
-      icon: PageIcon,
+      href: '/pages',
+      label: 'All pages',
+      icon: BookAtlasIcon,
       trailingAccessory: null,
-      isActive: router.asPath === page.path,
+      isActive: router.asPath === '/pages',
       trailingAction: null,
       isExternal: false,
     })
-  })
+  }
 
   if (pagesSection.items.length > 0) sections.push(pagesSection)
 
