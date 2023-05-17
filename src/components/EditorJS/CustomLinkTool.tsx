@@ -17,7 +17,7 @@ export class CustomLinkTool extends LinkTool {
 
   async fetchLinkData(url) {
     const that = this as any
-    if (url.startsWith('https://twitter.com/')) {
+    if (url.match(/https:\/\/twitter.com\/.*\/status/g)) {
       that.showProgress()
       this.data = { link: url }
 

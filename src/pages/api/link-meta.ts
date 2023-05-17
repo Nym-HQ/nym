@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getTweetCardHtml } from '~/lib/tweet/getTweetCardHtml'
+import { getTwitterId } from '~/lib/tweet/parser'
 
 /**
  * Extract Link's metadata
@@ -17,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const url =
     typeof urlQueryParam === 'string' ? urlQueryParam : urlQueryParam[0]
 
-  if (url.startsWith('https://twitter.com/')) {
+  if (getTwitterId(url)) {
     const { html, meta } = await getTweetCardHtml(url)
     return res.status(200).json({
       success: 1,
@@ -37,11 +38,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       success: 1,
       link: url,
       meta: {
-        title: json?.title,
-        description: json?.description,
+        ...json,
         image: {
           url: json?.thumbnail_url,
         },
+        html: json?.html?.includes('<script') ? null : json?.html,
       },
     })
   }
