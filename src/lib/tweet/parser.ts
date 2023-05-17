@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import Twemoji from 'twemoji'
 
 import { mapClass, mapStyles } from './reference'
-import { TweetContent, TweetOptions, TweetSyndication } from './utils/types'
+import { TweetOptions, TweetSyndication } from './utils/types'
 
 /**
  * Parse a twitter url and get twitter user id

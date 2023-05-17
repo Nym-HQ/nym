@@ -28,29 +28,29 @@ export async function getNewsletterProvider(
       break
   }
 
-  if (provider != null) {
-    const afterInit = await provider.init({
-      fromName: site?.name,
-      fromEmail: site?.newsletter_from_email || owner?.email,
-    })
+  if (provider === null) return
 
-    if (
-      site.newsletter_provider === 'Mailchimp' &&
-      afterInit &&
-      afterInit.listId &&
-      !site.newsletter_setting2
-    ) {
-      // update site's newsletter_setting2
-      await prisma.site.update({
-        where: {
-          id: site.id,
-        },
-        data: {
-          newsletter_setting2: afterInit.listId,
-        },
-      })
-      site.newsletter_setting2 = afterInit.listId
-    }
+  const afterInit = await provider.init({
+    fromName: site?.name,
+    fromEmail: site?.newsletter_from_email || owner?.email,
+  })
+
+  if (
+    site.newsletter_provider === 'Mailchimp' &&
+    afterInit &&
+    afterInit.listId &&
+    !site.newsletter_setting2
+  ) {
+    // update site's newsletter_setting2
+    await prisma.site.update({
+      where: {
+        id: site.id,
+      },
+      data: {
+        newsletter_setting2: afterInit.listId,
+      },
+    })
+    site.newsletter_setting2 = afterInit.listId
   }
 
   return provider
