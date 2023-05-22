@@ -25,10 +25,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
   const url = new URL(req.url, `https://${req.headers.host}`)
   const searchParams = new URLSearchParams(url.search)
-  const _nextUrl = new URL(
-    searchParams.get('next') || '/',
-    `https://${req.headers.host}`
-  )
+  const _nextUrl = new URL(searchParams.get('next') || '/', url)
 
   // check if user has already signed-in, and if he did, process cross-signin automatically
   const user = await isAuthenticatedServerSide(ctx)

@@ -47,11 +47,11 @@ function AddBookmarkSiteList({ ownedSites, bookmarkUrl }) {
         </h3>
         <ul className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
           {ownedSites.map((site, i) => {
-            const siteUrl = `${
+            const protocol =
               typeof window !== 'undefined'
                 ? window.location.protocol
-                : 'https://'
-            }//${getSiteDomain(
+                : 'https:'
+            const siteUrl = `${protocol}//${getSiteDomain(
               site.site
             )}/bookmarks/add?url=${encodeURIComponent(bookmarkUrl)}`
 
