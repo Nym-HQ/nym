@@ -16,10 +16,9 @@ export const BookmarksContext = React.createContext({
   setTag: (tag: string) => {},
 })
 
-export function BookmarksList() {
+export function BookmarksList({ initTag = '' }) {
   const router = useRouter()
-  const tagQuery = router.query?.tag as string
-  const [tag, setTag] = React.useState(tagQuery)
+  const [tag, _setTag] = React.useState(initTag)
   const [isVisible, setIsVisible] = React.useState(false)
   const [scrollContainerRef, setScrollContainerRef] = React.useState(null)
 
@@ -33,6 +32,11 @@ export function BookmarksList() {
   const { data, error, loading, fetchMore } = useGetBookmarksQuery({
     variables,
   })
+
+  const setTag = (tag) => {
+    _setTag(tag)
+    router.push(`/bookmarks/${tag}`)
+  }
 
   const defaultContextValue = {
     tag,
@@ -56,11 +60,6 @@ export function BookmarksList() {
   React.useEffect(() => {
     if (isVisible) handleFetchMore()
   }, [isVisible])
-
-  // if a user is linked to /bookmarks?tag=foo, clear the query filter but stay on the same page
-  React.useEffect(() => {
-    if (tagQuery) router.push(router.pathname, { query: null })
-  }, [tagQuery])
 
   if (loading && !data?.bookmarks) {
     return (
@@ -87,7 +86,11 @@ export function BookmarksList() {
               const active = router.query.id === bookmark.node.id
               return (
                 <motion.div layout key={bookmark.node.id}>
-                  <BookmarksListItem active={active} bookmark={bookmark.node} />
+                  <BookmarksListItem
+                    active={active}
+                    bookmark={bookmark.node}
+                    tag={tag}
+                  />
                 </motion.div>
               )
             })}

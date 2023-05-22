@@ -9,6 +9,7 @@ import {
 } from '~/graphql/types.generated'
 import { graphcdn } from '~/lib/graphcdn'
 import { getTweetCardHtml } from '~/lib/tweet/getTweetCardHtml'
+import { getTwitterId } from '~/lib/tweet/parser'
 import { validUrl } from '~/lib/validators'
 
 import getBookmarkMetaData from './getBookmarkMetaData'
@@ -91,7 +92,7 @@ export async function addBookmark(
   let metadata,
     html = null
   try {
-    if (url.startsWith('https://twitter.com/')) {
+    if (getTwitterId(url)) {
       const tweet = await getTweetCardHtml(url)
       html = tweet.html
       metadata = tweet.meta

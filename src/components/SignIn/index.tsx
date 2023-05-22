@@ -9,11 +9,12 @@ import { TitleBar } from '../ListDetail/TitleBar'
 export function SignIn({ children = null, trigger = null }) {
   return (
     <Detail.Container>
-      <TitleBar title="Sign In" />
+      <TitleBar title="Log In" />
       <div className="flex flex-1 flex-col items-center justify-center">
-        <p>Please signin - </p>
+        <p className="mb-2">Please login - </p>
 
         <TwitterButton
+          size="large"
           onClick={() =>
             signIn('twitter', {
               callbackUrl: `/signin-complete`,
@@ -22,7 +23,7 @@ export function SignIn({ children = null, trigger = null }) {
           }
         >
           <TwitterIcon />
-          <span>Sign in with Twitter</span>
+          <span>Login with Twitter</span>
         </TwitterButton>
       </div>
     </Detail.Container>

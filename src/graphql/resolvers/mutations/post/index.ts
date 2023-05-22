@@ -88,9 +88,9 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
 
   if (!existing.newsletterAt && publishedAt && data.publishNewsletter) {
     try {
-      const html = `<h1>${existing.title}</h1><br/>${parseEditorJsDataIntoHtml(
-        parseEditorJsData(data.data)
-      )}`
+      const html =
+        `<h1>${existing.title}</h1><br/>` +
+        parseEditorJsDataIntoHtml(parseEditorJsData(data.data))
 
       const newsletterProvider = await getNewsletterProvider(ctx)
       if (newsletterProvider) {
@@ -110,6 +110,8 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
             newsletterAt: new Date(),
           },
         })
+      } else {
+        console.log('Newsletter Providers are not configured')
       }
     } catch (err) {
       console.error('Unable to publish newsletter', err)

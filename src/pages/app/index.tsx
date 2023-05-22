@@ -60,11 +60,11 @@ function UserSitesList({ sites }) {
         {memberSites.length > 0 ? (
           <ul className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
             {memberSites.map((site, i) => {
-              const siteUrl = `${
+              const protocol =
                 typeof window !== 'undefined'
                   ? window.location.protocol
                   : 'https:'
-              }//${getSiteDomain(site.site)}`
+              const siteUrl = `${protocol}//${getSiteDomain(site.site)}`
 
               return (
                 <li
@@ -191,6 +191,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
   let commonProps = await getCommonPageProps(ctx, graphqlData[0])
 
   if (graphqlData[0].data?.context?.viewer) {
+    // Logged in already
     const userSites = await apolloClient.query({ query: GET_USER_SITES })
 
     const resolvedUrl = (ctx as any).resolvedUrl
@@ -222,7 +223,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
           return {
             redirect: {
               destination: `/signin-complete?next=${encodeURIComponent(
-                `https://${siteDomain}/bookmarks/add?url=${bookmarkUrl}`
+                `${nextUrl.protocol}//${siteDomain}/bookmarks/add?url=${bookmarkUrl}`
               )}`,
               permanent: false,
             },

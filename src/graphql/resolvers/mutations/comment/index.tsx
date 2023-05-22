@@ -89,7 +89,7 @@ export async function addComment(
     case CommentType.Bookmark: {
       field = 'bookmarkId'
       table = 'bookmark'
-      route = `https://${getSiteDomain(site)}/bookmarks/${refId}`
+      route = `https://${getSiteDomain(site)}/bookmark/${refId}`
       break
     }
     case CommentType.Post: {
