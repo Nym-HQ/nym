@@ -72,7 +72,7 @@ export default function App({ Component, session, pageProps }) {
           <Toast />
           <LoginErrorToast />
           {Component.getLayout ? (
-            Component.getLayout(page)
+            Component.getLayout(page, pageProps)
           ) : (
             <SiteLayout>{page}</SiteLayout>
           )}
