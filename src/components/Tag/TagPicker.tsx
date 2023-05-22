@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Check, ChevronDown } from 'react-feather'
 
 import { useGetTagsQuery } from '~/graphql/types.generated'
+import { forbiddenBookmarkTags } from '~/lib/consts'
 
 import { Input } from '../Input'
 import Tag from './Tag'
@@ -41,6 +42,7 @@ function AvailableTag({
 export default function TagPicker({
   filter = (t) => true,
   onChange,
+  onError,
   defaultValue = undefined,
 }) {
   const { data, loading } = useGetTagsQuery()
@@ -92,12 +94,26 @@ export default function TagPicker({
     }
   }
 
+  function isNotForbiddenTag(tag: string) {
+    return forbiddenBookmarkTags.indexOf(tag) === -1
+  }
+
   function handleNewTagChange(evt) {
     let newVal = evt.target.value || ''
     if (newVal.includes('\n') || newVal.includes(',')) {
       const tags = newVal.split(/[\n,]/)
       const editingTag = tags.pop() // remove the last one
-      const newTags = tags.filter((t) => t !== '' && isNotTagged(t))
+      const newTags = tags.filter(
+        (t) => t !== '' && isNotTagged(t) && isNotForbiddenTag(t)
+      )
+
+      const forbiddenTags = tags.filter((t) => !isNotForbiddenTag(t))
+      if (forbiddenTags.length > 0) {
+        onError(`Forbidden tags: ${forbiddenTags.join(', ')}`)
+      } else {
+        onError('')
+      }
+
       const newSelected = [...selected, ...newTags]
       setSelected(newSelected)
       onChange(newSelected)

@@ -48,8 +48,8 @@ export const BookmarksListItem = React.memo<Props>(({ bookmark, active }) => {
           </div>
         }
         active={active}
-        href="/bookmarks/[id]"
-        as={`/bookmarks/${bookmark.id}`}
+        href="/bookmark/[id]"
+        as={`/bookmark/${bookmark.id}`}
         onClick={(e) => handleClick(e, bookmark)}
       />
     </ReactVisibilitySensor>

@@ -12,6 +12,7 @@ import {
   useDeleteBookmarkMutation,
   useEditBookmarkMutation,
 } from '~/graphql/types.generated'
+import { defaultBookmarkTags } from '~/lib/consts'
 
 export function EditBookmarkForm({ closeModal, bookmark }) {
   const router = useRouter()
@@ -172,8 +173,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
   }
 
   const tagFilter = (t) => {
-    const allowedBookmarkTags = ['website', 'reading', 'portfolio']
-    return allowedBookmarkTags.indexOf(t.name) >= 0
+    return defaultBookmarkTags.indexOf(t.name) >= 0
   }
 
   return (
@@ -204,6 +204,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
           filter={tagFilter}
           defaultValue={initialState.tags}
           onChange={onTagChange}
+          onError={(err) => err && dispatch({ type: 'error', value: err })}
         />
 
         <Textarea

@@ -18,6 +18,7 @@ export function AddBookmarkForm({ initUrl, closeModal }) {
   const { data: context } = useContextQuery()
   const [url, setUrl] = React.useState('')
   const [tags, setTags] = React.useState(['reading'])
+  const [error, setError] = React.useState('')
   const router = useRouter()
 
   const [addBookmarkMutate, { loading }] = useAddBookmarkMutation()
@@ -78,7 +79,7 @@ export function AddBookmarkForm({ initUrl, closeModal }) {
       // otherwise, this was triggered from the sidebar shortcut and
       // don't redirect
       if (router.asPath.indexOf('/bookmarks') >= 0) {
-        return router.push(`/bookmarks/${id}`)
+        return router.push(`/bookmark/${id}`)
       } else {
         toast.success('Bookmark created')
       }
@@ -105,7 +106,12 @@ export function AddBookmarkForm({ initUrl, closeModal }) {
         onKeyDown={onKeyDown}
       />
 
-      <TagPicker defaultValue={tags} onChange={setTags} />
+      <TagPicker
+        defaultValue={tags}
+        onChange={setTags}
+        onError={(err) => err && setError(err)}
+      />
+      {error && <p className="text-red-500">{error}</p>}
 
       <div className="flex justify-end pt-2">
         <Button disabled={!url || loading} onClick={onSubmit}>
