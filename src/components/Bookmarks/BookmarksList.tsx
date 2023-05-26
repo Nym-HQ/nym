@@ -35,7 +35,7 @@ export function BookmarksList({ initTag = '' }) {
 
   const setTag = (tag) => {
     _setTag(tag)
-    router.push(`/bookmarks/${tag}`)
+    router.push(tag ? `/bookmarks/${tag}` : `/bookmarks`)
   }
 
   const defaultContextValue = {
