@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { NextAuthOptions, unstable_getServerSession } from 'next-auth'
+import { getServerSession, NextAuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import TwitterProvider, {
   TwitterLegacyProfile,
@@ -133,11 +133,7 @@ const authOptions = {
  * @returns
  */
 const isAuthenticatedServerSide = async (ctx) => {
-  const session: any = await unstable_getServerSession(
-    ctx.req,
-    ctx.res,
-    authOptions
-  )
+  const session: any = await getServerSession(ctx.req, ctx.res, authOptions)
   return session?.user
 }
 
