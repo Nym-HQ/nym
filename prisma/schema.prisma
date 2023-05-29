@@ -160,9 +160,7 @@ model Site {
   newsletter_setting2     String?  @db.VarChar(255)
   newsletter_setting3     String?  @db.VarChar(255)
 
-  //
-  chatbot SiteChatBot?
-
+  chatbot           SiteChatBot?
   userSites         UserSite[]
   Bookmark          Bookmark[]
   Question          Question[]

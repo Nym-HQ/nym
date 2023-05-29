@@ -187,6 +187,7 @@ export type EditSiteUserInput = {
 
 export type EditUserInput = {
   email?: InputMaybe<Scalars['String']>
+  name?: InputMaybe<Scalars['String']>
   username?: InputMaybe<Scalars['String']>
 }
 
@@ -559,7 +560,7 @@ export type Site = {
   social_other1_label?: Maybe<Scalars['String']>
   social_twitter?: Maybe<Scalars['String']>
   social_youtube?: Maybe<Scalars['String']>
-  subdomain?: Maybe<Scalars['String']>
+  subdomain: Scalars['String']
 }
 
 export type SiteChatBot = {
@@ -1021,7 +1022,7 @@ export type QuestionsConnectionFragment = {
 export type SitePublicInfoFragment = {
   __typename: 'Site'
   id: string
-  subdomain?: string | null | undefined
+  subdomain: string
   parkedDomain?: string | null | undefined
   plan?: string | null | undefined
   name?: string | null | undefined
@@ -1055,7 +1056,7 @@ export type SiteEditInfoFragment = {
   newsletter_setting2?: string | null | undefined
   newsletter_setting3?: string | null | undefined
   id: string
-  subdomain?: string | null | undefined
+  subdomain: string
   parkedDomain?: string | null | undefined
   plan?: string | null | undefined
   name?: string | null | undefined
@@ -1100,7 +1101,7 @@ export type UserSiteInfoFragment = {
     | {
         __typename: 'Site'
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -1611,7 +1612,7 @@ export type EditSiteDomainMutation = {
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -1659,7 +1660,7 @@ export type EditSiteMutation = {
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -1714,7 +1715,7 @@ export type AddSiteMutation = {
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -2172,7 +2173,7 @@ export type GetSiteSettingsQuery = {
     newsletter_setting2?: string | null | undefined
     newsletter_setting3?: string | null | undefined
     id: string
-    subdomain?: string | null | undefined
+    subdomain: string
     parkedDomain?: string | null | undefined
     plan?: string | null | undefined
     name?: string | null | undefined
@@ -2215,7 +2216,7 @@ export type GetUserSitesQuery = {
           | {
               __typename: 'Site'
               id: string
-              subdomain?: string | null | undefined
+              subdomain: string
               parkedDomain?: string | null | undefined
               plan?: string | null | undefined
               name?: string | null | undefined
@@ -2357,7 +2358,7 @@ export type ContextQuery = {
       | {
           __typename: 'Site'
           id: string
-          subdomain?: string | null | undefined
+          subdomain: string
           parkedDomain?: string | null | undefined
           plan?: string | null | undefined
           name?: string | null | undefined

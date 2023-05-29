@@ -40,7 +40,7 @@ async function getSite(ctx) {
   return site
 }
 
-export async function getContext(ctx) {
+export async function getContext(ctx): Promise<Context> {
   const site = await getSite(ctx)
   const viewer = await getViewer(ctx)
 
@@ -68,7 +68,7 @@ export async function getContext(ctx) {
     userSite,
     prisma,
     owner,
-  }
+  } as Context
 }
 
 export type Context = {

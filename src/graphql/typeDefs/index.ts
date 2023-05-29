@@ -5,7 +5,7 @@ const typeDefs = gql`
 
   type Site {
     id: ID!
-    subdomain: String
+    subdomain: String!
     parkedDomain: String
     plan: String
     name: String
@@ -315,6 +315,7 @@ const typeDefs = gql`
   input EditUserInput {
     username: String
     email: String
+    name: String
   }
 
   input EmailSubscriptionInput {
