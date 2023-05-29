@@ -11,6 +11,7 @@ import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { EmailForm } from './Email'
 import { EmailPreferences } from './EmailPreferences'
 import { UserSettingsFooter } from './Footer'
+import { NameForm } from './NameForm'
 import { SignedOut } from './SignedOut'
 import { UsernameForm } from './Username'
 
@@ -52,6 +53,7 @@ export function UserSettings() {
               <h3 className="text-primary text-lg font-bold">Account</h3>
               <EmailForm viewer={context?.viewer} />
               <UsernameForm viewer={context?.viewer} />
+              <NameForm viewer={context?.viewer} />
             </div>
 
             {context?.viewer.email && (
