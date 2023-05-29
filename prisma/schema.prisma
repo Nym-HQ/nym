@@ -1,13 +1,12 @@
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode      = "prisma"
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  provider = "prisma-client-js"
 }
 
 //
@@ -134,21 +133,23 @@ model VerificationToken {
 //
 
 model Site {
-  id                  String   @id @default(cuid())
-  subdomain           String   @unique @db.VarChar(128)
-  parkedDomain        String?  @unique @db.VarChar(255)
-  plan                SitePlan @default(FREE)
-  name                String?  @db.VarChar(255)
-  description         String?  @db.Text
-  logo                String?  @db.Text
-  banner              String?  @db.Text
-  attach_css          String?  @db.Text
-  attach_js           String?  @db.Text
-  social_twitter      String?  @db.Text
-  social_youtube      String?  @db.Text
-  social_github       String?  @db.Text
-  social_other1       String?  @db.Text
-  social_other1_label String?  @db.Text
+  id           String   @id @default(cuid())
+  subdomain    String   @unique @db.VarChar(128)
+  parkedDomain String?  @unique @db.VarChar(255)
+  plan         SitePlan @default(FREE)
+  name         String?  @db.VarChar(255)
+  description  String?  @db.Text
+  logo         String?  @db.Text
+  banner       String?  @db.Text
+  attach_css   String?  @db.Text
+  attach_js    String?  @db.Text
+
+  // social links
+  social_twitter      String? @db.Text
+  social_youtube      String? @db.Text
+  social_github       String? @db.Text
+  social_other1       String? @db.Text
+  social_other1_label String? @db.Text
 
   // newsletter configurations
   newsletter_provider     String?  @db.VarChar(30)
@@ -158,6 +159,9 @@ model Site {
   newsletter_setting1     String?  @db.VarChar(255)
   newsletter_setting2     String?  @db.VarChar(255)
   newsletter_setting3     String?  @db.VarChar(255)
+
+  //
+  chatbot SiteChatBot?
 
   userSites         UserSite[]
   Bookmark          Bookmark[]
@@ -170,6 +174,18 @@ model Site {
   EmailSubscription EmailSubscription[]
   Page              Page[]
   PageEdit          PageEdit[]
+}
+
+// chatbot - OpenAI
+model SiteChatBot {
+  id     String @id @default(cuid())
+  siteId String @unique
+
+  openai_key      String? @db.VarChar(255)
+  prompt_template String  @default("") @db.Text
+  free_quota      Int     @default(0)
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
 }
 
 // relationship between users and sites

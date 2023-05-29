@@ -2,8 +2,8 @@ import { gql } from '@apollo/client'
 
 import { UserInfoFragment } from './user'
 
-export const SiteInfoFragment = gql`
-  fragment SiteInfo on Site {
+export const SitePublicInfoFragment = gql`
+  fragment SitePublicInfo on Site {
     __typename
     id
     subdomain
@@ -15,6 +15,28 @@ export const SiteInfoFragment = gql`
     banner
     attach_css
     attach_js
+    social_twitter
+    social_youtube
+    social_github
+    social_other1
+    social_other1_label
+  }
+`
+
+export const SiteChatBotFragment = gql`
+  fragment SiteChatBotInfo on SiteChatBot {
+    __typename
+    id
+    openai_key
+    prompt_template
+    free_quota
+  }
+`
+
+export const SiteEditInfoFragment = gql`
+  fragment SiteEditInfo on Site {
+    ...SitePublicInfo
+
     newsletter_provider
     newsletter_description
     newsletter_from_email
@@ -22,12 +44,12 @@ export const SiteInfoFragment = gql`
     newsletter_setting1
     newsletter_setting2
     newsletter_setting3
-    social_twitter
-    social_youtube
-    social_github
-    social_other1
-    social_other1_label
+    chatbot {
+      ...SiteChatBotInfo
+    }
   }
+  ${SitePublicInfoFragment}
+  ${SiteChatBotFragment}
 `
 
 export const UserSiteFragment = gql`
@@ -47,10 +69,10 @@ export const UserSiteInfoFragment = gql`
     userId
     siteRole
     site {
-      ...SiteInfo
+      ...SitePublicInfo
     }
   }
-  ${SiteInfoFragment}
+  ${SitePublicInfoFragment}
 `
 
 export const SiteUserInfoFragment = gql`

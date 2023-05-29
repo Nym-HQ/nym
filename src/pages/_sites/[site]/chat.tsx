@@ -179,9 +179,8 @@ export function ChatWindow(props) {
             onClick={() => submit(value)}
             disabled={loading}
             colorway="primary"
-            iconLeft={loading ? <LoadingSpinner /> : null}
           >
-            Send
+            {loading ? <LoadingSpinner /> : null} Send
           </Button>
         </div>
       </div>

@@ -16,7 +16,7 @@ import { getNewsletterProvider } from '~/lib/newsletter'
 import { addDomainToProject, removeDomainFromProject } from '~/lib/vercel'
 
 export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
-  const { subdomain, data } = args
+  const { subdomain, data, chatbot } = args
   const {
     name = '',
     description = '',
@@ -37,6 +37,9 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     social_other1 = '',
     social_other1_label = '',
   } = data
+
+  const { prompt_template = '', openai_key = '' } = chatbot || {}
+
   const { prisma, site } = ctx
 
   const existing = site
