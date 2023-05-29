@@ -27,21 +27,6 @@ function handleCrossSiteLogin(req: NextRequest) {
   const searchParams = url.searchParams
 
   if (isAppDomain) {
-    if (
-      req.cookies.get('next-auth.session-token') ||
-      req.cookies.get('__Secure-next-auth.session-token')
-    ) {
-      // Already logged in
-      let nextUrl = new URL(url)
-      if (searchParams && searchParams.get('next')) {
-        nextUrl = new URL(searchParams.get('next') as string, url)
-      } else {
-        nextUrl.pathname = '/'
-      }
-
-      return handleCrossSiteSigninComplete(req)
-    }
-
     const response = NextResponse.next()
 
     // Set the "next" into cookies to redirect after login
