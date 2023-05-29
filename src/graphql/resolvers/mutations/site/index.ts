@@ -77,6 +77,19 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
         social_github,
         social_other1,
         social_other1_label,
+        chatbot: {
+          upsert: {
+            update: {
+              prompt_template,
+              openai_key,
+            },
+            create: {
+              prompt_template,
+              openai_key,
+              free_quota: 0,
+            },
+          },
+        },
       },
     })
     .then((site) => {

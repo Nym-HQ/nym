@@ -24,11 +24,17 @@ export async function getSiteByDomain(domain: string) {
       where: {
         subdomain: subdomain,
       },
+      include: {
+        chatbot: true,
+      },
     })
   } else {
     return await prisma.site.findFirst({
       where: {
         parkedDomain: domain,
+      },
+      include: {
+        chatbot: true,
       },
     })
   }

@@ -30,7 +30,6 @@ import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { Tooltip } from '~/components/Tooltip'
 import { getContext } from '~/graphql/context'
 import { GET_SITE_SETTINGS } from '~/graphql/queries/site'
-import { getSiteSettings } from '~/graphql/resolvers/queries/site'
 import {
   useContextQuery,
   useEditSiteMutation,
@@ -49,6 +48,8 @@ function AdminSettingsPage(props) {
   const { data: contextData } = useContextQuery()
   const context = contextData?.context
   const site = siteSettingsData?.siteSettings
+
+  console.log(site)
 
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
