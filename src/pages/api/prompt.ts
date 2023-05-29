@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-
 import calculateQuota from '~/lib/chatbot/calculateQuota'
 import generateResponse from '~/lib/chatbot/generateResponse'
 
-export default async function (req: NextApiRequest, res: NextApiResponse) {
+export default async function (ctx) {
+  const { req, res } = ctx
+
   res.status(200).json({
     success: true,
     answer: 'This is simulated answer',
