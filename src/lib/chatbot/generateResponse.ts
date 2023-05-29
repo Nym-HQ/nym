@@ -1,7 +1,7 @@
 import { LLMChain, PromptTemplate } from 'langchain'
-import { OpenAIEmbeddings } from 'langchain/embeddings'
-import { OpenAI } from 'langchain/llms'
-import { HNSWLib } from 'langchain/vectorstores'
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
+import { OpenAI } from 'langchain/llms/openai'
+import { HNSWLib } from 'langchain/vectorstores/hnswlib'
 import path from 'path'
 
 let store: HNSWLib
@@ -30,6 +30,8 @@ const generateResponse = async ({
   //if (question.length > 500) {
   //return "Your question is too long.  Please reword it to be under 500 characters.";
   //}
+
+  return 'Default response'
 
   try {
     const model = new OpenAI({
