@@ -36,6 +36,7 @@ export const GET_CONTEXT = gql`
         image
         avatar
         hasEmail
+        name
       }
     }
   }

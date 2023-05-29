@@ -576,6 +576,7 @@ export type SiteOwner = {
   avatar?: Maybe<Scalars['String']>
   hasEmail?: Maybe<Scalars['Boolean']>
   image?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
 }
 
 export enum SiteRole {
@@ -2382,6 +2383,7 @@ export type ContextQuery = {
           image?: string | null | undefined
           avatar?: string | null | undefined
           hasEmail?: boolean | null | undefined
+          name?: string | null | undefined
         }
       | null
       | undefined
@@ -4860,6 +4862,7 @@ export const ContextDocument = gql`
         image
         avatar
         hasEmail
+        name
       }
     }
   }

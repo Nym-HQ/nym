@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
 import Head from 'next/head'
 import { useEffect, useRef, useState } from 'react'
 import { Trash } from 'react-feather'
@@ -8,7 +7,12 @@ import { ChatMessage } from '~/components/chat/ChatMessage'
 import { Textarea } from '~/components/Input'
 import { ListDetailView } from '~/components/Layouts'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { getContext } from '~/graphql/context'
+import { useContextQuery } from '~/graphql/types.generated'
 import useType from '~/hooks/useType'
+import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { getCommonQueries } from '~/lib/apollo/common'
+import { getCommonPageProps } from '~/lib/commonProps'
 
 const loadingMessages = [
   'Hold on while I think...',
@@ -21,6 +25,7 @@ const loadingMessages = [
 ]
 
 export function ChatWindow(props) {
+  const { data: contextData } = useContextQuery()
   const [value, setValue] = useState('')
   const [loading, setLoading] = useState(false)
   const [history, setHistory] = useState([])
@@ -32,6 +37,22 @@ export function ChatWindow(props) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const lastMessage = useType(history)
+
+  const owner = {
+    name: contextData?.context?.owner?.name || 'Site Owner',
+    image:
+      contextData?.context?.owner?.avatar ||
+      contextData?.context?.owner?.image ||
+      '/static/favicon.ico',
+  }
+
+  const visitor = {
+    name: contextData?.context?.viewer?.name || 'You',
+    image:
+      contextData?.context?.owner?.avatar ||
+      contextData?.context?.owner?.image ||
+      '/static/favicon.ico',
+  }
 
   const submit = async (v: string) => {
     if (!v) return
@@ -46,8 +67,8 @@ export function ChatWindow(props) {
       const out = [
         ...hist,
         {
-          username: 'username',
-          userImage: 'image',
+          username: visitor.name,
+          userImage: visitor.image,
           message: v,
           isPresenter: false,
         },
@@ -70,7 +91,7 @@ export function ChatWindow(props) {
         prompt: v,
         history: historyQueryParam.map(
           ({ message, isPresenter }) =>
-            `${isPresenter ? 'Adam Breckler' : 'Human'}: ${message}`
+            `${isPresenter ? owner.name : visitor.name}: ${message}`
         ),
       }),
     }).then((r) => r.json())
@@ -79,8 +100,8 @@ export function ChatWindow(props) {
       setHistory((hist) => [
         ...hist,
         {
-          username: 'Adam Breckler',
-          userImage: '/amjad.jpeg',
+          username: owner.name,
+          userImage: owner.image,
           message: answer,
           isPresenter: true,
         },
@@ -92,8 +113,8 @@ export function ChatWindow(props) {
       setHistory((hist) => [
         ...hist,
         {
-          username: 'Adam Breckler',
-          userImage: '/amjad.jpeg',
+          username: owner.name,
+          userImage: owner.image,
           message: `An error occurred: ${message}`,
           isPresenter: true,
         },
@@ -144,8 +165,8 @@ export function ChatWindow(props) {
           {loading ? (
             <ChatMessage
               message={randomLoadMessage}
-              userImage="/amjad.jpeg"
-              username="Adam Breckler"
+              userImage={owner.image}
+              username={owner.name}
               isPresenter
               loading={loading}
             />
@@ -198,32 +219,15 @@ export default function ChatPage(pageProps) {
   )
 }
 
-export async function getServerSideProps({
-  req,
-  res,
-}: {
-  req: NextApiRequest
-  res: NextApiResponse
-}) {
-  // if (req.headers["x-replit-user-id"]) {
-  //   return {
-  //     props: {
-  //       image: req.headers["x-replit-user-profile-image"],
-  //       username: req.headers["x-replit-user-name"],
-  //     },
-  //   };
-  // } else {
-  //   res.setHeader("set-cookie", "REPL_AUTH=FFFFFFFF; Max-Age=0;");
-  //   return {
-  //     redirect: {
-  //       destination: "/login",
-  //     },
-  //   };
-  // }
-  return {
-    props: {
-      image: '/question_icon.png',
-      username: 'Playground',
-    },
-  }
+export async function getServerSideProps(ctx) {
+  const context = await getContext(ctx)
+  const apolloClient = initApolloClient({ context })
+
+  let graphqlData = await Promise.all(getCommonQueries(apolloClient))
+
+  let commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
+  return addApolloState(apolloClient, {
+    props: { ...commonProps },
+  })
 }

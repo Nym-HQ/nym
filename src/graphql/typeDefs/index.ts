@@ -64,6 +64,7 @@ const typeDefs = gql`
     avatar: String
     image: String
     hasEmail: Boolean
+    name: String
   }
 
   enum PageAccess {
