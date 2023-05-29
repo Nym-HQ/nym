@@ -1,37 +1,74 @@
+import { PineconeClient } from '@pinecone-database/pinecone'
 import { LLMChain, PromptTemplate } from 'langchain'
+import { Document } from 'langchain/document'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { OpenAI } from 'langchain/llms/openai'
-import { HNSWLib } from 'langchain/vectorstores/hnswlib'
-import path from 'path'
+import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
-let store: HNSWLib
-
-let storeLoader = (async () => {
-  const storePath = path.join(process.cwd(), 'vectorStore')
-  console.log('Loading vector store from ' + storePath)
-  store = await HNSWLib.load(storePath, new OpenAIEmbeddings())
-  console.clear()
-  console.log('Loaded vector store.')
-})()
-
-const generateResponse = async ({
-  promptTemplate,
-  history,
-  question,
-  apiKey,
-  userContext,
-}: {
+type ChatBotGenerateRequest = {
   promptTemplate: string
   history: Array<string>
   question: string
   apiKey?: string
   userContext?: string
-}) => {
+  getIndexName: () => string
+  getTrainData: () => Promise<Document[]>
+}
+
+const getOrTrainIndex = async ({
+  getIndexName,
+  getTrainData,
+}: ChatBotGenerateRequest) => {
+  const client = new PineconeClient()
+  client.init({
+    environment: process.env.PINECONE_ENVIRONMENT,
+    apiKey: process.env.PINECONE_API_KEY,
+  })
+
+  const indexName = getIndexName()
+  const indexes = await client.listIndexes()
+
+  let pineconeIndex
+  if (indexes.includes(indexName)) {
+    pineconeIndex = await client.Index(indexName)
+
+    return await PineconeStore.fromExistingIndex(new OpenAIEmbeddings(), {
+      pineconeIndex,
+    })
+  } else {
+    console.log('Creating index')
+    pineconeIndex = await client.createIndex({
+      createRequest: {
+        name: indexName,
+        dimension: 512,
+        metric: 'cosine',
+        shards: 1,
+      },
+    })
+
+    const docs = await getTrainData()
+
+    console.log('Initializing Store...')
+
+    return await PineconeStore.fromDocuments(docs, new OpenAIEmbeddings(), {
+      pineconeIndex,
+    })
+  }
+}
+
+const generateResponse = async (request: ChatBotGenerateRequest) => {
+  const {
+    promptTemplate,
+    history,
+    question,
+    apiKey,
+    userContext,
+    getIndexName,
+    getTrainData,
+  } = request
   //if (question.length > 500) {
   //return "Your question is too long.  Please reword it to be under 500 characters.";
   //}
-
-  return 'Default response'
 
   try {
     const model = new OpenAI({
@@ -47,11 +84,13 @@ const generateResponse = async ({
       prompt,
     })
 
-    if (!store) {
-      await storeLoader
-    }
+    const vectorStore = await getOrTrainIndex(request)
 
-    const data = await store.similaritySearch(question, 1)
+    /* Search the vector DB independently with meta filters */
+    const data = await vectorStore.similaritySearch(question, 1, {
+      foo: 'bar',
+    })
+
     const context = []
     if (userContext) context.push(userContext)
     for (const item of data) {
