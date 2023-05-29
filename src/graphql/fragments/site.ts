@@ -20,6 +20,8 @@ export const SitePublicInfoFragment = gql`
     social_github
     social_other1
     social_other1_label
+    newsletter_description
+    newsletter_double_optin
   }
 `
 
@@ -38,9 +40,7 @@ export const SiteEditInfoFragment = gql`
     ...SitePublicInfo
 
     newsletter_provider
-    newsletter_description
     newsletter_from_email
-    newsletter_double_optin
     newsletter_setting1
     newsletter_setting2
     newsletter_setting3

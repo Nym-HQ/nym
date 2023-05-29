@@ -18,16 +18,17 @@ export function UserSettings() {
   const { data, loading } = useGetViewerWithSettingsQuery({
     fetchPolicy: 'network-only',
   })
-  const { data: context } = useContextQuery()
+  const { data: contextData } = useContextQuery()
+  const context = contextData?.context
 
   const titleRef = React.useRef(null)
   const scrollContainerRef = React.useRef(null)
 
-  if (!data?.context?.viewer && loading) {
+  if (!context?.viewer && loading) {
     return <Detail.Loading />
   }
 
-  if (!data?.context?.viewer) {
+  if (!context?.viewer) {
     return <SignedOut />
   }
 
@@ -49,19 +50,17 @@ export function UserSettings() {
           <div className="divide-y divide-gray-200 py-12 dark:divide-gray-800">
             <div className="space-y-8 py-12">
               <h3 className="text-primary text-lg font-bold">Account</h3>
-              <EmailForm viewer={data?.context?.viewer} />
-              <UsernameForm viewer={data?.context?.viewer} />
+              <EmailForm viewer={context?.viewer} />
+              <UsernameForm viewer={context?.viewer} />
             </div>
 
-            {data?.context?.viewer.email && (
+            {context?.viewer.email && (
               <div className="space-y-8 py-12">
                 <h3 className="text-primary text-lg font-bold">Emails</h3>
                 <EmailPreferences
-                  viewer={data?.context?.viewer}
-                  newsletterDescription={
-                    context?.context?.site?.newsletter_description
-                  }
-                  doubleOptin={context?.context?.site?.newsletter_double_optin}
+                  viewer={context?.viewer}
+                  newsletterDescription={context?.site?.newsletter_description}
+                  doubleOptin={context?.site?.newsletter_double_optin}
                 />
               </div>
             )}

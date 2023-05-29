@@ -1035,6 +1035,8 @@ export type SitePublicInfoFragment = {
   social_github?: string | null | undefined
   social_other1?: string | null | undefined
   social_other1_label?: string | null | undefined
+  newsletter_description?: string | null | undefined
+  newsletter_double_optin?: boolean | null | undefined
 }
 
 export type SiteChatBotInfoFragment = {
@@ -1048,9 +1050,7 @@ export type SiteChatBotInfoFragment = {
 export type SiteEditInfoFragment = {
   __typename: 'Site'
   newsletter_provider?: string | null | undefined
-  newsletter_description?: string | null | undefined
   newsletter_from_email?: string | null | undefined
-  newsletter_double_optin?: boolean | null | undefined
   newsletter_setting1?: string | null | undefined
   newsletter_setting2?: string | null | undefined
   newsletter_setting3?: string | null | undefined
@@ -1069,6 +1069,8 @@ export type SiteEditInfoFragment = {
   social_github?: string | null | undefined
   social_other1?: string | null | undefined
   social_other1_label?: string | null | undefined
+  newsletter_description?: string | null | undefined
+  newsletter_double_optin?: boolean | null | undefined
   chatbot?:
     | {
         __typename: 'SiteChatBot'
@@ -1112,6 +1114,8 @@ export type UserSiteInfoFragment = {
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
       }
     | null
     | undefined
@@ -1602,9 +1606,7 @@ export type EditSiteDomainMutation = {
     | {
         __typename: 'Site'
         newsletter_provider?: string | null | undefined
-        newsletter_description?: string | null | undefined
         newsletter_from_email?: string | null | undefined
-        newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
@@ -1623,6 +1625,8 @@ export type EditSiteDomainMutation = {
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
         chatbot?:
           | {
               __typename: 'SiteChatBot'
@@ -1650,9 +1654,7 @@ export type EditSiteMutation = {
     | {
         __typename: 'Site'
         newsletter_provider?: string | null | undefined
-        newsletter_description?: string | null | undefined
         newsletter_from_email?: string | null | undefined
-        newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
@@ -1671,6 +1673,8 @@ export type EditSiteMutation = {
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
         chatbot?:
           | {
               __typename: 'SiteChatBot'
@@ -1705,9 +1709,7 @@ export type AddSiteMutation = {
     | {
         __typename: 'Site'
         newsletter_provider?: string | null | undefined
-        newsletter_description?: string | null | undefined
         newsletter_from_email?: string | null | undefined
-        newsletter_double_optin?: boolean | null | undefined
         newsletter_setting1?: string | null | undefined
         newsletter_setting2?: string | null | undefined
         newsletter_setting3?: string | null | undefined
@@ -1726,6 +1728,8 @@ export type AddSiteMutation = {
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
         chatbot?:
           | {
               __typename: 'SiteChatBot'
@@ -2163,9 +2167,7 @@ export type GetSiteSettingsQuery = {
   siteSettings: {
     __typename: 'Site'
     newsletter_provider?: string | null | undefined
-    newsletter_description?: string | null | undefined
     newsletter_from_email?: string | null | undefined
-    newsletter_double_optin?: boolean | null | undefined
     newsletter_setting1?: string | null | undefined
     newsletter_setting2?: string | null | undefined
     newsletter_setting3?: string | null | undefined
@@ -2184,6 +2186,8 @@ export type GetSiteSettingsQuery = {
     social_github?: string | null | undefined
     social_other1?: string | null | undefined
     social_other1_label?: string | null | undefined
+    newsletter_description?: string | null | undefined
+    newsletter_double_optin?: boolean | null | undefined
     chatbot?:
       | {
           __typename: 'SiteChatBot'
@@ -2225,6 +2229,8 @@ export type GetUserSitesQuery = {
               social_github?: string | null | undefined
               social_other1?: string | null | undefined
               social_other1_label?: string | null | undefined
+              newsletter_description?: string | null | undefined
+              newsletter_double_optin?: boolean | null | undefined
             }
           | null
           | undefined
@@ -2300,6 +2306,7 @@ export type GetViewerWithSettingsQuery = {
     viewer?:
       | {
           __typename: 'User'
+          email?: string | null | undefined
           id: string
           username?: string | null | undefined
           image?: string | null | undefined
@@ -2307,7 +2314,6 @@ export type GetViewerWithSettingsQuery = {
           name?: string | null | undefined
           role?: UserRole | null | undefined
           isAdmin?: boolean | null | undefined
-          email?: string | null | undefined
           pendingEmail?: string | null | undefined
           emailSubscriptions?:
             | Array<
@@ -2336,6 +2342,7 @@ export type ContextQuery = {
     viewer?:
       | {
           __typename: 'User'
+          email?: string | null | undefined
           id: string
           username?: string | null | undefined
           image?: string | null | undefined
@@ -2364,6 +2371,8 @@ export type ContextQuery = {
           social_github?: string | null | undefined
           social_other1?: string | null | undefined
           social_other1_label?: string | null | undefined
+          newsletter_description?: string | null | undefined
+          newsletter_double_optin?: boolean | null | undefined
         }
       | null
       | undefined
@@ -2622,6 +2631,8 @@ export const SitePublicInfoFragmentDoc = gql`
     social_github
     social_other1
     social_other1_label
+    newsletter_description
+    newsletter_double_optin
   }
 `
 export const SiteChatBotInfoFragmentDoc = gql`
@@ -2637,9 +2648,7 @@ export const SiteEditInfoFragmentDoc = gql`
   fragment SiteEditInfo on Site {
     ...SitePublicInfo
     newsletter_provider
-    newsletter_description
     newsletter_from_email
-    newsletter_double_optin
     newsletter_setting1
     newsletter_setting2
     newsletter_setting3
@@ -4789,6 +4798,7 @@ export const GetViewerWithSettingsDocument = gql`
     context {
       viewer {
         ...UserInfo
+        email
         ...UserSettings
       }
     }
@@ -4851,6 +4861,7 @@ export const ContextDocument = gql`
     context {
       viewer {
         ...UserInfo
+        email
       }
       site {
         ...SitePublicInfo

@@ -12,6 +12,7 @@ export const GET_VIEWER_SETTINGS = gql`
     context {
       viewer {
         ...UserInfo
+        email
         ...UserSettings
       }
     }
@@ -25,6 +26,7 @@ export const GET_CONTEXT = gql`
     context {
       viewer {
         ...UserInfo
+        email
       }
       site {
         ...SitePublicInfo
