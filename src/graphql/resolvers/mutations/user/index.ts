@@ -28,7 +28,7 @@ export async function deleteUser(_req, _args, ctx: Context) {
 export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
   const { prisma, viewer, site } = ctx
   const { data } = args
-  const { username, email } = data
+  const { username, email, name } = data
 
   if (username) {
     if (!validUsername(username)) {
@@ -98,6 +98,13 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
     return await prisma.user.update({
       where: { id: viewer.id },
       data: { pendingEmail: email },
+    })
+  }
+
+  if (name) {
+    return await prisma.user.update({
+      where: { id: viewer.id },
+      data: { name },
     })
   }
 

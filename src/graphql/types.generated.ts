@@ -150,6 +150,11 @@ export type EditQuestionInput = {
   title: Scalars['String']
 }
 
+export type EditSiteChatBotInput = {
+  openai_key?: InputMaybe<Scalars['String']>
+  prompt_template?: InputMaybe<Scalars['String']>
+}
+
 export type EditSiteDomainInput = {
   parkedDomain: Scalars['String']
 }
@@ -182,6 +187,7 @@ export type EditSiteUserInput = {
 
 export type EditUserInput = {
   email?: InputMaybe<Scalars['String']>
+  name?: InputMaybe<Scalars['String']>
   username?: InputMaybe<Scalars['String']>
 }
 
@@ -323,6 +329,7 @@ export type MutationEditQuestionArgs = {
 }
 
 export type MutationEditSiteArgs = {
+  chatbot?: InputMaybe<EditSiteChatBotInput>
   data: EditSiteInput
   subdomain: Scalars['String']
 }
@@ -424,6 +431,7 @@ export type Query = {
   posts: Array<Maybe<Post>>
   question?: Maybe<Question>
   questions: QuestionsConnection
+  siteSettings: Site
   siteUsers?: Maybe<Array<SiteUser>>
   tags: Array<Maybe<Tag>>
   user?: Maybe<User>
@@ -533,6 +541,7 @@ export type Site = {
   attach_css?: Maybe<Scalars['String']>
   attach_js?: Maybe<Scalars['String']>
   banner?: Maybe<Scalars['String']>
+  chatbot?: Maybe<SiteChatBot>
   description?: Maybe<Scalars['String']>
   id: Scalars['ID']
   logo?: Maybe<Scalars['String']>
@@ -551,7 +560,16 @@ export type Site = {
   social_other1_label?: Maybe<Scalars['String']>
   social_twitter?: Maybe<Scalars['String']>
   social_youtube?: Maybe<Scalars['String']>
-  subdomain?: Maybe<Scalars['String']>
+  subdomain: Scalars['String']
+}
+
+export type SiteChatBot = {
+  __typename?: 'SiteChatBot'
+  free_quota?: Maybe<Scalars['Int']>
+  id: Scalars['ID']
+  openai_key?: Maybe<Scalars['String']>
+  prompt_template?: Maybe<Scalars['String']>
+  site: Site
 }
 
 export type SiteOwner = {
@@ -559,6 +577,7 @@ export type SiteOwner = {
   avatar?: Maybe<Scalars['String']>
   hasEmail?: Maybe<Scalars['Boolean']>
   image?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
 }
 
 export enum SiteRole {
@@ -1000,10 +1019,10 @@ export type QuestionsConnectionFragment = {
   >
 }
 
-export type SiteInfoFragment = {
+export type SitePublicInfoFragment = {
   __typename: 'Site'
   id: string
-  subdomain?: string | null | undefined
+  subdomain: string
   parkedDomain?: string | null | undefined
   plan?: string | null | undefined
   name?: string | null | undefined
@@ -1012,18 +1031,57 @@ export type SiteInfoFragment = {
   banner?: string | null | undefined
   attach_css?: string | null | undefined
   attach_js?: string | null | undefined
-  newsletter_provider?: string | null | undefined
-  newsletter_description?: string | null | undefined
-  newsletter_from_email?: string | null | undefined
-  newsletter_double_optin?: boolean | null | undefined
-  newsletter_setting1?: string | null | undefined
-  newsletter_setting2?: string | null | undefined
-  newsletter_setting3?: string | null | undefined
   social_twitter?: string | null | undefined
   social_youtube?: string | null | undefined
   social_github?: string | null | undefined
   social_other1?: string | null | undefined
   social_other1_label?: string | null | undefined
+  newsletter_description?: string | null | undefined
+  newsletter_double_optin?: boolean | null | undefined
+}
+
+export type SiteChatBotInfoFragment = {
+  __typename: 'SiteChatBot'
+  id: string
+  openai_key?: string | null | undefined
+  prompt_template?: string | null | undefined
+  free_quota?: number | null | undefined
+}
+
+export type SiteEditInfoFragment = {
+  __typename: 'Site'
+  newsletter_provider?: string | null | undefined
+  newsletter_from_email?: string | null | undefined
+  newsletter_setting1?: string | null | undefined
+  newsletter_setting2?: string | null | undefined
+  newsletter_setting3?: string | null | undefined
+  id: string
+  subdomain: string
+  parkedDomain?: string | null | undefined
+  plan?: string | null | undefined
+  name?: string | null | undefined
+  description?: string | null | undefined
+  logo?: string | null | undefined
+  banner?: string | null | undefined
+  attach_css?: string | null | undefined
+  attach_js?: string | null | undefined
+  social_twitter?: string | null | undefined
+  social_youtube?: string | null | undefined
+  social_github?: string | null | undefined
+  social_other1?: string | null | undefined
+  social_other1_label?: string | null | undefined
+  newsletter_description?: string | null | undefined
+  newsletter_double_optin?: boolean | null | undefined
+  chatbot?:
+    | {
+        __typename: 'SiteChatBot'
+        id: string
+        openai_key?: string | null | undefined
+        prompt_template?: string | null | undefined
+        free_quota?: number | null | undefined
+      }
+    | null
+    | undefined
 }
 
 export type UserSiteFragment = {
@@ -1043,7 +1101,7 @@ export type UserSiteInfoFragment = {
     | {
         __typename: 'Site'
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -1052,18 +1110,13 @@ export type UserSiteInfoFragment = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        newsletter_provider?: string | null | undefined
-        newsletter_description?: string | null | undefined
-        newsletter_from_email?: string | null | undefined
-        newsletter_double_optin?: boolean | null | undefined
-        newsletter_setting1?: string | null | undefined
-        newsletter_setting2?: string | null | undefined
-        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
       }
     | null
     | undefined
@@ -1553,8 +1606,13 @@ export type EditSiteDomainMutation = {
   editSiteDomain?:
     | {
         __typename: 'Site'
+        newsletter_provider?: string | null | undefined
+        newsletter_from_email?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -1563,18 +1621,23 @@ export type EditSiteDomainMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        newsletter_provider?: string | null | undefined
-        newsletter_description?: string | null | undefined
-        newsletter_from_email?: string | null | undefined
-        newsletter_double_optin?: boolean | null | undefined
-        newsletter_setting1?: string | null | undefined
-        newsletter_setting2?: string | null | undefined
-        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
+        chatbot?:
+          | {
+              __typename: 'SiteChatBot'
+              id: string
+              openai_key?: string | null | undefined
+              prompt_template?: string | null | undefined
+              free_quota?: number | null | undefined
+            }
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -1583,6 +1646,7 @@ export type EditSiteDomainMutation = {
 export type EditSiteMutationVariables = Exact<{
   subdomain: Scalars['String']
   data: EditSiteInput
+  chatbot?: InputMaybe<EditSiteChatBotInput>
 }>
 
 export type EditSiteMutation = {
@@ -1590,8 +1654,13 @@ export type EditSiteMutation = {
   editSite?:
     | {
         __typename: 'Site'
+        newsletter_provider?: string | null | undefined
+        newsletter_from_email?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -1600,18 +1669,23 @@ export type EditSiteMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        newsletter_provider?: string | null | undefined
-        newsletter_description?: string | null | undefined
-        newsletter_from_email?: string | null | undefined
-        newsletter_double_optin?: boolean | null | undefined
-        newsletter_setting1?: string | null | undefined
-        newsletter_setting2?: string | null | undefined
-        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
+        chatbot?:
+          | {
+              __typename: 'SiteChatBot'
+              id: string
+              openai_key?: string | null | undefined
+              prompt_template?: string | null | undefined
+              free_quota?: number | null | undefined
+            }
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -1635,8 +1709,13 @@ export type AddSiteMutation = {
   addSite?:
     | {
         __typename: 'Site'
+        newsletter_provider?: string | null | undefined
+        newsletter_from_email?: string | null | undefined
+        newsletter_setting1?: string | null | undefined
+        newsletter_setting2?: string | null | undefined
+        newsletter_setting3?: string | null | undefined
         id: string
-        subdomain?: string | null | undefined
+        subdomain: string
         parkedDomain?: string | null | undefined
         plan?: string | null | undefined
         name?: string | null | undefined
@@ -1645,18 +1724,23 @@ export type AddSiteMutation = {
         banner?: string | null | undefined
         attach_css?: string | null | undefined
         attach_js?: string | null | undefined
-        newsletter_provider?: string | null | undefined
-        newsletter_description?: string | null | undefined
-        newsletter_from_email?: string | null | undefined
-        newsletter_double_optin?: boolean | null | undefined
-        newsletter_setting1?: string | null | undefined
-        newsletter_setting2?: string | null | undefined
-        newsletter_setting3?: string | null | undefined
         social_twitter?: string | null | undefined
         social_youtube?: string | null | undefined
         social_github?: string | null | undefined
         social_other1?: string | null | undefined
         social_other1_label?: string | null | undefined
+        newsletter_description?: string | null | undefined
+        newsletter_double_optin?: boolean | null | undefined
+        chatbot?:
+          | {
+              __typename: 'SiteChatBot'
+              id: string
+              openai_key?: string | null | undefined
+              prompt_template?: string | null | undefined
+              free_quota?: number | null | undefined
+            }
+          | null
+          | undefined
       }
     | null
     | undefined
@@ -2077,9 +2161,50 @@ export type GetQuestionQuery = {
     | undefined
 }
 
-export type GetSitesQueryVariables = Exact<{ [key: string]: never }>
+export type GetSiteSettingsQueryVariables = Exact<{ [key: string]: never }>
 
-export type GetSitesQuery = {
+export type GetSiteSettingsQuery = {
+  __typename?: 'Query'
+  siteSettings: {
+    __typename: 'Site'
+    newsletter_provider?: string | null | undefined
+    newsletter_from_email?: string | null | undefined
+    newsletter_setting1?: string | null | undefined
+    newsletter_setting2?: string | null | undefined
+    newsletter_setting3?: string | null | undefined
+    id: string
+    subdomain: string
+    parkedDomain?: string | null | undefined
+    plan?: string | null | undefined
+    name?: string | null | undefined
+    description?: string | null | undefined
+    logo?: string | null | undefined
+    banner?: string | null | undefined
+    attach_css?: string | null | undefined
+    attach_js?: string | null | undefined
+    social_twitter?: string | null | undefined
+    social_youtube?: string | null | undefined
+    social_github?: string | null | undefined
+    social_other1?: string | null | undefined
+    social_other1_label?: string | null | undefined
+    newsletter_description?: string | null | undefined
+    newsletter_double_optin?: boolean | null | undefined
+    chatbot?:
+      | {
+          __typename: 'SiteChatBot'
+          id: string
+          openai_key?: string | null | undefined
+          prompt_template?: string | null | undefined
+          free_quota?: number | null | undefined
+        }
+      | null
+      | undefined
+  }
+}
+
+export type GetUserSitesQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetUserSitesQuery = {
   __typename?: 'Query'
   userSites?:
     | Array<{
@@ -2091,7 +2216,7 @@ export type GetSitesQuery = {
           | {
               __typename: 'Site'
               id: string
-              subdomain?: string | null | undefined
+              subdomain: string
               parkedDomain?: string | null | undefined
               plan?: string | null | undefined
               name?: string | null | undefined
@@ -2100,18 +2225,13 @@ export type GetSitesQuery = {
               banner?: string | null | undefined
               attach_css?: string | null | undefined
               attach_js?: string | null | undefined
-              newsletter_provider?: string | null | undefined
-              newsletter_description?: string | null | undefined
-              newsletter_from_email?: string | null | undefined
-              newsletter_double_optin?: boolean | null | undefined
-              newsletter_setting1?: string | null | undefined
-              newsletter_setting2?: string | null | undefined
-              newsletter_setting3?: string | null | undefined
               social_twitter?: string | null | undefined
               social_youtube?: string | null | undefined
               social_github?: string | null | undefined
               social_other1?: string | null | undefined
               social_other1_label?: string | null | undefined
+              newsletter_description?: string | null | undefined
+              newsletter_double_optin?: boolean | null | undefined
             }
           | null
           | undefined
@@ -2187,6 +2307,7 @@ export type GetViewerWithSettingsQuery = {
     viewer?:
       | {
           __typename: 'User'
+          email?: string | null | undefined
           id: string
           username?: string | null | undefined
           image?: string | null | undefined
@@ -2194,7 +2315,6 @@ export type GetViewerWithSettingsQuery = {
           name?: string | null | undefined
           role?: UserRole | null | undefined
           isAdmin?: boolean | null | undefined
-          email?: string | null | undefined
           pendingEmail?: string | null | undefined
           emailSubscriptions?:
             | Array<
@@ -2223,6 +2343,7 @@ export type ContextQuery = {
     viewer?:
       | {
           __typename: 'User'
+          email?: string | null | undefined
           id: string
           username?: string | null | undefined
           image?: string | null | undefined
@@ -2237,7 +2358,7 @@ export type ContextQuery = {
       | {
           __typename: 'Site'
           id: string
-          subdomain?: string | null | undefined
+          subdomain: string
           parkedDomain?: string | null | undefined
           plan?: string | null | undefined
           name?: string | null | undefined
@@ -2246,18 +2367,13 @@ export type ContextQuery = {
           banner?: string | null | undefined
           attach_css?: string | null | undefined
           attach_js?: string | null | undefined
-          newsletter_provider?: string | null | undefined
-          newsletter_description?: string | null | undefined
-          newsletter_from_email?: string | null | undefined
-          newsletter_double_optin?: boolean | null | undefined
-          newsletter_setting1?: string | null | undefined
-          newsletter_setting2?: string | null | undefined
-          newsletter_setting3?: string | null | undefined
           social_twitter?: string | null | undefined
           social_youtube?: string | null | undefined
           social_github?: string | null | undefined
           social_other1?: string | null | undefined
           social_other1_label?: string | null | undefined
+          newsletter_description?: string | null | undefined
+          newsletter_double_optin?: boolean | null | undefined
         }
       | null
       | undefined
@@ -2277,6 +2393,7 @@ export type ContextQuery = {
           image?: string | null | undefined
           avatar?: string | null | undefined
           hasEmail?: boolean | null | undefined
+          name?: string | null | undefined
         }
       | null
       | undefined
@@ -2497,18 +2614,8 @@ export const QuestionsConnectionFragmentDoc = gql`
   }
   ${QuestionListItemFragmentDoc}
 `
-export const UserSiteFragmentDoc = gql`
-  fragment UserSite on UserSite {
-    id
-    userId
-    siteRole
-    site {
-      id
-    }
-  }
-`
-export const SiteInfoFragmentDoc = gql`
-  fragment SiteInfo on Site {
+export const SitePublicInfoFragmentDoc = gql`
+  fragment SitePublicInfo on Site {
     __typename
     id
     subdomain
@@ -2520,18 +2627,47 @@ export const SiteInfoFragmentDoc = gql`
     banner
     attach_css
     attach_js
-    newsletter_provider
-    newsletter_description
-    newsletter_from_email
-    newsletter_double_optin
-    newsletter_setting1
-    newsletter_setting2
-    newsletter_setting3
     social_twitter
     social_youtube
     social_github
     social_other1
     social_other1_label
+    newsletter_description
+    newsletter_double_optin
+  }
+`
+export const SiteChatBotInfoFragmentDoc = gql`
+  fragment SiteChatBotInfo on SiteChatBot {
+    __typename
+    id
+    openai_key
+    prompt_template
+    free_quota
+  }
+`
+export const SiteEditInfoFragmentDoc = gql`
+  fragment SiteEditInfo on Site {
+    ...SitePublicInfo
+    newsletter_provider
+    newsletter_from_email
+    newsletter_setting1
+    newsletter_setting2
+    newsletter_setting3
+    chatbot {
+      ...SiteChatBotInfo
+    }
+  }
+  ${SitePublicInfoFragmentDoc}
+  ${SiteChatBotInfoFragmentDoc}
+`
+export const UserSiteFragmentDoc = gql`
+  fragment UserSite on UserSite {
+    id
+    userId
+    siteRole
+    site {
+      id
+    }
   }
 `
 export const UserSiteInfoFragmentDoc = gql`
@@ -2540,10 +2676,10 @@ export const UserSiteInfoFragmentDoc = gql`
     userId
     siteRole
     site {
-      ...SiteInfo
+      ...SitePublicInfo
     }
   }
-  ${SiteInfoFragmentDoc}
+  ${SitePublicInfoFragmentDoc}
 `
 export const SiteUserInfoFragmentDoc = gql`
   fragment SiteUserInfo on SiteUser {
@@ -3430,10 +3566,10 @@ export type ToggleReactionMutationOptions = Apollo.BaseMutationOptions<
 export const EditSiteDomainDocument = gql`
   mutation editSiteDomain($subdomain: String!, $data: EditSiteDomainInput!) {
     editSiteDomain(subdomain: $subdomain, data: $data) {
-      ...SiteInfo
+      ...SiteEditInfo
     }
   }
-  ${SiteInfoFragmentDoc}
+  ${SiteEditInfoFragmentDoc}
 `
 export type EditSiteDomainMutationFn = Apollo.MutationFunction<
   EditSiteDomainMutation,
@@ -3480,12 +3616,16 @@ export type EditSiteDomainMutationOptions = Apollo.BaseMutationOptions<
   EditSiteDomainMutationVariables
 >
 export const EditSiteDocument = gql`
-  mutation editSite($subdomain: String!, $data: EditSiteInput!) {
-    editSite(subdomain: $subdomain, data: $data) {
-      ...SiteInfo
+  mutation editSite(
+    $subdomain: String!
+    $data: EditSiteInput!
+    $chatbot: EditSiteChatBotInput
+  ) {
+    editSite(subdomain: $subdomain, data: $data, chatbot: $chatbot) {
+      ...SiteEditInfo
     }
   }
-  ${SiteInfoFragmentDoc}
+  ${SiteEditInfoFragmentDoc}
 `
 export type EditSiteMutationFn = Apollo.MutationFunction<
   EditSiteMutation,
@@ -3507,6 +3647,7 @@ export type EditSiteMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      subdomain: // value for 'subdomain'
  *      data: // value for 'data'
+ *      chatbot: // value for 'chatbot'
  *   },
  * });
  */
@@ -3578,10 +3719,10 @@ export type DeleteSiteMutationOptions = Apollo.BaseMutationOptions<
 export const AddSiteDocument = gql`
   mutation addSite($data: AddSiteInput!) {
     addSite(data: $data) {
-      ...SiteInfo
+      ...SiteEditInfo
     }
   }
-  ${SiteInfoFragmentDoc}
+  ${SiteEditInfoFragmentDoc}
 `
 export type AddSiteMutationFn = Apollo.MutationFunction<
   AddSiteMutation,
@@ -4383,8 +4524,66 @@ export type GetQuestionQueryResult = Apollo.QueryResult<
   GetQuestionQuery,
   GetQuestionQueryVariables
 >
-export const GetSitesDocument = gql`
-  query getSites {
+export const GetSiteSettingsDocument = gql`
+  query getSiteSettings {
+    siteSettings {
+      ...SiteEditInfo
+    }
+  }
+  ${SiteEditInfoFragmentDoc}
+`
+
+/**
+ * __useGetSiteSettingsQuery__
+ *
+ * To run a query within a React component, call `useGetSiteSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSiteSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSiteSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSiteSettingsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetSiteSettingsQuery,
+    GetSiteSettingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetSiteSettingsQuery, GetSiteSettingsQueryVariables>(
+    GetSiteSettingsDocument,
+    options
+  )
+}
+export function useGetSiteSettingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSiteSettingsQuery,
+    GetSiteSettingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    GetSiteSettingsQuery,
+    GetSiteSettingsQueryVariables
+  >(GetSiteSettingsDocument, options)
+}
+export type GetSiteSettingsQueryHookResult = ReturnType<
+  typeof useGetSiteSettingsQuery
+>
+export type GetSiteSettingsLazyQueryHookResult = ReturnType<
+  typeof useGetSiteSettingsLazyQuery
+>
+export type GetSiteSettingsQueryResult = Apollo.QueryResult<
+  GetSiteSettingsQuery,
+  GetSiteSettingsQueryVariables
+>
+export const GetUserSitesDocument = gql`
+  query getUserSites {
     userSites {
       ...UserSiteInfo
     }
@@ -4393,48 +4592,53 @@ export const GetSitesDocument = gql`
 `
 
 /**
- * __useGetSitesQuery__
+ * __useGetUserSitesQuery__
  *
- * To run a query within a React component, call `useGetSitesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetSitesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserSitesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserSitesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetSitesQuery({
+ * const { data, loading, error } = useGetUserSitesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetSitesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetSitesQuery, GetSitesQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetSitesQuery, GetSitesQueryVariables>(
-    GetSitesDocument,
-    options
-  )
-}
-export function useGetSitesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetSitesQuery,
-    GetSitesQueryVariables
+export function useGetUserSitesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetUserSitesQuery,
+    GetUserSitesQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetSitesQuery, GetSitesQueryVariables>(
-    GetSitesDocument,
+  return Apollo.useQuery<GetUserSitesQuery, GetUserSitesQueryVariables>(
+    GetUserSitesDocument,
     options
   )
 }
-export type GetSitesQueryHookResult = ReturnType<typeof useGetSitesQuery>
-export type GetSitesLazyQueryHookResult = ReturnType<
-  typeof useGetSitesLazyQuery
+export function useGetUserSitesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserSitesQuery,
+    GetUserSitesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserSitesQuery, GetUserSitesQueryVariables>(
+    GetUserSitesDocument,
+    options
+  )
+}
+export type GetUserSitesQueryHookResult = ReturnType<
+  typeof useGetUserSitesQuery
 >
-export type GetSitesQueryResult = Apollo.QueryResult<
-  GetSitesQuery,
-  GetSitesQueryVariables
+export type GetUserSitesLazyQueryHookResult = ReturnType<
+  typeof useGetUserSitesLazyQuery
+>
+export type GetUserSitesQueryResult = Apollo.QueryResult<
+  GetUserSitesQuery,
+  GetUserSitesQueryVariables
 >
 export const GetSiteUsersDocument = gql`
   query getSiteUsers {
@@ -4595,6 +4799,7 @@ export const GetViewerWithSettingsDocument = gql`
     context {
       viewer {
         ...UserInfo
+        email
         ...UserSettings
       }
     }
@@ -4657,9 +4862,10 @@ export const ContextDocument = gql`
     context {
       viewer {
         ...UserInfo
+        email
       }
       site {
-        ...SiteInfo
+        ...SitePublicInfo
       }
       userSite {
         ...UserSite
@@ -4668,11 +4874,12 @@ export const ContextDocument = gql`
         image
         avatar
         hasEmail
+        name
       }
     }
   }
   ${UserInfoFragmentDoc}
-  ${SiteInfoFragmentDoc}
+  ${SitePublicInfoFragmentDoc}
   ${UserSiteFragmentDoc}
 `
 

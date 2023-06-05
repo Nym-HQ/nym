@@ -1,8 +1,7 @@
-import { Site } from '@prisma/client'
 import * as postmark from 'postmark'
 
 import { baseEmail } from '~/config/seo'
-import { User } from '~/graphql/types.generated'
+import { Site, User } from '~/graphql/types.generated'
 
 import { getSiteDomain } from '../multitenancy/client'
 import { validEmail } from '../validators'

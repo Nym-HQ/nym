@@ -5,7 +5,7 @@ const typeDefs = gql`
 
   type Site {
     id: ID!
-    subdomain: String
+    subdomain: String!
     parkedDomain: String
     plan: String
     name: String
@@ -26,6 +26,16 @@ const typeDefs = gql`
     social_github: String
     social_other1: String
     social_other1_label: String
+
+    chatbot: SiteChatBot
+  }
+
+  type SiteChatBot {
+    id: ID!
+    site: Site!
+    openai_key: String
+    prompt_template: String
+    free_quota: Int
   }
 
   enum SiteRole {
@@ -54,6 +64,7 @@ const typeDefs = gql`
     avatar: String
     image: String
     hasEmail: Boolean
+    name: String
   }
 
   enum PageAccess {
@@ -274,6 +285,7 @@ const typeDefs = gql`
 
   type Query {
     context: ViewerContext!
+    siteSettings: Site!
     userSites: [UserSite!]
     siteUsers: [SiteUser!]
     user(username: String!): User
@@ -303,6 +315,7 @@ const typeDefs = gql`
   input EditUserInput {
     username: String
     email: String
+    name: String
   }
 
   input EmailSubscriptionInput {
@@ -409,6 +422,11 @@ const typeDefs = gql`
     social_other1_label: String
   }
 
+  input EditSiteChatBotInput {
+    prompt_template: String
+    openai_key: String
+  }
+
   input EditSiteUserInput {
     userId: String
     siteRole: SiteRole
@@ -438,7 +456,11 @@ const typeDefs = gql`
     toggleReaction(refId: ID!, type: ReactionType!): Reactable
     addSite(data: AddSiteInput!): Site
     editSiteDomain(subdomain: String!, data: EditSiteDomainInput!): Site
-    editSite(subdomain: String!, data: EditSiteInput!): Site
+    editSite(
+      subdomain: String!
+      data: EditSiteInput!
+      chatbot: EditSiteChatBotInput
+    ): Site
     deleteSite(subdomain: String!): Boolean
     editSiteUser(data: EditSiteUserInput!): SiteUser
   }

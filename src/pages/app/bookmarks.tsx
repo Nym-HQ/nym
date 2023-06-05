@@ -12,7 +12,7 @@ import { GET_USER_SITES } from '~/graphql/queries/site'
 import {
   SiteRole,
   useContextQuery,
-  useGetSitesQuery,
+  useGetUserSitesQuery,
 } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
@@ -93,7 +93,7 @@ function BookmarksPage(props) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
   const { data: context } = useContextQuery()
-  const { data } = useGetSitesQuery()
+  const { data } = useGetUserSitesQuery()
 
   const seo = extendSEO(routes.bookmarks.seo, context.context.site)
   const ownedSites = data.userSites?.filter(

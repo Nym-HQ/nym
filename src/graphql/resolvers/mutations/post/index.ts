@@ -9,7 +9,7 @@ import {
   PostAccess,
 } from '~/graphql/types.generated'
 import { extractFeatureImage, parseEditorJsData } from '~/lib/compat/data'
-import { parseEditorJsDataIntoHtml } from '~/lib/editorjs'
+import { parseEditorJsDataIntoHtml } from '~/lib/editorjs/htmlParser'
 import { graphcdn } from '~/lib/graphcdn'
 import { getNewsletterProvider } from '~/lib/newsletter'
 

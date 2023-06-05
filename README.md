@@ -57,6 +57,13 @@ A good resource to understand Prisma and its Shadow DB
 
 - `IFRAMELY_API_KEY` - Iframely API key - to extract metadata from a url
 
+
+#### Configurations for Chat Bot
+
+- `OPENAI_API_KEY`
+- `PINECONE_ENVIRONMENT`
+- `PINECONE_API_KEY`
+
 ### Setting up DB for development environment
 
 #### Using PlanetScale

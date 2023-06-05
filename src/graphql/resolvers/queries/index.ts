@@ -1,3 +1,4 @@
+import { requiresSiteAdmin } from '~/graphql/helpers/requiresSiteAdmin'
 import { requiresUser } from '~/graphql/helpers/requiresUser'
 
 import { getBookmark, getBookmarks } from './bookmarks'
@@ -6,13 +7,14 @@ import { getEmailSubscriptions } from './emailSubscriptions'
 import { getHomePage, getPage, getPages } from './pages'
 import { getPost, getPosts } from './posts'
 import { getQuestion, getQuestions } from './questions'
-import { getSiteUsers, getUserSites } from './site'
+import { getSiteSettings, getSiteUsers, getUserSites } from './site'
 import { getTags } from './tags'
 import { getUser } from './user'
 import { getViewerContext } from './viewer'
 
 export default {
   context: getViewerContext,
+  siteSettings: requiresSiteAdmin(getSiteSettings),
   userSites: requiresUser(getUserSites),
   siteUsers: requiresUser(getSiteUsers),
   user: getUser,

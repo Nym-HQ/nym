@@ -1,6 +1,6 @@
-import { PrismaClient, Site, SiteRole, UserSite } from '@prisma/client'
+import { PrismaClient, SiteRole, UserSite } from '@prisma/client'
 
-import { User, UserRole } from '~/graphql/types.generated'
+import { Site, User, UserRole } from '~/graphql/types.generated'
 import { isAuthenticatedServerSide } from '~/lib/auth/nextauth'
 import { isMainAppDomain } from '~/lib/multitenancy/client'
 import {
@@ -40,7 +40,7 @@ async function getSite(ctx) {
   return site
 }
 
-export async function getContext(ctx) {
+export async function getContext(ctx): Promise<Context> {
   const site = await getSite(ctx)
   const viewer = await getViewer(ctx)
 
@@ -68,7 +68,7 @@ export async function getContext(ctx) {
     userSite,
     prisma,
     owner,
-  }
+  } as Context
 }
 
 export type Context = {
