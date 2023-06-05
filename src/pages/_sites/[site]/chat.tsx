@@ -16,12 +16,6 @@ import { useContextQuery } from '~/graphql/types.generated'
 import useType from '~/hooks/useType'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
-import {
-  createIndex,
-  getIndexName,
-  getTrainData,
-  getTrainedIndex,
-} from '~/lib/chatbot/train'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 const loadingMessages = [
@@ -55,15 +49,16 @@ export function ChatWindow(props) {
     image:
       contextData?.context?.owner?.avatar ||
       contextData?.context?.owner?.image ||
-      '/static/favicon.ico',
+      contextData?.context?.site?.logo ||
+      '/static/img/fallback-avatar.png',
   }
 
   const visitor = {
     name: contextData?.context?.viewer?.name || 'You',
     image:
-      contextData?.context?.owner?.avatar ||
-      contextData?.context?.owner?.image ||
-      '/static/favicon.ico',
+      contextData?.context?.viewer?.avatar ||
+      contextData?.context?.viewer?.image ||
+      '/static/img/fallback-avatar.png',
   }
 
   const submit = async (v: string) => {
