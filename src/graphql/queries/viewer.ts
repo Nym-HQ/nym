@@ -5,13 +5,14 @@ import {
   UserSettingsFragment,
 } from '~/graphql/fragments/user'
 
-import { SiteInfoFragment, UserSiteFragment } from '../fragments/site'
+import { SitePublicInfoFragment, UserSiteFragment } from '../fragments/site'
 
 export const GET_VIEWER_SETTINGS = gql`
   query getViewerWithSettings {
     context {
       viewer {
         ...UserInfo
+        email
         ...UserSettings
       }
     }
@@ -25,9 +26,10 @@ export const GET_CONTEXT = gql`
     context {
       viewer {
         ...UserInfo
+        email
       }
       site {
-        ...SiteInfo
+        ...SitePublicInfo
       }
       userSite {
         ...UserSite
@@ -36,10 +38,11 @@ export const GET_CONTEXT = gql`
         image
         avatar
         hasEmail
+        name
       }
     }
   }
   ${UserInfoFragment}
-  ${SiteInfoFragment}
+  ${SitePublicInfoFragment}
   ${UserSiteFragment}
 `

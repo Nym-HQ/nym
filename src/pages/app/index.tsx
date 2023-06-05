@@ -11,7 +11,7 @@ import { GET_USER_SITES } from '~/graphql/queries/site'
 import {
   SiteRole,
   useContextQuery,
-  useGetSitesQuery,
+  useGetUserSitesQuery,
 } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
@@ -151,7 +151,7 @@ export default function Home(props) {
   const { data } = useContextQuery()
 
   if (data?.context?.viewer) {
-    const { data: userSites } = useGetSitesQuery()
+    const { data: userSites } = useGetUserSitesQuery()
 
     return (
       <Detail.Container data-cy="home-intro" ref={scrollContainerRef}>

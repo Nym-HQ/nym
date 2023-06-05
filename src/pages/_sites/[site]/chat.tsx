@@ -1,5 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 import { useEffect, useRef, useState } from 'react'
 import { Trash } from 'react-feather'
 
@@ -7,8 +6,23 @@ import Button from '~/components/Button'
 import { ChatMessage } from '~/components/chat/ChatMessage'
 import { Textarea } from '~/components/Input'
 import { ListDetailView } from '~/components/Layouts'
+import { Detail } from '~/components/ListDetail/Detail'
+import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
+import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { LoadingSpinner } from '~/components/LoadingSpinner'
+import { extendSEO } from '~/config/seo'
+import { getContext } from '~/graphql/context'
+import { useContextQuery } from '~/graphql/types.generated'
 import useType from '~/hooks/useType'
+import { addApolloState, initApolloClient } from '~/lib/apollo'
+import { getCommonQueries } from '~/lib/apollo/common'
+import {
+  createIndex,
+  getIndexName,
+  getTrainData,
+  getTrainedIndex,
+} from '~/lib/chatbot/train'
+import { getCommonPageProps } from '~/lib/commonProps'
 
 const loadingMessages = [
   'Hold on while I think...',
@@ -21,6 +35,9 @@ const loadingMessages = [
 ]
 
 export function ChatWindow(props) {
+  const { data: contextData } = useContextQuery()
+  const scrollContainerRef = useRef(null)
+  const titleRef = useRef(null)
   const [value, setValue] = useState('')
   const [loading, setLoading] = useState(false)
   const [history, setHistory] = useState([])
@@ -32,6 +49,22 @@ export function ChatWindow(props) {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const lastMessage = useType(history)
+
+  const owner = {
+    name: contextData?.context?.owner?.name || 'Site Owner',
+    image:
+      contextData?.context?.owner?.avatar ||
+      contextData?.context?.owner?.image ||
+      '/static/favicon.ico',
+  }
+
+  const visitor = {
+    name: contextData?.context?.viewer?.name || 'You',
+    image:
+      contextData?.context?.owner?.avatar ||
+      contextData?.context?.owner?.image ||
+      '/static/favicon.ico',
+  }
 
   const submit = async (v: string) => {
     if (!v) return
@@ -46,8 +79,8 @@ export function ChatWindow(props) {
       const out = [
         ...hist,
         {
-          username: 'username',
-          userImage: 'image',
+          username: visitor.name,
+          userImage: visitor.image,
           message: v,
           isPresenter: false,
         },
@@ -60,7 +93,7 @@ export function ChatWindow(props) {
       }
       return out
     })
-    const { answer, success, message } = await fetch('/api/prompt', {
+    const { answer, success, message } = await fetch('/api/chatbot/prompt', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +103,7 @@ export function ChatWindow(props) {
         prompt: v,
         history: historyQueryParam.map(
           ({ message, isPresenter }) =>
-            `${isPresenter ? 'Adam Breckler' : 'Human'}: ${message}`
+            `${isPresenter ? owner.name : visitor.name}: ${message}`
         ),
       }),
     }).then((r) => r.json())
@@ -79,8 +112,8 @@ export function ChatWindow(props) {
       setHistory((hist) => [
         ...hist,
         {
-          username: 'Adam Breckler',
-          userImage: '/amjad.jpeg',
+          username: owner.name,
+          userImage: owner.image,
           message: answer,
           isPresenter: true,
         },
@@ -92,8 +125,8 @@ export function ChatWindow(props) {
       setHistory((hist) => [
         ...hist,
         {
-          username: 'Adam Breckler',
-          userImage: '/amjad.jpeg',
+          username: owner.name,
+          userImage: owner.image,
           message: `An error occurred: ${message}`,
           isPresenter: true,
         },
@@ -112,79 +145,100 @@ export function ChatWindow(props) {
     updateFocusAndScroll()
   }, [history, loading, lastMessage])
 
+  const seo = extendSEO(
+    {
+      title: `${owner.name} Chatbot`,
+      description: '',
+    },
+    contextData?.context?.site
+  )
+
   return (
     <>
-      <Head>
-        <title>Adam Breckler Chatbot</title>
-      </Head>
-
-      <div className="flex flex-col w-96 mx-auto p-1 bg-gray-900">
-        <div className="w-full flex border-gray-200 p-1">
-          <div className="flex-1"></div>
-          <Button alt="Clear Chat" size="small" onClick={() => setHistory([])}>
-            <Trash />
-          </Button>
-        </div>
-
-        <div className="w-full flex-grow flex-col flex-1">
-          {history.map(({ message, userImage, username, isPresenter }, i) => (
-            <ChatMessage
-              key={i}
-              message={
-                i === history.length - 1 && isPresenter
-                  ? lastMessage.join(' ')
-                  : message
-              }
-              userImage={userImage}
-              username={username}
-              isPresenter={isPresenter}
-            />
-          ))}
-
-          {loading ? (
-            <ChatMessage
-              message={randomLoadMessage}
-              userImage="/amjad.jpeg"
-              username="Adam Breckler"
-              isPresenter
-              loading={loading}
-            />
-          ) : null}
-
-          <div ref={scrollRef}></div>
-        </div>
-
-        <div className="flex flex-row space-x-2">
-          <Textarea
-            placeholder="Type a message..."
-            className="flex-grow resize-none w-full text-base text-primary"
-            style={{
-              opacity: loading ? 0.5 : 1,
-            }}
-            rows={1}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                if (!e.shiftKey) {
-                  e.preventDefault()
-                  submit(value)
+      <NextSeo {...seo} />
+      <Detail.Container data-cy="question-detail" ref={scrollContainerRef}>
+        <TitleBar
+          backButton
+          globalMenu={false}
+          backButtonHref={'/'}
+          magicTitle
+          title={`Chat with ${owner.name}`}
+          titleRef={titleRef}
+          scrollContainerRef={scrollContainerRef}
+          trailingAccessory={
+            <>
+              <Button
+                alt="Clear Chat"
+                size="small"
+                onClick={() => setHistory([])}
+              >
+                <Trash />
+              </Button>
+            </>
+          }
+        />
+        <div className="flex flex-1 flex-col w-96 mx-auto p-1 bg-gray-900">
+          <div className="w-full flex-grow flex-col flex-1">
+            {history.map(({ message, userImage, username, isPresenter }, i) => (
+              <ChatMessage
+                key={i}
+                message={
+                  i === history.length - 1 && isPresenter
+                    ? lastMessage.join(' ')
+                    : message
                 }
-              }
-            }}
-            disabled={loading}
-            ref={taRef}
-          />
-          <Button
-            onClick={() => submit(value)}
-            disabled={loading}
-            colorway="primary"
-            iconLeft={loading ? <LoadingSpinner /> : null}
-          >
-            Send
-          </Button>
+                userImage={userImage}
+                username={username}
+                isPresenter={isPresenter}
+              />
+            ))}
+
+            {loading ? (
+              <ChatMessage
+                message={randomLoadMessage}
+                userImage={owner.image}
+                username={owner.name}
+                isPresenter
+                loading={loading}
+              />
+            ) : null}
+
+            <div ref={scrollRef}></div>
+          </div>
+
+          <div className="flex flex-row space-x-2">
+            <Textarea
+              placeholder="Type a message..."
+              className="flex-grow resize-none w-full text-base text-primary"
+              style={{
+                opacity: loading ? 0.5 : 1,
+              }}
+              rows={1}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  if (!e.shiftKey) {
+                    e.preventDefault()
+                    submit(value)
+                  }
+                }
+              }}
+              disabled={loading}
+              ref={taRef}
+            />
+            <Button
+              onClick={() => submit(value)}
+              disabled={loading}
+              colorway="primary"
+            >
+              {loading ? <LoadingSpinner /> : null} Send
+            </Button>
+          </div>
         </div>
-      </div>
+
+        <PoweredByNym scrollContainerRef={scrollContainerRef} />
+      </Detail.Container>
     </>
   )
 }
@@ -199,32 +253,24 @@ export default function ChatPage(pageProps) {
   )
 }
 
-export async function getServerSideProps({
-  req,
-  res,
-}: {
-  req: NextApiRequest
-  res: NextApiResponse
-}) {
-  // if (req.headers["x-replit-user-id"]) {
-  //   return {
-  //     props: {
-  //       image: req.headers["x-replit-user-profile-image"],
-  //       username: req.headers["x-replit-user-name"],
-  //     },
-  //   };
-  // } else {
-  //   res.setHeader("set-cookie", "REPL_AUTH=FFFFFFFF; Max-Age=0;");
-  //   return {
-  //     redirect: {
-  //       destination: "/login",
-  //     },
-  //   };
-  // }
-  return {
-    props: {
-      image: '/question_icon.png',
-      username: 'Playground',
-    },
-  }
+export async function getServerSideProps(ctx) {
+  const context = await getContext(ctx)
+
+  if (!context.viewer)
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+
+  const apolloClient = initApolloClient({ context })
+
+  let graphqlData = await Promise.all(getCommonQueries(apolloClient))
+
+  let commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
+  return addApolloState(apolloClient, {
+    props: { ...commonProps },
+  })
 }

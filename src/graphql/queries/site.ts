@@ -1,19 +1,29 @@
 import { gql } from '@apollo/client'
 
 import {
-  SiteInfoFragment,
+  SiteEditInfoFragment,
+  SitePublicInfoFragment,
   SiteUserInfoFragment,
   UserSiteInfoFragment,
 } from '~/graphql/fragments/site'
 
+export const GET_SITE_SETTINGS = gql`
+  query getSiteSettings {
+    siteSettings {
+      ...SiteEditInfo
+    }
+  }
+  ${SiteEditInfoFragment}
+`
+
 export const GET_USER_SITES = gql`
-  query getSites {
+  query getUserSites {
     userSites {
       ...UserSiteInfo
     }
   }
   ${UserSiteInfoFragment}
-  ${SiteInfoFragment}
+  ${SitePublicInfoFragment}
 `
 
 export const GET_SITE_USERS = gql`

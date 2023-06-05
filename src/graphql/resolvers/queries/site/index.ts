@@ -1,4 +1,9 @@
+import prisma from '~/lib/prisma'
 import { isValidParkedDomain } from '~/lib/utils'
+
+export async function getSiteSettings(_, __, { site }) {
+  return site
+}
 
 export async function getUserSites(_, __, { viewer, prisma }) {
   const userSites = await prisma.userSite.findMany({

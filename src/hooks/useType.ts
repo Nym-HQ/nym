@@ -8,7 +8,9 @@ export default function useType(history: Array<ChatMessageType>) {
 
   const fire = () => {
     const lastMessage = history.at(-1)
-    const words = lastMessage.message.split(' ').filter((x) => x.length)
+    const words = lastMessage
+      ? lastMessage.message.split(' ').filter((x) => x.length)
+      : []
     let index = 0
     const iteration = () => {
       setOutput((o) => [...o, words[index]])
