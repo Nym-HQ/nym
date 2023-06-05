@@ -1,11 +1,10 @@
+import { Context } from '@apollo/client'
 import { TweetV2 } from 'twitter-api-v2'
-
-import { getContext } from '~/graphql/context'
 
 import getTwitterApiClient from './getTwitterApiClient'
 
 export default async function getTwitterTimeline(
-  context: Awaited<ReturnType<typeof getContext>>
+  context: Context
 ): Promise<TweetV2[]> {
   const twitterClient = await getTwitterApiClient(context)
 

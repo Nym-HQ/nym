@@ -5,6 +5,7 @@ import { getContext } from '~/graphql/context'
 import calculateQuota from '~/lib/chatbot/calculateQuota'
 import generateResponse from '~/lib/chatbot/generateResponse'
 import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
+import { getIndexName } from '~/lib/chatbot/train'
 import getTwitterTimeline from '~/lib/tweet/getTwitterTimeline'
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
@@ -32,18 +33,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       getDefaultPromptTemplate(context?.owner?.name)
 
     const resp = await generateResponse({
+      context,
       promptTemplate,
       history,
       question: prompt,
       apiKey: context.site?.chatbot?.openai_key,
       userContext,
-      getIndexName: () => `nym-${context.site?.id}`,
-      getTrainData: async () =>
-        (
-          await getTwitterTimeline(context)
-        ).map((e) => {
-          return { pageContent: e.text, metadata: { id: e.id } } as Document
-        }),
     })
 
     if (typeof resp === 'string') {

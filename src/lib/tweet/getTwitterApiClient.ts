@@ -1,10 +1,10 @@
+import { Context } from '@apollo/client'
 import { TwitterApi } from 'twitter-api-v2'
 
-import { getContext } from '~/graphql/context'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 export default async function getTwitterApiClient(
-  context: Awaited<ReturnType<typeof getContext>>
+  context: Context
 ): Promise<TwitterApi> {
   const { prisma } = context
 
