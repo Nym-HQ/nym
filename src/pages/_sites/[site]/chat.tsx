@@ -61,8 +61,8 @@ export function ChatWindow(props) {
   const visitor = {
     name: contextData?.context?.viewer?.name || 'You',
     image:
-      contextData?.context?.owner?.avatar ||
-      contextData?.context?.owner?.image ||
+      contextData?.context?.viewer?.avatar ||
+      contextData?.context?.viewer?.image ||
       '/static/favicon.ico',
   }
 
