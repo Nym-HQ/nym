@@ -16,12 +16,6 @@ import { useContextQuery } from '~/graphql/types.generated'
 import useType from '~/hooks/useType'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
-import {
-  createIndex,
-  getIndexName,
-  getTrainData,
-  getTrainedIndex,
-} from '~/lib/chatbot/train'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 const loadingMessages = [
