@@ -16,7 +16,12 @@ import { useContextQuery } from '~/graphql/types.generated'
 import useType from '~/hooks/useType'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
-import { createIndex, getTrainData, getTrainedIndex } from '~/lib/chatbot/train'
+import {
+  createIndex,
+  getIndexName,
+  getTrainData,
+  getTrainedIndex,
+} from '~/lib/chatbot/train'
 import { getCommonPageProps } from '~/lib/commonProps'
 
 const loadingMessages = [
@@ -252,8 +257,11 @@ export async function getServerSideProps(ctx) {
   const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
 
-  if (!getTrainedIndex(context)) {
+  const trainedIndex = await getTrainedIndex(context)
+  if (trainedIndex === null) {
     createIndex(context, getTrainData(context))
+  } else {
+    console.log('Found trained index', getIndexName(context))
   }
 
   let graphqlData = await Promise.all(getCommonQueries(apolloClient))

@@ -9,6 +9,18 @@ import parseEditorJsDataIntoMarkdown from '../editorjs/markdownParser'
 
 // import getTwitterTimeline from '../tweet/getTwitterTimeline'
 
+async function initPineconeClient() {
+  // Create a client
+  const client = new PineconeClient()
+
+  // Initialize the client
+  await client.init({
+    apiKey: process.env.PINECONE_API_KEY,
+    environment: process.env.PINECONE_ENVIRONMENT,
+  })
+  return client
+}
+
 export function getIndexName(context: Context) {
   return `nym-${context.site?.id}`
 }
@@ -41,7 +53,7 @@ export async function getTrainData(context: Context) {
 
     return {
       pageContent: parseEditorJsDataIntoMarkdown(p.data),
-      metadata: { id: p.id },
+      metadata: { id: p.id, siteId: site.id, type: 'writing' },
     } as Document
   })
 }
@@ -50,42 +62,29 @@ export async function getTrainData(context: Context) {
  * Look up existing trained index
  */
 export async function getTrainedIndex(context: Context) {
-  const client = new PineconeClient()
-  client.init({
-    environment: process.env.PINECONE_ENVIRONMENT,
-    apiKey: process.env.PINECONE_API_KEY,
-  })
-
+  const client = await initPineconeClient()
   const indexName = getIndexName(context)
   const indexes = await client.listIndexes()
+  console.log('Existing Pinecone Indexes:', indexes)
 
-  let pineconeIndex
-  if (indexes.includes(indexName)) {
-    pineconeIndex = await client.Index(indexName)
+  if (!indexes.includes(indexName)) return null
 
-    return await PineconeStore.fromExistingIndex(new OpenAIEmbeddings(), {
-      pineconeIndex,
-    })
-  }
-  return null
+  const pineconeIndex = client.Index(indexName)
+
+  return await PineconeStore.fromExistingIndex(new OpenAIEmbeddings(), {
+    pineconeIndex,
+  })
 }
 
 /**
  * Create a new index
  */
 export async function createIndex(context: Context, docs) {
-  const client = new PineconeClient()
-  client.init({
-    environment: process.env.PINECONE_ENVIRONMENT,
-    apiKey: process.env.PINECONE_API_KEY,
-  })
-
+  const client = await initPineconeClient()
   const indexName = getIndexName(context)
 
-  let pineconeIndex
-
-  console.log('Creating index')
-  pineconeIndex = await client.createIndex({
+  console.log('Creating index', indexName)
+  await client.createIndex({
     createRequest: {
       name: indexName,
       dimension: 512,
@@ -93,9 +92,9 @@ export async function createIndex(context: Context, docs) {
       shards: 1,
     },
   })
+  const pineconeIndex = client.Index(indexName)
 
-  console.log('Initializing Store...')
-
+  console.log('Initializing Store...', indexName)
   return await PineconeStore.fromDocuments(docs, new OpenAIEmbeddings(), {
     pineconeIndex,
   })

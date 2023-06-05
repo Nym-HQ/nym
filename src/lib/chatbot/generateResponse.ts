@@ -11,7 +11,7 @@ const generateResponse = async (request: ChatBotGenerateRequest) => {
   //}
 
   try {
-    const vectorStore = await getTrainedIndex(request)
+    const vectorStore = await getTrainedIndex(request.context)
 
     if (!vectorStore) {
       return 'I am not trained yet.  Please try again later.'
@@ -32,7 +32,8 @@ const generateResponse = async (request: ChatBotGenerateRequest) => {
 
     /* Search the vector DB independently with meta filters */
     const data = await vectorStore.similaritySearch(question, 1, {
-      foo: 'bar',
+      siteId: request.context.site.id,
+      type: 'writing',
     })
 
     const context = []
@@ -47,7 +48,8 @@ const generateResponse = async (request: ChatBotGenerateRequest) => {
       history,
     })
   } catch (e) {
-    return e.toString()
+    console.error('Error generating response', e)
+    return "I coulndn't generate a response.  Please try again later."
   }
 }
 
