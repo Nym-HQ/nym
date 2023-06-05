@@ -17,11 +17,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const context = await getContext({ req, res })
   const trainedIndex = await getTrainedIndex(context)
 
-  if (trainedIndex !== null) deleteIndex(context)
+  if (trainedIndex !== null) await deleteIndex(context)
 
   const trainData = await getTrainData(context)
   if (trainData.length > 0) {
-    createIndex(context, trainData)
+    await createIndex(context, trainData)
   } else {
     console.log('No data found to train chatbot', getIndexName(context))
   }
