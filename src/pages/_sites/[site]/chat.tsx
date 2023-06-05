@@ -93,7 +93,7 @@ export function ChatWindow(props) {
       }
       return out
     })
-    const { answer, success, message } = await fetch('/api/prompt', {
+    const { answer, success, message } = await fetch('/api/chatbot/prompt', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -265,18 +265,6 @@ export async function getServerSideProps(ctx) {
     }
 
   const apolloClient = initApolloClient({ context })
-
-  const trainedIndex = await getTrainedIndex(context)
-  if (trainedIndex === null) {
-    const trainData = await getTrainData(context)
-    if (trainData.length > 0) {
-      createIndex(context, trainData)
-    } else {
-      console.log('No data found to train chatbot', getIndexName(context))
-    }
-  } else {
-    console.log('Found trained index', getIndexName(context))
-  }
 
   let graphqlData = await Promise.all(getCommonQueries(apolloClient))
 

@@ -91,6 +91,16 @@ export async function getTrainedIndex(context: Context) {
   })
 }
 
+export async function deleteIndex(context: Context) {
+  const client = await initPineconeClient()
+  const indexName = getIndexName(context)
+
+  console.log('Creating index', indexName)
+  await client.deleteIndex({
+    indexName,
+  })
+}
+
 /**
  * Create a new index
  */

@@ -13,7 +13,7 @@ import {
   Subsection,
   SubsectionSplitter,
 } from '~/components/admin-components'
-import { DeleteButton, PrimaryButton } from '~/components/Button'
+import Button, { DeleteButton, PrimaryButton } from '~/components/Button'
 import { Dropzone } from '~/components/Dropzone'
 import {
   GitHubIcon,
@@ -82,6 +82,7 @@ function AdminSettingsPage(props) {
   const [showSocialOther1, setShowSocialOther1] = React.useState(
     !!site?.social_other1
   )
+  const [isChatbotTraining, setChatbotTraining] = React.useState(false)
 
   const [editSite, { loading: saving }] = useEditSiteMutation({
     onCompleted({ editSite }) {
@@ -119,6 +120,20 @@ function AdminSettingsPage(props) {
         },
       },
     })
+  }
+
+  const trainChatbot = async () => {
+    setChatbotTraining(true)
+    await fetch('/api/chatbot/train', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+      },
+      body: '{}',
+    })
+      .then((r) => r.json())
+      .finally(() => setChatbotTraining(false))
   }
 
   const renderGeneralSettings = () => {
@@ -681,6 +696,11 @@ function AdminSettingsPage(props) {
                   }
                   value={values.chatbot.prompt_template}
                 />
+              </div>
+              <div className="col-span-5">
+                <Button onClick={trainChatbot}>
+                  {isChatbotTraining && <LoadingSpinner />} Train
+                </Button>
               </div>
             </div>
           </div>
