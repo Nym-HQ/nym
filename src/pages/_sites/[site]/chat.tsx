@@ -49,7 +49,8 @@ export function ChatWindow(props) {
     image:
       contextData?.context?.owner?.avatar ||
       contextData?.context?.owner?.image ||
-      '/static/favicon.ico',
+      contextData?.context?.site?.logo ||
+      '/static/img/fallback-avatar.png',
   }
 
   const visitor = {
@@ -57,7 +58,7 @@ export function ChatWindow(props) {
     image:
       contextData?.context?.viewer?.avatar ||
       contextData?.context?.viewer?.image ||
-      '/static/favicon.ico',
+      '/static/img/fallback-avatar.png',
   }
 
   const submit = async (v: string) => {
