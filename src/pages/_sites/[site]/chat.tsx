@@ -255,11 +255,25 @@ export default function ChatPage(pageProps) {
 
 export async function getServerSideProps(ctx) {
   const context = await getContext(ctx)
+
+  if (!context.viewer)
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+
   const apolloClient = initApolloClient({ context })
 
   const trainedIndex = await getTrainedIndex(context)
   if (trainedIndex === null) {
-    createIndex(context, getTrainData(context))
+    const trainData = await getTrainData(context)
+    if (trainData.length > 0) {
+      createIndex(context, trainData)
+    } else {
+      console.log('No data found to train chatbot', getIndexName(context))
+    }
   } else {
     console.log('Found trained index', getIndexName(context))
   }

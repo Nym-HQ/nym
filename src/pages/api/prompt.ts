@@ -1,12 +1,9 @@
-import { Document } from 'langchain/document'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
 import calculateQuota from '~/lib/chatbot/calculateQuota'
 import generateResponse from '~/lib/chatbot/generateResponse'
 import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
-import { getIndexName } from '~/lib/chatbot/train'
-import getTwitterTimeline from '~/lib/tweet/getTwitterTimeline'
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { prompt, history } = await req.body

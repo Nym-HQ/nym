@@ -3,6 +3,7 @@ import { PineconeClient } from '@pinecone-database/pinecone'
 import { PostAccess } from '@prisma/client'
 import { Document } from 'langchain/document'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
+import { CharacterTextSplitter } from 'langchain/text_splitter'
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
 import parseEditorJsDataIntoMarkdown from '../editorjs/markdownParser'
@@ -43,19 +44,33 @@ export async function getTrainData(context: Context) {
     },
   })
 
-  return publishedPosts.map((p) => {
-    if (!p.data) return null
-
-    let data = p.data
-    if (typeof p.data === 'string') {
-      data = JSON.parse(p.data)
-    }
-
-    return {
-      pageContent: parseEditorJsDataIntoMarkdown(p.data),
-      metadata: { id: p.id, siteId: site.id, type: 'writing' },
-    } as Document
+  const textSplitter = new CharacterTextSplitter({
+    chunkSize: 400,
+    separator: '\n',
   })
+
+  return (
+    await Promise.all(
+      publishedPosts.map((p) => {
+        if (!p.data) return null
+
+        let data = p.data
+        if (typeof p.data === 'string') {
+          data = JSON.parse(p.data)
+        }
+
+        return textSplitter.splitText(parseEditorJsDataIntoMarkdown(data))
+      })
+    )
+  )
+    .flat()
+    .filter((txt) => !!txt)
+    .map((txt) => {
+      return {
+        pageContent: txt,
+        metadata: { siteId: site.id, type: 'writing' },
+      } as Document
+    })
 }
 
 /**
@@ -87,7 +102,7 @@ export async function createIndex(context: Context, docs) {
   await client.createIndex({
     createRequest: {
       name: indexName,
-      dimension: 512,
+      dimension: 1536, // OpenAI's vector dimension
       metric: 'cosine',
       shards: 1,
     },

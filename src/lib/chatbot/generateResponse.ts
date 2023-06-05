@@ -12,9 +12,8 @@ const generateResponse = async (request: ChatBotGenerateRequest) => {
 
   try {
     const vectorStore = await getTrainedIndex(request.context)
-
     if (!vectorStore) {
-      return 'I am not trained yet.  Please try again later.'
+      return 'I am under training now.  Please try again later.'
     }
 
     const model = new OpenAI({

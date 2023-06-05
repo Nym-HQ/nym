@@ -80,6 +80,8 @@ const blockParsers = {
  * Markdown Parsing class
  */
 export default function parseEditorJsDataIntoMarkdown(data) {
+  if (!data || !data.blocks) return ''
+
   const parsedData = data.blocks.map((item) => {
     if (blockParsers[item.type]) {
       return blockParsers[item.type](item.data)
