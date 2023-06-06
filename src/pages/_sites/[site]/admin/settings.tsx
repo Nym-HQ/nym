@@ -49,8 +49,6 @@ function AdminSettingsPage(props) {
   const context = contextData?.context
   const site = siteSettingsData?.siteSettings
 
-  console.log(site)
-
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
 
@@ -132,7 +130,10 @@ function AdminSettingsPage(props) {
       },
       body: '{}',
     })
-      .then((r) => r.json())
+      .then(
+        (r) => toast.success('Chatbot has been trained successfully!'),
+        (err) => toast.error('Failed to train your chatbot! Please try again.')
+      )
       .finally(() => setChatbotTraining(false))
   }
 

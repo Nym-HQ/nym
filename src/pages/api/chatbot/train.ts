@@ -2,11 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
 import {
-  createIndex,
-  deleteIndex,
+  createOrUpdateIndex,
   getIndexName,
   getTrainData,
-  getTrainedIndex,
 } from '~/lib/chatbot/train'
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
@@ -15,13 +13,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   }
 
   const context = await getContext({ req, res })
-  const trainedIndex = await getTrainedIndex(context)
 
-  if (trainedIndex !== null) await deleteIndex(context)
-
-  const trainData = await getTrainData(context)
-  if (trainData.length > 0) {
-    await createIndex(context, trainData)
+  const { docs, ids } = await getTrainData(context)
+  if (docs.length > 0) {
+    await createOrUpdateIndex(context, docs, ids)
   } else {
     console.log('No data found to train chatbot', getIndexName(context))
   }
