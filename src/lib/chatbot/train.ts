@@ -49,28 +49,46 @@ export async function getTrainData(context: Context) {
     separator: '\n',
   })
 
-  return (
-    await Promise.all(
-      publishedPosts.map((p) => {
-        if (!p.data) return null
+  const ids = []
+  const splitTexts = await Promise.all(
+    publishedPosts.map(async (p) => {
+      if (!p.data) return null
 
-        let data = p.data
-        if (typeof p.data === 'string') {
-          data = JSON.parse(p.data)
+      let data = p.data
+      if (typeof p.data === 'string') {
+        data = JSON.parse(p.data)
+      }
+
+      const splits = await textSplitter.splitText(
+        parseEditorJsDataIntoMarkdown(data)
+      )
+
+      return splits.map((s, idx) => {
+        return {
+          text: s,
+          id: `${p.id}-${idx}`,
         }
-
-        return textSplitter.splitText(parseEditorJsDataIntoMarkdown(data))
       })
-    )
+    })
   )
+  const docs = splitTexts
     .flat()
-    .filter((txt) => !!txt)
-    .map((txt) => {
+    .filter((t) => !!t && !!t.text)
+    .map((t) => {
+      ids.push(t.id)
       return {
-        pageContent: txt,
+        pageContent: t.text,
         metadata: { siteId: site.id, type: 'writing' },
       } as Document
     })
+
+  return { docs, ids }
+}
+
+export async function indexExists(client: PineconeClient, indexName: string) {
+  const indexes = await client.listIndexes()
+  console.log('Existing Pinecone Indexes:', indexes)
+  return indexes.includes(indexName)
 }
 
 /**
@@ -79,10 +97,8 @@ export async function getTrainData(context: Context) {
 export async function getTrainedIndex(context: Context) {
   const client = await initPineconeClient()
   const indexName = getIndexName(context)
-  const indexes = await client.listIndexes()
-  console.log('Existing Pinecone Indexes:', indexes)
 
-  if (!indexes.includes(indexName)) return null
+  if (!(await indexExists(client, indexName))) return null
 
   const pineconeIndex = client.Index(indexName)
 
@@ -95,7 +111,7 @@ export async function deleteIndex(context: Context) {
   const client = await initPineconeClient()
   const indexName = getIndexName(context)
 
-  console.log('Creating index', indexName)
+  console.log('Deleting Pinecone index', indexName)
   await client.deleteIndex({
     indexName,
   })
@@ -104,23 +120,28 @@ export async function deleteIndex(context: Context) {
 /**
  * Create a new index
  */
-export async function createIndex(context: Context, docs) {
+export async function createOrUpdateIndex(context: Context, docs, ids = null) {
   const client = await initPineconeClient()
   const indexName = getIndexName(context)
 
-  console.log('Creating index', indexName)
-  await client.createIndex({
-    createRequest: {
-      name: indexName,
-      dimension: 1536, // OpenAI's vector dimension
-      metric: 'cosine',
-      shards: 1,
-    },
-  })
+  if (!(await indexExists(client, indexName))) {
+    console.log('Creating Pinecone index', indexName)
+    await client.createIndex({
+      createRequest: {
+        name: indexName,
+        dimension: 1536, // OpenAI's vector dimension
+        metric: 'cosine',
+        shards: 1,
+      },
+    })
+  }
   const pineconeIndex = client.Index(indexName)
 
   console.log('Initializing Store...', indexName)
-  return await PineconeStore.fromDocuments(docs, new OpenAIEmbeddings(), {
-    pineconeIndex,
-  })
+  const pineconeStore = await PineconeStore.fromExistingIndex(
+    new OpenAIEmbeddings(),
+    { pineconeIndex }
+  )
+
+  await pineconeStore.addDocuments(docs, ids)
 }
