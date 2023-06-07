@@ -45,7 +45,7 @@ export async function getTrainData(context: Context) {
   })
 
   const textSplitter = new CharacterTextSplitter({
-    chunkSize: 400,
+    chunkSize: 2000,
     separator: '\n',
   })
 
