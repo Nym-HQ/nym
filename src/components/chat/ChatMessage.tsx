@@ -17,7 +17,11 @@ export const ChatMessage = ({
   loading,
 }: ChatMessageType) => {
   return (
-    <div className={`flex flex-col py-2 ${isPresenter ? '' : 'bg-slate-800'}`}>
+    <div
+      className={`flex flex-col py-2 px-1 ${
+        isPresenter ? '' : 'dark:bg-slate-800 bg-slate-200'
+      }`}
+    >
       <div className="flex flex-row space-x-2 align-center">
         <img
           src={userImage}
