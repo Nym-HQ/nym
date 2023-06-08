@@ -172,7 +172,7 @@ export function ChatWindow(props) {
             </>
           }
         />
-        <div className="flex flex-1 flex-col w-96 mx-auto p-1 bg-gray-900">
+        <div className="flex flex-1 flex-col w-96 mx-auto dark:bg-gray-900 bg-gray-100">
           <div className="w-full flex-grow flex-col flex-1">
             {history.map(({ message, userImage, username, isPresenter }, i) => (
               <ChatMessage
