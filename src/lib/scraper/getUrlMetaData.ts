@@ -10,7 +10,7 @@ import { validUrl } from '~/lib/validators'
  * @param url
  * @returns
  */
-export default async function getBookmarkMetaData(url) {
+export default async function getUrlMetaData(url) {
   const res = await fetch(url)
   const html = await res.text()
   const $ = cheerio.load(html)
@@ -77,5 +77,6 @@ export default async function getBookmarkMetaData(url) {
     author,
     creator,
     faviconUrl,
+    html,
   }
 }

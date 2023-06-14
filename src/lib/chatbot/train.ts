@@ -35,6 +35,19 @@ export async function getTrainData(context: Context) {
   // return (await getTwitterTimeline(context)).map((e) => {
   //   return { pageContent: e.text, metadata: { id: e.id } } as Document
   // })
+
+  const { docs: postsDocs, ids: postsDocIds } = await getPostsTrainData(context)
+
+  const { docs: bookmarksDocs, ids: bookmarksDocIds } =
+    await getBookmarksTrainData(context)
+
+  return {
+    docs: [...postsDocs, ...bookmarksDocs],
+    ids: [...postsDocIds, ...bookmarksDocIds],
+  }
+}
+
+async function getPostsTrainData(context: Context) {
   const { prisma, site } = context
   const publishedPosts = await prisma.post.findMany({
     where: {
@@ -62,7 +75,6 @@ export async function getTrainData(context: Context) {
       const splits = await textSplitter.splitText(
         parseEditorJsDataIntoMarkdown(data)
       )
-
       return splits.map((s, idx) => {
         return {
           text: s,
@@ -79,6 +91,48 @@ export async function getTrainData(context: Context) {
       return {
         pageContent: t.text,
         metadata: { siteId: site.id, type: 'writing' },
+      } as Document
+    })
+
+  return { docs, ids }
+}
+
+async function getBookmarksTrainData(context: Context) {
+  const { prisma, site } = context
+  const bookmarks = await prisma.bookmark.findMany({
+    where: {
+      siteId: site.id,
+    },
+  })
+
+  const textSplitter = new CharacterTextSplitter({
+    chunkSize: 2000,
+    separator: '\n',
+  })
+
+  const ids = []
+  const splitTexts = await Promise.all(
+    bookmarks.map(async (b) => {
+      const t = b.html || b.content
+      if (!t) return null
+
+      const splits = await textSplitter.splitText(t)
+      return splits.map((s, idx) => {
+        return {
+          text: s,
+          id: `b-${b.id}-${idx}`,
+        }
+      })
+    })
+  )
+  const docs = splitTexts
+    .flat()
+    .filter((t) => !!t && !!t.text)
+    .map((t) => {
+      ids.push(t.id)
+      return {
+        pageContent: t.text,
+        metadata: { siteId: site.id, type: 'bookmark' },
       } as Document
     })
 

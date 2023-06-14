@@ -63,6 +63,7 @@ export type AddSiteInput = {
 
 export type Bookmark = {
   __typename?: 'Bookmark'
+  content?: Maybe<Scalars['String']>
   createdAt: Scalars['Date']
   description?: Maybe<Scalars['String']>
   faviconUrl?: Maybe<Scalars['String']>
