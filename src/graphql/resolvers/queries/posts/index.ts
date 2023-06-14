@@ -104,15 +104,12 @@ export async function getPosts(_, args: GetPostsQueryVariables, ctx: Context) {
     userSite,
     filter?.published
   )
-  const accessFilter = getAccessFilter(viewer, userSite)
 
-  return await prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     orderBy: published ? { publishedAt: 'desc' } : { createdAt: 'desc' },
     where: {
       siteId: site.id,
-
       ...publishedFilter,
-      ...accessFilter,
     },
     include: {
       _count: {
@@ -129,6 +126,8 @@ export async function getPosts(_, args: GetPostsQueryVariables, ctx: Context) {
       },
     },
   })
+
+  return posts.map((p) => filterContentByAccessPerm(viewer, userSite, p))
 }
 
 export async function getPost(
@@ -143,14 +142,12 @@ export async function getPost(
   }
 
   const publishedFilter = !viewer ? { publishedAt: { not: null } } : {}
-  const accessFilter = getAccessFilter(viewer, userSite)
 
   let post = await prisma.post.findFirst({
     where: {
       slug: slug,
       siteId: site.id,
       ...publishedFilter,
-      ...accessFilter,
     },
     include: {
       _count: {
@@ -168,7 +165,6 @@ export async function getPost(
         id: slug,
         siteId: site.id,
         ...publishedFilter,
-        ...accessFilter,
       },
       include: {
         _count: {
@@ -180,5 +176,5 @@ export async function getPost(
     })
   }
 
-  return post
+  return filterContentByAccessPerm(viewer, userSite, post)
 }
