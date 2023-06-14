@@ -12,7 +12,7 @@ import { getTweetCardHtml } from '~/lib/tweet/getTweetCardHtml'
 import { getTwitterId } from '~/lib/tweet/parser'
 import { validUrl } from '~/lib/validators'
 
-import getBookmarkMetaData from './getBookmarkMetaData'
+import getUrlMetaData from '../../../../lib/scraper/getUrlMetaData'
 
 export async function editBookmark(
   _,
@@ -99,8 +99,7 @@ export async function addBookmark(
       metadata.title =
         metadata.title || `Tweet from ${metadata.name || metadata.screen_name}`
     } else {
-      metadata = await getBookmarkMetaData(url)
-      html
+      metadata = await getUrlMetaData(url)
     }
   } catch (err) {
     console.error('Unable to get metadata for bookmark: ' + url, { err })
@@ -112,7 +111,15 @@ export async function addBookmark(
       faviconUrl: null,
     }
   }
-  const { host, title, image, description, faviconUrl } = metadata
+
+  const {
+    host,
+    title,
+    image,
+    description,
+    faviconUrl,
+    html: content,
+  } = metadata
 
   // TODO: publish to newsletter
   console.log('Adding bookmark to newsletter', { url })
@@ -127,6 +134,7 @@ export async function addBookmark(
         description,
         html,
         faviconUrl,
+        content,
         tags: {
           connectOrCreate: (tags || (tag ? [tag] : [])).map((tag) => ({
             where: {

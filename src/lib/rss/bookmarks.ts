@@ -55,7 +55,7 @@ export async function generateRSS(bookmarks: BookmarkEdge[], context: Context) {
         link: bookmark.url,
         description: bookmark.description,
         date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
-        content: bookmark.html,
+        content: bookmark.html || bookmark.content,
         image: bookmark.image,
       })
     })

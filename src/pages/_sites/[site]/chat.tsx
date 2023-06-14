@@ -160,17 +160,6 @@ export function ChatWindow(props) {
           title={`Chat with ${owner.name}`}
           titleRef={titleRef}
           scrollContainerRef={scrollContainerRef}
-          trailingAccessory={
-            <>
-              <Button
-                alt="Clear Chat"
-                size="small"
-                onClick={() => setHistory([])}
-              >
-                <Trash />
-              </Button>
-            </>
-          }
         />
         <div className="flex flex-1 flex-col w-96 mx-auto dark:bg-gray-900 bg-gray-100">
           <div className="w-full flex-grow flex-col flex-1">

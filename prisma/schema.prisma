@@ -211,7 +211,14 @@ model Bookmark {
   description   String?    @db.VarChar(2048)
   twitterHandle String?
   faviconUrl    String?    @db.VarChar(512)
+
+  // html for url preview
   html          String?    @db.Text
+
+  // bookmarked page's raw html content
+  content       String?    @db.Text
+
+  // relationships
   comments      Comment[]
   reactions     Reaction[]
   tags          Tag[]
