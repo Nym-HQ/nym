@@ -213,10 +213,10 @@ model Bookmark {
   faviconUrl    String?    @db.VarChar(512)
 
   // html for url preview
-  html          String?    @db.Text
+  html          String?    @db.MediumText
 
   // bookmarked page's raw html content
-  content       String?    @db.Text
+  content       String?    @db.MediumText
 
   // relationships
   comments      Comment[]
@@ -300,9 +300,9 @@ model Post {
   slug         String
   title        String     @db.VarChar(280)
   // markdown
-  text         String     @default("") @db.Text
+  text         String     @default("") @db.MediumText
   // json
-  data         String     @default("") @db.Text
+  data         String     @default("") @db.MediumText
   excerpt      String     @db.VarChar(280)
   featureImage String?
   access       PostAccess @default(PUBLIC)
@@ -324,9 +324,9 @@ model PostEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
   // markdown
-  text         String   @default("") @db.Text
+  text         String   @default("") @db.MediumText
   // json
-  data         String   @default("") @db.Text
+  data         String   @default("") @db.MediumText
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
   featureImage String?
@@ -398,9 +398,9 @@ model Page {
   slug         String
   title        String     @db.VarChar(280)
   // markdown
-  text         String     @default("") @db.Text
+  text         String     @default("") @db.MediumText
   // json
-  data         String     @default("") @db.Text
+  data         String     @default("") @db.MediumText
   excerpt      String     @db.VarChar(280)
   featureImage String?
   userId       String
@@ -421,9 +421,9 @@ model PageEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
   // markdown
-  text         String   @default("") @db.Text
+  text         String   @default("") @db.MediumText
   // json
-  data         String   @default("") @db.Text
+  data         String   @default("") @db.MediumText
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
   featureImage String?
