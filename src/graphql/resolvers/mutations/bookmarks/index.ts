@@ -118,7 +118,7 @@ export async function addBookmark(
     image,
     description,
     faviconUrl,
-    html: content,
+    text: content,
   } = metadata
 
   // TODO: publish to newsletter
