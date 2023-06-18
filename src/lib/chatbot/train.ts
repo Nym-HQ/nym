@@ -23,7 +23,7 @@ async function initPineconeClient() {
 }
 
 export function getIndexName(context: Context) {
-  return `nym-${context.site?.id}`
+  return `nym-chatbot`
 }
 
 /**

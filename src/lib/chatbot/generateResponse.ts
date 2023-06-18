@@ -32,7 +32,6 @@ const generateResponse = async (request: ChatBotGenerateRequest) => {
     /* Search the vector DB independently with meta filters */
     const data = await vectorStore.similaritySearch(question, 1, {
       siteId: request.context.site.id,
-      type: 'writing',
     })
 
     const context = []
