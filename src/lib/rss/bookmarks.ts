@@ -1,14 +1,29 @@
+import { Bookmark } from '@prisma/client'
 import { Feed } from 'feed'
 
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
 import { Context } from '~/graphql/context'
-import { BookmarkEdge } from '~/graphql/types.generated'
 
 import { getSiteDomain } from '../multitenancy/client'
 
-export async function generateRSS(bookmarks: BookmarkEdge[], context: Context) {
+export async function generateRSS(context: Context) {
   const baseUrl = `https://${getSiteDomain(context.site)}`
+
+  const { prisma } = context
+
+  const bookmarks = await prisma.bookmark.findMany({
+    where: {
+      siteId: context.site.id,
+    },
+    orderBy: { createdAt: 'desc' },
+    include: {
+      tags: true,
+      _count: {
+        select: { reactions: true },
+      },
+    },
+  })
 
   const date = new Date()
   const author = {
@@ -17,14 +32,11 @@ export async function generateRSS(bookmarks: BookmarkEdge[], context: Context) {
     link: baseUrl,
   }
   const seo = extendSEO(routes.bookmarks.seo, context.site)
-  const updated =
-    bookmarks?.length > 0
-      ? bookmarks
-          .map((b) => b.node)
-          .filter((b) => b.updatedAt || b.createdAt)
-          .map((b) => new Date(b.updatedAt || b.createdAt))
-          .sort((a, b) => b.getTime() - a.getTime())[0]
-      : new Date(0)
+  let updated = bookmarks
+    ?.filter((b) => b.updatedAt || b.createdAt)
+    .map((b) => new Date(b.updatedAt || b.createdAt))
+    .sort((a, b) => b.getTime() - a.getTime())[0]
+  updated = updated ? updated : new Date(0)
 
   const feed = new Feed({
     title: seo.title,
@@ -46,19 +58,20 @@ export async function generateRSS(bookmarks: BookmarkEdge[], context: Context) {
     author,
   })
 
-  bookmarks
-    ?.map((b) => b.node)
-    .forEach((bookmark) => {
-      feed.addItem({
-        title: bookmark.title,
-        id: bookmark.url,
-        link: bookmark.url,
-        description: bookmark.description,
-        date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
-        content: bookmark.html || bookmark.content,
-        image: bookmark.image,
-      })
+  console.log(bookmarks)
+
+  bookmarks?.forEach((bookmark) => {
+    feed.addItem({
+      id: bookmark.id,
+      title: bookmark.title || '',
+      link: bookmark.url,
+      description: bookmark.description,
+      date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
+      content: bookmark.html || bookmark.content || '',
+      image: bookmark.image,
+      author: [author],
     })
+  })
 
   const rss = feed.rss2()
   const atom = feed.atom1()
