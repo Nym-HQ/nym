@@ -3,12 +3,21 @@ import { Feed } from 'feed'
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
 import { Context } from '~/graphql/context'
-import { Post } from '~/graphql/types.generated'
+import { GET_POSTS } from '~/graphql/queries/posts'
 
+import { initApolloClient } from '../apollo'
 import { getSiteDomain } from '../multitenancy/client'
 
-export async function generateRSS(posts: Post[], context: Context) {
+export async function generateRSS(context: Context) {
   const baseUrl = `https://${getSiteDomain(context.site)}`
+
+  const apolloClient = initApolloClient({ context })
+  const {
+    data: { posts },
+  } = await apolloClient.query({
+    query: GET_POSTS,
+    variables: { filter: { published: true } },
+  })
 
   const date = new Date()
   const author = {

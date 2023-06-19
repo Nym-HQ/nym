@@ -77,6 +77,10 @@ export default async function getUrlMetaData(url) {
     author,
     creator,
     faviconUrl,
-    html,
+    text:
+      $('article').text() ||
+      $('main').text() ||
+      $('[role=main]').text() ||
+      $('body').text(),
   }
 }
