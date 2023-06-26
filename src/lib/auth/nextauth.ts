@@ -1,6 +1,7 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { getServerSession, NextAuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import TwitterProvider, {
   TwitterLegacyProfile,
   TwitterProfile,
@@ -74,6 +75,43 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
         await prisma.account.updateMany({
           where: {
             provider: 'twitter',
+            providerAccountId: user.id,
+            type: 'oauth',
+          },
+          data: tokens,
+        })
+
+        return user
+      },
+    })
+  )
+}
+
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  providers.push(
+    GoogleProvider({
+      version: '2.0',
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        url: 'https://accounts.google.com/o/oauth2/auth',
+      },
+
+      profile: async (profile: GoogleProfile, tokens) => {
+        console.debug('Got google profile data', profile)
+        let user: any
+        user = {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          username: profile.email,
+          image: profile.picture,
+        }
+
+        // let's update Account model with new tokens, as next-auth library doesn't update the token
+        await prisma.account.updateMany({
+          where: {
+            provider: 'google',
             providerAccountId: user.id,
             type: 'oauth',
           },
