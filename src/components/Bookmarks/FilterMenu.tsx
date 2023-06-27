@@ -73,7 +73,7 @@ export function BookmarksFilterMenu() {
                     </Menu.Item>
                   </div>
                   <div className="flex flex-col py-2">
-                    {tags.map((t) => (
+                    {tags?.map((t) => (
                       <Menu.Item key={t.name}>
                         {({ active }) => (
                           <a

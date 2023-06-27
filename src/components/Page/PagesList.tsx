@@ -77,7 +77,7 @@ export function PagesList() {
         <PageTitlebar scrollContainerRef={scrollContainerRef} />
 
         <div className="lg:space-y-1 lg:p-3">
-          {pagesData.pages.map((page) => {
+          {pagesData.pages?.map((page) => {
             const active = router.query?.slug === page.slug
 
             return <PageListItem key={page.id} page={page} active={active} />
