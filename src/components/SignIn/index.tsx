@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import * as React from 'react'
 
@@ -7,11 +8,14 @@ import { Detail } from '../ListDetail/Detail'
 import { TitleBar } from '../ListDetail/TitleBar'
 
 export function SignIn({ children = null, trigger = null }) {
+  const router = useRouter()
+  const { error } = router.query
+
   return (
     <Detail.Container>
       <TitleBar title="Log In" />
       <div className="flex flex-1 flex-col items-center justify-center">
-        <p className="mb-2">Please login - </p>
+        <p className="text-primary mb-3">- Please login - </p>
 
         <TwitterButton
           style={{ width: '190px', height: '38px' }}
@@ -40,6 +44,18 @@ export function SignIn({ children = null, trigger = null }) {
           <GoogleIcon />
           <span>Login with Google</span>
         </GoogleButton>
+
+        {error && (
+          <p className="text-sm text-rose-500 mt-3">
+            {error == 'OAuthAccountNotLinked'
+              ? 'Another account with the same email address exists already!'
+              : error == 'OAuthCreateAccount'
+              ? 'We were not able to create your account!'
+              : error == 'Callback'
+              ? "We've got invalid callback from the authentication provider!"
+              : 'Unknown error!'}
+          </p>
+        )}
       </div>
     </Detail.Container>
   )
