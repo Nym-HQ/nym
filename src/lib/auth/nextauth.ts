@@ -90,12 +90,8 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   providers.push(
     GoogleProvider({
-      version: '2.0',
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      authorization: {
-        url: 'https://accounts.google.com/o/oauth2/auth',
-      },
 
       profile: async (profile: GoogleProfile, tokens) => {
         console.debug('Got google profile data', profile)
@@ -125,6 +121,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 }
 
 const authOptions = {
+  debug: true,
   pages: {
     signIn: `/login`,
     verifyRequest: `/login`,

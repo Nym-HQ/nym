@@ -322,9 +322,9 @@ export function GoogleIcon({ width = 28, height = 28, fill = 'currentColor' }) {
       <g
         id="Artboard"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       >
         {' '}
         <g id="btn_google_dark_normal_ios">
@@ -482,13 +482,13 @@ export function InfoIcon({ width = 15, height = 15 }) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fill-rule="evenodd"
+        fillRule="evenodd"
         clip-rule="evenodd"
         d="M12 3.538a8.462 8.462 0 1 0 0 16.924 8.462 8.462 0 0 0 0-16.924ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Z"
         fill="#030D45"
       />
       <path
-        fill-rule="evenodd"
+        fillRule="evenodd"
         clip-rule="evenodd"
         d="M12 16.359a.77.77 0 0 0 .77-.77v-4.102a.77.77 0 1 0-1.54 0v4.103a.77.77 0 0 0 .77.769Z"
         fill="#030D45"
