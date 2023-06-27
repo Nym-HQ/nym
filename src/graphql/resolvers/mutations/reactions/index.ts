@@ -20,17 +20,17 @@ export async function toggleReaction(
   switch (type) {
     case ReactionType.Bookmark: {
       field = 'bookmarkId'
-      table = 'bookmark'
+      table = prisma.bookmark
       break
     }
     case ReactionType.Post: {
       field = 'postId'
-      table = 'post'
+      table = prisma.post
       break
     }
     case ReactionType.Question: {
       field = 'questionId'
-      table = 'question'
+      table = prisma.question
       break
     }
     default: {
@@ -43,7 +43,7 @@ export async function toggleReaction(
   }
 
   const [parentObject, existingReaction] = await Promise.all([
-    prisma[table].findUnique({
+    table.findUnique({
       where: { id: refId },
     }),
 
