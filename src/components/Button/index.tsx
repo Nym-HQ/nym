@@ -143,7 +143,7 @@ export const CommentButton = React.forwardRef((props: ButtonProps, ref) => {
 })
 
 export const TwitterButton = React.forwardRef((props: ButtonProps, ref) => {
-  const classes = `bg-twitter text-white space-x-4 items-center`
+  const classes = `bg-twitter text-white space-x-4 items-center m-2`
   const size = composer.getSize(props.size)
   const opacity = composer.getOpacity(props.disabled)
   const radius = composer.getRadius(props.size)
@@ -152,7 +152,7 @@ export const TwitterButton = React.forwardRef((props: ButtonProps, ref) => {
 })
 
 export const GoogleButton = React.forwardRef((props: ButtonProps, ref) => {
-  const classes = `text-gray-700 border-gray-400 hover:text-gray-1000 border bg-gray-200 bg-opacity-0 hover:bg-opacity-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-white m-2 py-2 space-x-4 items-center`
+  const classes = `text-gray-700 border-gray-400 hover:text-gray-1000 border bg-gray-200 bg-opacity-0 hover:bg-opacity-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-white py-2 space-x-4 items-center m-2`
   const size = composer.getSize(props.size)
   const opacity = composer.getOpacity(props.disabled)
   const radius = composer.getRadius(props.size)
