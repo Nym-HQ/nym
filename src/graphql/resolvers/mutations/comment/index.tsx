@@ -88,19 +88,19 @@ export async function addComment(
   switch (type) {
     case CommentType.Bookmark: {
       field = 'bookmarkId'
-      table = 'bookmark'
+      table = prisma.bookmark
       route = `https://${getSiteDomain(site)}/bookmark/${refId}`
       break
     }
     case CommentType.Post: {
       field = 'postId'
-      table = 'post'
+      table = prisma.post
       route = `https://${getSiteDomain(site)}/writing/${refId}`
       break
     }
     case CommentType.Question: {
       field = 'questionId'
-      table = 'question'
+      table = prisma.question
       route = `https://${getSiteDomain(site)}/qa/${refId}`
       break
     }
@@ -113,7 +113,7 @@ export async function addComment(
     }
   }
 
-  const parentObject = await prisma[table].findUnique({ where: { id: refId } })
+  const parentObject = await table.findUnique({ where: { id: refId } })
 
   if (!parentObject) {
     throw new GraphQLError('Commenting on something that doesn’t exist', {
@@ -141,7 +141,7 @@ export async function addComment(
         siteId: site.id,
       },
     }),
-    prisma[table].update({
+    table.update({
       where: {
         id: refId,
       },
