@@ -32,11 +32,14 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
 
   if (username) {
     if (!validUsername(username)) {
-      throw new GraphQLError('Usernames can be 16 characters long', {
-        extensions: {
-          code: ApolloServerErrorCode.BAD_REQUEST,
-        },
-      })
+      throw new GraphQLError(
+        'Usernames must be longer than 4 characters and contain only numbers, letters and underscore.',
+        {
+          extensions: {
+            code: ApolloServerErrorCode.BAD_REQUEST,
+          },
+        }
+      )
     }
 
     const user = await prisma.user.findUnique({

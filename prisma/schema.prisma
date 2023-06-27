@@ -96,7 +96,7 @@ model User {
 
   // custom attributes
   createdAt   DateTime @default(now())
-  username    String   @unique @db.VarChar(16)
+  username    String   @unique
   role        Role     @default(USER)
   avatar      String?
   description String?  @db.VarChar(256)
