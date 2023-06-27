@@ -14,7 +14,6 @@ export function SignIn({ children = null, trigger = null }) {
         <p className="mb-2">Please login - </p>
 
         <TwitterButton
-          style={{ width: '190px', height: '38px' }}
           size="large"
           onClick={() =>
             signIn('twitter', {
@@ -28,7 +27,6 @@ export function SignIn({ children = null, trigger = null }) {
         </TwitterButton>
 
         <GoogleButton
-          style={{ width: '190px', height: '38px' }}
           size="large"
           onClick={() =>
             signIn('google', {
@@ -38,7 +36,7 @@ export function SignIn({ children = null, trigger = null }) {
           }
         >
           <GoogleIcon />
-          <span>Login with Google</span>
+          <span>Login with Twitter</span>
         </GoogleButton>
       </div>
     </Detail.Container>
