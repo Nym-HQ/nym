@@ -55,7 +55,7 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
             name: profile.data.name,
             // NOTE: E-mail is currently unsupported by OAuth 2 Twitter.
             email: null,
-            username: profile.data.username,
+            username: `T${profile.data.id}`,
             image: profile.data.profile_image_url,
           }
         } else {
@@ -63,7 +63,7 @@ if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
             id: profile.id_str,
             name: profile.name,
             email: (profile as any).email,
-            username: profile.screen_name,
+            username: `T${profile.id_str}`,
             image: profile.profile_image_url_https.replace(
               /_normal\.(jpg|png|gif)$/,
               '.$1'
@@ -93,27 +93,15 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 
-      profile: async (profile: GoogleProfile, tokens) => {
+      profile: async (profile: GoogleProfile) => {
         console.debug('Got google profile data', profile)
-        let user: any
-        user = {
+        let user: any = {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
-          username: profile.email,
+          username: `G${profile.sub}`,
           image: profile.picture,
         }
-
-        // let's update Account model with new tokens, as next-auth library doesn't update the token
-        await prisma.account.updateMany({
-          where: {
-            provider: 'google',
-            providerAccountId: user.id,
-            type: 'oauth',
-          },
-          data: tokens,
-        })
-
         return user
       },
     })

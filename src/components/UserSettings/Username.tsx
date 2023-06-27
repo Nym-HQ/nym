@@ -6,7 +6,6 @@ import { LoadingSpinner } from '~/components/LoadingSpinner'
 import {
   GetViewerWithSettingsQuery,
   useEditUserMutation,
-  useGetViewerWithSettingsQuery,
 } from '~/graphql/types.generated'
 import { validUsername } from '~/lib/validators'
 
@@ -71,7 +70,7 @@ export function UsernameForm(props: {
           />
           {error && (
             <p className={`text-xs text-red-500`}>
-              Usernames should be between 4 and 16 characters and only have
+              Usernames should be longer than 4 characters and only have
               numbers, letters, or underscores.
             </p>
           )}
