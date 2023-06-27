@@ -1,8 +1,8 @@
 import { signIn } from 'next-auth/react'
 import * as React from 'react'
 
-import { TwitterButton } from '../Button'
-import { TwitterIcon } from '../Icon'
+import { GoogleButton, TwitterButton } from '../Button'
+import { GoogleIcon, TwitterIcon } from '../Icon'
 import { Detail } from '../ListDetail/Detail'
 import { TitleBar } from '../ListDetail/TitleBar'
 
@@ -25,6 +25,19 @@ export function SignIn({ children = null, trigger = null }) {
           <TwitterIcon />
           <span>Login with Twitter</span>
         </TwitterButton>
+
+        <GoogleButton
+          size="large"
+          onClick={() =>
+            signIn('google', {
+              callbackUrl: `/signin-complete`,
+              redirect: true,
+            })
+          }
+        >
+          <GoogleIcon />
+          <span>Login with Twitter</span>
+        </GoogleButton>
       </div>
     </Detail.Container>
   )
