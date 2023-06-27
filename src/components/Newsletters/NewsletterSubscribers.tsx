@@ -70,7 +70,7 @@ export default function NewsletterSubscribers(props) {
       >
         <LayoutGroup>
           <div className="lg:space-y-1 lg:p-3">
-            {emailSubscriptions.edges.map((es) => {
+            {emailSubscriptions?.edges?.map((es) => {
               const active = router.query.id === es.node.id
               return (
                 <motion.div layout key={es.node.id}>
@@ -83,7 +83,7 @@ export default function NewsletterSubscribers(props) {
             })}
           </div>
 
-          {emailSubscriptions.pageInfo.hasNextPage && (
+          {emailSubscriptions?.pageInfo.hasNextPage && (
             <ListLoadMore setIsVisible={setIsVisible} />
           )}
         </LayoutGroup>

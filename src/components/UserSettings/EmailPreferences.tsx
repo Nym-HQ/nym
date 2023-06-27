@@ -85,7 +85,7 @@ export function EmailPreferences(props: {
 
   return (
     <div className="flex flex-col space-y-8">
-      {viewer.emailSubscriptions.map((subscription) => (
+      {viewer.emailSubscriptions?.map((subscription) => (
         <EmailSubscriptionForm
           key={subscription.type}
           subscription={subscription}

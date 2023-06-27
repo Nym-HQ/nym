@@ -20,7 +20,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
     error: '',
     title: bookmark.title || bookmark.url,
     description: bookmark.description || '',
-    tags: bookmark.tags?.map((t) => t.name) || ['reading'],
+    tags: (bookmark.tags || []).map((t) => t.name) || ['reading'],
     faviconUrl: bookmark.faviconUrl,
   }
 
@@ -88,7 +88,7 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
         ...bookmark,
         title: state.title,
         description: state.description,
-        tags: state.tags.map((t) => ({ __typename: 'Tag', name: t })),
+        tags: (state.tags || []).map((t) => ({ __typename: 'Tag', name: t })),
         faviconUrl: state.faviconUrl,
       },
     },

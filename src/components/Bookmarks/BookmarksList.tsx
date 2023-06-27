@@ -82,7 +82,7 @@ export function BookmarksList({ initTag = '' }) {
         <BookmarksTitlebar scrollContainerRef={scrollContainerRef} />
         <LayoutGroup>
           <div className="lg:space-y-1 lg:p-3">
-            {bookmarks.edges.map((bookmark) => {
+            {bookmarks.edges?.map((bookmark) => {
               const active = router.query.id === bookmark.node.id
               return (
                 <motion.div layout key={bookmark.node.id}>

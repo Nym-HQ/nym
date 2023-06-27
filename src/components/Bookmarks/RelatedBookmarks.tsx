@@ -33,7 +33,7 @@ export function RelatedBookmarks({ bookmark }) {
           {related.length} more from {bookmark.host}
         </p>
         <ul>
-          {related.map((r) => (
+          {related?.map((r) => (
             <li key={r.node.id}>
               <Link href="/bookmark/[id]" as={`/bookmark/${r.node.id}`}>
                 <a

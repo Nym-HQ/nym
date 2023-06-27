@@ -72,7 +72,7 @@ export function QuestionsList() {
 
         <LayoutGroup>
           <div className="lg:space-y-1 lg:p-3">
-            {questions.edges.map((question) => {
+            {questions.edges?.map((question) => {
               const active = router.query?.id === question.node.id.toString() // post ids are numbers
 
               return (
