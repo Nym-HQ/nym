@@ -22,25 +22,32 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
   )
 }
 
-if (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) {
+if (
+  (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) ||
+  (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET)
+) {
   providers.push(
     TwitterProvider({
-      // version: process.env.TWITTER_OAUTH_VER == '2.0' ? '2.0' : '1.0',
+      ...(process.env.TWITTER_OAUTH_VER == '2.0'
+        ? {
+            version: '2.0',
+            clientId: process.env.TWITTER_CLIENT_ID,
+            clientSecret: process.env.TWITTER_CLIENT_SECRET,
+            authorization: {
+              url: 'https://twitter.com/i/oauth2/authorize',
+              params: {
+                scope: 'users.read tweet.read bookmark.read offline.access', // added bookmark.read
+              },
+            },
+          }
+        : {
+            version: '1.0',
+            clientId: process.env.TWITTER_API_KEY,
+            clientSecret: process.env.TWITTER_API_SECRET,
+          }),
 
-      // for OAuth 2.0
-      version: '2.0',
-      clientId: process.env.TWITTER_CLIENT_ID,
-      clientSecret: process.env.TWITTER_CLIENT_SECRET,
-      authorization: {
-        url: 'https://twitter.com/i/oauth2/authorize',
-        params: {
-          scope: 'users.read tweet.read bookmark.read offline.access', // added bookmark.read
-        },
-      },
-
-      // for OAuth 1.0 : Twitter prefers this
-      // clientId: process.env.TWITTER_API_KEY,
-      // clientSecret: process.env.TWITTER_API_SECRET,
+      // allow multiple providers for a single account
+      allowDangerousEmailAccountLinking: true,
 
       profile: async (
         profile: TwitterProfile | TwitterLegacyProfile,
@@ -93,6 +100,9 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 
+      // allow multiple providers for a single account
+      allowDangerousEmailAccountLinking: true,
+
       profile: async (profile: GoogleProfile) => {
         console.debug('Got google profile data', profile)
         let user: any = {
@@ -116,6 +126,7 @@ const authOptions = {
     error: '/login', // Error code passed in query string as ?error=
   },
   adapter: PrismaAdapter(prisma),
+
   // Configure one or more authentication providers
   providers: providers,
   cookies: {
