@@ -15,7 +15,6 @@ import {
   useAddPageMutation,
   useEditPageMutation,
 } from '~/graphql/types.generated'
-// import * as bee from '~/lib/bee'
 import { slugifyString } from '~/lib/utils'
 
 import { PageEditorContext } from './PageEditor'
@@ -93,15 +92,6 @@ export function PageEditorMetaSidebar({ site }) {
         },
       },
       refetchQueries: [GET_PAGES],
-    }).then((resp) => {
-      if (newlyPublished) {
-        // bee.track('Page Published', {
-        //   site_id: site?.id,
-        //   subdomain: site?.subdomain,
-        //   page_id: resp.data.editPage.id,
-        //   page_slug: resp.data.editPage.slug,
-        // })
-      }
     })
   }
 

@@ -36,7 +36,7 @@ export function Paywall({ access, obj }: Props) {
     cta = (
       <>
         This {obj.toLocaleLowerCase()} is for Paid Members Only. Please{' '}
-        <Link href="/login" className="text-sky-500">
+        <Link href="/login" className="text-sky-500" passHref>
           join
         </Link>
         .

@@ -65,7 +65,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
                   {...props}
                 />
               )
-            }
+            },
           }}
         >
           {message.content}

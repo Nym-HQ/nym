@@ -61,6 +61,7 @@ export function BookmarkDetail({ id, bookmark, site, loading, error }) {
                 target="_blank"
                 rel="noopener"
                 className="block"
+                passHref
               >
                 <Detail.Title ref={titleRef}>{bookmark.title}</Detail.Title>
               </Link>
@@ -69,6 +70,7 @@ export function BookmarkDetail({ id, bookmark, site, loading, error }) {
                 target="_blank"
                 rel="noopener"
                 className="text-tertiary flex items-center space-x-2 leading-snug"
+                passHref
               >
                 {bookmark.faviconUrl && (
                   <img

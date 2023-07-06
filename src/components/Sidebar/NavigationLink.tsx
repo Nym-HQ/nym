@@ -2,7 +2,6 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { GlobalNavigationContext } from '~/components/Providers/GlobalNavigation'
-// import { track } from '~/lib/bee'
 
 export function NavigationLink({
   link: {
@@ -21,12 +20,6 @@ export function NavigationLink({
     <li
       className="flex items-stretch space-x-1"
       onClick={() => {
-        // track(isExternal ? 'External Link' : 'Internal Link', {
-        //   site_id: site?.id,
-        //   subdomain: site?.subdomain,
-        //   destination: label,
-        //   url: href,
-        // })
         setIsOpen(false)
       }}
     >
@@ -39,6 +32,7 @@ export function NavigationLink({
             ? 'bg-black text-white hover:bg-black hover:text-white dark:bg-gray-700 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white'
             : 'text-gray-700 dark:text-gray-200 sm:hover:bg-gray-200 sm:hover:text-gray-900 sm:dark:hover:bg-gray-700 sm:dark:hover:text-gray-200'
         }`}
+        passHref
       >
         <span className="flex items-center justify-center w-4">
           <Icon />

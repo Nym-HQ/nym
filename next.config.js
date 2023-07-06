@@ -70,25 +70,4 @@ module.exports = removeImports({
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_PRESET: process.env.CLOUDINARY_PRESET,
   },
-  async redirects() {
-    return [
-      // {
-      //   source: '/uses',
-      //   destination: '/stack',
-      //   permanent: true,
-      // }
-    ]
-  },
-  async rewrites() {
-    return [
-      // {
-      //   source: "/bee.js",
-      //   destination: "https://cdn.splitbee.io/sb.js",
-      // },
-      // {
-      //   source: "/_hive/:slug",
-      //   destination: "https://hive.splitbee.io/:slug",
-      // },
-    ]
-  },
 })

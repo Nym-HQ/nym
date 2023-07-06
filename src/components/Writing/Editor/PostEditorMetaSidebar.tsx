@@ -15,7 +15,6 @@ import {
   useAddPostMutation,
   useEditPostMutation,
 } from '~/graphql/types.generated'
-// import * as bee from '~/lib/bee'
 import { slugifyString } from '~/lib/utils'
 
 import { PostEditorContext } from './PostEditor'
@@ -94,15 +93,6 @@ export function PostEditorMetaSidebar({ site }) {
         },
       },
       refetchQueries: [GET_POSTS],
-    }).then((resp) => {
-      if (newlyPublished) {
-        // bee.track('Post Published', {
-        //   site_id: site?.id,
-        //   subdomain: site?.subdomain,
-        //   post_id: resp.data.editPost.id,
-        //   post_slug: resp.data.editPost.slug,
-        // })
-      }
     })
   }
 

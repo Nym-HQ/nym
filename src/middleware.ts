@@ -66,7 +66,8 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
     // OAuth happens on main app domain
     // So when auth completes, it will be redirected to /signin-complete
     // Here we check the "next" param and redirect accordingly.
-    const _next = searchParams.get('next') || req.cookies.get('next') || '/'
+    const _next =
+      searchParams.get('next') || req.cookies.get('next').value || '/'
     req.cookies.delete('next')
 
     if (

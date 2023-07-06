@@ -109,7 +109,11 @@ export const Comment = React.memo(function MemoComment({
     <div className="group flex flex-col space-y-0">
       <div className="flex items-center justify-between space-x-4">
         <div className="flex items-center space-x-4">
-          <Link href={`/u/${comment.author.username}`} className="inline-flex">
+          <Link
+            href={`/u/${comment.author.username}`}
+            className="inline-flex"
+            passHref
+          >
             <Avatar
               user={comment.author}
               src={comment.author.avatar || comment.author.image}
@@ -125,6 +129,7 @@ export const Comment = React.memo(function MemoComment({
             <Link
               href={`/u/${comment.author.username}`}
               className="text-primary font-semibold leading-snug"
+              passHref
             >
               <div className="flex break-all line-clamp-1">
                 {comment.author.name}

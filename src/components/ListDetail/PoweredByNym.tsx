@@ -51,6 +51,7 @@ export function PoweredByNym({ scrollContainerRef = null }: Props) {
                 href="https://nymhq.com"
                 target="_blank"
                 className="inline-flex"
+                passHref
               >
                 <b>Nym</b>
               </Link>

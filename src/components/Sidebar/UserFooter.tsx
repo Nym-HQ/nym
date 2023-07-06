@@ -73,6 +73,7 @@ export function UserFooter() {
           href={`/u/${data?.context?.viewer?.username}`}
           onClick={() => setIsOpen(false)}
           className="flex flex-none items-center rounded-full"
+          passHref
         >
           <Avatar
             user={data?.context?.viewer}

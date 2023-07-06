@@ -63,6 +63,7 @@ export function QuestionDetail({ id, question, site, loading, error }) {
                 <Link
                   href={`/u/${question.author.username}`}
                   className="inline-flex"
+                  passHref
                 >
                   <Avatar
                     user={question.author}
@@ -78,6 +79,7 @@ export function QuestionDetail({ id, question, site, loading, error }) {
                   <Link
                     href={`/u/${question.author.username}`}
                     className="inline-flex space-x-1"
+                    passHref
                   >
                     <span className="text-primary whitespace-nowrap font-semibold leading-snug">
                       {question.author.name}

@@ -13,7 +13,6 @@ import { useAddSiteMutation } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
-// import * as bee from '~/lib/bee'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
 function CreateYourWebsitePage() {
@@ -34,11 +33,6 @@ function CreateYourWebsitePage() {
           subdomain,
         },
       },
-    }).then((resp) => {
-      // bee.track('Site Created', {
-      //   site_id: resp.data.addSite.id,
-      //   subdomain,
-      // })
     })
   }
 

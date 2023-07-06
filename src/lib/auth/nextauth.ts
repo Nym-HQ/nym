@@ -151,7 +151,7 @@ const authOptions = {
           id: user.id,
           role: (user as any).role,
           username: (user as any).username,
-        }
+        } as any
       }
 
       return session

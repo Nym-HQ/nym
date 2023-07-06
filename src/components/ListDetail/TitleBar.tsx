@@ -136,6 +136,7 @@ export function TitleBar({
               <Link
                 href={backButtonHref}
                 className="text-primary flex items-center justify-center rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-800 lg:hidden"
+                passHref
               >
                 <ArrowLeft size={16} className="text-primary" />
               </Link>
@@ -154,7 +155,7 @@ export function TitleBar({
               }
               className="text-primary transform-gpu text-sm font-bold line-clamp-1"
             >
-              <Link href="/" className="inline-flex">
+              <Link href="/" className="inline-flex" passHref>
                 {title}
               </Link>
             </h2>

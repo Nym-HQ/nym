@@ -1,5 +1,5 @@
 import { OpenAIStream, StreamingTextResponse } from 'ai'
-import { PromptTemplate } from 'langchain'
+import { PromptTemplate } from 'langchain/prompts'
 import { NextResponse } from 'next/server'
 import { Configuration, OpenAIApi } from 'openai-edge'
 
