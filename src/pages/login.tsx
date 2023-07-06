@@ -6,7 +6,6 @@ import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
-import { isAuthenticatedServerSide } from '~/lib/auth/nextauth'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
@@ -28,8 +27,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
   const _nextUrl = new URL(searchParams.get('next') || '/', url)
 
   // check if user has already signed-in, and if he did, process cross-signin automatically
-  const user = await isAuthenticatedServerSide(ctx)
-  if (user) {
+  const context = await getContext(ctx)
+  if (context.viewer) {
     let nextUrl: URL
     if (_nextUrl.host != MAIN_APP_DOMAIN) {
       nextUrl = new URL(
@@ -47,7 +46,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
     return { props: {} }
   }
 
-  const context = await getContext(ctx)
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])

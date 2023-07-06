@@ -11,7 +11,7 @@ export const config = {
   runtime: 'edge',
 }
 
-export async function handler(req: Request) {
+export default async function handler(req: Request) {
   const context = await getContext({ req, res: new NextResponse() })
 
   const json = await req.json()

@@ -1,5 +1,5 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import { getServerSession, NextAuthOptions } from 'next-auth'
+import { NextAuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import TwitterProvider, {
@@ -119,7 +119,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 }
 
 const authOptions = {
-  debug: true,
+  debug: false,
   pages: {
     signIn: `/login`,
     verifyRequest: `/login`,
@@ -159,16 +159,4 @@ const authOptions = {
   },
 } as NextAuthOptions
 
-/**
- * Utility function to check if the user is authenticated
- * @param req
- * @param res
- *
- * @returns
- */
-const isAuthenticatedServerSide = async (ctx) => {
-  const session: any = await getServerSession(ctx.req, ctx.res, authOptions)
-  return session?.user
-}
-
-export { authOptions, isAuthenticatedServerSide }
+export { authOptions }

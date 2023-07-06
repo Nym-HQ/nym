@@ -1,7 +1,8 @@
 import { PrismaClient, SiteRole, UserSite } from '@prisma/client'
+import { getServerSession } from 'next-auth'
 
 import { Site, User, UserRole } from '~/graphql/types.generated'
-import { isAuthenticatedServerSide } from '~/lib/auth/nextauth'
+import { authOptions } from '~/lib/auth/nextauth'
 import { isMainAppDomain } from '~/lib/multitenancy/client'
 import {
   getSiteByDomain,
@@ -13,14 +14,19 @@ import prisma from '~/lib/prisma'
 import { NYM_APP_SITE } from '../constants'
 
 async function getViewer(ctx) {
-  const viewer = await isAuthenticatedServerSide(ctx)
+  try {
+    const session: any = await getServerSession(ctx.req, ctx.res, authOptions)
+    const viewer = session?.user
 
-  return viewer
-    ? {
-        ...viewer,
-        isAdmin: viewer?.role === UserRole.Admin,
-      }
-    : null
+    return viewer
+      ? {
+          ...viewer,
+          isAdmin: viewer?.role === UserRole.Admin,
+        }
+      : null
+  } catch (e) {
+    return null
+  }
 }
 
 async function getSite(ctx) {
