@@ -18,11 +18,7 @@ function LinkRenderer({ href, ...rest }: any) {
 
   if (href.startsWith('@')) {
     // link to a mention
-    return (
-      <Link href={`/u/${href.slice(1)}`} {...rest}>
-        <a {...rest} />
-      </Link>
-    )
+    return <Link href={`/u/${href.slice(1)}`} {...rest} />
   }
   try {
     return <a rel="noopener" href={href} {...rest} />

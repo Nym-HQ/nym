@@ -1,5 +1,8 @@
 import LinkTool from '@editorjs/link'
 
+/**
+ * Same as default link tool, but allows raw html preview from server response
+ */
 export class CustomLinkTool extends LinkTool {
   data: any
   nodes: any

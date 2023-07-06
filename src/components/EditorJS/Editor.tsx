@@ -1,6 +1,9 @@
+'use client'
+
 import CheckList from '@editorjs/checklist'
 import Code from '@editorjs/code'
 import Delimiter from '@editorjs/delimiter'
+import EditorJS, { ToolConstructable, ToolSettings } from '@editorjs/editorjs'
 import Embed from '@editorjs/embed'
 import Header from '@editorjs/header'
 import Image from '@editorjs/image'
@@ -16,8 +19,7 @@ import SimpleImage from '@editorjs/simple-image'
 import Table from '@editorjs/table'
 import Warning from '@editorjs/warning'
 import debounce from 'lodash/debounce'
-import React, { useCallback, useRef } from 'react'
-import { createReactEditorJS } from 'react-editor-js'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 import { Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
 import AnyButton from './AnyButtonTool'
@@ -57,6 +59,7 @@ const DEFAULT_EDITOR_JS_TOOLS = {
 }
 
 export default function CustomizedEditorJS({
+  id, //required
   value,
   readOnly = false,
   editorRef = (el) => {},
@@ -64,7 +67,7 @@ export default function CustomizedEditorJS({
   site,
   ...props
 }) {
-  const editorCore = useRef(null)
+  const editorCore = useRef<EditorJS>()
 
   const handleInitialize = useCallback((instance) => {
     editorCore.current = instance
@@ -163,17 +166,35 @@ export default function CustomizedEditorJS({
     subscribe: SubscribeButtonTool,
   }
 
-  const ReactEditorJS = createReactEditorJS()
   const editorProps = readOnly
     ? { readOnly: true }
     : { readOnly: false, onChange: handleSave }
 
-  return (
-    <ReactEditorJS
-      onInitialize={handleInitialize}
-      defaultValue={value}
-      tools={EDITOR_JS_TOOLS as typeof DEFAULT_EDITOR_JS_TOOLS}
-      {...editorProps}
-    />
-  )
+  //initialize editorjs
+  useEffect(() => {
+    //initialize editor if we don't have a reference
+    if (!editorCore.current) {
+      const editor = new EditorJS({
+        holder: id,
+        tools: EDITOR_JS_TOOLS as any as {
+          [toolName: string]: ToolConstructable | ToolSettings
+        },
+        data: value,
+        async onChange(api, event) {
+          const data = await api.saver.save()
+          onChange(data)
+        },
+      })
+      editorCore.current = editor
+    }
+
+    //add a return function handle cleanup
+    return () => {
+      if (editorCore.current && editorCore.current.destroy) {
+        editorCore.current.destroy()
+      }
+    }
+  }, [])
+
+  return <div id={id} />
 }

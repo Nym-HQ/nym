@@ -477,8 +477,8 @@ function AdminSettingsPage(props) {
             {context.userSite?.siteRole === 'OWNER' ? (
               <>
                 Please set it in{' '}
-                <Link className="underline" href="/profile">
-                  <a className="text-sky-500">this page</a>
+                <Link className="underline text-sky-500" href="/profile">
+                  this page
                 </Link>
                 .
               </>

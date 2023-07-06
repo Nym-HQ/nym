@@ -17,6 +17,8 @@ function SinglePageViewPage(props) {
   const { data: context } = useContextQuery({ variables: {} })
   const page = parsePageData(props.page)
 
+  console.log(page)
+
   return (
     <PageDetail
       slug={slug}

@@ -1,3 +1,5 @@
+'use client'
+
 import dynamic from 'next/dynamic'
 
 const CustomizedEditorJS = dynamic(() => import('./Editor'), {
@@ -5,9 +7,10 @@ const CustomizedEditorJS = dynamic(() => import('./Editor'), {
   loading: () => <p>Loading ...</p>,
 })
 
-export function EditorJSPreviewer({ value, editorRef = (el) => {}, ...props }) {
+export function EditorJSPreviewer({ value, editorRef = (el) => {} }) {
   return (
     <CustomizedEditorJS
+      id="editor-js-preview-container"
       value={value}
       readOnly={true}
       site={null}
@@ -21,10 +24,10 @@ export function EditorJSEditor({
   site,
   editorRef = (el) => {},
   onChange = (data) => {},
-  ...props
 }) {
   return (
     <CustomizedEditorJS
+      id="editor-js-container"
       value={value}
       site={site}
       editorRef={editorRef}

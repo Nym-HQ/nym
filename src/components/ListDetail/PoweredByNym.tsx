@@ -47,10 +47,12 @@ export function PoweredByNym({ scrollContainerRef = null }: Props) {
           <span className="flex items-center space-x-3">
             <h4 className="text-primary transform-gpu text-sm font-normal line-clamp-1">
               Powered by{' '}
-              <Link href="https://nymhq.com" target="_blank">
-                <a className="inline-flex" target="_blank">
-                  <b>Nym</b>
-                </a>
+              <Link
+                href="https://nymhq.com"
+                target="_blank"
+                className="inline-flex"
+              >
+                <b>Nym</b>
               </Link>
             </h4>
           </span>

@@ -60,29 +60,31 @@ export function QuestionDetail({ id, question, site, loading, error }) {
           <Detail.ContentContainer>
             <Detail.Header>
               <div className="flex items-center space-x-4 pb-2">
-                <Link href={`/u/${question.author.username}`}>
-                  <a className="inline-flex">
-                    <Avatar
-                      user={question.author}
-                      src={question.author.avatar || question.author.image}
-                      width={32}
-                      height={32}
-                      quality={100}
-                      layout="fixed"
-                      className="rounded-full"
-                    />
-                  </a>
+                <Link
+                  href={`/u/${question.author.username}`}
+                  className="inline-flex"
+                >
+                  <Avatar
+                    user={question.author}
+                    src={question.author.avatar || question.author.image}
+                    width={32}
+                    height={32}
+                    quality={100}
+                    layout="fixed"
+                    className="rounded-full"
+                  />
                 </Link>
                 <div className="flex space-x-1">
-                  <Link href={`/u/${question.author.username}`}>
-                    <a className="inline-flex space-x-1">
-                      <span className="text-primary whitespace-nowrap font-semibold leading-snug">
-                        {question.author.name}
-                      </span>
-                      <span className="text-tertiary inline-flex font-normal leading-snug line-clamp-1">
-                        @{question.author.username}
-                      </span>
-                    </a>
+                  <Link
+                    href={`/u/${question.author.username}`}
+                    className="inline-flex space-x-1"
+                  >
+                    <span className="text-primary whitespace-nowrap font-semibold leading-snug">
+                      {question.author.name}
+                    </span>
+                    <span className="text-tertiary inline-flex font-normal leading-snug line-clamp-1">
+                      @{question.author.username}
+                    </span>
                   </Link>
                   <p className="text-quaternary leading-snug">·</p>
                   <p
