@@ -43,6 +43,10 @@ import {
   newsletterProviders,
 } from '~/lib/newsletter/consts'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 function AdminSettingsPage(props) {
   const { data: siteSettingsData } = useGetSiteSettingsQuery()
   const { data: contextData } = useContextQuery()

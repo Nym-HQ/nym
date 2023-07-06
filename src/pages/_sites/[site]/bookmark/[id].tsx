@@ -17,6 +17,10 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 function BookmarkPage(props) {
   const { id } = props
   const { data: context } = useContextQuery()

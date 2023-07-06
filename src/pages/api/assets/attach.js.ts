@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const context = await getContext({ req, res })
 

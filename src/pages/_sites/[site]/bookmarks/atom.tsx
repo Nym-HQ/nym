@@ -3,6 +3,10 @@ import * as React from 'react'
 import { getContext } from '~/graphql/context'
 import { generateBookmarkRSS } from '~/lib/rss'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 const AtomFeed: React.FC = () => null
 
 export async function getServerSideProps(ctx) {

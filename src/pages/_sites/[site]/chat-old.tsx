@@ -27,6 +27,10 @@ const loadingMessages = [
   'Uh...',
 ]
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export function ChatWindow(props) {
   const { data: contextData } = useContextQuery()
   const scrollContainerRef = useRef(null)

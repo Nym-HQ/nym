@@ -3,6 +3,10 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getContext } from '~/graphql/context'
 import { getNewsletterProvider } from '~/lib/newsletter'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 /**
  * Send the newsletter
  */

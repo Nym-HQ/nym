@@ -9,6 +9,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export default function SignInPage(props) {
   return <ListDetailView list={null} hasDetail detail={<SignIn />} />
 }

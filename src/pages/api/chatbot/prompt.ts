@@ -5,6 +5,10 @@ import calculateQuota from '~/lib/chatbot/calculateQuota'
 import generateResopnse from '~/lib/chatbot/generateResponse'
 import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { prompt, history } = await req.body
 

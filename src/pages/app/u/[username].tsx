@@ -1,15 +1,17 @@
-import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
 import { ListDetailView } from '~/components/Layouts'
 import { UserDetail } from '~/components/UserProfile/UserDetail'
-import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { GET_USER } from '~/graphql/queries/user'
 import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 export default function UserPage(props) {
   const { data: context } = useContextQuery()

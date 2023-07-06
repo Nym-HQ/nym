@@ -10,6 +10,10 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export default function Profile() {
   const { data: context } = useContextQuery({ variables: {} })
   const seo = extendSEO(routes.profile.seo, context.context.site)

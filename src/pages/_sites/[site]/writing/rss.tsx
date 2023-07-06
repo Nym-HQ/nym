@@ -5,6 +5,10 @@ import { generatePostRSS } from '~/lib/rss'
 
 const RSSFeed: React.FC = () => null
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export async function getServerSideProps(ctx) {
   const { req, res } = ctx
   const context = await getContext(ctx)

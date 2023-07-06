@@ -6,6 +6,10 @@ import { ADD_BOOKMARK } from '~/graphql/mutations/bookmarks'
 import { initApolloClient } from '~/lib/apollo'
 import getTwitterApiClient from '~/lib/tweet/getTwitterApiClient'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 /**
  * Sync twitter bookmarks
  */

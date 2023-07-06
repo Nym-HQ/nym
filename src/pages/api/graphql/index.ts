@@ -13,6 +13,7 @@ const apolloServer = new ApolloServer<Context>({
 
 export const config = {
   api: {},
+  runtime: 'nodejs',
 }
 
 let apolloServerStatus = 'stopped'

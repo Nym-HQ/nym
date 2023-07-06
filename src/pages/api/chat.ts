@@ -9,12 +9,19 @@ import { getTrainedIndex } from '~/lib/chatbot/train'
 
 export const config = {
   runtime: 'edge',
+  unstable_allowDynamic: [
+    // allows a single file
+    '~/graphql/context',
+  ],
 }
 
 export default async function handler(req: Request) {
   const context = await getContext({ req, res: new NextResponse() })
 
-  const json = await req.json()
+  const json =
+    typeof req.json === 'function'
+      ? await req.json()
+      : JSON.parse((req as any).body)
   const { prompt: question, history } = json
   const userId = context.viewer?.id
 

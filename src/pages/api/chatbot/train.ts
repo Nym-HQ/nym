@@ -7,6 +7,10 @@ import {
   getTrainData,
 } from '~/lib/chatbot/train'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return

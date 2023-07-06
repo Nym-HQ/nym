@@ -15,6 +15,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 function CreateYourWebsitePage() {
   const router = useRouter()
   const [subdomain, setSubdomain] = useState('')

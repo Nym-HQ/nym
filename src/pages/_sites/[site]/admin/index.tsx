@@ -15,6 +15,10 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 function AdminPage(props) {
   const { data } = useContextQuery()
 

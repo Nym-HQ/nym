@@ -12,6 +12,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { parsePostData } from '~/lib/compat/data'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 function EditPostPage(props) {
   const { slug } = props
   const { data: context } = useContextQuery()

@@ -17,6 +17,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { parsePageData } from '~/lib/compat/data'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export default function Home(props) {
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)

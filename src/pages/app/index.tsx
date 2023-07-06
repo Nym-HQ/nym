@@ -18,6 +18,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { getSiteDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 function UserSitesList({ sites }) {
   const router = useRouter()
 

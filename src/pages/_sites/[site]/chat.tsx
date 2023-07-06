@@ -12,6 +12,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { nanoid } from '~/lib/utils'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 export default function ChatPage(props) {
   const { data: contextData } = useContextQuery()
   const scrollContainerRef = useRef(null)

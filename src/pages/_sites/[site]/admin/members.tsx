@@ -32,6 +32,10 @@ import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { formatSiteRole } from '~/lib/formatters'
 
+export const config = {
+  runtime: 'nodejs',
+}
+
 interface MemberListItemProps {
   siteUser: SiteUser
   context: any
