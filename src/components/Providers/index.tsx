@@ -1,7 +1,10 @@
 import { ApolloProvider } from '@apollo/client'
 import { NextPageContext } from 'next'
+import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { ThemeProviderProps } from 'next-themes/dist/types'
 import * as React from 'react'
 
+import { TooltipProvider } from '~/components/chat/ui/tooltip'
 import { useApollo } from '~/lib/apollo'
 
 import { AddBookmarkDialog, SubscribeDialog } from '../Dialog'
@@ -19,17 +22,21 @@ export function Providers({ children, pageProps }: Props) {
   const apolloClient = useApollo(pageProps)
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <GlobalSiteContextProvider pageProps={pageProps}>
-        <SEO />
-        {/* <FathomProvider /> */}
+    <NextThemesProvider>
+      <ApolloProvider client={apolloClient}>
+        <GlobalSiteContextProvider pageProps={pageProps}>
+          <SEO />
+          {/* <FathomProvider /> */}
 
-        <GlobalNavigationContextProvider pageProps={pageProps}>
-          {children}
-          <SubscribeDialog />
-          <AddBookmarkDialog />
-        </GlobalNavigationContextProvider>
-      </GlobalSiteContextProvider>
-    </ApolloProvider>
+          <GlobalNavigationContextProvider pageProps={pageProps}>
+            <TooltipProvider>
+              {children}
+              <SubscribeDialog />
+              <AddBookmarkDialog />
+            </TooltipProvider>
+          </GlobalNavigationContextProvider>
+        </GlobalSiteContextProvider>
+      </ApolloProvider>
+    </NextThemesProvider>
   )
 }

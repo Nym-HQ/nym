@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
 import calculateQuota from '~/lib/chatbot/calculateQuota'
-import generateResponse from '~/lib/chatbot/generateResponse'
+import generateResopnse from '~/lib/chatbot/generateResponse'
 import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
@@ -29,7 +29,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       context.site?.chatbot?.prompt_template ||
       getDefaultPromptTemplate(context?.owner?.name)
 
-    const resp = await generateResponse({
+    return await generateResopnse({
       context,
       promptTemplate,
       history,
@@ -37,21 +37,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       apiKey: context.site?.chatbot?.openai_key,
       userContext,
     })
-
-    if (typeof resp === 'string') {
-      // TODO: increase usage quota
-
-      res.status(200).json({
-        success: true,
-        answer: resp,
-      })
-    } else {
-      res.status(500).json({
-        success: false,
-        answer: null,
-        message: 'Internal Server Error, Please try again',
-      })
-    }
   } else {
     res.status(400).json({
       success: false,

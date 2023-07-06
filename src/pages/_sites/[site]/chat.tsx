@@ -1,48 +1,21 @@
 import { NextSeo } from 'next-seo'
-import { useEffect, useRef, useState } from 'react'
-import { Trash } from 'react-feather'
+import { useRef } from 'react'
 
-import Button from '~/components/Button'
-import { ChatMessage } from '~/components/chat/ChatMessage'
-import { Textarea } from '~/components/Input'
-import { ListDetailView } from '~/components/Layouts'
+import { Chat } from '~/components/chat/chat'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
-import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { LoadingSpinner } from '~/components/LoadingSpinner'
 import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { useContextQuery } from '~/graphql/types.generated'
-import useType from '~/hooks/useType'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import { nanoid } from '~/lib/utils'
 
-const loadingMessages = [
-  'Hold on while I think...',
-  'Thinking...',
-  'Hmm...',
-  'Interesting...',
-  'Evaluating your question...',
-  'Hold up a sec...',
-  'Uh...',
-]
-
-export function ChatWindow(props) {
+export default function ChatPage(props) {
   const { data: contextData } = useContextQuery()
   const scrollContainerRef = useRef(null)
-  const titleRef = useRef(null)
-  const [value, setValue] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [history, setHistory] = useState([])
-  const [randomLoadMessage, setRandomLoadingMessage] = useState(
-    loadingMessages[Math.floor(Math.random() * loadingMessages.length)]
-  )
-
-  const taRef = useRef<HTMLTextAreaElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  const lastMessage = useType(history)
+  const id = nanoid()
 
   const owner = {
     name: contextData?.context?.owner?.name || 'Site Owner',
@@ -52,93 +25,6 @@ export function ChatWindow(props) {
       contextData?.context?.site?.logo ||
       '/static/img/fallback-avatar.png',
   }
-
-  const visitor = {
-    name: contextData?.context?.viewer?.name || 'You',
-    image:
-      contextData?.context?.viewer?.avatar ||
-      contextData?.context?.viewer?.image ||
-      '/static/img/fallback-avatar.png',
-  }
-
-  const submit = async (v: string) => {
-    if (!v) return
-    const historyQueryParam = []
-    let totalLength = 0
-
-    setRandomLoadingMessage(
-      loadingMessages[Math.floor(Math.random() * loadingMessages.length)]
-    )
-    setLoading(true)
-    setHistory((hist) => {
-      const out = [
-        ...hist,
-        {
-          username: visitor.name,
-          userImage: visitor.image,
-          message: v,
-          isPresenter: false,
-        },
-      ]
-      for (let i = 0; i < out.length; i++) {
-        totalLength += out[i].message.length
-        if (totalLength + out[i].message.length <= 3500) {
-          historyQueryParam.push(out[i])
-        }
-      }
-      return out
-    })
-    const { answer, success, message } = await fetch('/api/chatbot/prompt', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-      },
-      body: JSON.stringify({
-        prompt: v,
-        history: historyQueryParam.map(
-          ({ message, isPresenter }) =>
-            `${isPresenter ? owner.name : visitor.name}: ${message}`
-        ),
-      }),
-    }).then((r) => r.json())
-
-    if (success) {
-      setHistory((hist) => [
-        ...hist,
-        {
-          username: owner.name,
-          userImage: owner.image,
-          message: answer,
-          isPresenter: true,
-        },
-      ])
-      setLoading(false)
-      setValue('')
-      updateFocusAndScroll()
-    } else {
-      setHistory((hist) => [
-        ...hist,
-        {
-          username: owner.name,
-          userImage: owner.image,
-          message: `An error occurred: ${message}`,
-          isPresenter: true,
-        },
-      ])
-      setLoading(false)
-      updateFocusAndScroll()
-    }
-  }
-
-  const updateFocusAndScroll = () => {
-    scrollRef?.current?.scrollIntoView()
-    taRef?.current?.focus()
-  }
-
-  useEffect(() => {
-    updateFocusAndScroll()
-  }, [history, loading, lastMessage])
 
   const seo = extendSEO(
     {
@@ -151,89 +37,15 @@ export function ChatWindow(props) {
   return (
     <>
       <NextSeo {...seo} />
-      <Detail.Container data-cy="question-detail" ref={scrollContainerRef}>
-        <TitleBar
-          backButton
-          globalMenu={false}
-          backButtonHref={'/'}
-          magicTitle
-          title={`Chat with ${owner.name}`}
-          titleRef={titleRef}
-          scrollContainerRef={scrollContainerRef}
-        />
-        <div className="flex flex-1 flex-col w-96 mx-auto dark:bg-gray-900 bg-gray-100">
-          <div className="w-full flex-grow flex-col flex-1">
-            {history.map(({ message, userImage, username, isPresenter }, i) => (
-              <ChatMessage
-                key={i}
-                message={
-                  i === history.length - 1 && isPresenter
-                    ? lastMessage.join(' ')
-                    : message
-                }
-                userImage={userImage}
-                username={username}
-                isPresenter={isPresenter}
-              />
-            ))}
-
-            {loading ? (
-              <ChatMessage
-                message={randomLoadMessage}
-                userImage={owner.image}
-                username={owner.name}
-                isPresenter
-                loading={loading}
-              />
-            ) : null}
-
-            <div ref={scrollRef}></div>
-          </div>
-
-          <div className="flex flex-row space-x-2">
-            <Textarea
-              placeholder="Type a message..."
-              className="flex-grow resize-none w-full text-base text-primary"
-              style={{
-                opacity: loading ? 0.5 : 1,
-              }}
-              rows={1}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  if (!e.shiftKey) {
-                    e.preventDefault()
-                    submit(value)
-                  }
-                }
-              }}
-              disabled={loading}
-              ref={taRef}
-            />
-            <Button
-              onClick={() => submit(value)}
-              disabled={loading}
-              colorway="primary"
-            >
-              {loading ? <LoadingSpinner /> : null} Send
-            </Button>
+      <Detail.Container data-cy="chat-detail">
+        <div className="flex flex-1 h-full">
+          <div className="relative flex-col w-full">
+            <Chat id={id} />
           </div>
         </div>
-
         <PoweredByNym scrollContainerRef={scrollContainerRef} />
       </Detail.Container>
     </>
-  )
-}
-
-export default function ChatPage(pageProps) {
-  return (
-    <ListDetailView
-      list={null}
-      hasDetail
-      detail={<ChatWindow {...pageProps} />}
-    />
   )
 }
 
