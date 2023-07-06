@@ -7,27 +7,23 @@ import { ChatList } from '~/components/chat/chat-list'
 import { ChatPanel } from '~/components/chat/chat-panel'
 import { ChatScrollAnchor } from '~/components/chat/chat-scroll-anchor'
 import { EmptyScreen } from '~/components/chat/empty-screen'
-import { useLocalStorage } from '~/lib/hooks/use-local-storage'
 import { cn } from '~/lib/utils'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
+  user: string
 }
 
-export function Chat({ id, initialMessages, className }: ChatProps) {
-  const [previewToken, setPreviewToken] = useLocalStorage<string | null>(
-    'ai-token',
-    null
-  )
+export function Chat({ id, initialMessages, className, user }: ChatProps) {
   const { messages, append, reload, stop, isLoading, input, setInput } =
     useChat({
-      api: '/api/chat',
+      api: '/api/chatbot/stream',
       initialMessages,
       id,
       body: {
         id,
-        previewToken,
+        user,
       },
       onResponse(response) {
         if (response.status === 401) {

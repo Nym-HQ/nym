@@ -1,5 +1,6 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { NextAuthOptions } from 'next-auth'
+import NextAuth from 'next-auth/next'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import TwitterProvider, {
@@ -156,7 +157,12 @@ const authOptions = {
 
       return session
     },
+    authorized({ auth }) {
+      return !!auth?.user
+    },
   },
 } as NextAuthOptions
 
-export { authOptions }
+const { auth, CSRF_experimental } = NextAuth(authOptions)
+
+export { auth, authOptions, CSRF_experimental }

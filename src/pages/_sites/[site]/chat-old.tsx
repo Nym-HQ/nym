@@ -91,7 +91,7 @@ export function ChatWindow(props) {
       }
       return out
     })
-    const { answer, success, message } = await fetch('/api/chat', {
+    const { answer, success, message } = await fetch('/api/chatbot/prompt', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

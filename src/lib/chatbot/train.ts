@@ -197,5 +197,8 @@ export async function createOrUpdateIndex(context: Context, docs, ids = null) {
     { pineconeIndex }
   )
 
+  console.log('Updating Store...', indexName)
   await pineconeStore.addDocuments(docs, ids)
+
+  console.log('Completed Updating Index Store...', indexName)
 }

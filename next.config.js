@@ -5,6 +5,9 @@ const removeImports = require('next-remove-imports')({
 module.exports = removeImports({
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    serverActions: true,
+  },
   webpack: (
     config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }

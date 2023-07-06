@@ -33,13 +33,17 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       context.site?.chatbot?.prompt_template ||
       getDefaultPromptTemplate(context?.owner?.name)
 
-    return await generateResopnse({
+    const text = await generateResopnse({
       context,
       promptTemplate,
       history,
       question: prompt,
       apiKey: context.site?.chatbot?.openai_key,
       userContext,
+    })
+    res.json({
+      success: true,
+      answer: text,
     })
   } else {
     res.status(400).json({

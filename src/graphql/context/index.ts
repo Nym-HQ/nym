@@ -1,53 +1,14 @@
 import { PrismaClient, SiteRole, UserSite } from '@prisma/client'
-import { getServerSession } from 'next-auth'
 
 import { Site, User, UserRole } from '~/graphql/types.generated'
-import { authOptions } from '~/lib/auth/nextauth'
-import { isMainAppDomain } from '~/lib/multitenancy/client'
-import {
-  getSiteByDomain,
-  getSiteOwner,
-  getUserSiteById,
-} from '~/lib/multitenancy/server'
+import { getSiteOwner, getUserSiteById } from '~/lib/multitenancy/server'
 import prisma from '~/lib/prisma'
 
-import { NYM_APP_SITE } from '../constants'
-
-async function getViewer(ctx) {
-  try {
-    const session: any = await getServerSession(ctx.req, ctx.res, authOptions)
-    const viewer = session?.user
-
-    return viewer
-      ? {
-          ...viewer,
-          isAdmin: viewer?.role === UserRole.Admin,
-        }
-      : null
-  } catch (e) {
-    return null
-  }
-}
-
-async function getSite(ctx) {
-  if (isMainAppDomain(ctx.req.headers.host)) {
-    return NYM_APP_SITE as Site
-  }
-
-  const site = await getSiteByDomain(ctx.req.headers.host)
-  if (site) {
-    // fix parkedDomain, as we are filling them with subdomain values
-    // if they are empty just to make it compliant with unique constraint.
-    site.parkedDomain =
-      site.parkedDomain && site.parkedDomain.indexOf('.') >= 0
-        ? site.parkedDomain
-        : null
-  }
-  return site
-}
+import getSite from './getSite'
+import getViewer from './getViewer'
 
 export async function getContext(ctx): Promise<Context> {
-  const site = await getSite(ctx)
+  const site = await getSite(ctx.req)
   const viewer = await getViewer(ctx)
 
   // for a new visitor, create a user-site record with the role USER
