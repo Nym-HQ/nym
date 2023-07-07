@@ -35,13 +35,14 @@ export function RelatedBookmarks({ bookmark }) {
         <ul>
           {related?.map((r) => (
             <li key={r.node.id}>
-              <Link href="/bookmark/[id]" as={`/bookmark/${r.node.id}`}>
-                <a
-                  onClick={handleClick}
-                  className="text-primary -mx-2 flex justify-between rounded-md px-2 py-2 font-medium line-clamp-1 hover:bg-gray-200 dark:hover:bg-gray-700 md:-mx-3 md:px-3"
-                >
-                  <span>{r.node.title}</span>
-                </a>
+              <Link
+                href="/bookmark/[id]"
+                as={`/bookmark/${r.node.id}`}
+                onClick={handleClick}
+                className="text-primary -mx-2 flex justify-between rounded-md px-2 py-2 font-medium line-clamp-1 hover:bg-gray-200 dark:hover:bg-gray-700 md:-mx-3 md:px-3"
+                passHref
+              >
+                <span>{r.node.title}</span>
               </Link>
             </li>
           ))}

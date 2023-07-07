@@ -189,15 +189,15 @@ export function EditBookmarkForm({ closeModal, bookmark }) {
           onKeyDown={onKeyDown}
         />
         {state.error && <p className="text-red-500">{state.error}</p>}
-        <Link href={bookmark.url}>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-secondary flex items-center space-x-2 pb-2 text-sm opacity-70 hover:opacity-100"
-          >
-            <LinkIcon className="flex-none" size={12} />
-            <span className="line-clamp-1">{bookmark.url}</span>
-          </a>
+        <Link
+          href={bookmark.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-secondary flex items-center space-x-2 pb-2 text-sm opacity-70 hover:opacity-100"
+          passHref
+        >
+          <LinkIcon className="flex-none" size={12} />
+          <span className="line-clamp-1">{bookmark.url}</span>
         </Link>
 
         <TagPicker

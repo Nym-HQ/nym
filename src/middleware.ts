@@ -66,7 +66,8 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
     // OAuth happens on main app domain
     // So when auth completes, it will be redirected to /signin-complete
     // Here we check the "next" param and redirect accordingly.
-    const _next = searchParams.get('next') || req.cookies.get('next') || '/'
+    const _next =
+      searchParams.get('next') || req.cookies.get('next').value || '/'
     req.cookies.delete('next')
 
     if (
@@ -80,7 +81,7 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
           nextUrl.host
         }/signin-complete?next=${encodeURIComponent(
           nextUrl.toString()
-        )}&session-token=${req.cookies.get(nextAuthSessionCookie)}`
+        )}&session-token=${req.cookies.get(nextAuthSessionCookie).value}`
       )
 
       const response = NextResponse.redirect(crossSigninUrl)
@@ -94,6 +95,9 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
     const nextUrl = new URL(searchParams.get('next') || '/', req.nextUrl)
 
     const response = NextResponse.redirect(nextUrl)
+    console.log(
+      `Setting authentication cookies to the host: ${host}, secure: ${secureCookie}`
+    )
     response.cookies.set(nextAuthSessionCookie, sessionToken, {
       secure: secureCookie,
       domain: host.split(':')[0],

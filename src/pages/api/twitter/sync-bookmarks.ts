@@ -4,13 +4,18 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getContext } from '~/graphql/context'
 import { ADD_BOOKMARK } from '~/graphql/mutations/bookmarks'
 import { initApolloClient } from '~/lib/apollo'
+import prisma from '~/lib/prisma'
 import getTwitterApiClient from '~/lib/tweet/getTwitterApiClient'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 /**
  * Sync twitter bookmarks
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const context = await getContext({ req, res })
+  const context = await getContext({ req, res }, prisma)
   if (!context.viewer.id || context.userSite.siteRole !== SiteRole.OWNER) {
     return res.status(401).json({})
   }

@@ -6,6 +6,7 @@
 
 import { LayoutGroup, motion } from 'framer-motion'
 import Link from 'next/link'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 
@@ -31,6 +32,11 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { formatSiteRole } from '~/lib/formatters'
+import prisma from '~/lib/prisma'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 interface MemberListItemProps {
   siteUser: SiteUser
@@ -48,30 +54,30 @@ export const MemberListItemItem = React.memo<MemberListItemProps>(
         partialVisibility
         onChange={(visible: boolean) => !isVisible && setIsVisible(visible)}
       >
-        <Link href={`/u/${user.username}`}>
-          <a
-            onClick={(e) => {
-              e.preventDefault()
-              context.viewer?.id != user.id && onClick()
-            }}
-            className="flex space-x-3 border-b border-gray-100 py-3 px-3.5 text-sm dark:border-gray-900 lg:rounded-lg lg:border-none lg:py-2 bg-black dark:bg-gray-700"
-          >
-            <div className="w-full flex flex-row items-center justify-between space-y-1">
-              <div>
-                <img className="rounded-full mr-4 h-8" src={user.image} />
-              </div>
-              <div className="font-medium text-white">
-                {user.name || user.username}
-                {context.viewer?.id == user.id && (
-                  <span className="ml-2 text-sm">(You)</span>
-                )}
-              </div>
-              <div className="flex-1"></div>
-              <div className="text-white text-opacity-60">
-                {formatSiteRole(siteRole)}
-              </div>
+        <Link
+          href={`/u/${user.username}`}
+          onClick={(e) => {
+            e.preventDefault()
+            context.viewer?.id != user.id && onClick()
+          }}
+          className="flex space-x-3 border-b border-gray-100 py-3 px-3.5 text-sm dark:border-gray-900 lg:rounded-lg lg:border-none lg:py-2 bg-black dark:bg-gray-700"
+          passHref
+        >
+          <div className="w-full flex flex-row items-center justify-between space-y-1">
+            <div>
+              <img className="rounded-full mr-4 h-8" src={user.image} />
             </div>
-          </a>
+            <div className="font-medium text-white">
+              {user.name || user.username}
+              {context.viewer?.id == user.id && (
+                <span className="ml-2 text-sm">(You)</span>
+              )}
+            </div>
+            <div className="flex-1"></div>
+            <div className="text-white text-opacity-60">
+              {formatSiteRole(siteRole)}
+            </div>
+          </div>
         </Link>
       </ReactVisibilitySensor>
     )
@@ -244,8 +250,8 @@ function AdminMembersPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
 
   // require login
   if (!context.viewer) {

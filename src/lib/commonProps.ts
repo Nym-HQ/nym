@@ -1,5 +1,3 @@
-import { NextPageContext } from 'next'
-
 import { getSubdomain, isMainAppDomain } from './multitenancy/client'
 
 export interface CommonPageProps {
@@ -12,10 +10,10 @@ export interface CommonPageProps {
 }
 
 export async function getCommonPageProps(
-  context: NextPageContext,
+  { req },
   graphqlContextQueryData?: any
 ): Promise<CommonPageProps> {
-  const domain = context.req.headers.host
+  const domain = req.headers.host
   const isAppDomain = isMainAppDomain(domain)
   const subdomain = getSubdomain(domain)
 

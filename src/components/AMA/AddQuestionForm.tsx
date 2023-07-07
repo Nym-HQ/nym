@@ -10,7 +10,6 @@ import {
   useContextQuery,
 } from '~/graphql/types.generated'
 
-// import { track } from '~/lib/bee'
 import { Avatar } from '../Avatar'
 
 export function AddQuestionForm({ closeModal }) {
@@ -22,12 +21,6 @@ export function AddQuestionForm({ closeModal }) {
 
   const [handleAddQuestion, { loading }] = useAddQuestionMutation({
     onCompleted: ({ addQuestion: { id } }) => {
-      // track('Question Asked', {
-      //   site_id: data?.context.site.id,
-      //   subdomain: data?.context.site.subdomain,
-      //   question_id: id,
-      // })
-
       closeModal()
       return router.push(`/qa/${id}`)
     },

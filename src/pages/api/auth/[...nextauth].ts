@@ -32,5 +32,5 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     }
   }
 
-  return await NextAuth(req, res, authOptions)
+  await NextAuth(req, res, authOptions)
 }

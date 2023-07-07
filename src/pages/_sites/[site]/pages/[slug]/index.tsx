@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
@@ -10,12 +11,19 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { parsePageData } from '~/lib/compat/data'
+import prisma from '~/lib/prisma'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 function SinglePageViewPage(props) {
   const { slug } = props
   const { data, error, loading } = useGetPageQuery({ variables: { slug } })
   const { data: context } = useContextQuery({ variables: {} })
   const page = parsePageData(props.page)
+
+  console.log(page)
 
   return (
     <PageDetail
@@ -28,12 +36,12 @@ function SinglePageViewPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const {
     params: { slug },
   } = ctx
 
-  const context = await getContext(ctx)
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
 
   const { data, loading } = await apolloClient.query({

@@ -5,6 +5,9 @@ const removeImports = require('next-remove-imports')({
 module.exports = removeImports({
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    serverActions: true,
+  },
   webpack: (
     config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
@@ -69,26 +72,5 @@ module.exports = removeImports({
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_PRESET: process.env.CLOUDINARY_PRESET,
-  },
-  async redirects() {
-    return [
-      // {
-      //   source: '/uses',
-      //   destination: '/stack',
-      //   permanent: true,
-      // }
-    ]
-  },
-  async rewrites() {
-    return [
-      // {
-      //   source: "/bee.js",
-      //   destination: "https://cdn.splitbee.io/sb.js",
-      // },
-      // {
-      //   source: "/_hive/:slug",
-      //   destination: "https://hive.splitbee.io/:slug",
-      // },
-    ]
   },
 })

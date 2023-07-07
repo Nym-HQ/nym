@@ -3,7 +3,7 @@
  * These pages will be used to manage the user's contents on the site
  *
  */
-
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import {
@@ -21,6 +21,11 @@ import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import prisma from '~/lib/prisma'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 function AdminProfilePage(props) {
   const { data } = useContextQuery()
@@ -100,8 +105,8 @@ AdminProfilePage.getLayout = function getLayout(page) {
   return <SiteLayout>{page}</SiteLayout>
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])

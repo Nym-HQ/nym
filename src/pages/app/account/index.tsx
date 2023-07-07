@@ -4,7 +4,7 @@
  *
  */
 
-import { NextPageContext } from 'next'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { SiteLayout } from '~/components/Layouts'
@@ -12,6 +12,11 @@ import { getContext } from '~/graphql/context'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import prisma from '~/lib/prisma'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 function AccountPage(props) {
   return (
@@ -26,8 +31,8 @@ AccountPage.getLayout = function getLayout(page) {
   return <SiteLayout>{page}</SiteLayout>
 }
 
-export async function getServerSideProps(ctx: NextPageContext) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])

@@ -4,6 +4,7 @@ import { Context, getContext } from '~/graphql/context'
 import withRateLimit from '~/graphql/helpers/withRateLimit'
 import resolvers from '~/graphql/resolvers'
 import typeDefs from '~/graphql/typeDefs'
+import prisma from '~/lib/prisma'
 
 const apolloServer = new ApolloServer<Context>({
   typeDefs,
@@ -13,6 +14,7 @@ const apolloServer = new ApolloServer<Context>({
 
 export const config = {
   api: {},
+  runtime: 'nodejs',
 }
 
 let apolloServerStatus = 'stopped'
@@ -57,7 +59,7 @@ const graphqlHandler = async (req, res) => {
   return apolloServer
     .executeHTTPGraphQLRequest({
       httpGraphQLRequest,
-      context: async () => getContext({ req, res }),
+      context: async () => getContext({ req, res }, prisma),
     })
     .then(async (httpGraphQLResponse) => {
       httpGraphQLResponse.headers.forEach((value, key) => {

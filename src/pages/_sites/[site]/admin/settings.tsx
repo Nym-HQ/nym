@@ -4,6 +4,7 @@
  *
  */
 import Link from 'next/link'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 import { BiInfoCircle } from 'react-icons/bi'
@@ -42,6 +43,11 @@ import {
   newsletterProviderDetails,
   newsletterProviders,
 } from '~/lib/newsletter/consts'
+import prisma from '~/lib/prisma'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 function AdminSettingsPage(props) {
   const { data: siteSettingsData } = useGetSiteSettingsQuery()
@@ -477,8 +483,8 @@ function AdminSettingsPage(props) {
             {context.userSite?.siteRole === 'OWNER' ? (
               <>
                 Please set it in{' '}
-                <Link className="underline" href="/profile">
-                  <a className="text-sky-500">this page</a>
+                <Link className="underline text-sky-500" href="/profile">
+                  this page
                 </Link>
                 .
               </>
@@ -757,8 +763,8 @@ function AdminSettingsPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
 
   // require login
   if (!context.viewer) {

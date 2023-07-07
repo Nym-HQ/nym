@@ -12,7 +12,6 @@ import {
   useContextQuery,
   useGetBookmarksQuery,
 } from '~/graphql/types.generated'
-// import { track } from '~/lib/bee'
 
 export function AddBookmarkForm({ initUrl, closeModal }) {
   const { data: context } = useContextQuery()
@@ -66,13 +65,6 @@ export function AddBookmarkForm({ initUrl, closeModal }) {
         return
       }
       const { id } = addBookmark
-      // track('Bookmark Added', {
-      //   site_id: context?.context?.site?.id,
-      //   subdomain: context?.context?.site?.subdomain,
-      //   bookmark_id: id,
-      //   url: url,
-      // })
-
       closeModal()
 
       // if I'm already viewing bookmarks, push me to the one I just created.

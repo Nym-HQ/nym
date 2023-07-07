@@ -69,22 +69,20 @@ export function UserFooter() {
   if (data?.context?.viewer) {
     return (
       <Container>
-        <Link href={`/u/${data?.context?.viewer?.username}`}>
-          <a
-            onClick={() => setIsOpen(false)}
-            className="flex flex-none items-center rounded-full"
-          >
-            <Avatar
-              user={data?.context?.viewer}
-              src={
-                data?.context?.viewer?.avatar || data?.context?.viewer?.image
-              }
-              width={24}
-              height={24}
-              layout="fixed"
-              className="rounded-full"
-            />
-          </a>
+        <Link
+          href={`/u/${data?.context?.viewer?.username}`}
+          onClick={() => setIsOpen(false)}
+          className="flex flex-none items-center rounded-full"
+          passHref
+        >
+          <Avatar
+            user={data?.context?.viewer}
+            src={data?.context?.viewer?.avatar || data?.context?.viewer?.image}
+            width={24}
+            height={24}
+            layout="fixed"
+            className="rounded-full"
+          />
         </Link>
         <GhostButton
           aria-label="Profile Settings"

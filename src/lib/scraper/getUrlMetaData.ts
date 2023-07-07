@@ -54,12 +54,12 @@ export default async function getUrlMetaData(url) {
 
   // it's possible that a url doesn't return a title
   let title = $('title').first().text()
-  title = title ? title.substr(0, TITLE_LIMIT) : title
+  title = title ? title.substring(0, TITLE_LIMIT) : title
 
   // it's possible that a url doesn't return a description
   let description = getMetavalue('description')
   description = description
-    ? description.substr(0, DESCRIPTION_LIMIT)
+    ? description.substring(0, DESCRIPTION_LIMIT)
     : description
 
   let image = getMetavalue('image')

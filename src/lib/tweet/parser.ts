@@ -189,7 +189,7 @@ export const getTweetContent = (
       photos,
       video,
     } = data
-    let html = text.substr(display_text_range[0])
+    let html = text.substring(0, display_text_range[0])
 
     const meta = {
       user_id: user.id_str,

@@ -2,8 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
 import calculateQuota from '~/lib/chatbot/calculateQuota'
-import generateResponse from '~/lib/chatbot/generateResponse'
+import generateResopnse from '~/lib/chatbot/generateResponse'
 import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
+import prisma from '~/lib/prisma'
+
+export const config = {
+  runtime: 'nodejs',
+}
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { prompt, history } = await req.body
@@ -22,14 +27,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       return
     }
 
-    const context = await getContext({ req, res })
+    const context = await getContext({ req, res }, prisma)
 
     const userContext = `The human speaking to you has a username of ${context?.viewer?.name}. `
     const promptTemplate =
       context.site?.chatbot?.prompt_template ||
       getDefaultPromptTemplate(context?.owner?.name)
 
-    const resp = await generateResponse({
+    const text = await generateResopnse({
       context,
       promptTemplate,
       history,
@@ -37,21 +42,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       apiKey: context.site?.chatbot?.openai_key,
       userContext,
     })
-
-    if (typeof resp === 'string') {
-      // TODO: increase usage quota
-
-      res.status(200).json({
-        success: true,
-        answer: resp,
-      })
-    } else {
-      res.status(500).json({
-        success: false,
-        answer: null,
-        message: 'Internal Server Error, Please try again',
-      })
-    }
+    res.json({
+      success: true,
+      answer: text,
+    })
   } else {
     res.status(400).json({
       success: false,
