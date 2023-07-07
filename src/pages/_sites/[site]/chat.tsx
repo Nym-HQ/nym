@@ -44,12 +44,7 @@ export default function ChatPage(props) {
     <>
       <NextSeo {...seo} />
       <Detail.Container data-cy="chat-detail">
-        <div className="flex flex-1 h-full">
-          <div className="relative flex-col w-full">
-            <Chat id={id} user={contextData?.context.viewer?.name} />
-          </div>
-        </div>
-        <PoweredByNym scrollContainerRef={scrollContainerRef} />
+        <Chat id={id} user={contextData?.context.viewer?.name} />
       </Detail.Container>
     </>
   )

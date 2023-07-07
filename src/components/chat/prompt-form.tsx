@@ -46,14 +46,14 @@ export function PromptForm({
       }}
       ref={formRef}
     >
-      <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">
+      <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-white dark:bg-black px-8 sm:rounded-md sm:border sm:px-12">
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
               href="/"
               className={cn(
                 buttonVariants({ size: 'sm', variant: 'outline' }),
-                'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
+                'absolute left-0 top-4 h-8 w-8 rounded-full bg-white dark:bg-black p-0 sm:left-4'
               )}
               passHref
             >
