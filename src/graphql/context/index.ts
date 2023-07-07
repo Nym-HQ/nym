@@ -7,13 +7,13 @@ import getSite from './getSite'
 import getViewer from './getViewer'
 
 export async function getContext(ctx, prisma: PrismaClient): Promise<Context> {
-  const site = await getSite(ctx.req)
+  const site = await getSite(prisma, ctx.req)
   const viewer = await getViewer(ctx)
 
   // for a new visitor, create a user-site record with the role USER
   const userSite =
     site && viewer
-      ? await getUserSiteById(viewer.id, site.id, SiteRole.USER)
+      ? await getUserSiteById(prisma, viewer.id, site.id, SiteRole.USER)
       : null
   if (viewer) {
     // on app site, check user role
@@ -25,7 +25,7 @@ export async function getContext(ctx, prisma: PrismaClient): Promise<Context> {
   const owner = site
     ? userSite?.siteRole === SiteRole.OWNER
       ? viewer
-      : await getSiteOwner(site?.id)
+      : await getSiteOwner(prisma, site?.id)
     : null
 
   return {

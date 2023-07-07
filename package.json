@@ -10,7 +10,7 @@
     "cypress:run": "cypress run",
     "generate": "graphql-codegen",
     "generate:watch": "graphql-codegen --watch 'src/graphql/**/*.ts'",
-    "postinstall": "yarn generate && prisma generate",
+    "postinstall": "yarn generate && prisma generate && prisma generate --data-proxy",
     "db:dev": "pscale connect klokt_valg dev --port 3309",
     "db:prod": "pscale connect klokt_valg main --port 3309"
   },

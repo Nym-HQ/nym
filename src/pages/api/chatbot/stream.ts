@@ -7,6 +7,7 @@ import getSite from '~/graphql/context/getSite'
 import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
 import { getTrainedIndex } from '~/lib/chatbot/train'
 import { getSiteOwner } from '~/lib/multitenancy/server'
+import prisma from '~/lib/prisma-edge'
 
 export const config = {
   api: {},
@@ -43,11 +44,9 @@ export default async function handler(req: Request) {
   //   })
   // }
 
-  const site = await getSite(req)
-  // const owner = site?.id ? await getSiteOwner(site.id) : null
-  const context = null,
-    // site = null,
-    owner = null
+  const site = await getSite(prisma, req)
+  const owner = site?.id ? await getSiteOwner(prisma, site.id) : null
+  const context = null
 
   const promptTemplate =
     site?.chatbot?.prompt_template || getDefaultPromptTemplate(owner?.name)
