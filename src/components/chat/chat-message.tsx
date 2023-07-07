@@ -22,7 +22,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
         className={cn(
           'flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md border shadow',
           message.role === 'user'
-            ? 'bg-background'
+            ? 'bg-white dark:bg-black'
             : 'bg-primary text-primary-foreground'
         )}
       >
