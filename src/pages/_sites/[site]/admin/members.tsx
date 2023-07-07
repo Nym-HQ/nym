@@ -6,6 +6,7 @@
 
 import { LayoutGroup, motion } from 'framer-motion'
 import Link from 'next/link'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 import ReactVisibilitySensor from 'react-visibility-sensor'
 
@@ -31,6 +32,7 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { formatSiteRole } from '~/lib/formatters'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -248,8 +250,8 @@ function AdminMembersPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
 
   // require login
   if (!context.viewer) {

@@ -1,4 +1,4 @@
-import { NextPageContext } from 'next'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 function CreateYourWebsitePage() {
@@ -7,7 +7,7 @@ function CreateYourWebsitePage() {
 
 export default CreateYourWebsitePage
 
-export async function getServerSideProps(ctx: NextPageContext) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     redirect: {
       destination: `/create-site`,

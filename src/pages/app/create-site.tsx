@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { GetServerSideProps } from 'next/types'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -14,6 +15,7 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { TENANT_DOMAIN } from '~/lib/multitenancy/client'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -89,8 +91,8 @@ function CreateYourWebsitePage() {
 
 export default CreateYourWebsitePage
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
 
   // if not signed in, redirect to sign in page
   if (!context.viewer) {

@@ -2,12 +2,11 @@ import { PrismaClient, SiteRole, UserSite } from '@prisma/client'
 
 import { Site, User, UserRole } from '~/graphql/types.generated'
 import { getSiteOwner, getUserSiteById } from '~/lib/multitenancy/server'
-import prisma from '~/lib/prisma'
 
 import getSite from './getSite'
 import getViewer from './getViewer'
 
-export async function getContext(ctx): Promise<Context> {
+export async function getContext(ctx, prisma: PrismaClient): Promise<Context> {
   const site = await getSite(ctx.req)
   const viewer = await getViewer(ctx)
 

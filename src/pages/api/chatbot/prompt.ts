@@ -4,6 +4,7 @@ import { getContext } from '~/graphql/context'
 import calculateQuota from '~/lib/chatbot/calculateQuota'
 import generateResopnse from '~/lib/chatbot/generateResponse'
 import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -26,7 +27,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       return
     }
 
-    const context = await getContext({ req, res })
+    const context = await getContext({ req, res }, prisma)
 
     const userContext = `The human speaking to you has a username of ${context?.viewer?.name}. `
     const promptTemplate =

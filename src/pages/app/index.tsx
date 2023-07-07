@@ -1,5 +1,5 @@
-import { NextPageContext } from 'next'
 import { useRouter } from 'next/router'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { PrimaryButton } from '~/components/Button'
@@ -17,6 +17,7 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { getSiteDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -186,8 +187,8 @@ export default function Home(props) {
   }
 }
 
-export async function getServerSideProps(ctx: NextPageContext) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
 
   let graphqlData = await Promise.all(getCommonQueries(apolloClient))

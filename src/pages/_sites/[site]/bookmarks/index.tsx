@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types'
 import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
@@ -12,6 +13,7 @@ import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -30,8 +32,8 @@ function BookmarksPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
 
   let graphqlData = await Promise.all(getCommonQueries(apolloClient))

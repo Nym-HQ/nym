@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types'
 import { NextSeo } from 'next-seo'
 import { useRef } from 'react'
 
@@ -10,6 +11,7 @@ import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import prisma from '~/lib/prisma'
 import { nanoid } from '~/lib/utils'
 
 export const config = {
@@ -53,8 +55,8 @@ export default function ChatPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
 
   if (!context.viewer)
     return {

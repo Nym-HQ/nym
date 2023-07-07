@@ -1,4 +1,4 @@
-import { NextPageContext } from 'next'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { ListDetailView } from '~/components/Layouts'
@@ -8,6 +8,7 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -23,7 +24,7 @@ export default function SignInPage(props) {
  * @param props
  * @returns
  */
-export async function getServerSideProps(ctx: NextPageContext) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req, res } = ctx
 
   const url = new URL(req.url, `https://${req.headers.host}`)
@@ -31,7 +32,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
   const _nextUrl = new URL(searchParams.get('next') || '/', url)
 
   // check if user has already signed-in, and if he did, process cross-signin automatically
-  const context = await getContext(ctx)
+  const context = await getContext(ctx, prisma)
   if (context.viewer) {
     let nextUrl: URL
     if (_nextUrl.host != MAIN_APP_DOMAIN) {

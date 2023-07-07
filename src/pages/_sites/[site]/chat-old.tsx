@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types'
 import { NextSeo } from 'next-seo'
 import { useEffect, useRef, useState } from 'react'
 
@@ -16,6 +17,7 @@ import useType from '~/hooks/useType'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import prisma from '~/lib/prisma'
 
 const loadingMessages = [
   'Hold on while I think...',
@@ -240,8 +242,8 @@ export default function ChatPage(pageProps) {
   )
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
 
   if (!context.viewer)
     return {

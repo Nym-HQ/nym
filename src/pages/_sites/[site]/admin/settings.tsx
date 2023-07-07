@@ -4,6 +4,7 @@
  *
  */
 import Link from 'next/link'
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 import { BiInfoCircle } from 'react-icons/bi'
@@ -42,6 +43,7 @@ import {
   newsletterProviderDetails,
   newsletterProviders,
 } from '~/lib/newsletter/consts'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -761,8 +763,8 @@ function AdminSettingsPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
-  const context = await getContext(ctx)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const context = await getContext(ctx, prisma)
 
   // require login
   if (!context.viewer) {

@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { ListDetailView, SiteLayout } from '~/components/Layouts'
@@ -11,6 +12,7 @@ import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { parsePostData } from '~/lib/compat/data'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -26,11 +28,11 @@ function EditPostPage(props) {
   return <PostEditor slug={slug} post={post} site={context.context?.site} />
 }
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const {
     params: { slug },
   } = ctx
-  const context = await getContext(ctx)
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([
     ...getCommonQueries(apolloClient),

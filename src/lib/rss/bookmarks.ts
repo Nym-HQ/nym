@@ -1,4 +1,3 @@
-import { Bookmark } from '@prisma/client'
 import { Feed } from 'feed'
 
 import routes from '~/config/routes'

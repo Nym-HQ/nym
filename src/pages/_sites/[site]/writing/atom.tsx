@@ -1,6 +1,8 @@
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { getContext } from '~/graphql/context'
+import prisma from '~/lib/prisma'
 import { generatePostRSS } from '~/lib/rss'
 
 export const config = {
@@ -9,9 +11,9 @@ export const config = {
 
 const AtomFeed: React.FC = () => null
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req, res } = ctx
-  const context = await getContext(ctx)
+  const context = await getContext(ctx, prisma)
 
   const { atom } = await generatePostRSS(context)
 

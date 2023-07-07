@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { BookmarkDetail } from '~/components/Bookmarks/BookmarkDetail'
@@ -16,6 +17,7 @@ import {
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -39,11 +41,11 @@ function BookmarkPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const {
     params: { id },
   } = ctx
-  const context = await getContext(ctx)
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
 
   const graphqlData = await Promise.all([

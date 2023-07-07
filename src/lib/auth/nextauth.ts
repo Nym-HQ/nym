@@ -126,7 +126,12 @@ const authOptions = {
     verifyRequest: `/login`,
     error: '/login', // Error code passed in query string as ?error=
   },
-  adapter: PrismaAdapter(prisma),
+
+  ...(typeof window === 'undefined'
+    ? {
+        adapter: PrismaAdapter(prisma),
+      }
+    : {}),
 
   // Configure one or more authentication providers
   providers: providers,

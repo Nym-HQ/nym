@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
 
 import { ListDetailView } from '~/components/Layouts'
@@ -8,6 +9,7 @@ import { useContextQuery } from '~/graphql/types.generated'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -26,12 +28,12 @@ export default function UserPage(props) {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const {
     params: { username },
   } = ctx
 
-  const context = await getContext(ctx)
+  const context = await getContext(ctx, prisma)
   const apolloClient = initApolloClient({ context })
 
   const graphqlData = await Promise.all([

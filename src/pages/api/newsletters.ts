@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
 import { getNewsletterProvider } from '~/lib/newsletter'
+import prisma from '~/lib/prisma'
 
 export const config = {
   runtime: 'nodejs',
@@ -19,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   }
 
-  const context = await getContext({ req, res })
+  const context = await getContext({ req, res }, prisma)
   const newsletterProvider = await getNewsletterProvider(context)
 
   if (newsletterProvider) {

@@ -1,4 +1,3 @@
-import prisma from '~/lib/prisma'
 import { isValidParkedDomain } from '~/lib/utils'
 
 export async function getSiteSettings(_, __, { site }) {

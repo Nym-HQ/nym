@@ -43,10 +43,10 @@ export default async function handler(req: Request) {
   //   })
   // }
 
-  // const site = await getSite(req)
+  const site = await getSite(req)
   // const owner = site?.id ? await getSiteOwner(site.id) : null
   const context = null,
-    site = null,
+    // site = null,
     owner = null
 
   const promptTemplate =
