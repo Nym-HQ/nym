@@ -57,7 +57,7 @@ export async function generateRSS(context: Context) {
     author,
   })
 
-  console.log(bookmarks)
+  console.info(bookmarks)
 
   bookmarks?.forEach((bookmark) => {
     feed.addItem({

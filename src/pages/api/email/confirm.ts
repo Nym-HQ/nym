@@ -75,7 +75,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       //     },
       //   })
       // } catch (err) {
-      //   console.log(
+      //   console.info(
       //     "Failed to update the user's email subscriptions after email address changed",
       //     err
       //   )

@@ -111,7 +111,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
           },
         })
       } else {
-        console.log('Newsletter Providers are not configured')
+        console.info('Newsletter Providers are not configured')
       }
     } catch (err) {
       console.error('Unable to publish newsletter', err)

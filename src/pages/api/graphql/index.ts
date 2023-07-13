@@ -110,7 +110,7 @@ const lockForApolloServerStart = () => {
 }
 
 export default withRateLimit(async (req, res) => {
-  console.log('/api/graphql request')
+  console.info('/api/graphql request')
   try {
     if (apolloServerStatus == 'stopped') {
       apolloServerStatus = 'starting'

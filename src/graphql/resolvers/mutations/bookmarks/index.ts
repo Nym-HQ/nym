@@ -122,7 +122,7 @@ export async function addBookmark(
   } = metadata
 
   // TODO: publish to newsletter
-  console.log('Adding bookmark to newsletter', { url })
+  console.info('Adding bookmark to newsletter', { url })
 
   return await prisma.bookmark
     .create({

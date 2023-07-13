@@ -56,7 +56,7 @@ export async function editEmailSubscription(
 
         // Add subscriber to the provider
         if (type === EmailSubscriptionType.Newsletter) {
-          console.log('Adding subscriber to newletter provider')
+          console.info('Adding subscriber to newletter provider')
           const provider = await getNewsletterProvider(ctx)
 
           if (provider) {
@@ -82,7 +82,7 @@ export async function editEmailSubscription(
 
       // Add subscriber to the provider
       if (type === EmailSubscriptionType.Newsletter) {
-        console.log('Removing subscriber from newletter provider')
+        console.info('Removing subscriber from newletter provider')
         const provider = await getNewsletterProvider(ctx)
 
         if (provider) {

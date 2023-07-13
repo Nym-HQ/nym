@@ -53,7 +53,7 @@ async function getPostsTrainData(context: Context) {
     where: {
       siteId: site.id,
       publishedAt: { not: null, lt: new Date() },
-      access: { equals: PostAccess.PUBLIC },
+      access: { equals: PostAccess.PUBLIC }, // only publicly available posts are used as training materials
     },
   })
 
@@ -141,7 +141,7 @@ async function getBookmarksTrainData(context: Context) {
 
 export async function indexExists(client: PineconeClient, indexName: string) {
   const indexes = await client.listIndexes()
-  console.log('Existing Pinecone Indexes:', indexes)
+  console.info('Existing Pinecone Indexes:', indexes)
   return indexes.includes(indexName)
 }
 
@@ -165,7 +165,7 @@ export async function deleteIndex(context: Context) {
   const client = await initPineconeClient()
   const indexName = getIndexName()
 
-  console.log('Deleting Pinecone index', indexName)
+  console.info('Deleting Pinecone index', indexName)
   await client.deleteIndex({
     indexName,
   })
@@ -179,7 +179,7 @@ export async function createOrUpdateIndex(context: Context, docs, ids = null) {
   const indexName = getIndexName()
 
   if (!(await indexExists(client, indexName))) {
-    console.log('Creating Pinecone index', indexName)
+    console.info('Creating Pinecone index', indexName)
     await client.createIndex({
       createRequest: {
         name: indexName,
@@ -191,14 +191,14 @@ export async function createOrUpdateIndex(context: Context, docs, ids = null) {
   }
   const pineconeIndex = client.Index(indexName)
 
-  console.log('Initializing Store...', indexName)
+  console.info('Initializing Store...', indexName)
   const pineconeStore = await PineconeStore.fromExistingIndex(
     new OpenAIEmbeddings(),
     { pineconeIndex }
   )
 
-  console.log('Updating Store...', indexName)
+  console.info('Updating Store...', indexName)
   await pineconeStore.addDocuments(docs, ids)
 
-  console.log('Completed Updating Index Store...', indexName)
+  console.info('Completed Updating Index Store...', indexName)
 }
