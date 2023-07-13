@@ -11,7 +11,7 @@ const generateResponse = async (request: ChatBotGenerateRequest) => {
   //}
 
   try {
-    const vectorStore = await getTrainedIndex(request.context)
+    const vectorStore = await getTrainedIndex()
     if (!vectorStore) {
       return 'I am under training now.  Please try again later.'
     }
