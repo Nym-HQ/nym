@@ -95,7 +95,7 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
     const nextUrl = new URL(searchParams.get('next') || '/', req.nextUrl)
 
     const response = NextResponse.redirect(nextUrl)
-    console.log(
+    console.info(
       `Setting authentication cookies to the host: ${host}, secure: ${secureCookie}`
     )
     response.cookies.set(nextAuthSessionCookie, sessionToken, {

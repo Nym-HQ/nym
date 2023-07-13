@@ -34,7 +34,7 @@ export function emailToSiteOwner({
       TextBody: body,
     })
   } else {
-    console.log(
+    console.info(
       'Site owner does not have the email configured. Skipping email.'
     )
     return true
@@ -63,7 +63,7 @@ const confirmChangedEmailAddress = async (
   user: User,
   data: { email: string; token: string }
 ) => {
-  console.log('Sending confirmation email to the user: ', user.username)
+  console.info('Sending confirmation email to the user: ', user.username)
   const { email, token } = data
 
   try {
@@ -91,10 +91,10 @@ const confirmChangedEmailAddress = async (
         )}'>here</a></p>`,
       })
     }
-    console.log('Sent "confirm-changed-email-address" email: ', sent)
+    console.info('Sent "confirm-changed-email-address" email: ', sent)
     return true
   } catch (err) {
-    console.log('Failed to send "confirm-changed-email-address" email: ', err)
+    console.info('Failed to send "confirm-changed-email-address" email: ', err)
     return false
   }
 }

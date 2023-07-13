@@ -23,7 +23,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (docs.length > 0) {
     await createOrUpdateIndex(context, docs, ids)
   } else {
-    console.log('No data found to train chatbot', getIndexName())
+    console.info('No data found to train chatbot', getIndexName())
   }
 
   res.status(200).json({

@@ -40,7 +40,7 @@ export default class MailchimpNewsletterProvider
     if (audienceListId) this.audienceListId = audienceListId
 
     if (!IS_PROD) {
-      console.log(
+      console.info(
         'Mailchimp Newsletter Provider class is initialized for ',
         this.instanceId,
         this.audienceListId
@@ -72,7 +72,7 @@ export default class MailchimpNewsletterProvider
       ) {
         const response = await mailchimpUntyped.lists.getAllLists()
         this.audienceListId = response.lists[0].id
-        console.log('Got the default audience list id: ', this.audienceListId)
+        console.info('Got the default audience list id: ', this.audienceListId)
       }
     }
     return {
@@ -182,7 +182,7 @@ export default class MailchimpNewsletterProvider
         mailchimpUntyped.templates &&
         typeof mailchimpUntyped.templates.create === 'function'
       ) {
-        console.log('Creating a new newletter template')
+        console.info('Creating a new newletter template')
         const templateCreated = await mailchimpUntyped.templates.create({
           name: `${new Date().toDateString()} - ${subject}`.slice(0, 50), // name requires to be max 50 characters
           html: htmlBody,
@@ -195,7 +195,7 @@ export default class MailchimpNewsletterProvider
             subject,
           })
         } else {
-          console.log('Failed to create a template', templateCreated)
+          console.info('Failed to create a template', templateCreated)
           return false
         }
       }

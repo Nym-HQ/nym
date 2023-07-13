@@ -5,7 +5,7 @@ import { authOptions } from '~/lib/auth/nextauth'
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   if (req.query.nextauth.includes('callback')) {
-    console.log(
+    console.info(
       'Handling callback request from my Identity Provider',
       req.body,
       req.query

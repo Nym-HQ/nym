@@ -2,7 +2,7 @@ import { GRAPHCDN_PURGE_ENDPOINT, IS_PROD } from '~/graphql/constants'
 
 async function handleFetch(query) {
   if (!IS_PROD) {
-    return console.log('Purging GraphCDN cache: ', query)
+    return console.info('Purging GraphCDN cache: ', query)
   }
 
   return await fetch(GRAPHCDN_PURGE_ENDPOINT, {
