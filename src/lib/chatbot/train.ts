@@ -22,7 +22,7 @@ async function initPineconeClient() {
   return client
 }
 
-export function getIndexName(context: Context) {
+export function getIndexName() {
   return `nym-chatbot`
 }
 
@@ -148,9 +148,9 @@ export async function indexExists(client: PineconeClient, indexName: string) {
 /**
  * Look up existing trained index
  */
-export async function getTrainedIndex(context: Context) {
+export async function getTrainedIndex() {
   const client = await initPineconeClient()
-  const indexName = getIndexName(context)
+  const indexName = getIndexName()
 
   if (!(await indexExists(client, indexName))) return null
 
@@ -163,7 +163,7 @@ export async function getTrainedIndex(context: Context) {
 
 export async function deleteIndex(context: Context) {
   const client = await initPineconeClient()
-  const indexName = getIndexName(context)
+  const indexName = getIndexName()
 
   console.log('Deleting Pinecone index', indexName)
   await client.deleteIndex({
@@ -176,7 +176,7 @@ export async function deleteIndex(context: Context) {
  */
 export async function createOrUpdateIndex(context: Context, docs, ids = null) {
   const client = await initPineconeClient()
-  const indexName = getIndexName(context)
+  const indexName = getIndexName()
 
   if (!(await indexExists(client, indexName))) {
     console.log('Creating Pinecone index', indexName)
