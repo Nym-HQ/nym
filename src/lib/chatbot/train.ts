@@ -8,6 +8,7 @@ import { CharacterTextSplitter } from 'langchain/text_splitter'
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
 import parseEditorJsDataIntoMarkdown from '../editorjs/markdownParser'
+import { extractMainText } from '../scraper/getUrlMetaData'
 
 // import getTwitterTimeline from '../tweet/getTwitterTimeline'
 
@@ -131,7 +132,7 @@ async function getBookmarksTrainData(context: Context) {
 
       // extract texts from html
       const $ = cheerio.load(html)
-      const text = $.text()
+      const text = extractMainText($)
 
       const splits = await textSplitter.splitText(text)
       return splits.map((s, idx) => {
@@ -216,10 +217,30 @@ export async function createOrUpdateIndex(context: Context, docs, ids = null) {
 
   console.info(`Updating Store... ${indexName}, total ${docs.length} docs`)
 
-  for (let doc of docs) {
-    let idx = docs.indexOf(doc)
-    let id = ids && ids[idx]
-    await pineconeStore.addDocuments([doc], id ? [id] : undefined)
+  const chunks = []
+  const chunkSize = 5
+  for (let i = 0; i < docs.length; i += chunkSize) {
+    chunks.push({
+      docs: docs.slice(i, i + chunkSize),
+      ids: ids ? ids.slice(i, i + chunkSize) : undefined,
+    })
+  }
+
+  let progress = 0
+  for (let chunk of chunks) {
+    progress += chunk.docs.length
+    try {
+      await pineconeStore.addDocuments(
+        chunk.docs,
+        chunk.ids ? chunk.ids : undefined
+      )
+    } catch (err) {
+      console.error('Error adding documents', err)
+      console.log('Error Chunk', chunk)
+    }
+    if (progress % (chunkSize * 5) == 0) {
+      console.log(`${progress} docs added...`)
+    }
   }
 
   console.info('Completed Updating Index Store...', indexName)

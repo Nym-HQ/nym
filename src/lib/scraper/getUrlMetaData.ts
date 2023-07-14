@@ -53,7 +53,7 @@ export default async function getUrlMetaData(url) {
   }
 
   // it's possible that a url doesn't return a title
-  let title = $('title').first().text()
+  let title = $('title').first().text() || $('h1').first().text()
   title = title ? title.substring(0, TITLE_LIMIT) : title
 
   // it's possible that a url doesn't return a description
@@ -77,10 +77,16 @@ export default async function getUrlMetaData(url) {
     author,
     creator,
     faviconUrl,
-    text:
-      $('article').text() ||
-      $('main').text() ||
-      $('[role=main]').text() ||
-      $('body').text(),
+    text: extractMainText($),
   }
+}
+
+export function extractMainText($) {
+  return (
+    $('article').text() ||
+    $('main').text() ||
+    $('[role=main]').text() ||
+    $('body').text() ||
+    $.text()
+  )
 }
