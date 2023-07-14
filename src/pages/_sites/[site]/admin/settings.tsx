@@ -705,7 +705,7 @@ function AdminSettingsPage(props) {
                 />
               </div>
               <div className="col-span-5">
-                <Button onClick={trainChatbot}>
+                <Button onClick={trainChatbot} disabled={isChatbotTraining}>
                   {isChatbotTraining && <LoadingSpinner />} Train
                 </Button>
               </div>
