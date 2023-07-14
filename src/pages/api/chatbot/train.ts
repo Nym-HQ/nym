@@ -17,16 +17,25 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return
   }
 
-  const context = await getContext({ req, res }, prisma)
+  try {
+    const context = await getContext({ req, res }, prisma)
 
-  const { docs, ids } = await getTrainData(context)
-  if (docs.length > 0) {
-    await createOrUpdateIndex(context, docs, ids)
-  } else {
-    console.info('No data found to train chatbot', getIndexName())
+    const { docs, ids } = await getTrainData(context)
+    if (docs.length > 0) {
+      await createOrUpdateIndex(context, docs, ids)
+    } else {
+      console.info('No data found to train chatbot', getIndexName())
+    }
+
+    res.status(200).json({
+      success: true,
+    })
+  } catch (err) {
+    console.error('Error generating response', err)
+    res.status(400).json({
+      success: false,
+      error: err.message,
+      data: err.data,
+    })
   }
-
-  res.status(200).json({
-    success: true,
-  })
 }
