@@ -135,6 +135,7 @@ export default async function handler(req: Request) {
 
     return new StreamingTextResponse(stream)
   } catch (err) {
+    console.error('Error generating response', err)
     return new Response(
       JSON.stringify({
         error: err.message,
