@@ -69,7 +69,11 @@ async function getPostsTrainData(context: Context) {
       let text
       let data = p.data
       if (typeof p.data === 'string') {
-        data = JSON.parse(p.data)
+        try {
+          data = JSON.parse(p.data)
+        } catch {
+          data = null
+        }
       }
 
       if (data && data.blocks && data.blocks.length > 0) {
