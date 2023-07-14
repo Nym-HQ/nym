@@ -94,7 +94,7 @@ export default async function handler(req: Request) {
         context: promptContext.join('\n\n'),
         history: '',
       })
-      console.info('promptString', promptString)
+      console.info('promptString', promptString.substring(0, 1000) + '...')
 
       const chatMessage: ChatCompletionRequestMessage = {
         role: 'user',
@@ -120,7 +120,7 @@ export default async function handler(req: Request) {
         context: promptContext.join('\n\n'),
         history,
       })
-      console.info('promptString', promptString)
+      console.info('promptString', promptString.substring(0, 1000) + '...')
 
       completion = await openai.createCompletion({
         model: 'text-davinci-003', // 'gpt-3.5-turbo',
