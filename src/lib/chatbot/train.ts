@@ -197,8 +197,21 @@ export async function createOrUpdateIndex(context: Context, docs, ids = null) {
     { pineconeIndex }
   )
 
-  console.info('Updating Store...', indexName)
-  await pineconeStore.addDocuments(docs, ids)
+  console.info(`Updating Store... ${indexName}, total ${docs.length} docs`)
+
+  const chunkSize = 5
+  const chunks = []
+  for (let i = 0; i < docs.length; i += chunkSize) {
+    const chunk = {
+      ids: ids.slice(i, i + chunkSize),
+      docs: docs.slice(i, i + chunkSize),
+    }
+    chunks.push(chunk)
+  }
+
+  for (let chunk of chunks) {
+    await pineconeStore.addDocuments(chunk.docs, chunk.ids)
+  }
 
   console.info('Completed Updating Index Store...', indexName)
 }
