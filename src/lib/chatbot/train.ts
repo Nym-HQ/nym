@@ -1,6 +1,7 @@
 import { Context } from '@apollo/client'
 import { PineconeClient } from '@pinecone-database/pinecone'
 import { PostAccess } from '@prisma/client'
+import * as cheerio from 'cheerio'
 import { Document } from 'langchain/document'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { CharacterTextSplitter } from 'langchain/text_splitter'
@@ -113,10 +114,14 @@ async function getBookmarksTrainData(context: Context) {
   const ids = []
   const splitTexts = await Promise.all(
     bookmarks.map(async (b) => {
-      const t = b.html || b.content
-      if (!t) return null
+      const html = b.html || b.content
+      if (!html) return null
 
-      const splits = await textSplitter.splitText(t)
+      // extract texts from html
+      const $ = cheerio.load(html)
+      const text = $.text()
+
+      const splits = await textSplitter.splitText(text)
       return splits.map((s, idx) => {
         return {
           text: s,
