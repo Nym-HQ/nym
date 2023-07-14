@@ -82,12 +82,13 @@ const blockParsers = {
 export default function parseEditorJsDataIntoMarkdown(data) {
   if (!data || !data.blocks) return ''
 
-  const parsedData = data.blocks.map((item) => {
-    if (blockParsers[item.type]) {
-      return blockParsers[item.type](item.data)
-    }
-    return ''
-  })
-
-  return parsedData.filter((v) => !!v).join('')
+  return data.blocks
+    .map((item) => {
+      if (blockParsers[item.type]) {
+        return blockParsers[item.type](item.data)
+      }
+      return ''
+    })
+    .filter((v) => !!v)
+    .join('')
 }

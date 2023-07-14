@@ -66,16 +66,24 @@ async function getPostsTrainData(context: Context) {
   const ids = []
   const splitTexts = await Promise.all(
     publishedPosts.map(async (p) => {
-      if (!p.data) return null
-
+      let text
       let data = p.data
       if (typeof p.data === 'string') {
         data = JSON.parse(p.data)
       }
 
-      const splits = await textSplitter.splitText(
-        parseEditorJsDataIntoMarkdown(data)
-      )
+      if (data && data.blocks && data.blocks.length > 0) {
+        text = parseEditorJsDataIntoMarkdown(data)
+      } else if (p.text) {
+        text = p.text
+      } else {
+        return null
+      }
+
+      // add title
+      text = `# ${p.title}\n\n${text}`
+
+      const splits = await textSplitter.splitText(text)
       return splits.map((s, idx) => {
         return {
           text: s,
