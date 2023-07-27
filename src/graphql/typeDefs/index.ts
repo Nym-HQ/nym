@@ -202,6 +202,7 @@ const typeDefs = gql`
     social_github: String
     social_other1: String
     social_other1_label: String
+    api_key: String
     emailSubscriptions: [UserEmailSubscription]
 
     isAdmin: Boolean
@@ -325,6 +326,11 @@ const typeDefs = gql`
     email: String
   }
 
+  input SetUserApiKeyInput {
+    clearApiKey: Boolean
+    regenApiKey: Boolean
+  }
+
   input AddBookmarkInput {
     url: String!
     tag: String
@@ -446,6 +452,7 @@ const typeDefs = gql`
     editComment(id: ID!, text: String): Comment
     deleteComment(id: ID!): Boolean
     editUser(data: EditUserInput): User
+    setUserApiKey(data: SetUserApiKeyInput): User
     deleteUser: Boolean
     editEmailSubscription(data: EmailSubscriptionInput): User
     addPage(data: AddPageInput!): Page

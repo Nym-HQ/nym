@@ -8,6 +8,7 @@ import {
 } from '~/graphql/types.generated'
 
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
+import { ApiKeyForm } from './ApiKeyForm'
 import { EmailForm } from './Email'
 import { EmailPreferences } from './EmailPreferences'
 import { UserSettingsFooter } from './Footer'
@@ -54,6 +55,11 @@ export function UserSettings() {
               <EmailForm viewer={context?.viewer} />
               <UsernameForm viewer={context?.viewer} />
               <NameForm viewer={context?.viewer} />
+            </div>
+
+            <div className="space-y-8 py-12">
+              <h3 className="text-primary text-lg font-bold">API Key</h3>
+              <ApiKeyForm viewer={data?.context?.viewer} />
             </div>
 
             {context?.viewer.email && (

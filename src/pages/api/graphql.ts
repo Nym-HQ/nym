@@ -1,5 +1,6 @@
 import { ApolloServer, HeaderMap, HTTPGraphQLRequest } from '@apollo/server'
 
+import { IS_DEV } from '~/graphql/constants'
 import { Context, getContext } from '~/graphql/context'
 import withRateLimit from '~/graphql/helpers/withRateLimit'
 import resolvers from '~/graphql/resolvers'
@@ -9,7 +10,7 @@ import prisma from '~/lib/prisma'
 const apolloServer = new ApolloServer<Context>({
   typeDefs,
   resolvers,
-  introspection: true,
+  introspection: IS_DEV,
 })
 
 export const config = {
@@ -20,7 +21,7 @@ export const config = {
 let apolloServerStatus = 'stopped'
 
 const graphqlHandler = async (req, res) => {
-  if (!req.body) {
+  if (req.method === 'POST' && !req.body) {
     // The json body-parser *always* sets req.body to {} if it's unset (even
     // if the Content-Type doesn't match), so if it isn't set, you probably
     // forgot to set up body-parser. (Note that this may change in the future

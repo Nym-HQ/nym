@@ -23,3 +23,9 @@ export const UserSettingsFragment = gql`
     }
   }
 `
+
+export const UserApiKeyFragment = gql`
+  fragment UserApiKey on User {
+    api_key
+  }
+`

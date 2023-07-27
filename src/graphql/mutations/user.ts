@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { UserInfoFragment } from '~/graphql/fragments/user'
+import { UserApiKeyFragment, UserInfoFragment } from '~/graphql/fragments/user'
 
 export const DELETE_USER = gql`
   mutation deleteUser {
@@ -15,4 +15,13 @@ export const EDIT_USER = gql`
     }
   }
   ${UserInfoFragment}
+`
+
+export const SET_USER_API_KEY = gql`
+  mutation setUserApiKey($data: SetUserApiKeyInput) {
+    setUserApiKey(data: $data) {
+      ...UserApiKey
+    }
+  }
+  ${UserApiKeyFragment}
 `

@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
 import {
+  UserApiKeyFragment,
   UserInfoFragment,
   UserSettingsFragment,
 } from '~/graphql/fragments/user'
@@ -14,11 +15,13 @@ export const GET_VIEWER_SETTINGS = gql`
         ...UserInfo
         email
         ...UserSettings
+        ...UserApiKey
       }
     }
   }
   ${UserInfoFragment}
   ${UserSettingsFragment}
+  ${UserApiKeyFragment}
 `
 
 export const GET_CONTEXT = gql`
