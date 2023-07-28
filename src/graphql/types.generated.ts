@@ -247,6 +247,7 @@ export type Mutation = {
   editSiteDomain?: Maybe<Site>
   editSiteUser?: Maybe<SiteUser>
   editUser?: Maybe<User>
+  setUserApiKey?: Maybe<User>
   toggleReaction?: Maybe<Reactable>
 }
 
@@ -346,6 +347,10 @@ export type MutationEditSiteUserArgs = {
 
 export type MutationEditUserArgs = {
   data?: InputMaybe<EditUserInput>
+}
+
+export type MutationSetUserApiKeyArgs = {
+  data?: InputMaybe<SetUserApiKeyInput>
 }
 
 export type MutationToggleReactionArgs = {
@@ -537,6 +542,11 @@ export enum ReactionType {
   Question = 'QUESTION',
 }
 
+export type SetUserApiKeyInput = {
+  clearApiKey?: InputMaybe<Scalars['Boolean']>
+  regenApiKey?: InputMaybe<Scalars['Boolean']>
+}
+
 export type Site = {
   __typename?: 'Site'
   attach_css?: Maybe<Scalars['String']>
@@ -604,6 +614,7 @@ export type Tag = {
 
 export type User = {
   __typename?: 'User'
+  api_key?: Maybe<Scalars['String']>
   avatar?: Maybe<Scalars['String']>
   createdAt?: Maybe<Scalars['Date']>
   description?: Maybe<Scalars['String']>
@@ -1170,6 +1181,11 @@ export type UserSettingsFragment = {
       >
     | null
     | undefined
+}
+
+export type UserApiKeyFragment = {
+  __typename?: 'User'
+  api_key?: string | null | undefined
 }
 
 export type EditBookmarkMutationVariables = Exact<{
@@ -1787,6 +1803,18 @@ export type EditUserMutation = {
     | undefined
 }
 
+export type SetUserApiKeyMutationVariables = Exact<{
+  data?: InputMaybe<SetUserApiKeyInput>
+}>
+
+export type SetUserApiKeyMutation = {
+  __typename?: 'Mutation'
+  setUserApiKey?:
+    | { __typename?: 'User'; api_key?: string | null | undefined }
+    | null
+    | undefined
+}
+
 export type GetBookmarksQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>
   after?: InputMaybe<Scalars['String']>
@@ -2317,6 +2345,7 @@ export type GetViewerWithSettingsQuery = {
           role?: UserRole | null | undefined
           isAdmin?: boolean | null | undefined
           pendingEmail?: string | null | undefined
+          api_key?: string | null | undefined
           emailSubscriptions?:
             | Array<
                 | {
@@ -2701,6 +2730,11 @@ export const UserSettingsFragmentDoc = gql`
       type
       subscribed
     }
+  }
+`
+export const UserApiKeyFragmentDoc = gql`
+  fragment UserApiKey on User {
+    api_key
   }
 `
 export const EditBookmarkDocument = gql`
@@ -3909,6 +3943,57 @@ export type EditUserMutationOptions = Apollo.BaseMutationOptions<
   EditUserMutation,
   EditUserMutationVariables
 >
+export const SetUserApiKeyDocument = gql`
+  mutation setUserApiKey($data: SetUserApiKeyInput) {
+    setUserApiKey(data: $data) {
+      ...UserApiKey
+    }
+  }
+  ${UserApiKeyFragmentDoc}
+`
+export type SetUserApiKeyMutationFn = Apollo.MutationFunction<
+  SetUserApiKeyMutation,
+  SetUserApiKeyMutationVariables
+>
+
+/**
+ * __useSetUserApiKeyMutation__
+ *
+ * To run a mutation, you first call `useSetUserApiKeyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetUserApiKeyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setUserApiKeyMutation, { data, loading, error }] = useSetUserApiKeyMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSetUserApiKeyMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetUserApiKeyMutation,
+    SetUserApiKeyMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    SetUserApiKeyMutation,
+    SetUserApiKeyMutationVariables
+  >(SetUserApiKeyDocument, options)
+}
+export type SetUserApiKeyMutationHookResult = ReturnType<
+  typeof useSetUserApiKeyMutation
+>
+export type SetUserApiKeyMutationResult =
+  Apollo.MutationResult<SetUserApiKeyMutation>
+export type SetUserApiKeyMutationOptions = Apollo.BaseMutationOptions<
+  SetUserApiKeyMutation,
+  SetUserApiKeyMutationVariables
+>
 export const GetBookmarksDocument = gql`
   query getBookmarks($first: Int, $after: String, $filter: BookmarkFilter) {
     bookmarks(first: $first, after: $after, filter: $filter) {
@@ -4802,11 +4887,13 @@ export const GetViewerWithSettingsDocument = gql`
         ...UserInfo
         email
         ...UserSettings
+        ...UserApiKey
       }
     }
   }
   ${UserInfoFragmentDoc}
   ${UserSettingsFragmentDoc}
+  ${UserApiKeyFragmentDoc}
 `
 
 /**

@@ -109,6 +109,8 @@ model User {
   social_other1       String? @db.Text
   social_other1_label String? @db.Text
 
+  api_key String? @db.VarChar(256)
+
   comments     Comment[]
   questions    Question[]
   reactions    Reaction[]
@@ -202,27 +204,27 @@ model UserSite {
 //
 
 model Bookmark {
-  id            String     @id @default(cuid())
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  url           String     @db.VarChar(512)
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  url           String   @db.VarChar(512)
   host          String?
-  title         String?    @db.VarChar(280)
-  image         String?    @db.VarChar(512)
-  description   String?    @db.VarChar(2048)
+  title         String?  @db.VarChar(280)
+  image         String?  @db.VarChar(512)
+  description   String?  @db.VarChar(2048)
   twitterHandle String?
-  faviconUrl    String?    @db.VarChar(512)
+  faviconUrl    String?  @db.VarChar(512)
 
   // html for url preview
-  html          String?    @db.MediumText
+  html String? @db.MediumText
 
   // bookmarked page's raw html content
-  content       String?    @db.MediumText
+  content String? @db.MediumText
 
   // relationships
-  comments      Comment[]
-  reactions     Reaction[]
-  tags          Tag[]
+  comments  Comment[]
+  reactions Reaction[]
+  tags      Tag[]
 
   // multi-tenancy
   siteId String

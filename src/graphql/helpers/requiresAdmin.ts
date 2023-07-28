@@ -7,10 +7,13 @@ export function requiresAdmin(fn) {
       return fn(parent, args, context)
     }
 
-    throw new GraphQLError('You can’t do that!', {
-      extensions: {
-        code: ApolloServerErrorCode.BAD_REQUEST,
-      },
-    })
+    throw new GraphQLError(
+      'Admin privilege is required to perform this query/mutation!',
+      {
+        extensions: {
+          code: ApolloServerErrorCode.BAD_REQUEST,
+        },
+      }
+    )
   }
 }

@@ -35,7 +35,11 @@ import {
   editSiteDomain,
   editSiteUser,
 } from '~/graphql/resolvers/mutations/site'
-import { deleteUser, editUser } from '~/graphql/resolvers/mutations/user'
+import {
+  deleteUser,
+  editUser,
+  setUserApiKey,
+} from '~/graphql/resolvers/mutations/user'
 
 export default {
   addBookmark: requiresAdmin(addBookmark),
@@ -49,6 +53,7 @@ export default {
   deleteComment: requiresUser(deleteComment),
   deleteUser: requiresUser(deleteUser),
   editUser: requiresUser(editUser),
+  setUserApiKey: requiresUser(setUserApiKey),
   editEmailSubscription: editEmailSubscription,
   addPage: requiresAdmin(addPage),
   editPage: requiresAdmin(editPage),

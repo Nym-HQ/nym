@@ -13,10 +13,8 @@ export default async function getSite(
 ) {
   const host =
     typeof req.headers.get === 'function'
-      ? // when using 'edge' runtime
-        req.headers.get('host') || req.headers.get('x-forwarded-host')
-      : // when using 'nodejs' runtime
-        req.headers['host'] || req.headers['x-forwarded-host']
+      ? req.headers.get('host') || req.headers.get('x-forwarded-host') // when using 'edge' runtime
+      : req.headers['host'] || req.headers['x-forwarded-host'] // when using 'nodejs' runtime
   if (isMainAppDomain(host)) {
     return NYM_APP_SITE as Site
   }

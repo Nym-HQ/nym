@@ -117,3 +117,29 @@ export async function editUser(_, args: MutationEditUserArgs, ctx: Context) {
     data: { pendingEmail: null },
   })
 }
+
+export async function setUserApiKey(_, args: any, ctx: Context) {
+  const { prisma, viewer, site } = ctx
+  const { data } = args
+  const { clearApiKey, regenApiKey } = data
+
+  if (clearApiKey) {
+    viewer.api_key = null
+  }
+
+  if (regenApiKey) {
+    viewer.api_key = jwt.sign(
+      {
+        userId: viewer.id,
+        created: Date.now(),
+        state: Number.parseInt(`${Math.random() * 100000000000000000}`),
+      },
+      process.env.JWT_SIGNING_KEY
+    )
+  }
+
+  return await prisma.user.update({
+    where: { id: viewer.id },
+    data: { api_key: viewer.api_key },
+  })
+}
