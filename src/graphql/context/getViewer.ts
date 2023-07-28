@@ -1,10 +1,10 @@
+import { PrismaClient } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 
 import { UserRole } from '~/graphql/types.generated'
 import { authOptions } from '~/lib/auth/nextauth'
-import prisma from '~/lib/prisma'
 
-export default async function getViewer(ctx) {
+export default async function getViewer(prisma: PrismaClient, ctx) {
   try {
     const session: any = await getServerSession(ctx.req, ctx.res, authOptions)
     const sessionUser = session?.user

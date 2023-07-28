@@ -131,6 +131,7 @@ export async function setUserApiKey(_, args: any, ctx: Context) {
     viewer.api_key = jwt.sign(
       {
         userId: viewer.id,
+        created: Date.now(),
         state: Number.parseInt(`${Math.random() * 100000000000000000}`),
       },
       process.env.JWT_SIGNING_KEY

@@ -60,7 +60,7 @@ const graphqlHandler = async (req, res) => {
   return apolloServer
     .executeHTTPGraphQLRequest({
       httpGraphQLRequest,
-      context: async () => getContext({ req, res }, prisma),
+      context: async () => getContext({ req, res }, prisma, true),
     })
     .then(async (httpGraphQLResponse) => {
       httpGraphQLResponse.headers.forEach((value, key) => {
@@ -111,7 +111,6 @@ const lockForApolloServerStart = () => {
 }
 
 export default withRateLimit(async (req, res) => {
-  console.info('/api/graphql request')
   try {
     if (apolloServerStatus == 'stopped') {
       apolloServerStatus = 'starting'

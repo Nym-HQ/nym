@@ -3,12 +3,26 @@ import { PrismaClient, SiteRole, UserSite } from '@prisma/client'
 import { Site, User, UserRole } from '~/graphql/types.generated'
 import { getSiteOwner, getUserSiteById } from '~/lib/multitenancy/server'
 
+import getApiViewer from './getApiViewer'
 import getSite from './getSite'
 import getViewer from './getViewer'
 
-export async function getContext(ctx, prisma: PrismaClient): Promise<Context> {
-  const site = await getSite(prisma, ctx.req)
-  const viewer = await getViewer(ctx)
+export async function getContext(
+  ctx,
+  prisma: PrismaClient,
+  supportApiKeyAuth: boolean = false
+): Promise<Context> {
+  const authorizationHeader =
+    typeof ctx.req.headers.get === 'function'
+      ? ctx.req.headers.get('authorization') // when using 'edge' runtime
+      : ctx.req.headers['authorization'] // when using 'nodejs' runtime
+
+  const [site, viewer] = await Promise.all([
+    getSite(prisma, ctx.req),
+    supportApiKeyAuth && authorizationHeader
+      ? getApiViewer(prisma, authorizationHeader)
+      : getViewer(prisma, ctx),
+  ])
 
   // for a new visitor, create a user-site record with the role USER
   const userSite =
