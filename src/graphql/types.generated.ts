@@ -27,6 +27,7 @@ export type Scalars = {
 }
 
 export type AddBookmarkInput = {
+  content?: InputMaybe<Scalars['String']>
   tag?: InputMaybe<Scalars['String']>
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>
   url: Scalars['String']

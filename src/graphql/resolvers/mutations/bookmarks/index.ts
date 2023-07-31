@@ -134,7 +134,7 @@ export async function addBookmark(
         description,
         html,
         faviconUrl,
-        content,
+        content: data.content || content,
         tags: {
           connectOrCreate: (tags || (tag ? [tag] : [])).map((tag) => ({
             where: {
