@@ -4,7 +4,7 @@ import { PostAccess } from '@prisma/client'
 import * as cheerio from 'cheerio'
 import { Document } from 'langchain/document'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
-import { CharacterTextSplitter } from 'langchain/text_splitter'
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter'
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 
 import parseEditorJsDataIntoMarkdown from '../editorjs/markdownParser'
@@ -59,9 +59,8 @@ async function getPostsTrainData(context: Context) {
     },
   })
 
-  const textSplitter = new CharacterTextSplitter({
+  const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: 2000,
-    separator: '\n',
   })
 
   const ids = []
@@ -119,9 +118,8 @@ async function getBookmarksTrainData(context: Context) {
     },
   })
 
-  const textSplitter = new CharacterTextSplitter({
+  const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: 2000,
-    separator: '\n',
   })
 
   const ids = []
