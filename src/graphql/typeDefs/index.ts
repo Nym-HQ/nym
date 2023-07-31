@@ -335,6 +335,7 @@ const typeDefs = gql`
     url: String!
     tag: String
     tags: [String]
+    content: String
   }
 
   input EditBookmarkInput {
