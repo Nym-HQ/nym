@@ -234,7 +234,15 @@ export async function createOrUpdateIndex(context: Context, docs, ids = null) {
       )
     } catch (err) {
       console.error('Error adding documents', err)
-      console.log('Error Chunk', chunk)
+      console.log(
+        'Error Chunk',
+        chunk.docs.map((d) => {
+          return {
+            pageContent: `${d.pageContent.slice(0, 20)}...`,
+            metadata: d.metadata,
+          }
+        })
+      )
     }
     if (progress % (chunkSize * 5) == 0) {
       console.log(`${progress} docs added...`)
