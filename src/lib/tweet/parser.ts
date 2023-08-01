@@ -5,17 +5,16 @@ import { mapClass, mapStyles } from './reference'
 import { TweetOptions, TweetSyndication } from './utils/types'
 
 /**
- * Parse a twitter url and get twitter user id
+ * Parse a twitter url and get twitter status id
  * @param url
  * @returns
  */
 export const getTwitterId = (url: string): string | boolean => {
   const u = new URL(url)
   let u1 = `${u.origin}${u.pathname}`
-  // @see https://regex101.com/r/AAtIUu/1
-  let match = u1.match(/(https:\/\/twitter.com\/.*\/status\/)|([0-9]+)/g)
-  if (match && match.length === 2) {
-    return match[1]
+  let match = /https:\/\/twitter.com\/(.*)\/status\/([0-9]+)/g.exec(u1)
+  if (match) {
+    return match[2]
   }
   return false
 }
