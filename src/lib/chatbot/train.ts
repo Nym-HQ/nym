@@ -49,6 +49,42 @@ export async function getTrainData(context: Context) {
   }
 }
 
+async function markAsTrained(context: Context, ids: string[]) {
+  const postIds = [],
+    bookmarkIds = []
+  ;(ids || []).forEach((id) =>
+    id.startsWith('b-')
+      ? bookmarkIds.push(id.split('-')[1])
+      : postIds.push(id.split('-')[0])
+  )
+
+  // remove duplicates from postIds and bookmarkIds
+  const postIdsSet = new Set(postIds)
+  const bookmarkIdsSet = new Set(bookmarkIds)
+
+  if (postIdsSet.size > 0) {
+    await context.prisma.post.updateMany({
+      where: {
+        id: { in: [...postIdsSet] },
+      },
+      data: {
+        isTrained: true,
+      },
+    })
+  }
+
+  if (bookmarkIdsSet.size > 0) {
+    await context.prisma.bookmark.updateMany({
+      where: {
+        id: { in: [...bookmarkIdsSet] },
+      },
+      data: {
+        isTrained: true,
+      },
+    })
+  }
+}
+
 async function getPostsTrainData(context: Context) {
   const { prisma, site } = context
   const publishedPosts = await prisma.post.findMany({
@@ -56,6 +92,7 @@ async function getPostsTrainData(context: Context) {
       siteId: site.id,
       publishedAt: { not: null, lt: new Date() },
       access: { equals: PostAccess.PUBLIC }, // only publicly available posts are used as training materials
+      isTrained: false,
     },
   })
 
@@ -115,6 +152,7 @@ async function getBookmarksTrainData(context: Context) {
   const bookmarks = await prisma.bookmark.findMany({
     where: {
       siteId: site.id,
+      isTrained: false,
     },
   })
 
@@ -232,6 +270,7 @@ export async function createOrUpdateIndex(context: Context, docs, ids = null) {
         chunk.docs,
         chunk.ids ? chunk.ids : undefined
       )
+      await markAsTrained(context, chunk.ids)
     } catch (err) {
       console.error('Error adding documents', err)
       console.log(
