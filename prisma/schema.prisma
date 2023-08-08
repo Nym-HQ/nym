@@ -221,6 +221,8 @@ model Bookmark {
   // bookmarked page's raw html content
   content String? @db.MediumText
 
+  isTrained Boolean @default(false)
+
   // relationships
   comments  Comment[]
   reactions Reaction[]
@@ -309,6 +311,8 @@ model Post {
   excerpt      String     @db.VarChar(280)
   featureImage String?
   access       PostAccess @default(PUBLIC)
+
+  isTrained Boolean @default(false)
 
   comments  Comment[]
   reactions Reaction[]
