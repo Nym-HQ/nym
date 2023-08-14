@@ -6,7 +6,7 @@ import { EditorJSPreviewer } from '~/components/EditorJS'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
-import { MDEditorPreviewer } from '~/components/ReactMdEditor'
+import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
@@ -56,9 +56,10 @@ export default function Home(props) {
                 )}
 
                 {homepage.text && !homepage.data?.blocks ? (
-                  <div className="mt-8">
-                    <MDEditorPreviewer source={homepage.text} />
-                  </div>
+                  <MarkdownRenderer
+                    children={homepage.text}
+                    className="prose mt-8"
+                  />
                 ) : (
                   <EditorJSPreviewer value={homepage.data} />
                 )}

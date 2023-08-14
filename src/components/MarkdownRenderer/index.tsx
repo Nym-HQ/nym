@@ -24,7 +24,7 @@ function LinkRenderer({ href, ...rest }: any) {
     return <a rel="noopener" href={href} {...rest} />
   } catch (e) {
     console.error(e)
-    return <a rel="noopener" href={href} {...rest} />
+    return <span href={href} {...rest} />
   }
 }
 

@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { DeleteButton, PrimaryButton } from '~/components/Button'
@@ -11,8 +10,6 @@ import {
 } from '~/graphql/types.generated'
 
 export function EditQuestionForm({ closeModal, question }) {
-  const router = useRouter()
-
   const initialState = {
     error: '',
     title: question.title || question.url,

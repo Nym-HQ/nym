@@ -22,7 +22,12 @@ function WritingPage(props) {
   const { data: context } = useContextQuery()
   const seo = extendSEO(routes.writing.seo, context.context.site)
 
-  return <NextSeo {...seo} />
+  return (
+    <>
+      <NextSeo {...seo} />
+      <div></div>
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

@@ -64,7 +64,9 @@ export default function App({ Component, session, pageProps }) {
 
       <SessionProvider session={session}>
         <Providers pageProps={pageProps}>
-          <Toast />
+          <div>
+            <Toast />
+          </div>
           <LoginErrorToast />
           {Component.getLayout ? (
             Component.getLayout(page, pageProps)
