@@ -8,11 +8,6 @@ export const MDEditor = dynamic(
   { ssr: false }
 )
 
-export const MDEditorPreviewer = dynamic(
-  () => import('@uiw/react-md-editor').then((mod) => mod.default.Markdown),
-  { ssr: false }
-)
-
 export function CustomizedMDEditor({ value, onChange, ...props }) {
   const fileRef = React.useRef(null)
   const fileProvider =
