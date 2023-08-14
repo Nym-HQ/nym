@@ -9,12 +9,10 @@ import TagPicker from '~/components/Tag/TagPicker'
 import { GET_BOOKMARKS } from '~/graphql/queries/bookmarks'
 import {
   useAddBookmarkMutation,
-  useContextQuery,
   useGetBookmarksQuery,
 } from '~/graphql/types.generated'
 
 export function AddBookmarkForm({ initUrl, closeModal }) {
-  const { data: context } = useContextQuery()
   const [url, setUrl] = React.useState('')
   const [tags, setTags] = React.useState(['reading'])
   const [error, setError] = React.useState('')

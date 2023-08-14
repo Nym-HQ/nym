@@ -26,12 +26,6 @@ export function EmailForm(props: {
       },
     },
     update(cache) {
-      const {
-        context: { viewer },
-      } = cache.readQuery({
-        query: GET_VIEWER_SETTINGS,
-      }) as any
-
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
         data: {
@@ -57,10 +51,6 @@ export function EmailForm(props: {
       },
     },
     update(cache) {
-      const { context } = cache.readQuery({
-        query: GET_VIEWER_SETTINGS,
-      }) as any
-
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
         data: {
@@ -86,10 +76,6 @@ export function EmailForm(props: {
       },
     },
     update(cache) {
-      const { viewer } = cache.readQuery({
-        query: GET_VIEWER_SETTINGS,
-      }) as any
-
       cache.writeQuery({
         query: GET_VIEWER_SETTINGS,
         data: {
