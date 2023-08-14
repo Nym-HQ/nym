@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import { Chat } from '~/components/chat/chat'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
+import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
 import { useContextQuery } from '~/graphql/types.generated'
@@ -44,6 +45,13 @@ export default function ChatPage(props) {
     <>
       <NextSeo {...seo} />
       <Detail.Container data-cy="chat-detail">
+        <TitleBar
+          globalMenu={true}
+          magicTitle
+          title={`Chat with ${owner.name}`}
+          scrollContainerRef={scrollContainerRef}
+          className="lg:hidden"
+        />
         <Chat id={id} user={contextData?.context.viewer?.name} />
       </Detail.Container>
     </>

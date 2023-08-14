@@ -15,6 +15,7 @@ interface Props {
   children?: React.ReactNode
   leadingAccessory?: React.ReactNode
   trailingAccessory?: React.ReactNode
+  className?: string
 }
 
 export function TitleBar({
@@ -28,6 +29,7 @@ export function TitleBar({
   leadingAccessory = null,
   trailingAccessory = null,
   children,
+  className,
 }: Props) {
   const { isOpen, setIsOpen } = React.useContext(GlobalNavigationContext)
   const [darkMode, setDarkMode] = React.useState(false)
@@ -102,70 +104,68 @@ export function TitleBar({
   }, [])
 
   return (
-    <>
-      <div
-        style={{
-          background: `rgba(${darkMode ? '50,50,50' : '255,255,255'},${
-            currentScrollOffset === 0
-              ? currentScrollOffset
-              : darkMode
-              ? currentScrollOffset + 0.5
-              : currentScrollOffset + 0.8
-          })`,
-          boxShadow: `0 1px 3px rgba(0,0,0,${currentScrollOffset})`,
-          minHeight: '48px',
-        }}
-        className={`filter-blur sticky top-0 z-10 flex flex-col justify-center px-3 py-2 dark:border-b dark:border-gray-900`}
-      >
-        <div className="flex flex-none items-center justify-between">
-          <span className="flex items-center space-x-3">
-            {globalMenu && (
-              <span
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex cursor-pointer items-center justify-center rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-800 lg:hidden"
-              >
-                {isOpen ? (
-                  <X size={16} className="text-primary" />
-                ) : (
-                  <Menu size={16} className="text-primary" />
-                )}
-              </span>
-            )}
-
-            {backButton && (
-              <Link
-                href={backButtonHref}
-                className="text-primary flex items-center justify-center rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-800 lg:hidden"
-                passHref
-              >
-                <ArrowLeft size={16} className="text-primary" />
-              </Link>
-            )}
-
-            {leadingAccessory && <>{leadingAccessory}</>}
-
-            <h2
-              style={
-                magicTitle
-                  ? {
-                      transform: `translateY(${offset}%)`,
-                      opacity: `${opacity}`,
-                    }
-                  : {}
-              }
-              className="text-primary transform-gpu text-sm font-bold line-clamp-1"
+    <div
+      style={{
+        background: `rgba(${darkMode ? '50,50,50' : '255,255,255'},${
+          currentScrollOffset === 0
+            ? currentScrollOffset
+            : darkMode
+            ? currentScrollOffset + 0.5
+            : currentScrollOffset + 0.8
+        })`,
+        boxShadow: `0 1px 3px rgba(0,0,0,${currentScrollOffset})`,
+        minHeight: '48px',
+      }}
+      className={`filter-blur sticky top-0 z-10 flex flex-col justify-center px-3 py-2 dark:border-b dark:border-gray-900 ${className}`}
+    >
+      <div className="flex flex-none items-center justify-between">
+        <span className="flex items-center space-x-3">
+          {globalMenu && (
+            <span
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex cursor-pointer items-center justify-center rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-800 lg:hidden"
             >
-              <Link href="/" className="inline-flex" passHref>
-                {title}
-              </Link>
-            </h2>
-          </span>
+              {isOpen ? (
+                <X size={16} className="text-primary" />
+              ) : (
+                <Menu size={16} className="text-primary" />
+              )}
+            </span>
+          )}
 
-          {trailingAccessory && <>{trailingAccessory}</>}
-        </div>
+          {backButton && (
+            <Link
+              href={backButtonHref}
+              className="text-primary flex items-center justify-center rounded-md p-2 hover:bg-gray-200 dark:hover:bg-gray-800 lg:hidden"
+              passHref
+            >
+              <ArrowLeft size={16} className="text-primary" />
+            </Link>
+          )}
 
-        <div>{children}</div>
+          {leadingAccessory && <>{leadingAccessory}</>}
+
+          <h2
+            style={
+              magicTitle
+                ? {
+                    transform: `translateY(${offset}%)`,
+                    opacity: `${opacity}`,
+                  }
+                : {}
+            }
+            className="text-primary transform-gpu text-sm font-bold line-clamp-1"
+          >
+            <Link href="/" className="inline-flex" passHref>
+              {title}
+            </Link>
+          </h2>
+        </span>
+
+        {trailingAccessory && <>{trailingAccessory}</>}
       </div>
-    </>
+
+      <div>{children}</div>
+    </div>
   )
 }
