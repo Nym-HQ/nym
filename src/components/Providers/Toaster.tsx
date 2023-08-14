@@ -7,21 +7,20 @@ export function Toast() {
       reverseOrder={false}
       gutter={8}
       containerClassName=""
-      containerStyle={{}}
       toastOptions={{
         // Define default options
         className: 'bg-white dark:bg-gray-700 text-primary',
         duration: 2000,
         success: {
           duration: 2000,
-          theme: {
+          iconTheme: {
             primary: 'green',
             secondary: 'black',
           },
         },
         error: {
           duration: 2000,
-          theme: {
+          iconTheme: {
             primary: 'red',
             secondary: 'white',
           },

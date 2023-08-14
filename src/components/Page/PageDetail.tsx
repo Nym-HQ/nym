@@ -7,7 +7,7 @@ import { timestampToCleanTime } from '~/lib/transformers'
 import { EditorJSPreviewer } from '../EditorJS'
 import { Paywall } from '../ListDetail/Paywall'
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
-import { MDEditorPreviewer } from '../ReactMdEditor'
+import { MarkdownRenderer } from '../MarkdownRenderer'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
 
@@ -65,9 +65,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
             </Detail.Header>
 
             {page.text && !page.data?.blocks?.length ? (
-              <div className="mt-8">
-                <MDEditorPreviewer source={page.text} />
-              </div>
+              <MarkdownRenderer children={page.text} className="prose mt-8" />
             ) : (
               <EditorJSPreviewer
                 value={page.data}

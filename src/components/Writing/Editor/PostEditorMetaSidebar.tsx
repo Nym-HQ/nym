@@ -93,6 +93,9 @@ export function PostEditorMetaSidebar({ site }) {
         },
       },
       refetchQueries: [GET_POSTS],
+      onCompleted({ editPost }) {
+        toast.success('Post updated')
+      },
     })
   }
 

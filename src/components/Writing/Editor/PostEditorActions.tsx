@@ -52,6 +52,9 @@ export function PostEditorActions() {
             slug: slugifyString(draftState.slug),
           },
         },
+        onCompleted({ editPost }) {
+          toast.success('Post updated')
+        },
       })
     }
 
@@ -65,6 +68,9 @@ export function PostEditorActions() {
           slug:
             slugifyString(draftState.slug) || slugifyString(draftState.title),
         },
+      },
+      onCompleted({ addPost }) {
+        toast.success('Draft created')
       },
     })
   }

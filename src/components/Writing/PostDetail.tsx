@@ -10,7 +10,6 @@ import { timestampToCleanTime } from '~/lib/transformers'
 import { EditorJSPreviewer } from '../EditorJS'
 import { Paywall } from '../ListDetail/Paywall'
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
-import { MDEditorPreviewer } from '../ReactMdEditor'
 import { PostActions } from './PostActions'
 import { PostSEO } from './PostSEO'
 
@@ -68,9 +67,7 @@ export function PostDetail({ slug, site, post, error, loading }) {
             </Detail.Header>
 
             {post.text && !post.data?.blocks?.length ? (
-              <div className="mt-8">
-                <MDEditorPreviewer source={post.text} />
-              </div>
+              <MarkdownRenderer children={post.text} className="prose mt-8" />
             ) : (
               <EditorJSPreviewer
                 value={post.data}
@@ -79,7 +76,6 @@ export function PostDetail({ slug, site, post, error, loading }) {
                 }}
               />
             )}
-            {/* <MarkdownRenderer children={post.text} className="prose mt-8" /> */}
 
             {/* bottom padding to give space between post content and comments */}
             <div className="py-6" />

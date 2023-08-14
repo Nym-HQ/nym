@@ -3,7 +3,6 @@ import * as React from 'react'
 import { EditorJSPreviewer } from '~/components/EditorJS'
 import { Detail } from '~/components/ListDetail/Detail'
 import { MarkdownRenderer } from '~/components/MarkdownRenderer'
-import { MDEditorPreviewer } from '~/components/ReactMdEditor'
 
 import { PageEditorContext } from './PageEditor'
 
@@ -21,9 +20,7 @@ export function PageEditorPreview() {
       </Detail.Header>
 
       {text && !data?.blocks ? (
-        <div className="mt-8">
-          <MDEditorPreviewer source={text} />
-        </div>
+        <MarkdownRenderer children={text} className="prose mt-8" />
       ) : (
         <div className="mt-3">
           <EditorJSPreviewer value={data} />
