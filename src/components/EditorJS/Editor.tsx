@@ -67,21 +67,16 @@ export default function CustomizedEditorJS({
   site,
   ...props
 }) {
-  const editorCore = useRef<EditorJS>()
-
-  const handleInitialize = useCallback((instance) => {
-    editorCore.current = instance
-    editorRef(instance)
-  }, [])
+  const editorCore = useRef<EditorJS>(null)
 
   const handleSave = useCallback(
     debounce(async () => {
-      if (editorCore.current === null) return false
+      if (!editorCore.current) return false
 
       const savedData = await editorCore.current.save()
       onChange(savedData)
     }, 200),
-    []
+    [onChange]
   )
 
   const EDITOR_JS_TOOLS = {
@@ -166,10 +161,6 @@ export default function CustomizedEditorJS({
     subscribe: SubscribeButtonTool,
   }
 
-  const editorProps = readOnly
-    ? { readOnly: true }
-    : { readOnly: false, onChange: handleSave }
-
   //initialize editorjs
   useEffect(() => {
     //initialize editor if we don't have a reference
@@ -180,21 +171,39 @@ export default function CustomizedEditorJS({
           [toolName: string]: ToolConstructable | ToolSettings
         },
         data: value,
-        async onChange(api, event) {
-          const data = await api.saver.save()
-          onChange(data)
+        readOnly: readOnly,
+        onChange: async (api, event) => {
+          handleSave()
         },
       })
+
       editorCore.current = editor
     }
 
     //add a return function handle cleanup
     return () => {
-      if (editorCore.current && editorCore.current.destroy) {
-        editorCore.current.destroy()
+      if (editorCore.current) {
+        if (editorCore.current.destroy) editorCore.current.destroy()
+        editorCore.current = null
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (editorCore.current) {
+      editorCore.current.readOnly?.toggle(readOnly)
+    }
+  }, [editorCore.current, readOnly])
+
+  useEffect(() => {
+    editorRef(editorCore.current)
+  }, [editorCore.current])
+
+  useEffect(() => {
+    if (editorCore.current && editorCore.current.render) {
+      editorCore.current.render(value)
+    }
+  }, [editorCore.current, value])
 
   return <div id={id} />
 }
