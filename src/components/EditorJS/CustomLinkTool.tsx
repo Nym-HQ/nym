@@ -18,6 +18,23 @@ export class CustomLinkTool extends LinkTool {
     super({ data, config, api, readOnly })
   }
 
+  prepareLinkPreview() {
+    const holder = super.make('div', this.CSS.linkContent, {
+      target: '_blank',
+      rel: 'nofollow noindex noreferrer',
+      onclick: (event) => {
+        window.open(this.data.link, '_blank')
+      },
+    })
+
+    this.nodes.linkImage = super.make('div', this.CSS.linkImage)
+    this.nodes.linkTitle = super.make('div', this.CSS.linkTitle)
+    this.nodes.linkDescription = super.make('p', this.CSS.linkDescription)
+    this.nodes.linkText = super.make('span', this.CSS.linkText)
+
+    return holder
+  }
+
   async fetchLinkData(url) {
     const that = this as any
     if (url.match(/https:\/\/twitter.com\/.*\/status/g)) {
@@ -61,6 +78,7 @@ export class CustomLinkTool extends LinkTool {
         description: null,
       }
       super.showLinkPreview(modifiedMeta)
+
       this.nodes.linkContent.innerHTML = html
       this.nodes.linkContent.classList.add('link-tool__content--html')
     } else {
