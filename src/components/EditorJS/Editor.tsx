@@ -67,7 +67,6 @@ export default function CustomizedEditorJS({
   site,
   ...props
 }) {
-  const editorContainer = useRef<HTMLDivElement>()
   const editorCore = useRef<EditorJS>(null)
   const editorData = useRef<string>(JSON.stringify(value))
 
@@ -172,15 +171,11 @@ export default function CustomizedEditorJS({
     [editorCore, onChange]
   )
 
-  //initialize editorjs
-  useEffect(() => {
-    //initialize editor if we don't have a reference
-    if (!editorCore.current) {
-      if (!editorContainer.current) return
-
+  const initEditor = useCallback(
+    (holder) => {
       console.log('Creating a new editorjs instance')
-      editorCore.current = new EditorJS({
-        holder: editorContainer.current,
+      const editor = new EditorJS({
+        holder: holder,
         tools: EDITOR_JS_TOOLS as any as {
           [toolName: string]: ToolConstructable | ToolSettings
         },
@@ -188,17 +183,24 @@ export default function CustomizedEditorJS({
         readOnly: readOnly,
         onChange: handleSave,
       })
-    }
+      editorCore.current = editor
+      return editor
+    },
+    [EDITOR_JS_TOOLS, handleSave]
+  )
 
-    //add a return function handle cleanup
-    return () => {
+  const setEditorContainerRef = useCallback(
+    (node) => {
       if (editorCore.current) {
         if (editorCore.current.destroy) editorCore.current.destroy()
         editorCore.current = null
-        console.log('Destroyed editorjs instance')
       }
-    }
-  }, [editorContainer.current, EDITOR_JS_TOOLS, handleSave])
+      if (node) {
+        initEditor(node)
+      }
+    },
+    [initEditor]
+  )
 
   useEffect(() => {
     if (!editorCore.current) return
@@ -226,5 +228,5 @@ export default function CustomizedEditorJS({
     }
   }, [editorCore.current, value])
 
-  return <div id={id} ref={editorContainer} />
+  return <div id={id} ref={setEditorContainerRef} />
 }
