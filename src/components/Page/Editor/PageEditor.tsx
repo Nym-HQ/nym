@@ -7,7 +7,6 @@ import { PageAccess } from '~/graphql/types.generated'
 import { PageEditorActions } from './PageEditorActions'
 import { PageEditorComposer } from './PageEditorComposer'
 import { PageEditorMetaSidebar } from './PageEditorMetaSidebar'
-import { PageEditorPreview } from './PageEditorPreview'
 import { PreviewSwitch } from './PreviewSwitch'
 
 interface PageDraftState {
@@ -30,7 +29,7 @@ export const PageEditorContext = React.createContext({
   draftState: {
     title: '',
     text: '',
-    data: {} as any,
+    data: { blocks: [] } as any,
     path: '',
     slug: '',
     excerpt: '',
@@ -75,7 +74,7 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
   const defaultDraftState = {
     title: page?.title || '',
     text: page?.text || '',
-    data: page?.data || {},
+    data: page?.data || { blocks: [] },
     path: page?.path || '',
     slug: page?.slug || '',
     excerpt: page?.excerpt || '',
@@ -131,11 +130,7 @@ export function PageEditor({ slug: propsSlug = '', site, page }) {
           leadingAccessory={<PreviewSwitch />}
         />
 
-        {isPreviewing ? (
-          <PageEditorPreview />
-        ) : (
-          <PageEditorComposer site={site} />
-        )}
+        <PageEditorComposer site={site} />
       </Detail.Container>
       <PageEditorMetaSidebar site={site} />
     </PageEditorContext.Provider>

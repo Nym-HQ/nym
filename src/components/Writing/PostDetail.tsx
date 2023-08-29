@@ -7,7 +7,7 @@ import { MarkdownRenderer } from '~/components/MarkdownRenderer'
 import { CommentType } from '~/graphql/types.generated'
 import { timestampToCleanTime } from '~/lib/transformers'
 
-import { EditorJSPreviewer } from '../EditorJS'
+import { EditorJSEditor } from '../EditorJS'
 import { Paywall } from '../ListDetail/Paywall'
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { PostActions } from './PostActions'
@@ -24,10 +24,6 @@ export function PostDetail({ slug, site, post, error, loading }) {
 
   if (!post || error) {
     return <Detail.Null type="Post" />
-  }
-
-  if (editorJsRef.current) {
-    editorJsRef.current.render(post.data)
   }
 
   const publishedAt = timestampToCleanTime({ timestamp: post.publishedAt })
@@ -69,7 +65,9 @@ export function PostDetail({ slug, site, post, error, loading }) {
             {post.text && !post.data?.blocks?.length ? (
               <MarkdownRenderer children={post.text} className="prose mt-8" />
             ) : (
-              <EditorJSPreviewer
+              <EditorJSEditor
+                site={site}
+                readOnly={true}
                 value={post.data}
                 editorRef={(el) => {
                   editorJsRef.current = el

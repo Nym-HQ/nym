@@ -7,21 +7,10 @@ const CustomizedEditorJS = dynamic(() => import('./Editor'), {
   loading: () => <p>Loading ...</p>,
 })
 
-export function EditorJSPreviewer({ value, editorRef = (el) => {} }) {
-  return (
-    <CustomizedEditorJS
-      id="editor-js-preview-container"
-      value={value}
-      readOnly={true}
-      site={null}
-      editorRef={editorRef}
-    />
-  )
-}
-
 export function EditorJSEditor({
   value,
   site,
+  readOnly = false,
   editorRef = (el) => {},
   onChange = (data) => {},
 }) {
@@ -30,6 +19,7 @@ export function EditorJSEditor({
       id="editor-js-container"
       value={value}
       site={site}
+      readOnly={readOnly}
       editorRef={editorRef}
       onChange={onChange}
     />

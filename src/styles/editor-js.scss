@@ -208,6 +208,11 @@
         padding: 0;
         overflow: hidden;
         @apply rounded-xl;
+
+        > div {
+          margin-left: auto;
+          margin-right: auto;
+        }
       }
       .link-tool__title {
         @apply text-gray-700 dark:text-gray-400;
