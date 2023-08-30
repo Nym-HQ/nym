@@ -79,11 +79,34 @@ export class CustomLinkTool extends LinkTool {
       }
       super.showLinkPreview(modifiedMeta)
 
-      this.nodes.linkContent.innerHTML = html
+      this.setInnerHTML(this.nodes.linkContent, html)
+      // this.nodes.linkContent.innerHTML = html
       this.nodes.linkContent.classList.add('link-tool__content--html')
     } else {
       super.showLinkPreview(meta)
     }
+  }
+
+  /**
+   * Sets innerHTML with scripts execution
+   * @param elm - HTMLElement to set innerHTML to
+   * @param html - string with HTML
+   */
+  setInnerHTML(elm, html) {
+    elm.innerHTML = html
+
+    Array.from(elm.querySelectorAll('script')).forEach((oldScriptEl: any) => {
+      const newScriptEl = document.createElement('script')
+
+      Array.from(oldScriptEl.attributes).forEach((attr: any) => {
+        newScriptEl.setAttribute(attr.name, attr.value)
+      })
+
+      const scriptText = document.createTextNode(oldScriptEl.innerHTML)
+      newScriptEl.appendChild(scriptText)
+
+      oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl)
+    })
   }
 
   /**
