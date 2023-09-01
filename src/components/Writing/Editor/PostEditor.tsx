@@ -7,7 +7,6 @@ import { PostAccess } from '~/graphql/types.generated'
 import { PostEditorActions } from './PostEditorActions'
 import { PostEditorComposer } from './PostEditorComposer'
 import { PostEditorMetaSidebar } from './PostEditorMetaSidebar'
-import { PostEditorPreview } from './PostEditorPreview'
 import { PreviewSwitch } from './PreviewSwitch'
 
 interface PostDraftState {
@@ -28,7 +27,7 @@ export const PostEditorContext = React.createContext({
   draftState: {
     title: '',
     text: '',
-    data: {} as any,
+    data: { blocks: [] } as any,
     slug: '',
     excerpt: '',
     publishedAt: null,
@@ -73,7 +72,7 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
   const defaultDraftState = {
     title: post?.title || '',
     text: post?.text || '',
-    data: post?.data || {},
+    data: post?.data || { blocks: [] },
     slug: post?.slug || '',
     excerpt: post?.excerpt || '',
     publishedAt: post?.publishedAt || null,
@@ -130,11 +129,7 @@ export function PostEditor({ slug: propsSlug = '', site, post }) {
           leadingAccessory={<PreviewSwitch />}
         />
 
-        {isPreviewing ? (
-          <PostEditorPreview />
-        ) : (
-          <PostEditorComposer site={site} />
-        )}
+        <PostEditorComposer site={site} />
       </Detail.Container>
       <PostEditorMetaSidebar site={site} />
     </PostEditorContext.Provider>

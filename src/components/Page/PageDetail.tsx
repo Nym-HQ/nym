@@ -4,7 +4,7 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { timestampToCleanTime } from '~/lib/transformers'
 
-import { EditorJSPreviewer } from '../EditorJS'
+import { EditorJSEditor } from '../EditorJS'
 import { Paywall } from '../ListDetail/Paywall'
 import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MarkdownRenderer } from '../MarkdownRenderer'
@@ -22,10 +22,6 @@ export function PageDetail({ slug, site, page, error, loading }) {
 
   if (!page || error) {
     return <Detail.Null type="Page" />
-  }
-
-  if (editorJsRef.current) {
-    editorJsRef.current.render(page.data)
   }
 
   const publishedAt = timestampToCleanTime({ timestamp: page.publishedAt })
@@ -67,7 +63,9 @@ export function PageDetail({ slug, site, page, error, loading }) {
             {page.text && !page.data?.blocks?.length ? (
               <MarkdownRenderer children={page.text} className="prose mt-8" />
             ) : (
-              <EditorJSPreviewer
+              <EditorJSEditor
+                site={site}
+                readOnly={true}
                 value={page.data}
                 editorRef={(el) => {
                   editorJsRef.current = el

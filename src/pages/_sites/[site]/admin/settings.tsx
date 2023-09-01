@@ -687,7 +687,7 @@ function AdminSettingsPage(props) {
                   }
                 />
               </div>
-              <div className="col-span-5">
+              {/* <div className="col-span-5">
                 <Label htmlFor="newsletter_description">Prompt Template</Label>
                 <Textarea
                   id="prompt_template"
@@ -703,7 +703,7 @@ function AdminSettingsPage(props) {
                   }
                   value={values.chatbot.prompt_template}
                 />
-              </div>
+              </div> */}
               <div className="col-span-5">
                 <Button onClick={trainChatbot} disabled={isChatbotTraining}>
                   {isChatbotTraining && <LoadingSpinner />} Train

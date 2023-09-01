@@ -18,6 +18,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const url =
     typeof urlQueryParam === 'string' ? urlQueryParam : urlQueryParam[0]
 
+  if (!/^https?:\/\//.test(url)) {
+    return res.status(400).json({
+      success: 0,
+      error: 'URL is invalid',
+    })
+  }
+
   if (getTwitterId(url)) {
     const { html, meta } = await getTweetCardHtml(url)
     return res.status(200).json({
@@ -25,6 +32,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       link: url,
       meta: meta,
       html: html,
+    })
+  } else if (url.match(/https:\/\/www.tiktok.com\/@(.*)\/video\/(.*)/)) {
+    const matches = url.match(/https:\/\/www.tiktok.com\/@(.*)\/video\/(.*)/)
+    const username = matches[1]
+    const videoId = matches[2]
+    const html =
+      `<blockquote class="tiktok-embed" cite="https://www.tiktok.com/@${username}/video/${videoId}" data-video-id="${videoId}" data-embed-from="embed_page" style="max-width: 605px;min-width: 325px;" >` +
+      ` <section> <a target="_blank" title="@${username}" href="https://www.tiktok.com/@${username}?refer=embed">@${username}</a> </section>` +
+      `</blockquote> <script type='text/javascript' src="https://www.tiktok.com/embed.js"></script>`
+    return res.status(200).json({
+      success: 1,
+      link: url,
+      meta: {
+        html,
+        provider_name: 'Tiktok',
+        url,
+        author: username,
+        author_url: `https://www.tiktok.com/@${username}`,
+      },
     })
   } else if (process.env.IFRAMELY_API_KEY) {
     const resp = await fetch(

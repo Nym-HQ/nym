@@ -22,7 +22,9 @@ export const config = {
 export default function ChatPage(props) {
   const { data: contextData } = useContextQuery()
   const scrollContainerRef = useRef(null)
-  const id = nanoid()
+  const id = `chat-s${contextData?.context?.site?.id}-${
+    `u${contextData?.context?.viewer?.id}` || `v${nanoid()}`
+  }`
 
   const owner = {
     name: contextData?.context?.owner?.name || 'Site Owner',

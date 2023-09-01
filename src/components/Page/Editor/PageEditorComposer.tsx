@@ -10,35 +10,40 @@ import { PageEditorContext } from './PageEditor'
 
 export function PageEditorComposer({ site }) {
   const context = React.useContext(PageEditorContext)
-  const { draftState, setDraftState, existingPage } = context
+  const { draftState, setDraftState, existingPage, isPreviewing } = context
   const editorJsRef = React.useRef(null)
 
-  function handleTitleChange(e) {
-    let title = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
-    var slug = draftState.slug
-    if (!existingPage) {
-      // if we are creating a new page, automatically generate slug based on the title
-      slug = slugifyString(title)
-    }
+  const handleTitleChange = React.useCallback(
+    (e) => {
+      let title = (e.target.value || '').replaceAll(/\n/g, ' ') // Do not allow line changes in the title
+      var slug = draftState.slug
+      if (!existingPage) {
+        // if we are creating a new page, automatically generate slug based on the title
+        slug = slugifyString(title)
+      }
 
-    setDraftState((draft) => ({ ...draft, title, slug }))
+      setDraftState((draft) => ({ ...draft, title, slug }))
 
-    // on press enter, focus the editor
-    if ((e.target.value || '') !== title) {
-      // line changes?
-      editorJsRef.current &&
-        editorJsRef.current._editorJS &&
-        editorJsRef.current._editorJS.focus()
-    }
-  }
+      // on press enter, focus the editor
+      if ((e.target.value || '') !== title) {
+        // line changes?
+        editorJsRef.current &&
+          editorJsRef.current._editorJS &&
+          editorJsRef.current._editorJS.focus()
+      }
+    },
+    [setDraftState, editorJsRef]
+  )
 
-  function handleTextChange(e) {
-    setDraftState((draft) => ({ ...draft, text: e }))
-  }
+  const handleTextChange = React.useCallback(
+    (e) => setDraftState((draft) => ({ ...draft, text: e })),
+    [setDraftState]
+  )
 
-  function handleDataChange(data) {
-    setDraftState((draft) => ({ ...draft, data }))
-  }
+  const handleDataChange = React.useCallback(
+    (data) => setDraftState((draft) => ({ ...draft, data })),
+    [setDraftState]
+  )
 
   return (
     <Detail.ContentContainer>
@@ -50,6 +55,7 @@ export function PageEditorComposer({ site }) {
           value={draftState.title}
           onChange={handleTitleChange}
           placeholder={'Page title'}
+          disabled={isPreviewing}
           className="block w-full p-0 text-2xl font-bold border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black md:text-3xl"
         />
       </Detail.Header>
@@ -62,7 +68,8 @@ export function PageEditorComposer({ site }) {
       ) : (
         <div className="mt-3">
           <EditorJSEditor
-            value={draftState.data}
+            value={draftState?.data}
+            readOnly={isPreviewing}
             site={site}
             editorRef={(el) => {
               editorJsRef.current = el
@@ -71,15 +78,6 @@ export function PageEditorComposer({ site }) {
           />
         </div>
       )}
-
-      {/* <Textarea
-          rows={20}
-          maxRows={2000}
-          value={draftState.text}
-          onChange={handleTextChange}
-          placeholder={'Write a page...'}
-          className="block w-full p-0 pt-5 text-lg font-normal prose border-none composer text-primary focus:border-0 focus:outline-none focus:ring-0 dark:bg-black"
-        /> */}
     </Detail.ContentContainer>
   )
 }

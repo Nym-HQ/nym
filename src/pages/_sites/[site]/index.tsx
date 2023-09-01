@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next/types'
 import { NextSeo } from 'next-seo'
 import * as React from 'react'
 
-import { EditorJSPreviewer } from '~/components/EditorJS'
+import { EditorJSEditor } from '~/components/EditorJS'
 import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
@@ -61,7 +61,11 @@ export default function Home(props) {
                     className="prose mt-8"
                   />
                 ) : (
-                  <EditorJSPreviewer value={homepage.data} />
+                  <EditorJSEditor
+                    readOnly={true}
+                    site={null}
+                    value={homepage.data}
+                  />
                 )}
                 {/* <MarkdownRenderer children={homepage.text} className="prose" /> */}
               </div>

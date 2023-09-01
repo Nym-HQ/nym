@@ -19,7 +19,7 @@ import SimpleImage from '@editorjs/simple-image'
 import Table from '@editorjs/table'
 import Warning from '@editorjs/warning'
 import debounce from 'lodash/debounce'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
 import AnyButton from './AnyButtonTool'
@@ -68,40 +68,54 @@ export default function CustomizedEditorJS({
   ...props
 }) {
   const editorCore = useRef<EditorJS>(null)
+  const editorData = useRef<string>(JSON.stringify(value))
 
-  const handleSave = useCallback(
-    debounce(async () => {
-      if (!editorCore.current) return false
-
-      const savedData = await editorCore.current.save()
-      onChange(savedData)
-    }, 200),
-    [onChange]
+  const handleUploadByFile = useCallback(
+    async (file) => {
+      // your own uploading logic here
+      try {
+        const url = await uploadFile({
+          file,
+          fileProvider: Cloudinary,
+          site: site,
+          upload_options: props.upload_options,
+        })
+        return {
+          success: 1,
+          file: {
+            url,
+            // any other image data you want to store, such as width, height, color, extension, etc
+          },
+        }
+      } catch (e) {}
+    },
+    [site, props.upload_options]
   )
 
-  const EDITOR_JS_TOOLS = {
-    ...DEFAULT_EDITOR_JS_TOOLS,
-    image: {
-      class: Image,
-      config: {
-        /**
-         * Custom uploader
-         */
-        uploader: {
+  const EDITOR_JS_TOOLS = useMemo(() => {
+    return {
+      ...DEFAULT_EDITOR_JS_TOOLS,
+      image: {
+        class: Image,
+        config: {
           /**
-           * Upload file to the server and return an uploaded image data
-           * @param {File} file - file selected from the device or pasted by drag-n-drop
-           * @return {Promise.<{success, file: {url}}>}
+           * Custom uploader
            */
-          uploadByFile: async (file) => {
-            // your own uploading logic here
-            try {
-              const url = await uploadFile({
-                file,
-                fileProvider: Cloudinary,
-                site: site,
-                upload_options: props.upload_options,
-              })
+          uploader: {
+            /**
+             * Upload file to the server and return an uploaded image data
+             * @param {File} file - file selected from the device or pasted by drag-n-drop
+             * @return {Promise.<{success, file: {url}}>}
+             */
+            uploadByFile: handleUploadByFile,
+
+            /**
+             * Send URL-string to the server. Backend should load image by this URL and return an uploaded image data
+             * @param {string} url - pasted image URL
+             * @return {Promise.<{success, file: {url}}>}
+             */
+            uploadByUrl: async (url) => {
+              // your ajax request for uploading
               return {
                 success: 1,
                 file: {
@@ -109,90 +123,90 @@ export default function CustomizedEditorJS({
                   // any other image data you want to store, such as width, height, color, extension, etc
                 },
               }
-            } catch (e) {}
-          },
-
-          /**
-           * Send URL-string to the server. Backend should load image by this URL and return an uploaded image data
-           * @param {string} url - pasted image URL
-           * @return {Promise.<{success, file: {url}}>}
-           */
-          uploadByUrl: async (url) => {
-            // your ajax request for uploading
-            return {
-              success: 1,
-              file: {
-                url,
-                // any other image data you want to store, such as width, height, color, extension, etc
-              },
-            }
+            },
           },
         },
       },
-    },
-    embed: {
-      class: Embed,
-      config: {
-        services: {
-          facebook: true,
-          instagram: true,
-          youtube: true,
-          twitter: false, // disable twitter service, as we deal with it in linkTool
-          'twitch-video': true,
-          miro: true,
-          vime: true,
-          gfycat: true,
-          imgur: true,
-          vine: true,
-          aparat: true,
-          'yandex-music-track': true,
-          coub: true,
-          codepen: true,
-          pinterest: true,
+      embed: {
+        class: Embed,
+        config: {
+          services: {
+            facebook: true,
+            instagram: true,
+            youtube: true,
+            twitter: false, // disable twitter service, as we deal with it in linkTool
+            'twitch-video': true,
+            miro: true,
+            vime: true,
+            gfycat: true,
+            imgur: true,
+            vine: true,
+            aparat: true,
+            'yandex-music-track': true,
+            coub: true,
+            codepen: true,
+            pinterest: true,
+          },
         },
       },
-    },
-    linkTool: {
-      class: CustomLinkTool,
-      config: {
-        endpoint: '/api/link-meta', // endpoint for url data fetching,
+      linkTool: {
+        class: CustomLinkTool,
+        config: {
+          endpoint: '/api/link-meta', // endpoint for url data fetching,
+        },
       },
-    },
-    subscribe: SubscribeButtonTool,
-  }
+      subscribe: SubscribeButtonTool,
+    }
+  }, [handleUploadByFile])
 
-  //initialize editorjs
-  useEffect(() => {
-    //initialize editor if we don't have a reference
-    if (!editorCore.current) {
+  const handleSave = useCallback(
+    debounce(async () => {
+      if (!editorCore.current || editorCore.current.readOnly?.isEnabled)
+        return false
+
+      const savedData = await editorCore.current.save()
+      editorData.current = JSON.stringify(savedData)
+      onChange(savedData)
+    }, 200),
+    [editorCore, onChange]
+  )
+
+  const initEditor = useCallback(
+    (holder) => {
+      console.log('Creating a new editorjs instance')
       const editor = new EditorJS({
-        holder: id,
+        holder: holder,
         tools: EDITOR_JS_TOOLS as any as {
           [toolName: string]: ToolConstructable | ToolSettings
         },
         data: value,
         readOnly: readOnly,
-        onChange: async (api, event) => {
-          handleSave()
-        },
+        onChange: handleSave,
       })
-
       editorCore.current = editor
-    }
+      return editor
+    },
+    [EDITOR_JS_TOOLS, handleSave]
+  )
 
-    //add a return function handle cleanup
-    return () => {
+  const setEditorContainerRef = useCallback(
+    (node) => {
       if (editorCore.current) {
         if (editorCore.current.destroy) editorCore.current.destroy()
         editorCore.current = null
       }
-    }
-  }, [])
+      if (node) {
+        initEditor(node)
+      }
+    },
+    [initEditor]
+  )
 
   useEffect(() => {
-    if (editorCore.current) {
-      editorCore.current.readOnly?.toggle(readOnly)
-    }
+    if (!editorCore.current) return
+
+    console.log('toggling readonly state of the editorjs', readOnly)
+    editorCore.current.readOnly?.toggle(readOnly)
   }, [editorCore.current, readOnly])
 
   useEffect(() => {
@@ -200,10 +214,19 @@ export default function CustomizedEditorJS({
   }, [editorCore.current])
 
   useEffect(() => {
-    if (editorCore.current && editorCore.current.render) {
-      editorCore.current.render(value)
+    if (
+      editorCore.current &&
+      editorCore.current.render &&
+      editorData.current != JSON.stringify(value)
+    ) {
+      try {
+        console.log('rendering editorjs with value', value)
+        editorCore.current.render(value || { blocks: [] })
+      } catch {
+        // swallow error
+      }
     }
   }, [editorCore.current, value])
 
-  return <div id={id} />
+  return <div id={id} ref={setEditorContainerRef} />
 }
