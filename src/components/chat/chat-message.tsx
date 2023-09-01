@@ -4,12 +4,14 @@ import remarkMath from 'remark-math'
 
 import { ChatMessageActions } from '~/components/chat/chat-message-actions'
 import { MemoizedReactMarkdown } from '~/components/chat/markdown'
+import { Button } from '~/components/chat/ui/button'
 import { CodeBlock } from '~/components/chat/ui/codeblock'
 import { IconOpenAI, IconUser } from '~/components/chat/ui/icons'
 import { cn } from '~/lib/utils'
 
 export interface ChatMessageProps {
   message: Message
+  setInput?: any
 }
 
 export function ChatMessage({ message, ...props }: ChatMessageProps) {
@@ -70,6 +72,26 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
         >
           {message.content}
         </MemoizedReactMarkdown>
+        {(message as any).questions && (
+          <ul>
+            {(message as any).questions.map((question, i) => (
+              <li key={`q-${i}`}>
+                <Button
+                  variant="outline"
+                  className="mb-1 w-full flex justify-between h-auto"
+                  onClick={() =>
+                    typeof props.setInput === 'function' &&
+                    props.setInput(question)
+                  }
+                >
+                  <span className="text-left">{question}</span>
+                  <span>&rarr;</span>
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+
         <ChatMessageActions message={message} />
       </div>
     </div>
