@@ -17,6 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const { atom } = await generateBookmarkRSS(context)
+    console.log(`Atom feed generated: ${atom.length} bytes`)
 
     if (res) {
       res.setHeader('Content-Type', 'text/xml')

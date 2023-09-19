@@ -10,6 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const { json } = await generateBookmarkRSS(context)
+    console.log(`JSON feed generated: ${json.length} bytes`)
 
     res.setHeader('Content-Type', 'application/json')
     res.write(json)
