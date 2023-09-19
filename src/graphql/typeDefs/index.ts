@@ -387,6 +387,7 @@ const typeDefs = gql`
     slug: String!
     excerpt: String
     access: PostAccess
+    published: Boolean
   }
 
   input EditPostInput {

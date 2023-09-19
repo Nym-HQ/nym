@@ -69,7 +69,7 @@ export async function editPost(_, args: MutationEditPostArgs, ctx: Context) {
         data: blocks,
         slug,
         excerpt,
-        publishedAt: publishedAt,
+        publishedAt,
         access: access || PostAccess.Public,
       },
     })
@@ -136,7 +136,12 @@ export async function addPost(_, args: MutationAddPostArgs, ctx: Context) {
     excerpt = '',
     access = PostAccess.Public,
   } = data
-  const { prisma, viewer, site } = ctx
+  const { prisma, viewer, site, isApiViewer } = ctx
+
+  let publishedAt = null
+  if (isApiViewer && data.published) {
+    publishedAt = new Date()
+  }
 
   return await prisma.post
     .create({
@@ -148,6 +153,7 @@ export async function addPost(_, args: MutationAddPostArgs, ctx: Context) {
         slug,
         excerpt,
         access: access || PostAccess.Public,
+        publishedAt,
         author: {
           connect: { id: viewer.id },
         },
