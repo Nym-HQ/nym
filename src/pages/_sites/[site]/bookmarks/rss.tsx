@@ -15,12 +15,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req, res } = ctx
   const context = await getContext(ctx, prisma)
 
-  const { rss } = await generateBookmarkRSS(context)
+  try {
+    const { rss } = await generateBookmarkRSS(context)
 
-  if (res) {
-    res.setHeader('Content-Type', 'text/xml')
-    res.write(rss)
-    res.end()
+    if (res) {
+      res.setHeader('Content-Type', 'text/xml')
+      res.write(rss)
+      res.end()
+    }
+  } catch (err) {
+    console.error(err)
   }
 
   return {
