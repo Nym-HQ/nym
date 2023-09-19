@@ -86,7 +86,10 @@ export default async function getUrlMetaData(url) {
     author = getMetavalue('author')
     creator = getMetavalue('creator')
     text = extractMainText($)
-  } else if (contentType.startsWith('text/')) {
+  } else if (
+    contentType.startsWith('text/') ||
+    contentType === 'application/json'
+  ) {
     text = await res.text()
   } else if (
     contentType.startsWith('image/') ||
