@@ -24,6 +24,8 @@ export async function generateRSS(context: Context) {
     },
   })
 
+  console.log(`Generating feeds of ${bookmarks.length} bookmarks`)
+
   const date = new Date()
   const author = {
     name: context.owner.name,
