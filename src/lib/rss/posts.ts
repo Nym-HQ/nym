@@ -19,6 +19,8 @@ export async function generateRSS(context: Context) {
     variables: { filter: { published: true } },
   })
 
+  console.log(`Generating feeds of ${posts.length} posts`)
+
   const date = new Date()
   const author = {
     name: context.owner.name,
