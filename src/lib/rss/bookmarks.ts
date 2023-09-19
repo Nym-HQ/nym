@@ -66,7 +66,7 @@ export async function generateRSS(context: Context) {
       link: bookmark.url,
       description: bookmark.description,
       date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
-      content: bookmark.html || bookmark.content || '',
+      content: null,
       image: bookmark.image,
       author: [author],
     })
