@@ -17,7 +17,7 @@ export function SignIn({ children = null, trigger = null }) {
       <div className="flex flex-1 flex-col items-center justify-center">
         <p className="text-primary mb-3">- Please login - </p>
 
-        {/* <TwitterButton
+        <TwitterButton
           style={{ width: '190px', height: '38px' }}
           size="large"
           onClick={() =>
@@ -29,7 +29,7 @@ export function SignIn({ children = null, trigger = null }) {
         >
           <TwitterIcon />
           <span>Login with Twitter</span>
-        </TwitterButton> */}
+        </TwitterButton>
 
         <GoogleButton
           style={{ width: '190px', height: '38px' }}
