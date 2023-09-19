@@ -10,6 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const { atom } = await generateBookmarkRSS(context)
+    console.log(`Atom feed generated: ${atom.length} bytes`)
 
     res.setHeader('Content-Type', 'text/xml')
     res.write(atom)

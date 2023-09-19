@@ -9,6 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const context = await getContext(ctx, prisma)
   try {
     const { rss } = await generateBookmarkRSS(context)
+    console.log(`RSS feed generated: ${rss.length} bytes`)
 
     res.setHeader('Content-Type', 'text/xml')
     res.write(rss)

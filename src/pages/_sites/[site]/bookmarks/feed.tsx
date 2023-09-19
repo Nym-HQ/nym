@@ -17,6 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   try {
     const { json } = await generateBookmarkRSS(context)
+    console.log(`JSON feed generated: ${json.length} bytes`)
 
     if (res) {
       res.setHeader('Content-Type', 'application/json')
