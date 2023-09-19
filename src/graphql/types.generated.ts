@@ -48,6 +48,7 @@ export type AddPostInput = {
   access?: InputMaybe<PostAccess>
   data: Scalars['String']
   excerpt?: InputMaybe<Scalars['String']>
+  published?: InputMaybe<Scalars['Boolean']>
   slug: Scalars['String']
   text: Scalars['String']
   title: Scalars['String']

@@ -17,9 +17,10 @@ export async function getContext(
       ? ctx.req.headers.get('authorization') // when using 'edge' runtime
       : ctx.req.headers['authorization'] // when using 'nodejs' runtime
 
+  const isApiViewer = supportApiKeyAuth && authorizationHeader
   const [site, viewer] = await Promise.all([
     getSite(prisma, ctx.req),
-    supportApiKeyAuth && authorizationHeader
+    isApiViewer
       ? getApiViewer(prisma, authorizationHeader)
       : getViewer(prisma, ctx),
   ])
@@ -48,6 +49,7 @@ export async function getContext(
     userSite,
     prisma,
     owner,
+    isApiViewer,
   } as Context
 }
 
@@ -57,4 +59,5 @@ export type Context = {
   site: Site | null
   userSite: UserSite | null
   owner: User | null
+  isApiViewer: boolean
 }
