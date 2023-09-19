@@ -183,7 +183,13 @@ export default function Home(props) {
       </Detail.Container>
     )
   } else {
-    return <SignIn />
+    return (
+      <SignIn
+        isTwitterLoginEnabled={props.isTwitterLoginEnabled}
+        isGoogleLoginEnabled={props.isGoogleLoginEnabled}
+        isGithubLoginEnabled={props.isGithubLoginEnabled}
+      />
+    )
   }
 }
 
@@ -244,7 +250,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
+  const isTwitterLoginEnabled =
+    (process.env.TWITTER_API_KEY && process.env.TWITTER_API_SECRET) ||
+    (process.env.TWITTER_CLIENT_ID && process.env.TWITTER_CLIENT_SECRET) ||
+    false
+  const isGoogleLoginEnabled =
+    (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) || false
+  const isGithubLoginEnabled =
+    (process.env.GITHUB_ID && process.env.GITHUB_SECRET) || false
+
   return addApolloState(apolloClient, {
-    props: { ...commonProps },
+    props: {
+      ...commonProps,
+      isTwitterLoginEnabled,
+      isGoogleLoginEnabled,
+      isGithubLoginEnabled,
+    },
   })
 }

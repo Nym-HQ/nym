@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { Mail, Plus, Settings } from 'react-feather'
-import { User } from 'react-feather'
 import { Users } from 'react-feather'
 
 import { GhostButton } from '~/components/Button'
@@ -92,6 +91,16 @@ export function SiteSidebarNavigation() {
           isActive:
             router.asPath.indexOf('/qa') >= 0 &&
             !router.asPath.startsWith('/qa/pending'),
+          trailingAction: null,
+          isExternal: false,
+        },
+
+        {
+          href: '/chat',
+          label: 'Chat',
+          icon: AMAIcon,
+          trailingAccessory: null,
+          isActive: router.asPath.indexOf('/chat') >= 0,
           trailingAction: null,
           isExternal: false,
         },
