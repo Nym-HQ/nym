@@ -2,6 +2,7 @@ import { Feed } from 'feed'
 
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 
 import { getSiteDomain } from '../multitenancy/client'
@@ -25,12 +26,17 @@ export async function generateRSS(context: Context) {
     },
   })
 
+  const owner =
+    context.site.id === NYM_APP_SITE.id
+      ? { name: 'Nym', email: 'support@nymhq.com' }
+      : context.owner
+
   console.log(`Generating feeds of ${bookmarks.length} bookmarks`)
 
   const date = new Date()
   const author = {
-    name: context.owner.name,
-    email: context.owner.email,
+    name: owner.name,
+    email: owner.email,
     link: baseUrl,
   }
   const seo = extendSEO(routes.bookmarks.seo, context.site)
