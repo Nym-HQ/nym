@@ -6,7 +6,8 @@ import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 
 import { getSiteDomain } from '../multitenancy/client'
-import { fixXmlEntities } from './helpers'
+import { isValidURL } from '../utils'
+import { fixXmlAttribute } from './helpers'
 
 export async function generateRSS(context: Context) {
   const baseUrl = `https://${getSiteDomain(context.site)}`
@@ -74,7 +75,10 @@ export async function generateRSS(context: Context) {
       description: bookmark.description,
       date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
       content: null,
-      image: bookmark.image ? fixXmlEntities(bookmark.image) : null,
+      image:
+        bookmark.image && isValidURL(bookmark.image)
+          ? fixXmlAttribute(bookmark.image)
+          : null,
       author: [author],
     })
   })

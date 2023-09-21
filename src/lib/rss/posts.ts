@@ -8,7 +8,8 @@ import { GET_POSTS } from '~/graphql/queries/posts'
 
 import { initApolloClient } from '../apollo'
 import { getSiteDomain } from '../multitenancy/client'
-import { fixXmlEntities } from './helpers'
+import { isValidURL } from '../utils'
+import { fixXmlAttribute } from './helpers'
 
 export async function generateRSS(context: Context) {
   const baseUrl = `https://${getSiteDomain(context.site)}`
@@ -76,7 +77,10 @@ export async function generateRSS(context: Context) {
       author: [postAuthor],
       contributor: [postAuthor],
       date: new Date(post.publishedAt),
-      image: post.featureImage ? fixXmlEntities(post.featureImage) : null,
+      image:
+        post.featureImage && isValidURL(post.featureImage)
+          ? fixXmlAttribute(post.featureImage)
+          : null,
       // content: post.data,
     })
   })
