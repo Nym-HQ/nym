@@ -70,7 +70,7 @@ export async function generateRSS(context: Context) {
       author: [postAuthor],
       contributor: [postAuthor],
       date: new Date(post.publishedAt),
-      image: post.featureImage,
+      image: post.featureImage ? encodeURI(post.featureImage) : null,
       // content: post.data,
     })
   })
