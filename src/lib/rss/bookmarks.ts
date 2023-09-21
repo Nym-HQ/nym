@@ -5,6 +5,7 @@ import { extendSEO } from '~/config/seo'
 import { Context } from '~/graphql/context'
 
 import { getSiteDomain } from '../multitenancy/client'
+import { fixXmlEntities } from './helpers'
 
 export async function generateRSS(context: Context) {
   const baseUrl = `https://${getSiteDomain(context.site)}`
@@ -67,7 +68,7 @@ export async function generateRSS(context: Context) {
       description: bookmark.description,
       date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
       content: null,
-      image: bookmark.image ? encodeURI(bookmark.image) : null,
+      image: bookmark.image ? fixXmlEntities(bookmark.image) : null,
       author: [author],
     })
   })
