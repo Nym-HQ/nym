@@ -84,10 +84,10 @@ export async function toggleReaction(
 
   return await fn()
     .then(() => {
-      return { ...parentObject, reactableType: table }
+      return { ...parentObject, reactableType: type }
     })
     .catch((err) => {
       console.error({ err })
-      return { ...parentObject, reactableType: table }
+      return { ...parentObject, reactableType: type }
     })
 }
