@@ -11,7 +11,7 @@
  * @param str
  * @returns
  */
-export function fixXmlEntities(str) {
+export function fixXmlAttribute(str) {
   if (/&(?!amp;)/gi.test(str)) {
     str = str.replace(/(&(?!amp;))/gi, '&amp;')
   }

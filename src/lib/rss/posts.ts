@@ -2,12 +2,14 @@ import { Feed } from 'feed'
 
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 import { GET_POSTS } from '~/graphql/queries/posts'
 
 import { initApolloClient } from '../apollo'
 import { getSiteDomain } from '../multitenancy/client'
-import { fixXmlEntities } from './helpers'
+import { isValidURL } from '../utils'
+import { fixXmlAttribute } from './helpers'
 
 export async function generateRSS(context: Context) {
   const baseUrl = `https://${getSiteDomain(context.site)}`
@@ -21,11 +23,15 @@ export async function generateRSS(context: Context) {
   })
 
   console.log(`Generating feeds of ${posts.length} posts`)
+  const owner =
+    context.site.id === NYM_APP_SITE.id
+      ? { name: 'Nym', email: 'support@nymhq.com' }
+      : context.owner
 
   const date = new Date()
   const author = {
-    name: context.owner.name,
-    email: context.owner.email,
+    name: owner.name,
+    email: owner.email,
     link: baseUrl,
   }
   const seo = extendSEO(routes.writing.seo, context.site)
@@ -71,7 +77,10 @@ export async function generateRSS(context: Context) {
       author: [postAuthor],
       contributor: [postAuthor],
       date: new Date(post.publishedAt),
-      image: post.featureImage ? fixXmlEntities(post.featureImage) : null,
+      image:
+        post.featureImage && isValidURL(post.featureImage)
+          ? fixXmlAttribute(post.featureImage)
+          : null,
       // content: post.data,
     })
   })

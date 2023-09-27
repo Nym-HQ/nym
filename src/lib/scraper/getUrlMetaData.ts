@@ -3,6 +3,8 @@ import URL from 'url'
 
 import { validUrl } from '~/lib/validators'
 
+import { isValidURL } from '../utils'
+
 /**
  * NOTE: IFramely is a great service for getting metadata.
  *      It has a free tier but sometimes it is not enough.
@@ -81,7 +83,8 @@ export default async function getUrlMetaData(url) {
       : description
 
     image = getMetavalue('image')
-    image = image ? (image.length > IMAGE_LIMIT ? null : image) : image
+    image = image ? (image.length > IMAGE_LIMIT ? null : image) : null
+    image = image && isValidURL(image) ? image : null
 
     author = getMetavalue('author')
     creator = getMetavalue('creator')

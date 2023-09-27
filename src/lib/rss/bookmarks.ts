@@ -2,10 +2,12 @@ import { Feed } from 'feed'
 
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
+import { NYM_APP_SITE } from '~/graphql/constants'
 import { Context } from '~/graphql/context'
 
 import { getSiteDomain } from '../multitenancy/client'
-import { fixXmlEntities } from './helpers'
+import { isValidURL } from '../utils'
+import { fixXmlAttribute } from './helpers'
 
 export async function generateRSS(context: Context) {
   const baseUrl = `https://${getSiteDomain(context.site)}`
@@ -25,12 +27,17 @@ export async function generateRSS(context: Context) {
     },
   })
 
+  const owner =
+    context.site.id === NYM_APP_SITE.id
+      ? { name: 'Nym', email: 'support@nymhq.com' }
+      : context.owner
+
   console.log(`Generating feeds of ${bookmarks.length} bookmarks`)
 
   const date = new Date()
   const author = {
-    name: context.owner.name,
-    email: context.owner.email,
+    name: owner.name,
+    email: owner.email,
     link: baseUrl,
   }
   const seo = extendSEO(routes.bookmarks.seo, context.site)
@@ -68,7 +75,10 @@ export async function generateRSS(context: Context) {
       description: bookmark.description,
       date: new Date(bookmark.updatedAt || bookmark.createdAt || 0),
       content: null,
-      image: bookmark.image ? fixXmlEntities(bookmark.image) : null,
+      image:
+        bookmark.image && isValidURL(bookmark.image)
+          ? fixXmlAttribute(bookmark.image)
+          : null,
       author: [author],
     })
   })

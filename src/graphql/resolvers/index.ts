@@ -9,6 +9,7 @@ import { dateScalar } from '~/graphql/scalars'
 import {
   EmailSubscriptionType,
   QuestionStatus,
+  ReactionType,
   UserRole,
 } from '~/graphql/types.generated'
 import { validEmail } from '~/lib/validators'
@@ -22,13 +23,11 @@ const resolvers = {
   Reactable: {
     __resolveType(obj) {
       switch (obj.reactableType) {
-        case 'question':
+        case ReactionType.Question:
           return 'Question'
-        case 'page':
-          return 'Page'
-        case 'post':
+        case ReactionType.Post:
           return 'Post'
-        case 'bookmark':
+        case ReactionType.Bookmark:
           return 'Bookmark'
         default:
           return null

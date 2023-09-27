@@ -70,3 +70,12 @@ export function isPreservedPath(path: string): boolean {
     preservedPaths.findIndex((p) => path === p || path.startsWith(p + '/')) >= 0
   )
 }
+
+export function isValidURL(str: string): boolean {
+  try {
+    new URL(str)
+    return true
+  } catch {
+    return false
+  }
+}
