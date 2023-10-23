@@ -51,8 +51,8 @@ export function Dropzone(props: DropzoneProps) {
     noKeyboard: true,
     multiple: false,
     noClick: true,
-    maxSize: 1000 * 1000 * 3, // 3mb
-    accept: ['image/jpeg', 'image/png', 'image/gif'],
+    maxSize: 1024 * 1024 * 10, // 10mb
+    accept: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'],
   })
 
   return (
