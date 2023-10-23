@@ -1,5 +1,6 @@
 'use client'
 
+import Attaches from '@editorjs/attaches'
 import CheckList from '@editorjs/checklist'
 import Code from '@editorjs/code'
 import Delimiter from '@editorjs/delimiter'
@@ -21,7 +22,7 @@ import Warning from '@editorjs/warning'
 import debounce from 'lodash/debounce'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
+import { Cloudinary, uploadFile } from '../Dropzone/uploadFile'
 import AnyButton from './AnyButtonTool'
 import { CustomLinkTool } from './CustomLinkTool'
 import HeaderExtended from './Header'
@@ -85,46 +86,62 @@ export default function CustomizedEditorJS({
           file: {
             url,
             // any other image data you want to store, such as width, height, color, extension, etc
+            name: file.name,
+            title: file.name,
           },
+          title: file.name,
         }
       } catch (e) {}
     },
     [site, props.upload_options]
   )
 
+  /**
+   * Custom uploader
+   */
+  const customUploader = {
+    /**
+     * Upload file to the server and return an uploaded image data
+     * @param {File} file - file selected from the device or pasted by drag-n-drop
+     * @return {Promise.<{success, file: {url}}>}
+     */
+    uploadByFile: handleUploadByFile,
+
+    /**
+     * Send URL-string to the server. Backend should load image by this URL and return an uploaded image data
+     * @param {string} url - pasted image URL
+     * @return {Promise.<{success, file: {url}}>}
+     */
+    uploadByUrl: async (url) => {
+      // your ajax request for uploading
+      return {
+        success: 1,
+        file: {
+          url,
+          // any other image data you want to store, such as width, height, color, extension, etc
+        },
+      }
+    },
+  }
+
   const EDITOR_JS_TOOLS = useMemo(() => {
     return {
       ...DEFAULT_EDITOR_JS_TOOLS,
+      attaches: {
+        class: Attaches,
+        config: {
+          uploader: customUploader,
+          types: 'application/pdf',
+          buttonText: 'Upload PDF',
+        },
+      },
       image: {
         class: Image,
         config: {
           /**
            * Custom uploader
            */
-          uploader: {
-            /**
-             * Upload file to the server and return an uploaded image data
-             * @param {File} file - file selected from the device or pasted by drag-n-drop
-             * @return {Promise.<{success, file: {url}}>}
-             */
-            uploadByFile: handleUploadByFile,
-
-            /**
-             * Send URL-string to the server. Backend should load image by this URL and return an uploaded image data
-             * @param {string} url - pasted image URL
-             * @return {Promise.<{success, file: {url}}>}
-             */
-            uploadByUrl: async (url) => {
-              // your ajax request for uploading
-              return {
-                success: 1,
-                file: {
-                  url,
-                  // any other image data you want to store, such as width, height, color, extension, etc
-                },
-              }
-            },
-          },
+          uploader: customUploader,
         },
       },
       embed: {

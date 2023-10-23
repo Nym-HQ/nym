@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone'
 import { Site } from '~/graphql/types.generated'
 
 import { ActiveDropzone } from './ActiveDropzone'
-import { Cloudflare, Cloudinary, uploadFile } from './uploadUtils'
+import { Cloudflare, Cloudinary, uploadFile } from './uploadFile'
 
 interface DropzoneProps {
   site?: Site
@@ -52,7 +52,7 @@ export function Dropzone(props: DropzoneProps) {
     multiple: false,
     noClick: true,
     maxSize: 1024 * 1024 * 10, // 10mb
-    accept: ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'],
+    accept: ['image/jpeg', 'image/png', 'image/gif'],
   })
 
   return (
