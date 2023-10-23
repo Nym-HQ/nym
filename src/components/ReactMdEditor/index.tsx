@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import * as React from 'react'
 
-import { Cloudflare, Cloudinary, uploadFile } from '../Dropzone/uploadUtils'
+import { Cloudflare, Cloudinary, uploadFile } from '../Dropzone/uploadFile'
 
 export const MDEditor = dynamic(
   () => import('@uiw/react-md-editor').then((mod) => mod.default),
