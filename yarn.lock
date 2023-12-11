@@ -2356,22 +2356,20 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.6.tgz"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@prisma/client@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.0.0.tgz#9f0cd4164f4ffddb28bb1811c27eb7fa1e01a087"
-  integrity sha512-XlO5ELNAQ7rV4cXIDJUNBEgdLwX3pjtt9Q/RHqDpGf43szpNJx2hJnggfFs7TKNx0cOFsl6KJCSfqr5duEU/bQ==
-  dependencies:
-    "@prisma/engines-version" "4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
-
-"@prisma/engines-version@4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584":
-  version "4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584"
-  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.17.0-26.6b0aef69b7cdfc787f822ecd7cdc76d5f1991584.tgz#b36eda5620872d3fac810c302a7e46cf41daa033"
-  integrity sha512-HHiUF6NixsldsP3JROq07TYBLEjXFKr6PdH8H4gK/XAoTmIplOJBCgrIUMrsRAnEuGyRoRLXKXWUb943+PFoKQ==
+"@prisma/client@^5.7.0":
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.7.0.tgz#c29dd9a16e100902eb2d2443d90fee2482d2aeac"
+  integrity sha512-cZmglCrfNbYpzUtz7HscVHl38e9CrUs31nrVoGUK1nIPXGgt8hT4jj2s657UXcNdQ/jBUxDgGmHyu2Nyrq1txg==
 
 "@prisma/engines@5.0.0":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-5.0.0.tgz#5249650eabe77c458c90f2be97d8210353c2e22e"
   integrity sha512-kyT/8fd0OpWmhAU5YnY7eP31brW1q1YrTGoblWrhQJDiN/1K+Z8S1kylcmtjqx5wsUGcP1HBWutayA/jtyt+sg==
+
+"@prisma/extension-accelerate@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@prisma/extension-accelerate/-/extension-accelerate-0.6.2.tgz#31e0fabb0b0dc318dca9b4087e89bf07219a4866"
+  integrity sha512-KIBVPeWt8qaSg7wQ+TXmCVeUDoW75whtXcdS9dbHxRoO2OWFH5I9+qbkHBhx5Wj/h1wQpS8usuxGnsZqiBjUpQ==
 
 "@prisma/prisma-fmt-wasm@4.13.0-52.integration-mobc-upstream-d100a9299fcb9cffb064301998e9a94ce2722c49":
   version "4.13.0-52.integration-mobc-upstream-d100a9299fcb9cffb064301998e9a94ce2722c49"
