@@ -142,7 +142,7 @@ export default function CustomizedEditorJS({
         inlineToolbar: ['link'],
       },
       link: {
-        class: Hyperlink
+        class: Hyperlink,
       },
       table: {
         class: Table,
