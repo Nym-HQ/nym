@@ -9,7 +9,7 @@ import Embed from '@editorjs/embed'
 import Header from '@editorjs/header'
 import Image from '@editorjs/image'
 import InlineCode from '@editorjs/inline-code'
-import LinkTool from '@editorjs/link'
+import LinkWithTarget from '@editorjs/link'
 import List from '@editorjs/list'
 import Hyperlink from 'editorjs-link-with-target'
 import Marker from '@editorjs/marker'
@@ -48,7 +48,7 @@ const DEFAULT_EDITOR_JS_TOOLS = {
   warning: Warning,
   code: Code,
   linkTool: LinkTool,
-  link: Hyperlink,
+  link: LinkWithTarget,
   image: Image,
   raw: Raw,
   header: HeaderExtended as typeof Header,
