@@ -11,6 +11,7 @@ import Image from '@editorjs/image'
 import InlineCode from '@editorjs/inline-code'
 import LinkTool from '@editorjs/link'
 import List from '@editorjs/list'
+import Hyperlink from 'editorjs-link-with-target'
 import Marker from '@editorjs/marker'
 import NestedList from '@editorjs/nested-list'
 import Paragraph from '@editorjs/paragraph'
@@ -47,6 +48,7 @@ const DEFAULT_EDITOR_JS_TOOLS = {
   warning: Warning,
   code: Code,
   linkTool: LinkTool,
+  link: Hyperlink,
   image: Image,
   raw: Raw,
   header: HeaderExtended as typeof Header,
