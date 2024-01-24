@@ -33,11 +33,6 @@ const DEFAULT_EDITOR_JS_TOOLS = {
   // paragraph: Paragraph,
   embed: Embed,
   table: Table,
-  tools: {
-    table: {
-      class: Table,
-       inlineToolbar: ['link']
-  },
   list: List,
   // !TODO: Replace @editorjs/list with @editorjs/nested-list,
   //        But we should wait for [the PR](https://github.com/editor-js/nested-list/pull/39) to be merged.
@@ -139,6 +134,10 @@ export default function CustomizedEditorJS({
           types: 'application/pdf',
           buttonText: 'Upload PDF',
         },
+      },
+      table: {
+        class: Table,
+        inlineToolbar: ['link']
       },
       image: {
         class: Image,
