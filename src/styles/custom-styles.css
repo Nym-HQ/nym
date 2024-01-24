@@ -319,4 +319,10 @@
       transform: translate(20%, 10%);
     }
   }
+
+
+  body .tc-cell {border: none !important;}
+  body .tc-table {border-top: none !important;}
+
+
 }
