@@ -137,7 +137,7 @@ export default function CustomizedEditorJS({
       },
       table: {
         class: Table,
-        inlineToolbar: ['link']
+        inlineToolbar: ['link'],
       },
       image: {
         class: Image,
