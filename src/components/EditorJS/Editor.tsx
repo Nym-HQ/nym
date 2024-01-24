@@ -135,6 +135,10 @@ export default function CustomizedEditorJS({
           buttonText: 'Upload PDF',
         },
       },
+      list: {
+        class: List,
+        inlineToolbar: ['link'],
+      },
       table: {
         class: Table,
         inlineToolbar: ['link'],
