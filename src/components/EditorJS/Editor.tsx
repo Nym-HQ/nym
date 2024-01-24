@@ -139,6 +139,9 @@ export default function CustomizedEditorJS({
         class: List,
         inlineToolbar: ['link'],
       },
+      link: {
+        class: Hyperlink
+      },
       table: {
         class: Table,
         inlineToolbar: ['link'],
