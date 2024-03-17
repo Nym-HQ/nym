@@ -77,7 +77,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const isGithubLoginEnabled =
     (process.env.GITHUB_ID && process.env.GITHUB_SECRET) || false
   const isAuth0LoginEnabled =
-    (process.env.AUTH0_CLIENT_ID && process.env.AUTH0_CLIENT_SECRET && process.env.AUTH0_SECRET && process.env.AUTH0_BASE_URL && process.env.AUTH0_ISSUER_BASE_URL) || false
+    (process.env.AUTH0_CLIENT_ID &&
+      process.env.AUTH0_CLIENT_SECRET &&
+      process.env.AUTH0_SECRET &&
+      process.env.AUTH0_BASE_URL &&
+      process.env.AUTH0_ISSUER_BASE_URL) ||
+    false
 
   return addApolloState(apolloClient, {
     props: {

@@ -56,18 +56,17 @@ export function SignIn({
           </GoogleButton>
         )}
 
-
-
         {isAuth0LoginEnabled && (
           <button
             style={{ width: '190px', height: '38px' }}
             size="large"
-            onClick={() => signIn("auth0", undefined, { screen_hint: "signin" })}
+            onClick={() =>
+              signIn('auth0', undefined, { screen_hint: 'signin' })
+            }
           >
             <span>Login with Auth0</span>
           </button>
         )}
-
 
         {error && (
           <p className="text-sm text-rose-500 mt-3">
