@@ -8,7 +8,6 @@ interface Props {
   detail: React.ReactElement | null
   hasDetail?: boolean
 }
-
 export function ListDetailView({ list, detail, hasDetail = false }: Props) {
   return (
     <div className="flex w-full">
