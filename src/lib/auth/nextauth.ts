@@ -1,6 +1,7 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { NextAuthOptions } from 'next-auth'
 import NextAuth from 'next-auth/next'
+import Auth0Provider from 'next-auth/providers/auth0'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import TwitterProvider, {
@@ -21,6 +22,16 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
       clientSecret: process.env.GITHUB_SECRET,
     })
   )
+}
+
+if (process.env.AUTH0_CLIENT_ID) {
+  providers.push(
+    Auth0Provider({
+      clientId: process.env.AUTH0_CLIENT_ID!,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET!,
+      issuer: process.env.AUTH0_ISSUER_BASE_URL
+    }),
+  );
 }
 
 if (
