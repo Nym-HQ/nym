@@ -259,8 +259,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) || false
   const isGithubLoginEnabled =
     (process.env.GITHUB_ID && process.env.GITHUB_SECRET) || false
-  const isGithubLoginEnabled =
-    (process.env.GITHUB_ID && process.env.GITHUB_SECRET) || false
   const isAuth0LoginEnabled =
     (process.env.AUTH0_CLIENT_ID &&
       process.env.AUTH0_CLIENT_SECRET &&
