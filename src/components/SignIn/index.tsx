@@ -40,6 +40,18 @@ export function SignIn({
           </TwitterButton>
         )}
 
+        {isAuth0LoginEnabled && (
+          <GoogleButton
+            style={{ width: '190px', height: '38px' }}
+            size="large" // Note: Ensure your GoogleButton component is designed to accept and use this prop, as it's not a standard prop for HTML buttons.
+            onClick={() =>
+              signIn('auth0', undefined, { screen_hint: 'signup' })
+            }
+          >
+            <span>Login with Auth0</span>
+          </GoogleButton>
+        )}
+
         {isGoogleLoginEnabled && (
           <GoogleButton
             style={{ width: '190px', height: '38px' }}
@@ -54,18 +66,6 @@ export function SignIn({
             <GoogleIcon />
             <span>Login with Google</span>
           </GoogleButton>
-        )}
-
-        {isAuth0LoginEnabled && (
-          <button
-            style={{ width: '190px', height: '38px' }}
-            size="large"
-            onClick={() =>
-              signIn('auth0', undefined, { screen_hint: 'signin' })
-            }
-          >
-            <span>Login with Auth0</span>
-          </button>
         )}
 
         {error && (
