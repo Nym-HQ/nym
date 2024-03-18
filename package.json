@@ -62,6 +62,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "@tippyjs/react": "^4.2.6",
     "@uiw/react-md-editor": "^4.0.4",
+    "@vercel/analytics": "^0.1.10",
     "ai": "^2.1.13",
     "babel-plugin-transform-remove-imports": "^1.7.1",
     "cheerio": "^1.0.0-rc.12",
