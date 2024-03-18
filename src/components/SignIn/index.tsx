@@ -48,22 +48,25 @@ export function SignIn({
               signIn('auth0', {
                 callbackUrl: `/signin-complete`,
                 redirect: true,
+                screen_hint: 'signin',
+                allowDangerousEmailAccountLinking: true,
               })
             }
           >
             <span>Login</span>
           </Button>
         )}
-
-
+        <br />
         {isAuth0LoginEnabled && (
           <Button
             style={{ width: '190px', height: '38px' }}
             size="large"
             onClick={() =>
-              signUp('auth0', {
+              signIn('auth0', {
                 callbackUrl: `/signin-complete`,
                 redirect: true,
+                screen_hint: 'signup',
+                allowDangerousEmailAccountLinking: true,
               })
             }
           >
