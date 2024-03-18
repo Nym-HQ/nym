@@ -106,45 +106,15 @@ if (
       // allow multiple providers for a single account
       allowDangerousEmailAccountLinking: true,
 
-      profile: async (
-        profile: TwitterProfile | TwitterLegacyProfile,
-        tokens
-      ) => {
-        console.debug('Got twitter profile data', profile)
-        let user: any
-        if ('data' in profile) {
-          // OAuth 2.0
-          user = {
-            id: profile.data.id,
-            name: profile.data.name,
-            // NOTE: E-mail is currently unsupported by OAuth 2 Twitter.
-            email: null,
-            username: `T${profile.data.id}`,
-            image: profile.data.profile_image_url,
-          }
-        } else {
-          user = {
-            id: profile.id_str,
-            name: profile.name,
-            email: (profile as any).email,
-            username: `T${profile.id_str}`,
-            image: profile.profile_image_url_https.replace(
-              /_normal\.(jpg|png|gif)$/,
-              '.$1'
-            ),
-          }
+      profile: async (profile: Auth0Profile) => {
+        console.debug('Got auth0 profile data', profile)
+        let user: any = {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          username: `G${profile.sub}`,
+          image: profile.picture,
         }
-
-        // let's update Account model with new tokens, as next-auth library doesn't update the token
-        await prisma.account.updateMany({
-          where: {
-            provider: 'twitter',
-            providerAccountId: user.id,
-            type: 'oauth',
-          },
-          data: tokens,
-        })
-
         return user
       },
     })
