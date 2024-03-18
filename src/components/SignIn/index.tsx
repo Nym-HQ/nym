@@ -57,7 +57,6 @@ export function SignIn({
           </Button>
         )}
 
-
         {isGoogleLoginEnabled && (
           <GoogleButton
             style={{ width: '190px', height: '38px' }}
