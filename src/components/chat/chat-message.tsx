@@ -39,6 +39,7 @@ export function ChatMessage({ message, ...props }: ChatMessageProps) {
               return <p className="mb-2 last:mb-0">{children}</p>
             },
             code({ node, inline, className, children, ...props }) {
+              const inline = props.inline as boolean; // Use `as` to assert the type of `inline`
               if (children.length) {
                 if (children[0] == '▍') {
                   return (
