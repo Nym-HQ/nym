@@ -29,6 +29,8 @@ if (process.env.AUTH0_CLIENT_ID && process.env.AUTH0_CLIENT_SECRET && process.en
     Auth0Provider({
       clientId: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
+      // allow multiple providers for a single account
+      allowDangerousEmailAccountLinking: true,
       issuer: process.env.AUTH0_ISSUER_BASE_URL,
     })
   )

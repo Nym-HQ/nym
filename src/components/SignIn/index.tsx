@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import * as React from 'react'
 
-import { GoogleButton, TwitterButton } from '../Button'
+import { Button, GoogleButton, TwitterButton } from '../Button'
 import { GoogleIcon, TwitterIcon } from '../Icon'
 import { Detail } from '../ListDetail/Detail'
 import { TitleBar } from '../ListDetail/TitleBar'
@@ -41,15 +41,18 @@ export function SignIn({
         )}
 
         {isAuth0LoginEnabled && (
-          <GoogleButton
+          <Button
             style={{ width: '190px', height: '38px' }}
-            size="large" // Note: Ensure your GoogleButton component is designed to accept and use this prop, as it's not a standard prop for HTML buttons.
+            size="large"
             onClick={() =>
-              signIn('auth0', undefined, { screen_hint: 'signup' })
+              signIn('auth0', {
+                callbackUrl: `/signin-complete`,
+                redirect: true,
+              })
             }
           >
             <span>Login with Auth0</span>
-          </GoogleButton>
+          </Button>
         )}
 
         {isGoogleLoginEnabled && (
