@@ -51,7 +51,23 @@ export function SignIn({
               })
             }
           >
-            <span>Login with Auth0</span>
+            <span>Login</span>
+          </Button>
+        )}
+
+
+        {isAuth0LoginEnabled && (
+          <Button
+            style={{ width: '190px', height: '38px' }}
+            size="large"
+            onClick={() =>
+              signUp('auth0', {
+                callbackUrl: `/signin-complete`,
+                redirect: true,
+              })
+            }
+          >
+            <span>Signup</span>
           </Button>
         )}
 
