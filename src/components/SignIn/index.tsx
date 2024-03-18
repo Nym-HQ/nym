@@ -56,23 +56,7 @@ export function SignIn({
             <span>Login</span>
           </Button>
         )}
-        <br />
-        {isAuth0LoginEnabled && (
-          <Button
-            style={{ width: '190px', height: '38px' }}
-            size="large"
-            onClick={() =>
-              signIn('auth0', {
-                callbackUrl: `/signin-complete`,
-                redirect: true,
-                screen_hint: 'signup',
-                allowDangerousEmailAccountLinking: true,
-              })
-            }
-          >
-            <span>Signup</span>
-          </Button>
-        )}
+
 
         {isGoogleLoginEnabled && (
           <GoogleButton
