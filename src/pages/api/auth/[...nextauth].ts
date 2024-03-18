@@ -21,7 +21,7 @@ req.query.nextauth.includes('signin')
     res.json = (body: any) => {
       if (
         body &&
-        typeof body.url === 'string')
+        typeof body.url === 'string'
       ) {
         body.url += '&force_login=true'
       }
