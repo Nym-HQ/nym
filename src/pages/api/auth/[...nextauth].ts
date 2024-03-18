@@ -12,17 +12,12 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     )
   }
 
-  if (
-req.query.nextauth.includes('signin')
-  ) {
+  if (req.query.nextauth.includes('signin')) {
     // A little hack around the next-auth bug, to attach "force_login" paramter for Twitter Oauth
     // https://developer.twitter.com/en/docs/authentication/api-reference/authenticate
     const orig_json = res.json
     res.json = (body: any) => {
-      if (
-        body &&
-        typeof body.url === 'string'
-      ) {
+      if (body && typeof body.url === 'string') {
         body.url += '&force_login=true'
       }
       return orig_json.call(res, body)
