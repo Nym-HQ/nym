@@ -24,7 +24,11 @@ if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
   )
 }
 
-if (process.env.AUTH0_CLIENT_ID && process.env.AUTH0_CLIENT_SECRET && process.env.AUTH0_ISSUER_BASE_URL) {
+if (
+  process.env.AUTH0_CLIENT_ID &&
+  process.env.AUTH0_CLIENT_SECRET &&
+  process.env.AUTH0_ISSUER_BASE_URL
+) {
   providers.push(
     Auth0Provider({
       clientId: process.env.AUTH0_CLIENT_ID,

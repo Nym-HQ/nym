@@ -8,6 +8,7 @@ node_modules
 .DS_Store
 .vscode
 yarn-error.log
+yarn.lock
 .vercel
 cors.json
 src/data/local/*
