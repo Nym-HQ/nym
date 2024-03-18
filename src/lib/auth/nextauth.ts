@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { NextAuthOptions } from 'next-auth'
 import NextAuth from 'next-auth/next'
-import Auth0Provider from 'next-auth/providers/auth0'
+import Auth0Provider, { Auth0Profile } from 'next-auth/providers/auth0'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
 import TwitterProvider, {
@@ -36,6 +36,45 @@ if (
       // allow multiple providers for a single account
       allowDangerousEmailAccountLinking: true,
       issuer: process.env.AUTH0_ISSUER_BASE_URL,
+
+      profile: async (profile: Auth0Profile, tokens) => {
+        console.debug('Got profile data', profile)
+        let user: any
+        if ('data' in profile) {
+          // OAuth 2.0
+          user = {
+            id: profile.data.id,
+            name: profile.data.name,
+            // NOTE: E-mail is currently unsupported by OAuth 2 Twitter.
+            email: null,
+            username: `T${profile.data.id}`,
+            image: profile.data.profile_image_url,
+          }
+        } else {
+          user = {
+            id: profile.id_str,
+            name: profile.name,
+            email: (profile as any).email,
+            username: `T${profile.id_str}`,
+            image: profile.profile_image_url_https.replace(
+              /_normal\.(jpg|png|gif)$/,
+              '.$1'
+            ),
+          }
+        }
+
+        // let's update Account model with new tokens, as next-auth library doesn't update the token
+        await prisma.account.updateMany({
+          where: {
+            provider: 'auth0',
+            providerAccountId: user.id,
+            type: 'oauth',
+          },
+          data: tokens,
+        })
+
+        return user
+      },
     })
   )
 }
