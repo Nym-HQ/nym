@@ -37,16 +37,16 @@ if (
       allowDangerousEmailAccountLinking: true,
       issuer: process.env.AUTH0_ISSUER_BASE_URL,
 
-    profile: async (profile: Auth0Profile) => {
-      console.debug('Got oAuth profile data', profile)
-      let user: any = {
-        id: profile.sub,
-        name: profile.name,
-        email: profile.email,
-        username: `G${profile.sub}`,
-        image: profile.picture,
-      }
-      return user
+      profile: async (profile: Auth0Profile) => {
+        console.debug('Got oAuth profile data', profile)
+        let user: any = {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          username: `G${profile.sub}`,
+          image: profile.picture,
+        }
+        return user
       },
     })
   )
