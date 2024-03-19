@@ -10,6 +10,7 @@ import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
+import useCustomHistory from '../hooks/useCustomHistory'
 
 export function PageDetail({ slug, site, page, error, loading }) {
   const scrollContainerRef = React.useRef(null)
@@ -25,6 +26,12 @@ export function PageDetail({ slug, site, page, error, loading }) {
   }
 
   const publishedAt = timestampToCleanTime({ timestamp: page.publishedAt })
+  const { navigateBack } = useCustomHistory()
+  // Component implementation
+  const handleBackButtonClick = () => {
+    navigateBack()
+  }
+
   return (
     <>
       {page && <PageSEO page={page} site={site} />}
@@ -32,7 +39,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
         <TitleBar
           backButton
           globalMenu={false}
-          backButtonHref={'/pages'}
+          onClick={handleBackButtonClick}
           magicTitle
           title={page.title}
           titleRef={titleRef}
