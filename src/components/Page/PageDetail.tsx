@@ -39,7 +39,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
         <TitleBar
           backButton
           globalMenu={false}
-          onClick={handleBackButtonClick}
+          backButtonOnClick={handleBackButtonClick}
           magicTitle
           title={page.title}
           titleRef={titleRef}
