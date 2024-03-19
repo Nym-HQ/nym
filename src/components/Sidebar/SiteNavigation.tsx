@@ -114,6 +114,18 @@ export function SiteSidebarNavigation() {
     items: [],
   }
 
+  if (data?.context?.viewer?.isAdmin) {
+    pagesSection.items.push({
+      href: '/pages',
+      label: 'All pages',
+      icon: BookAtlasIcon,
+      trailingAccessory: null,
+      isActive: router.asPath === '/pages',
+      trailingAction: null,
+      isExternal: false,
+    })
+  }
+
   pagesData?.pages
     ?.filter((page) => page && page.featured)
     .forEach((page) => {
