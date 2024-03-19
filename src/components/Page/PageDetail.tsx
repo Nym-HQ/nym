@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
+import useCustomHistory from '~/hooks/useCustomHistory'
 import { timestampToCleanTime } from '~/lib/transformers'
 
 import { EditorJSEditor } from '../EditorJS'
@@ -10,7 +11,6 @@ import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
-import useCustomHistory from '~/hooks/useCustomHistory'
 
 export function PageDetail({ slug, site, page, error, loading }) {
   const scrollContainerRef = React.useRef(null)
