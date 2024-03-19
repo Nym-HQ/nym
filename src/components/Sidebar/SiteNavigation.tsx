@@ -114,7 +114,6 @@ export function SiteSidebarNavigation() {
     items: [],
   }
 
-
   pagesData?.pages
     ?.filter((page) => page && page.featured)
     .forEach((page) => {
@@ -128,7 +127,6 @@ export function SiteSidebarNavigation() {
         isExternal: false,
       })
     })
-
 
   if (pagesSection.items.length > 0) sections.push(pagesSection)
 
