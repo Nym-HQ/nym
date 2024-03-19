@@ -50,14 +50,4 @@ export function PageTitlebar({ scrollContainerRef }) {
     }
     return null
   }
-
-  //  return (
-  //    <TitleBar
-  //      trailingAccessory={trailingAccessory()}
-  //      title="Page"
-  //      scrollContainerRef={scrollContainerRef}
-  //    >
-  //      {getChildren()}
-  //    </TitleBar>
-  //  )
 }
