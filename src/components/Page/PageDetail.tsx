@@ -10,7 +10,7 @@ import { PoweredByNym } from '../ListDetail/PoweredByNym'
 import { MarkdownRenderer } from '../MarkdownRenderer'
 import { PageActions } from './PageActions'
 import { PageSEO } from './PageSEO'
-import useCustomHistory from '../hooks/useCustomHistory'
+import useCustomHistory from '~/lib/hooks/useCustomHistory'
 
 export function PageDetail({ slug, site, page, error, loading }) {
   const scrollContainerRef = React.useRef(null)
