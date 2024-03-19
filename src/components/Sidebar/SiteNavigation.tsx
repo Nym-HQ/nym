@@ -113,17 +113,7 @@ export function SiteSidebarNavigation() {
     label: 'Pages',
     items: [],
   }
-  if (data?.context?.viewer?.isAdmin) {
-    pagesSection.items.push({
-      href: '/pages',
-      label: 'All pages',
-      icon: BookAtlasIcon,
-      trailingAccessory: null,
-      isActive: router.asPath === '/pages',
-      trailingAction: null,
-      isExternal: false,
-    })
-  }
+
 
   pagesData?.pages
     ?.filter((page) => page && page.featured)
@@ -139,17 +129,6 @@ export function SiteSidebarNavigation() {
       })
     })
 
-  if (!data?.context?.viewer?.isAdmin && pagesData?.pages?.length > 0) {
-    pagesSection.items.push({
-      href: '/pages',
-      label: 'All pages',
-      icon: BookAtlasIcon,
-      trailingAccessory: null,
-      isActive: router.asPath === '/pages',
-      trailingAction: null,
-      isExternal: false,
-    })
-  }
 
   if (pagesSection.items.length > 0) sections.push(pagesSection)
 
