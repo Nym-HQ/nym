@@ -55,8 +55,39 @@ export function PagesList() {
     )
   }
 
+  if (data?.context?.viewer?.isAdmin) {
+    if (loading && !pagesData?.pages) {
+      return (
+        <ListContainer onRef={setScrollContainerRef}>
+          <PageTitlebar scrollContainerRef={scrollContainerRef} />
+          <div className="flex flex-1 items-center justify-center">
+            <LoadingSpinner />
+          </div>
+        </ListContainer>
+      )
+    }
+  }
+
   const defaultContextValue = {
     filter,
     setFilter,
+  }
+
+  if (data?.context?.viewer?.isAdmin) {
+    return (
+      <PageContext.Provider value={defaultContextValue}>
+        <ListContainer data-cy="pages-list" onRef={setScrollContainerRef}>
+          <PageTitlebar scrollContainerRef={scrollContainerRef} />
+
+          <div className="lg:space-y-1 lg:p-3">
+            {pagesData.pages?.map((page) => {
+              const active = router.query?.slug === page.slug
+
+              return <PageListItem key={page.id} page={page} active={active} />
+            })}
+          </div>
+        </ListContainer>
+      </PageContext.Provider>
+    )
   }
 }

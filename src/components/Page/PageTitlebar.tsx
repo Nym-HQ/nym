@@ -50,4 +50,16 @@ export function PageTitlebar({ scrollContainerRef }) {
     }
     return null
   }
+
+  if (data?.context?.viewer?.isAdmin) {
+    return (
+      <TitleBar
+        trailingAccessory={trailingAccessory()}
+        title="Page"
+        scrollContainerRef={scrollContainerRef}
+      >
+        {getChildren()}
+      </TitleBar>
+    )
+  }
 }
