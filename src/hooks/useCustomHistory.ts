@@ -1,4 +1,3 @@
-// hooks/useCustomHistory.js or utils/useCustomHistory.js
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -30,7 +29,16 @@ const useCustomHistory = () => {
     }
   }
 
-  return { navigateBack }
+  // Calculate lastPath without modifying the original pathStack
+  const getLastPath = () => {
+    if (pathStack.length < 2) {
+      return '/' // Default or fallback path if no history is available
+    } else {
+      return pathStack[pathStack.length - 2] // Second last item in the array
+    }
+  }
+
+  return { navigateBack, lastPath: getLastPath() }
 }
 
 export default useCustomHistory

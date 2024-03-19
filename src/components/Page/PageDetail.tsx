@@ -26,11 +26,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
   }
 
   const publishedAt = timestampToCleanTime({ timestamp: page.publishedAt })
-  const { navigateBack } = useCustomHistory()
-  // Component implementation
-  const handleBackButtonClick = () => {
-    navigateBack()
-  }
+  const { navigateBack, lastPath } = useCustomHistory()
 
   return (
     <>
@@ -39,7 +35,7 @@ export function PageDetail({ slug, site, page, error, loading }) {
         <TitleBar
           backButton
           globalMenu={false}
-          backButtonOnClick={handleBackButtonClick}
+          backButtonHref={lastPath}
           magicTitle
           title={page.title}
           titleRef={titleRef}
