@@ -135,7 +135,7 @@ export default function CustomizedEditorJS({
         config: {
           uploader: customUploader,
           types: 'application/pdf',
-          buttonText: 'Upload PDF',
+          buttonText: 'Upload File',
         },
       },
       list: {
