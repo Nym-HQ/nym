@@ -165,7 +165,8 @@ export default function CustomizedEditorJS({
             facebook: true,
             instagram: true,
             youtube: true,
-            twitter: false, // disable twitter service, as we deal with it in linkTool
+            //twitter: false, // disable twitter service, as we deal with it in linkTool
+            twitter: true,
             'twitch-video': true,
             miro: true,
             vime: true,
