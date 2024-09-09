@@ -3,9 +3,9 @@
  * These pages will be used to manage the user's contents on the site
  *
  */
-import * as React from 'react'
 import Link from 'next/link'
 import { GetServerSideProps } from 'next/types'
+import * as React from 'react'
 import toast from 'react-hot-toast'
 import { BiInfoCircle } from 'react-icons/bi'
 
@@ -23,7 +23,7 @@ import {
   TwitterIcon,
   YouTubeIcon,
 } from '~/components/Icon'
-import { Input, Select, Textarea, Checkbox } from '~/components/Input'
+import { Checkbox, Input, Select, Textarea } from '~/components/Input'
 import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
