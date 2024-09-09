@@ -44,6 +44,7 @@ export const SiteEditInfoFragment = gql`
     newsletter_setting1
     newsletter_setting2
     newsletter_setting3
+    community_site
     chatbot {
       ...SiteChatBotInfo
     }

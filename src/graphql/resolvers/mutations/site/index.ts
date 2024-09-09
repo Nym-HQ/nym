@@ -36,6 +36,7 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
     social_github = '',
     social_other1 = '',
     social_other1_label = '',
+    community_site = '',
   } = data
 
   const { prompt_template = '', openai_key = '' } = chatbot || {}

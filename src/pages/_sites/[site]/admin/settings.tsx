@@ -81,6 +81,7 @@ function AdminSettingsPage(props) {
       prompt_template: site?.chatbot?.prompt_template || '',
       openai_key: site?.chatbot?.openai_key || '',
     },
+    community_site: site?.community_site || '',
   })
 
   const [showSocialOther1, setShowSocialOther1] = React.useState(
@@ -117,6 +118,7 @@ function AdminSettingsPage(props) {
           social_youtube: values.social_youtube,
           social_other1: values.social_other1,
           social_other1_label: values.social_other1_label,
+          community_site: values.community_site,
         },
         chatbot: {
           prompt_template: values.chatbot?.prompt_template || '',
@@ -476,65 +478,114 @@ function AdminSettingsPage(props) {
       : null
 
     return (
-      <Subsection title="Email newsletter settings">
-        {!context.owner?.hasEmail && (
-          <p className="text-red-500 text-sm ml-1 mt-1 font-medium">
-            The email address of the site owner is not set.{' '}
-            {context.userSite?.siteRole === 'OWNER' ? (
-              <>
-                Please set it in{' '}
-                <Link className="underline text-sky-500" href="/profile">
-                  this page
-                </Link>
-                .
-              </>
-            ) : (
-              <>Please contact the site owner!</>
-            )}
-          </p>
-        )}
+      <>
+        <Subsection title="Community Site Setting">
+          <div className="flex items-center">
+            <Checkbox
+              id="community-site-checkbox"
+              name="community-site-checkbox"
+              checked={values.community_site}
+              onChange={(e) =>
+                setValues({
+                  ...values,
+                  community_site: e.target.checked,
+                })
+              }
+            />
+            <Label htmlFor="community-site-checkbox" className="ml-2">
+              Enable Community Site
+            </Label>
+          </div>
+        </Subsection>
+        
+        <Subsection title="Email newsletter settings">
+          {!context.owner?.hasEmail && (
+            <p className="text-red-500 text-sm ml-1 mt-1 font-medium">
+              The email address of the site owner is not set.{' '}
+              {context.userSite?.siteRole === 'OWNER' ? (
+                <>
+                  Please set it in{' '}
+                  <Link className="underline text-sky-500" href="/profile">
+                    this page
+                  </Link>
+                  .
+                </>
+              ) : (
+                <>Please contact the site owner!</>
+              )}
+            </p>
+          )}
 
-        <div className="mt-10 sm:mt-0">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="grid grid-cols-6 gap-6">
-              <div className="col-span-5">
-                <Label htmlFor="newsletter_description">
-                  Describe your newletter
-                </Label>
-                <Textarea
-                  id="newsletter_description"
-                  rows={3}
-                  onChange={(e) =>
-                    setValues({
-                      ...values,
-                      newsletter_description: e.target.value,
-                    })
-                  }
-                  value={values.newsletter_description}
-                />
-              </div>
-              <div className="col-span-5">
-                <Label htmlFor="newsletter_provider">Newsletter Provider</Label>
-                <Select
-                  id="newsletter_provider"
-                  onChange={(e) =>
-                    setValues({
-                      ...values,
-                      newsletter_provider: e.target.value,
-                    })
-                  }
-                  value={values.newsletter_provider}
-                >
-                  <option disabled value="">
-                    Select a provider
-                  </option>
-                  {newsletterProviders.map((p) => (
-                    <option key={p} value={p}>
-                      {newsletterProviderDetails[p].name}
+          <div className="mt-10 sm:mt-0">
+            <div className="px-4 py-5 sm:p-6">
+              <div className="grid grid-cols-6 gap-6">
+                <div className="col-span-5">
+                  <Label htmlFor="newsletter_description">
+                    Describe your newletter
+                  </Label>
+                  <Textarea
+                    id="newsletter_description"
+                    rows={3}
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        newsletter_description: e.target.value,
+                      })
+                    }
+                    value={values.newsletter_description}
+                  />
+                </div>
+                <div className="col-span-5">
+                  <Label htmlFor="newsletter_provider">Newsletter Provider</Label>
+                  <Select
+                    id="newsletter_provider"
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        newsletter_provider: e.target.value,
+                      })
+                    }
+                    value={values.newsletter_provider}
+                  >
+                    <option disabled value="">
+                      Select a provider
                     </option>
-                  ))}
-                </Select>
-                {provider && (
+                    {newsletterProviders.map((p) => (
+                      <option key={p} value={p}>
+                        {newsletterProviderDetails[p].name}
+                      </option>
+                    ))}
+                  </Select>
+                  {provider && (
+                    <div className="flex pl-2 mt-2 text-gray-700 dark:text-gray-300">
+                      <LightBulbWithElectricIcon
+                        width={18}
+                        height={18}
+                        className="flex-shrink-0"
+                      />
+                      <p className="text-sm ml-1 mt-1 font-medium">
+                        {provider.help_text && provider.help_text}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="col-span-5">
+                  <Label className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      onChange={(e) =>
+                        setValues({
+                          ...values,
+                          newsletter_double_optin: e.target.checked,
+                        })
+                      }
+                      defaultChecked={values.newsletter_double_optin}
+                      className="relative top-1 h-4 w-4 rounded border border-gray-300 dark:border-gray-700"
+                    />
+                    <span className="text-primary">
+                      Uses double opt-in for the subscribers
+                    </span>
+                  </Label>
                   <div className="flex pl-2 mt-2 text-gray-700 dark:text-gray-300">
                     <LightBulbWithElectricIcon
                       width={18}
@@ -542,123 +593,95 @@ function AdminSettingsPage(props) {
                       className="flex-shrink-0"
                     />
                     <p className="text-sm ml-1 mt-1 font-medium">
-                      {provider.help_text && provider.help_text}
+                      Double opt-in means that the user has to confirm their
+                      subscription (a confirmation email will be sent).
                     </p>
+                  </div>
+                </div>
+
+                {provider && (
+                  <div className="col-span-6 sm:col-span-5">
+                    <Label htmlFor="newsletter_from_email">From Email</Label>
+                    <Input
+                      type="text"
+                      name="newsletter_from_email"
+                      id="newsletter_from_email"
+                      autoComplete="disabled"
+                      value={values.newsletter_from_email}
+                      onChange={(e) =>
+                        setValues({
+                          ...values,
+                          newsletter_from_email: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                {provider && provider.setting1 && (
+                  <div className="col-span-6 sm:col-span-5">
+                    <Label htmlFor="newsletter_setting1">
+                      {provider.setting1}
+                    </Label>
+                    <Input
+                      type="text"
+                      name="newsletter_setting1"
+                      id="newsletter_setting1"
+                      autoComplete="disabled"
+                      value={values.newsletter_setting1}
+                      onChange={(e) =>
+                        setValues({
+                          ...values,
+                          newsletter_setting1: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                {provider && provider.setting2 && (
+                  <div className="col-span-6 sm:col-span-5">
+                    <Label htmlFor="newsletter_setting2">
+                      {provider.setting2}
+                    </Label>
+                    <Input
+                      type="text"
+                      name="newsletter_setting2"
+                      id="newsletter_setting2"
+                      autoComplete="disabled"
+                      value={values.newsletter_setting2}
+                      onChange={(e) =>
+                        setValues({
+                          ...values,
+                          newsletter_setting2: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                {provider && provider.setting3 && (
+                  <div className="col-span-6 sm:col-span-5">
+                    <Label htmlFor="newsletter_setting3">
+                      {provider.setting3}
+                    </Label>
+                    <Input
+                      type="text"
+                      name="newsletter_setting3"
+                      id="newsletter_setting3"
+                      autoComplete="disabled"
+                      value={values.newsletter_setting3}
+                      onChange={(e) =>
+                        setValues({
+                          ...values,
+                          newsletter_setting3: e.target.value,
+                        })
+                      }
+                    />
                   </div>
                 )}
               </div>
-              <div className="col-span-5">
-                <Label className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        newsletter_double_optin: e.target.checked,
-                      })
-                    }
-                    defaultChecked={values.newsletter_double_optin}
-                    className="relative top-1 h-4 w-4 rounded border border-gray-300 dark:border-gray-700"
-                  />
-                  <span className="text-primary">
-                    Uses double opt-in for the subscribers
-                  </span>
-                </Label>
-                <div className="flex pl-2 mt-2 text-gray-700 dark:text-gray-300">
-                  <LightBulbWithElectricIcon
-                    width={18}
-                    height={18}
-                    className="flex-shrink-0"
-                  />
-                  <p className="text-sm ml-1 mt-1 font-medium">
-                    Double opt-in means that the user has to confirm their
-                    subscription (a confirmation email will be sent).
-                  </p>
-                </div>
-              </div>
-
-              {provider && (
-                <div className="col-span-6 sm:col-span-5">
-                  <Label htmlFor="newsletter_from_email">From Email</Label>
-                  <Input
-                    type="text"
-                    name="newsletter_from_email"
-                    id="newsletter_from_email"
-                    autoComplete="disabled"
-                    value={values.newsletter_from_email}
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        newsletter_from_email: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              )}
-              {provider && provider.setting1 && (
-                <div className="col-span-6 sm:col-span-5">
-                  <Label htmlFor="newsletter_setting1">
-                    {provider.setting1}
-                  </Label>
-                  <Input
-                    type="text"
-                    name="newsletter_setting1"
-                    id="newsletter_setting1"
-                    autoComplete="disabled"
-                    value={values.newsletter_setting1}
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        newsletter_setting1: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              )}
-              {provider && provider.setting2 && (
-                <div className="col-span-6 sm:col-span-5">
-                  <Label htmlFor="newsletter_setting2">
-                    {provider.setting2}
-                  </Label>
-                  <Input
-                    type="text"
-                    name="newsletter_setting2"
-                    id="newsletter_setting2"
-                    autoComplete="disabled"
-                    value={values.newsletter_setting2}
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        newsletter_setting2: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              )}
-              {provider && provider.setting3 && (
-                <div className="col-span-6 sm:col-span-5">
-                  <Label htmlFor="newsletter_setting3">
-                    {provider.setting3}
-                  </Label>
-                  <Input
-                    type="text"
-                    name="newsletter_setting3"
-                    id="newsletter_setting3"
-                    autoComplete="disabled"
-                    value={values.newsletter_setting3}
-                    onChange={(e) =>
-                      setValues({
-                        ...values,
-                        newsletter_setting3: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              )}
             </div>
           </div>
-        </div>
-      </Subsection>
+        </Subsection>
+      </>
     )
   }
 
