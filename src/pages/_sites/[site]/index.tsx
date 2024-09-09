@@ -113,7 +113,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   return addApolloState(apolloClient, {
-    props: { 
+    props: {
       ...commonProps,
       community_site: siteData?.community_site || false, // Pass this to the component
     },

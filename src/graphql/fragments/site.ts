@@ -22,6 +22,7 @@ export const SitePublicInfoFragment = gql`
     social_other1_label
     newsletter_description
     newsletter_double_optin
+    community_site
   }
 `
 
