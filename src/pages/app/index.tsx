@@ -185,7 +185,7 @@ export default function Home(props) {
   } else {
     // Check if community_site is true and redirect to /bookmarks
     if (props.community_site) {
-      router.push('/bookmarks')
+     return router.push('/bookmarks')
     }
     return (
       <SignIn
