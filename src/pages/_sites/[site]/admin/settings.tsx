@@ -23,7 +23,7 @@ import {
   TwitterIcon,
   YouTubeIcon,
 } from '~/components/Icon'
-import { Input, Select, Textarea } from '~/components/Input'
+import { Input, Select, Textarea, Checkbox } from '~/components/Input'
 import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
@@ -118,7 +118,7 @@ function AdminSettingsPage(props) {
           social_youtube: values.social_youtube,
           social_other1: values.social_other1,
           social_other1_label: values.social_other1_label,
-          community_site: Boolean(values.community_site),
+          community_site: values.community_site,
         },
         chatbot: {
           prompt_template: values.chatbot?.prompt_template || '',
@@ -484,7 +484,7 @@ function AdminSettingsPage(props) {
             <Checkbox
               id="community-site-checkbox"
               name="community-site-checkbox"
-              checked={Boolean(values.community_site)}
+              checked={values.community_site}
               onChange={(e) =>
                 setValues({
                   ...values,
