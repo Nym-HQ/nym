@@ -151,6 +151,7 @@ function UserSitesList({ sites }) {
 }
 
 export default function Home(props) {
+  const router = useRouter()
   const scrollContainerRef = React.useRef(null)
   const titleRef = React.useRef(null)
   const { data } = useContextQuery()
@@ -185,7 +186,7 @@ export default function Home(props) {
   } else {
     // Check if community_site is true and redirect to /bookmarks
     if (props.community_site) {
-     return router.push('/bookmarks')
+      router.push('/bookmarks')
     }
     return (
       <SignIn
