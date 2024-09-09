@@ -1598,7 +1598,7 @@ export type DeleteSiteMutation = {
 
 export type AddSiteMutationVariables = Exact<{
   data: AddSiteInput
-}>
+}> 
 
 export type AddSiteMutation = {
   __typename?: 'Mutation'
