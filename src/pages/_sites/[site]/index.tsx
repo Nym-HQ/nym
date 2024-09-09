@@ -99,6 +99,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
+  if (commonProps.site.community_site) {
+    return {
+      redirect: {
+        destination: '/bookmarks',
+        permanent: false,
+      },
+    }
+  }
+
   return addApolloState(apolloClient, {
     props: { ...commonProps },
   })
