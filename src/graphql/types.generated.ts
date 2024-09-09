@@ -190,6 +190,7 @@ export type EditSiteInput = {
   social_other1_label?: InputMaybe<Scalars['String']['input']>
   social_twitter?: InputMaybe<Scalars['String']['input']>
   social_youtube?: InputMaybe<Scalars['String']['input']>
+  community_site?: InputMaybe<Scalars['Boolean']['input']>
 }
 
 export type EditSiteUserInput = {
@@ -583,6 +584,7 @@ export type Site = {
   social_twitter?: Maybe<Scalars['String']['output']>
   social_youtube?: Maybe<Scalars['String']['output']>
   subdomain: Scalars['String']['output']
+  community_site?: Maybe<Scalars['Boolean']['output']>
 }
 
 export type SiteChatBot = {
@@ -1577,6 +1579,7 @@ export type EditSiteMutation = {
     social_other1_label?: string | null
     newsletter_description?: string | null
     newsletter_double_optin?: boolean | null
+    community_site?: boolean | null
     chatbot?: {
       __typename: 'SiteChatBot'
       id: string
