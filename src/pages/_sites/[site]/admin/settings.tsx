@@ -89,7 +89,7 @@ function AdminSettingsPage(props) {
   )
   const [isChatbotTraining, setChatbotTraining] = React.useState(false)
 
-  const [editSite, { loading: saving }] = useEditSiteMutation({
+  const [executeSiteEdit, { loading: saving }] = useEditSiteMutation({
     onCompleted({ editSite }) {
       toast.success('Saved site settings!')
     },
@@ -106,7 +106,7 @@ function AdminSettingsPage(props) {
   })
 
   const saveSettings = () => {
-    return editSite({
+    return executeSiteEdit({
       variables: {
         subdomain: site?.subdomain,
         data: {
