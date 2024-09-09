@@ -23,7 +23,7 @@ import {
   TwitterIcon,
   YouTubeIcon,
 } from '~/components/Icon'
-import { Checkbox, Input, Select, Textarea } from '~/components/Input'
+import { Input, Select, Textarea } from '~/components/Input'
 import { SiteLayout } from '~/components/Layouts'
 import { Detail } from '~/components/ListDetail/Detail'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
@@ -481,7 +481,8 @@ function AdminSettingsPage(props) {
       <>
         <Subsection title="Community Site Setting">
           <div className="flex items-center">
-            <Checkbox
+            <Input
+              type="checkbox"
               id="community-site-checkbox"
               name="community-site-checkbox"
               checked={values.community_site}
