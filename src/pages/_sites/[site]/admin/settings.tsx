@@ -79,7 +79,7 @@ function AdminSettingsPage(props) {
     newsletter_setting3: site?.newsletter_setting3 || '',
     chatbot: {
       prompt_template: site?.chatbot?.prompt_template || '',
-      openai_key: site?.chatbot?.openai_key || ''
+      openai_key: site?.chatbot?.openai_key || '',
     },
     community_site: site?.community_site || false,
   })
