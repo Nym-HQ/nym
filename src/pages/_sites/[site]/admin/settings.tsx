@@ -470,7 +470,7 @@ function AdminSettingsPage(props) {
         </div>
       </Subsection>
     )
-  } 
+  }
 
   const renderNewsletterProviderConfig = ({ newsletter_provider }) => {
     const provider = newsletterProviders.includes(newsletter_provider)
