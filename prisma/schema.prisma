@@ -150,7 +150,6 @@ model Site {
   // community site settings
   community_site Boolean? @default(false)
 
-
   // social links
   social_twitter      String? @db.Text
   social_youtube      String? @db.Text
