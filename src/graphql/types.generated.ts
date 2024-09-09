@@ -175,6 +175,7 @@ export type EditSiteInput = {
   attach_css?: InputMaybe<Scalars['String']['input']>
   attach_js?: InputMaybe<Scalars['String']['input']>
   banner?: InputMaybe<Scalars['String']['input']>
+  community_site?: InputMaybe<Scalars['Boolean']['input']>
   description?: InputMaybe<Scalars['String']['input']>
   logo?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
@@ -190,7 +191,6 @@ export type EditSiteInput = {
   social_other1_label?: InputMaybe<Scalars['String']['input']>
   social_twitter?: InputMaybe<Scalars['String']['input']>
   social_youtube?: InputMaybe<Scalars['String']['input']>
-  community_site?: InputMaybe<Scalars['Boolean']['input']>
 }
 
 export type EditSiteUserInput = {
@@ -565,6 +565,7 @@ export type Site = {
   attach_js?: Maybe<Scalars['String']['output']>
   banner?: Maybe<Scalars['String']['output']>
   chatbot?: Maybe<SiteChatBot>
+  community_site?: Maybe<Scalars['Boolean']['output']>
   description?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
   logo?: Maybe<Scalars['String']['output']>
@@ -584,7 +585,6 @@ export type Site = {
   social_twitter?: Maybe<Scalars['String']['output']>
   social_youtube?: Maybe<Scalars['String']['output']>
   subdomain: Scalars['String']['output']
-  community_site?: Maybe<Scalars['Boolean']['output']>
 }
 
 export type SiteChatBot = {
@@ -1029,6 +1029,7 @@ export type SiteEditInfoFragment = {
   newsletter_setting1?: string | null
   newsletter_setting2?: string | null
   newsletter_setting3?: string | null
+  community_site?: boolean | null
   id: string
   subdomain: string
   parkedDomain?: string | null
@@ -1520,6 +1521,7 @@ export type EditSiteDomainMutation = {
     newsletter_setting1?: string | null
     newsletter_setting2?: string | null
     newsletter_setting3?: string | null
+    community_site?: boolean | null
     id: string
     subdomain: string
     parkedDomain?: string | null
@@ -1562,6 +1564,7 @@ export type EditSiteMutation = {
     newsletter_setting1?: string | null
     newsletter_setting2?: string | null
     newsletter_setting3?: string | null
+    community_site?: boolean | null
     id: string
     subdomain: string
     parkedDomain?: string | null
@@ -1579,7 +1582,6 @@ export type EditSiteMutation = {
     social_other1_label?: string | null
     newsletter_description?: string | null
     newsletter_double_optin?: boolean | null
-    community_site?: boolean | null
     chatbot?: {
       __typename: 'SiteChatBot'
       id: string
@@ -1612,6 +1614,7 @@ export type AddSiteMutation = {
     newsletter_setting1?: string | null
     newsletter_setting2?: string | null
     newsletter_setting3?: string | null
+    community_site?: boolean | null
     id: string
     subdomain: string
     parkedDomain?: string | null
@@ -1999,6 +2002,7 @@ export type GetSiteSettingsQuery = {
     newsletter_setting1?: string | null
     newsletter_setting2?: string | null
     newsletter_setting3?: string | null
+    community_site?: boolean | null
     id: string
     subdomain: string
     parkedDomain?: string | null
@@ -2078,6 +2082,46 @@ export type GetSiteUsersQuery = {
       isAdmin?: boolean | null
     } | null
   }> | null
+}
+
+export type EditSiteMutationVariables = Exact<{
+  subdomain: Scalars['String']['input']
+  data: EditSiteInput
+  chatbot?: InputMaybe<EditSiteChatBotInput>
+}>
+
+export type EditSiteMutation = {
+  __typename?: 'Mutation'
+  editSite?: {
+    __typename?: 'Site'
+    id: string
+    name?: string | null
+    description?: string | null
+    logo?: string | null
+    banner?: string | null
+    attach_css?: string | null
+    attach_js?: string | null
+    newsletter_provider?: string | null
+    newsletter_description?: string | null
+    newsletter_from_email?: string | null
+    newsletter_double_optin?: boolean | null
+    newsletter_setting1?: string | null
+    newsletter_setting2?: string | null
+    newsletter_setting3?: string | null
+    social_github?: string | null
+    social_twitter?: string | null
+    social_youtube?: string | null
+    social_other1?: string | null
+    social_other1_label?: string | null
+    community_site?: boolean | null
+    chatbot?: {
+      __typename?: 'SiteChatBot'
+      id: string
+      openai_key?: string | null
+      prompt_template?: string | null
+      free_quota?: number | null
+    } | null
+  } | null
 }
 
 export type GetTagsQueryVariables = Exact<{ [key: string]: never }>
@@ -2441,6 +2485,7 @@ export const SiteEditInfoFragmentDoc = gql`
     newsletter_setting1
     newsletter_setting2
     newsletter_setting3
+    community_site
     chatbot {
       ...SiteChatBotInfo
     }
@@ -4765,6 +4810,84 @@ export type GetSiteUsersSuspenseQueryHookResult = ReturnType<
 export type GetSiteUsersQueryResult = Apollo.QueryResult<
   GetSiteUsersQuery,
   GetSiteUsersQueryVariables
+>
+export const EditSiteDocument = gql`
+  mutation EditSite(
+    $subdomain: String!
+    $data: EditSiteInput!
+    $chatbot: EditSiteChatBotInput
+  ) {
+    editSite(subdomain: $subdomain, data: $data, chatbot: $chatbot) {
+      id
+      name
+      description
+      logo
+      banner
+      attach_css
+      attach_js
+      newsletter_provider
+      newsletter_description
+      newsletter_from_email
+      newsletter_double_optin
+      newsletter_setting1
+      newsletter_setting2
+      newsletter_setting3
+      social_github
+      social_twitter
+      social_youtube
+      social_other1
+      social_other1_label
+      community_site
+      chatbot {
+        id
+        openai_key
+        prompt_template
+        free_quota
+      }
+    }
+  }
+`
+export type EditSiteMutationFn = Apollo.MutationFunction<
+  EditSiteMutation,
+  EditSiteMutationVariables
+>
+
+/**
+ * __useEditSiteMutation__
+ *
+ * To run a mutation, you first call `useEditSiteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditSiteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editSiteMutation, { data, loading, error }] = useEditSiteMutation({
+ *   variables: {
+ *      subdomain: // value for 'subdomain'
+ *      data: // value for 'data'
+ *      chatbot: // value for 'chatbot'
+ *   },
+ * });
+ */
+export function useEditSiteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    EditSiteMutation,
+    EditSiteMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<EditSiteMutation, EditSiteMutationVariables>(
+    EditSiteDocument,
+    options
+  )
+}
+export type EditSiteMutationHookResult = ReturnType<typeof useEditSiteMutation>
+export type EditSiteMutationResult = Apollo.MutationResult<EditSiteMutation>
+export type EditSiteMutationOptions = Apollo.BaseMutationOptions<
+  EditSiteMutation,
+  EditSiteMutationVariables
 >
 export const GetTagsDocument = gql`
   query getTags {
