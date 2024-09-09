@@ -9,7 +9,7 @@ const routes = {
     path: '/writing',
     seo: {
       title: 'Writing',
-      description: 'Express yourself.',
+      description: 'Recent posts',
       image: 'og/writing.png',
       url: 'writing',
     },

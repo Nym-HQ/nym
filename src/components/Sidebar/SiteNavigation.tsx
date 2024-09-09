@@ -53,7 +53,7 @@ export function SiteSidebarNavigation() {
     {
       label: null,
       items: [
-        {
+        /*{
           href: '/',
           label: 'Home',
           icon: HomeIcon,
@@ -61,11 +61,11 @@ export function SiteSidebarNavigation() {
           isActive: router.asPath === '/',
           trailingAction: null,
           isExternal: false,
-        },
+        },*/
 
         {
           href: '/writing',
-          label: 'Writing',
+          label: 'Posts',
           icon: WritingIcon,
           trailingAccessory: null,
           isActive: router.asPath.indexOf('/writing') >= 0,
@@ -75,7 +75,7 @@ export function SiteSidebarNavigation() {
 
         {
           href: '/bookmarks',
-          label: 'Bookmarks',
+          label: 'Links',
           icon: BookmarksIcon,
           trailingAccessory: null,
           isActive: router.asPath.indexOf('/bookmarks') >= 0,
