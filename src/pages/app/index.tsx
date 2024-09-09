@@ -158,7 +158,7 @@ export default function Home(props) {
 
   React.useEffect(() => {
     // Check if community_site is true and redirect to /bookmarks
-    if (props.community_site && router.pathname === '/') {
+    if (getSiteDomain(props.community_site) && router.pathname === '/') {
       router.push('/bookmarks')
     }
   }, [props.community_site, router.pathname])
