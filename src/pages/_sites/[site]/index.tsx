@@ -90,6 +90,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   let commonProps = await getCommonPageProps(ctx, graphqlData[0])
   graphqlData.push(await apolloClient.query({ query: GET_HOME_PAGE }))
 
+  // Extract the site data from the GraphQL response
+  const siteData = graphqlData[0]?.data?.context?.site
+
   if (!commonProps.site.siteId) {
     return {
       redirect: {
@@ -99,7 +102,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
-  if (commonProps.site.community_site) {
+  // Check if the site is a community site using the GraphQL data
+  if (siteData?.community_site) {
     return {
       redirect: {
         destination: '/bookmarks',
@@ -109,6 +113,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   return addApolloState(apolloClient, {
-    props: { ...commonProps },
+    props: { 
+      ...commonProps,
+      community_site: siteData?.community_site || false, // Pass this to the component
+    },
   })
 }
