@@ -79,7 +79,7 @@ function AdminSettingsPage(props) {
     newsletter_setting3: site?.newsletter_setting3 || '',
     chatbot: {
       prompt_template: site?.chatbot?.prompt_template || '',
-      openai_key: site?.chatbot?.openai_key || '',
+      openai_key: site?.chatbot?.openai_key || ''
     },
     community_site: site?.community_site || false,
   })
@@ -106,7 +106,6 @@ function AdminSettingsPage(props) {
   })
 
   const saveSettings = () => {
-    console.log('Saving community_site:', values.community_site); // Add this line for debugging
     return editSite({
       variables: {
         subdomain: site?.subdomain,

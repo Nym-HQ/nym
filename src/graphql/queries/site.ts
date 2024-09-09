@@ -36,7 +36,11 @@ export const GET_SITE_USERS = gql`
 `
 
 export const EDIT_SITE = gql`
-  mutation EditSite($subdomain: String!, $data: EditSiteInput!, $chatbot: EditSiteChatBotInput) {
+  mutation EditSite(
+    $subdomain: String!
+    $data: EditSiteInput!
+    $chatbot: EditSiteChatBotInput
+  ) {
     editSite(subdomain: $subdomain, data: $data, chatbot: $chatbot) {
       id
       name
