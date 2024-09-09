@@ -34,7 +34,7 @@ export const SiteChatBotFragment = gql`
     free_quota
   }
 `
- 
+
 export const SiteEditInfoFragment = gql`
   fragment SiteEditInfo on Site {
     ...SitePublicInfo

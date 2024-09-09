@@ -14,7 +14,7 @@ import { preservedSubdomains } from '~/lib/consts'
 import { graphcdn } from '~/lib/graphcdn'
 import { getNewsletterProvider } from '~/lib/newsletter'
 import { addDomainToProject, removeDomainFromProject } from '~/lib/vercel'
- 
+
 export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
   const { subdomain, data, chatbot } = args
   const {
