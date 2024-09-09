@@ -156,6 +156,13 @@ export default function Home(props) {
   const titleRef = React.useRef(null)
   const { data } = useContextQuery()
 
+  React.useEffect(() => {
+    // Check if community_site is true and redirect to /bookmarks
+    if (props.community_site && router.pathname === '/') {
+      router.push('/bookmarks')
+    }
+  }, [props.community_site, router.pathname])
+
   if (data?.context?.viewer) {
     const { data: userSites } = useGetUserSitesQuery()
 
@@ -184,10 +191,6 @@ export default function Home(props) {
       </Detail.Container>
     )
   } else {
-    // Check if community_site is true and redirect to /bookmarks
-    if (props.community_site) {
-      router.push('/bookmarks')
-    }
     return (
       <SignIn
         isTwitterLoginEnabled={props.isTwitterLoginEnabled}
