@@ -12,3 +12,4 @@ yarn.lock
 .vercel
 cors.json
 src/data/local/*
+.env*.local

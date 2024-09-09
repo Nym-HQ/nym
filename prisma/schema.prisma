@@ -146,7 +146,7 @@ model Site {
   banner       String?  @db.Text
   attach_css   String?  @db.Text
   attach_js    String?  @db.Text
-  
+
   // community site settings
   community_site Boolean? @default(false)
 
