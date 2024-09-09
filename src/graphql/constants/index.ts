@@ -47,4 +47,3 @@ export const NYM_APP_SITE = {
   social_other1_label: null,
   community_site: null,
 }
- 
