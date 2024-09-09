@@ -34,3 +34,36 @@ export const GET_SITE_USERS = gql`
   }
   ${SiteUserInfoFragment}
 `
+
+export const EDIT_SITE = gql`
+  mutation EditSite($subdomain: String!, $data: EditSiteInput!, $chatbot: EditSiteChatBotInput) {
+    editSite(subdomain: $subdomain, data: $data, chatbot: $chatbot) {
+      id
+      name
+      description
+      logo
+      banner
+      attach_css
+      attach_js
+      newsletter_provider
+      newsletter_description
+      newsletter_from_email
+      newsletter_double_optin
+      newsletter_setting1
+      newsletter_setting2
+      newsletter_setting3
+      social_github
+      social_twitter
+      social_youtube
+      social_other1
+      social_other1_label
+      community_site
+      chatbot {
+        id
+        openai_key
+        prompt_template
+        free_quota
+      }
+    }
+  }
+`

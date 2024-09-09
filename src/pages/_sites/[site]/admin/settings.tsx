@@ -106,6 +106,7 @@ function AdminSettingsPage(props) {
   })
 
   const saveSettings = () => {
+    console.log('Saving community_site:', values.community_site); // Add this line for debugging
     return editSite({
       variables: {
         subdomain: site?.subdomain,
