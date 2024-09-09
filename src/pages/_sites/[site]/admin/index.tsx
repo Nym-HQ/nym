@@ -44,6 +44,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const apolloClient = initApolloClient({ context })
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])
+
+  // Check if the site is a community site
+  if (commonProps.site.community_site === true) {
+    return {
+      redirect: {
+        destination: '/bookmarks',
+        permanent: false,
+      },
+    }
+  }
+
   if (!commonProps.site.isAppDomain && !commonProps.site.siteId) {
     return {
       redirect: {
@@ -52,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     }
   }
+
   if (!graphqlData[0]?.data?.context?.viewer?.isAdmin) {
     return {
       redirect: {
