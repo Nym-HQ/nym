@@ -81,7 +81,7 @@ function AdminSettingsPage(props) {
       prompt_template: site?.chatbot?.prompt_template || '',
       openai_key: site?.chatbot?.openai_key || '',
     },
-    community_site: site?.community_site || '',
+    community_site: site?.community_site === true,
   })
 
   const [showSocialOther1, setShowSocialOther1] = React.useState(
@@ -118,7 +118,7 @@ function AdminSettingsPage(props) {
           social_youtube: values.social_youtube,
           social_other1: values.social_other1,
           social_other1_label: values.social_other1_label,
-          community_site: values.community_site,
+          community_site: Boolean(values.community_site),
         },
         chatbot: {
           prompt_template: values.chatbot?.prompt_template || '',
@@ -484,7 +484,7 @@ function AdminSettingsPage(props) {
             <Checkbox
               id="community-site-checkbox"
               name="community-site-checkbox"
-              checked={values.community_site}
+              checked={Boolean(values.community_site)}
               onChange={(e) =>
                 setValues({
                   ...values,
