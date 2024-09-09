@@ -23,6 +23,9 @@ export const config = {
 
 function AdminPage(props) {
   const { data } = useContextQuery()
+  const isCommunity = props.isCommunity
+
+  // Use isCommunity as needed in your component
 
   return (
     <Detail.Container>
@@ -45,8 +48,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const graphqlData = await Promise.all([...getCommonQueries(apolloClient)])
   const commonProps = await getCommonPageProps(ctx, graphqlData[0])
 
+  // Extract the community_site property from the GraphQL data
+  const siteData = graphqlData[0]?.data?.context?.site
+  const isCommunity = siteData?.community_site === true
+
   // Check if the site is a community site
-  if (commonProps.site.community_site === true) {
+  if (isCommunity) {
     return {
       redirect: {
         destination: '/bookmarks',
@@ -74,7 +81,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   return addApolloState(apolloClient, {
-    props: { ...commonProps },
+    props: { 
+      ...commonProps,
+      isCommunity, // Pass the community site status to the component
+    },
   })
 }
 
