@@ -30,7 +30,7 @@ export default function Home(props) {
 
   const homepage = parsePageData(data?.homepage)
 
-  const seo = extendSEO(routes.home.seo, context.context.site)
+  const seo = extendSEO(context.context.site)
   return (
     <>
       <NextSeo {...seo} />

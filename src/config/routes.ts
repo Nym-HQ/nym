@@ -1,4 +1,9 @@
 const routes = {
+  /*home: {
+    label: 'Home',
+    path: '/',
+    seo: {},
+  },*/
   writing: {
     label: 'Posts',
     path: '/writing',
