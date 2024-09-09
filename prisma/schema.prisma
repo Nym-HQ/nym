@@ -186,7 +186,7 @@ model SiteChatBot {
   siteId String @unique
 
   openai_key      String? @db.VarChar(255)
-  prompt_template String  @default("") @db.Text
+  prompt_template String  @db.Text
   free_quota      Int     @default(0)
 
   site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
@@ -308,9 +308,9 @@ model Post {
   slug         String
   title        String     @db.VarChar(280)
   // markdown
-  text         String     @default("") @db.MediumText
+  text         String     @db.MediumText
   // json
-  data         String     @default("") @db.MediumText
+  data         String     @db.MediumText
   excerpt      String     @db.VarChar(280)
   featureImage String?
   access       PostAccess @default(PUBLIC)
@@ -334,9 +334,9 @@ model PostEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
   // markdown
-  text         String   @default("") @db.MediumText
+  text         String   @db.MediumText
   // json
-  data         String   @default("") @db.MediumText
+  data         String   @db.MediumText
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
   featureImage String?
@@ -408,9 +408,9 @@ model Page {
   slug         String
   title        String     @db.VarChar(280)
   // markdown
-  text         String     @default("") @db.MediumText
+  text         String     @db.MediumText
   // json
-  data         String     @default("") @db.MediumText
+  data         String     @db.MediumText
   excerpt      String     @db.VarChar(280)
   featureImage String?
   userId       String
@@ -431,9 +431,9 @@ model PageEdit {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
   // markdown
-  text         String   @default("") @db.MediumText
+  text         String   @db.MediumText
   // json
-  data         String   @default("") @db.MediumText
+  data         String   @db.MediumText
   title        String   @db.VarChar(280)
   excerpt      String   @db.VarChar(280)
   featureImage String?

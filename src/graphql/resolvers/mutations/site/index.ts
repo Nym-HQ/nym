@@ -55,7 +55,7 @@ export async function editSite(_, args: MutationEditSiteArgs, ctx: Context) {
         code: ApolloServerErrorCode.BAD_REQUEST,
       },
     })
-    
+
   return await prisma.site
     .update({
       where: { subdomain },

@@ -1,9 +1,9 @@
 {
-    "github": {
-        "deploymentEnabled": {
-            "main": true,
-            "dev": true
-        },
-        "silent": true
-    }
+  "github": {
+    "deploymentEnabled": {
+      "main": true,
+      "dev": true
+    },
+    "silent": true
+  }
 }

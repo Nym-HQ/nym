@@ -320,9 +320,10 @@
     }
   }
 
-
-  body .tc-cell {border: none !important;}
-  body .tc-table {border-top: none !important;}
-
-
+  body .tc-cell {
+    border: none !important;
+  }
+  body .tc-table {
+    border-top: none !important;
+  }
 }

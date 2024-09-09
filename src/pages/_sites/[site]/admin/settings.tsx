@@ -497,7 +497,7 @@ function AdminSettingsPage(props) {
             </Label>
           </div>
         </Subsection>
-        
+
         <Subsection title="Email newsletter settings">
           {!context.owner?.hasEmail && (
             <p className="text-red-500 text-sm ml-1 mt-1 font-medium">
@@ -536,7 +536,9 @@ function AdminSettingsPage(props) {
                   />
                 </div>
                 <div className="col-span-5">
-                  <Label htmlFor="newsletter_provider">Newsletter Provider</Label>
+                  <Label htmlFor="newsletter_provider">
+                    Newsletter Provider
+                  </Label>
                   <Select
                     id="newsletter_provider"
                     onChange={(e) =>

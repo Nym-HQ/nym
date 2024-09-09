@@ -1,5 +1,7 @@
 ## Nym
+
 An open source solution for personal blogs, bookmarks, newsletters & notes.
+
 ## App Domain structure
 
 The system will consist of 3 different apps hosted separately.
@@ -18,8 +20,8 @@ This is for registered users and sites to show contents and manage contents.
 ### Environment values (.env)
 
 - `NODE_ENV` (production|development)
-- `VERCEL_ENV` (production|preview|development) Set automatically 
-- `NEXT_PUBLIC_VERCEL_ENV` (production|preview|development) Set automatically 
+- `VERCEL_ENV` (production|preview|development) Set automatically
+- `NEXT_PUBLIC_VERCEL_ENV` (production|preview|development) Set automatically
 - `VERCEL_URL` (https://{nym-xyz}.vercel.app) Set automatically
 - `NEXT_PUBLIC_VERCEL_URL` (https://{nym-xyz}.vercel.app) Set automatically
 - `PUBLIC_URL` (https://nymhq.com)
@@ -30,8 +32,8 @@ This is for registered users and sites to show contents and manage contents.
 #### Prisma and PlanetScale
 
 A good resource to understand Prisma and its Shadow DB
- https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database  
- https://blog.tericcabrel.com/understand-the-shadow-database-feature-prisma/  
+https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database  
+ https://blog.tericcabrel.com/understand-the-shadow-database-feature-prisma/
 
 - `DATABASE_URL` (mysql://user:password@host:port/database)
 - `SHADOW_DATABASE_URL` (Only required for local env where we run migration commands)
@@ -43,7 +45,7 @@ A good resource to understand Prisma and its Shadow DB
 - `JWT_SIGNING_KEY`
 - `GITHUB_ID`
 - `GITHUB_SECRET`
-- `TWITTER_API_KEY`  Use Twitter API Key 
+- `TWITTER_API_KEY` Use Twitter API Key
 - `TWITTER_API_SECRET` Use Twitter API Secret
 
 #### [Cloudinary](https://cloudinary.com/)
@@ -56,7 +58,6 @@ A good resource to understand Prisma and its Shadow DB
 #### [IFramely](https://iframely.com/)
 
 - `IFRAMELY_API_KEY` - Iframely API key - to extract metadata from a url
-
 
 #### Configurations for Chat Bot
 
@@ -72,7 +73,6 @@ A good resource to understand Prisma and its Shadow DB
 2. Create a DB.
 3. Copy the connection string for the DB, and set it to the .env file variables. ([See PlanetScale Doc](https://planetscale.com/docs/concepts/connection-strings))
 4. Run migration `yarn prisma migrate dev`
-
 
 ### Migrating DB (PScale and Prisma)
 
@@ -101,4 +101,5 @@ yarn prisma migrate dev
 - When you want to deploy changes from `dev` to `main`, go to https://app.planetscale.com/sov-ventures/nymhq/deploy-requests and create deployment request from `dev` branch to `main` branch.
 
 ### Nym is a fork of the briOS project
+
 https://github.com/brianlovin/briOS

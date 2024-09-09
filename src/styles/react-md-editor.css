@@ -23,7 +23,8 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .wmde-markdown, .wmde-markdown-var {
+  .wmde-markdown,
+  .wmde-markdown-var {
     --color-canvas-default: rgb(5 5 5 / var(--tw-bg-opacity));
   }
 }
