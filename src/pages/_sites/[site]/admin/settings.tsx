@@ -81,7 +81,7 @@ function AdminSettingsPage(props) {
       prompt_template: site?.chatbot?.prompt_template || '',
       openai_key: site?.chatbot?.openai_key || '',
     },
-    community_site: site?.community_site || false,
+    community_site: site?.community_site === true,
   })
 
   const [showSocialOther1, setShowSocialOther1] = React.useState(
@@ -89,24 +89,14 @@ function AdminSettingsPage(props) {
   )
   const [isChatbotTraining, setChatbotTraining] = React.useState(false)
 
-  const [executeSiteEdit, { loading: saving }] = useEditSiteMutation({
+  const [editSite, { loading: saving }] = useEditSiteMutation({
     onCompleted({ editSite }) {
       toast.success('Saved site settings!')
-    },
-    update(cache, { data }) {
-      if (data?.editSite) {
-        cache.modify({
-          id: cache.identify(data.editSite),
-          fields: {
-            community_site: () => data.editSite.community_site,
-          },
-        })
-      }
     },
   })
 
   const saveSettings = () => {
-    return executeSiteEdit({
+    return editSite({
       variables: {
         subdomain: site?.subdomain,
         data: {

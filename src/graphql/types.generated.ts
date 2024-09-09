@@ -2084,22 +2084,6 @@ export type GetSiteUsersQuery = {
   }> | null
 }
 
-export type EditSiteMutationVariables = Exact<{
-  subdomain: Scalars['String']['input']
-  data: EditSiteInput
-  chatbot?: InputMaybe<EditSiteChatBotInput>
-}>
-
-export type EditSiteMutation = {
-  __typename?: 'Mutation'
-  editSite?: {
-    __typename?: 'Site'
-    id: string
-    name?: string | null
-    description?: string | null
-  } | null
-}
-
 export type GetTagsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetTagsQuery = {
@@ -4786,61 +4770,6 @@ export type GetSiteUsersSuspenseQueryHookResult = ReturnType<
 export type GetSiteUsersQueryResult = Apollo.QueryResult<
   GetSiteUsersQuery,
   GetSiteUsersQueryVariables
->
-export const EditSiteDocument = gql`
-  mutation EditSite(
-    $subdomain: String!
-    $data: EditSiteInput!
-    $chatbot: EditSiteChatBotInput
-  ) {
-    editSite(subdomain: $subdomain, data: $data, chatbot: $chatbot) {
-      id
-      name
-      description
-    }
-  }
-`
-export type EditSiteMutationFn = Apollo.MutationFunction<
-  EditSiteMutation,
-  EditSiteMutationVariables
->
-
-/**
- * __useEditSiteMutation__
- *
- * To run a mutation, you first call `useEditSiteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useEditSiteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [editSiteMutation, { data, loading, error }] = useEditSiteMutation({
- *   variables: {
- *      subdomain: // value for 'subdomain'
- *      data: // value for 'data'
- *      chatbot: // value for 'chatbot'
- *   },
- * });
- */
-export function useEditSiteMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    EditSiteMutation,
-    EditSiteMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<EditSiteMutation, EditSiteMutationVariables>(
-    EditSiteDocument,
-    options
-  )
-}
-export type EditSiteMutationHookResult = ReturnType<typeof useEditSiteMutation>
-export type EditSiteMutationResult = Apollo.MutationResult<EditSiteMutation>
-export type EditSiteMutationOptions = Apollo.BaseMutationOptions<
-  EditSiteMutation,
-  EditSiteMutationVariables
 >
 export const GetTagsDocument = gql`
   query getTags {

@@ -34,18 +34,3 @@ export const GET_SITE_USERS = gql`
   }
   ${SiteUserInfoFragment}
 `
-
-export const EDIT_SITE = gql`
-  mutation EditSite(
-    $subdomain: String!
-    $data: EditSiteInput!
-    $chatbot: EditSiteChatBotInput
-  ) {
-    editSite(subdomain: $subdomain, data: $data, chatbot: $chatbot) {
-      id
-      name
-      description
-      # ... other fields ...
-    }
-  }
-`

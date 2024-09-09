@@ -26,7 +26,7 @@ const typeDefs = gql`
     social_github: String
     social_other1: String
     social_other1_label: String
-
+ 
     chatbot: SiteChatBot
     community_site: Boolean
   }
