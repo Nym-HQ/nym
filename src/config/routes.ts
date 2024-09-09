@@ -1,11 +1,6 @@
 const routes = {
-  home: {
-    label: 'Home',
-    path: '/',
-    seo: {},
-  },
   writing: {
-    label: 'Writing',
+    label: 'Posts',
     path: '/writing',
     seo: {
       title: 'Writing',
@@ -15,7 +10,7 @@ const routes = {
     },
   },
   bookmarks: {
-    label: 'Bookmarks',
+    label: 'Links',
     path: '/bookmarks',
     seo: {
       title: 'Bookmarks',
