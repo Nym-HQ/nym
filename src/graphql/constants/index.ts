@@ -45,5 +45,5 @@ export const NYM_APP_SITE = {
   social_github: 'alpha8eta',
   social_other1: null,
   social_other1_label: null,
-  community_site: null,
+  community_site: false, // or true, depending on your default setting
 }
