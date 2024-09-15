@@ -1,4 +1,4 @@
-import { UserInputError, ForbiddenError, ApolloError } from 'apollo-server-micro';
+import { GraphQLError } from 'graphql';
 import { ValidationError } from 'yup';
 import { AuthorizationError } from '~/lib/errors';
 
@@ -26,11 +26,17 @@ export const addPost = async (_, { input }, context) => {
   } catch (error) {
     console.error('Error adding post:', error);
     if (error instanceof ValidationError) {
-      throw new UserInputError('Invalid input data', { invalidArgs: error.errors });
+      throw new GraphQLError('Invalid input data', {
+        extensions: { code: 'BAD_USER_INPUT', invalidArgs: error.errors },
+      });
     } else if (error instanceof AuthorizationError) {
-      throw new ForbiddenError('Not authorized to add post');
+      throw new GraphQLError('Not authorized to add post', {
+        extensions: { code: 'FORBIDDEN' },
+      });
     } else {
-      throw new ApolloError('Unable to add post: ' + error.message, 'INTERNAL_SERVER_ERROR');
+      throw new GraphQLError('Unable to add post: ' + error.message, {
+        extensions: { code: 'INTERNAL_SERVER_ERROR' },
+      });
     }
   }
 };
