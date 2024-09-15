@@ -25,11 +25,7 @@ export const addPost = async (_, { input }, context) => {
     return newPost;
   } catch (error) {
     console.error('Error adding post:', error);
-    // if (error instanceof ValidationError) { // Removed
-    //   throw new GraphQLError('Invalid input data', {
-    //     extensions: { code: 'BAD_USER_INPUT', invalidArgs: error.errors },
-    //   });
-    // } else 
+    // Removed Yup ValidationError handling
     if (error instanceof AuthorizationError) {
       throw new GraphQLError('Not authorized to add post', {
         extensions: { code: 'FORBIDDEN' },
