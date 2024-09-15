@@ -1,4 +1,4 @@
-import { GraphQLError } from 'graphql';
+import { GraphQLError } from 'graphql'
 
 export class ApplicationError extends Error {
   constructor(message: string, public data: Record<string, any> = {}) {
@@ -12,7 +12,7 @@ export class AuthorizationError extends GraphQLError {
   constructor(message: string) {
     super(message, {
       extensions: { code: 'FORBIDDEN' },
-    });
+    })
   }
 }
 
