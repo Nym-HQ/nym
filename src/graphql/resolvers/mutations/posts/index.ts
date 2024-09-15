@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql';
-import { ValidationError } from 'yup';
+// import { ValidationError } from 'yup'; // Removed
 import { AuthorizationError } from '~/lib/errors';
 
 export const addPost = async (_, { input }, context) => {
@@ -11,7 +11,7 @@ export const addPost = async (_, { input }, context) => {
     }
 
     // Validate input
-    // TODO: Add proper validation using Yup or similar
+    // TODO: Add proper validation without Yup or use another validation library
 
     const newPost = await prisma.post.create({
       data: {
@@ -25,11 +25,12 @@ export const addPost = async (_, { input }, context) => {
     return newPost;
   } catch (error) {
     console.error('Error adding post:', error);
-    if (error instanceof ValidationError) {
-      throw new GraphQLError('Invalid input data', {
-        extensions: { code: 'BAD_USER_INPUT', invalidArgs: error.errors },
-      });
-    } else if (error instanceof AuthorizationError) {
+    // if (error instanceof ValidationError) { // Removed
+    //   throw new GraphQLError('Invalid input data', {
+    //     extensions: { code: 'BAD_USER_INPUT', invalidArgs: error.errors },
+    //   });
+    // } else 
+    if (error instanceof AuthorizationError) {
       throw new GraphQLError('Not authorized to add post', {
         extensions: { code: 'FORBIDDEN' },
       });
