@@ -1,6 +1,11 @@
 import { GraphQLError } from 'graphql';
-// import { ValidationError } from 'yup'; // Removed
-// import { AuthorizationError } from '~/lib/errors'; // Removed
+import { z } from 'zod';
+
+const addPostSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  content: z.string().min(1, 'Content is required'),
+  // Add other fields and validations as necessary
+});
 
 export const addPost = async (_, { input }, context) => {
   try {
@@ -13,12 +18,12 @@ export const addPost = async (_, { input }, context) => {
     }
 
     // Validate input
-    // TODO: Add proper validation without Yup or use another validation library
+    const validatedInput = addPostSchema.parse(input);
 
     const newPost = await prisma.post.create({
       data: {
-        title: input.title,
-        content: input.content,
+        title: validatedInput.title,
+        content: validatedInput.content,
         authorId: viewer.id,
         // Add other fields as necessary
       },
@@ -27,6 +32,11 @@ export const addPost = async (_, { input }, context) => {
     return newPost;
   } catch (error) {
     console.error('Error adding post:', error);
+    if (error instanceof z.ZodError) {
+      throw new GraphQLError('Invalid input data', {
+        extensions: { code: 'BAD_USER_INPUT', invalidArgs: error.errors },
+      });
+    }
     throw new GraphQLError('Unable to add post: ' + error.message, {
       extensions: { code: 'INTERNAL_SERVER_ERROR' },
     });
