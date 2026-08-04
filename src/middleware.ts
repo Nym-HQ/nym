@@ -156,16 +156,22 @@ export async function middleware(req: NextRequest) {
     return handleCrossSiteAuth(req)
   }
 
+  // Build rewrite targets from req.nextUrl (the server's own internal origin).
+  // Next 16 treats NextResponse.rewrite() to an absolute URL whose origin isn't
+  // the server origin as an external proxy, which loops on the custom multi-tenant
+  // host (app.nymhq.local) — getCurrentUrl()'s `url` has host overwritten, so it
+  // must NOT be used as a rewrite target.
   if (isAppDomain) {
     // App Domain: Mapping of /account to /admin
     // Rewrite to "/app/**"
-    url.pathname = `/app${pathname.replace('/admin', '/account')}`
-    return NextResponse.rewrite(url)
+    const rewriteUrl = req.nextUrl.clone()
+    rewriteUrl.pathname = `/app${pathname.replace('/admin', '/account')}`
+    return NextResponse.rewrite(rewriteUrl)
   } else {
     // rewrite everything else to `/_sites/[site] dynamic route
-    return NextResponse.rewrite(
-      new URL(`/_sites/${host.split(':')[0]}${pathname}`, req.url)
-    )
+    const rewriteUrl = req.nextUrl.clone()
+    rewriteUrl.pathname = `/_sites/${host.split(':')[0]}${pathname}`
+    return NextResponse.rewrite(rewriteUrl)
   }
 }
 
