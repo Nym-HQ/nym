@@ -227,6 +227,17 @@
   .ce-paragraph {
     word-break: break-word;
   }
+
+  /* Image Tool caption: hide when empty, drop the input border when filled */
+  .image-tool__caption {
+    &:empty {
+      display: none;
+    }
+
+    &:not(:empty) {
+      @apply border-0 shadow-none;
+    }
+  }
 }
 
 /* Button Tool */
