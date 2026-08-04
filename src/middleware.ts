@@ -67,7 +67,7 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
     // So when auth completes, it will be redirected to /signin-complete
     // Here we check the "next" param and redirect accordingly.
     const _next =
-      searchParams.get('next') || req.cookies.get('next').value || '/'
+      searchParams.get('next') || req.cookies.get('next')?.value || '/'
     req.cookies.delete('next')
 
     if (
@@ -81,7 +81,7 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
           nextUrl.host
         }/signin-complete?next=${encodeURIComponent(
           nextUrl.toString()
-        )}&session-token=${req.cookies.get(nextAuthSessionCookie).value}`
+        )}&session-token=${req.cookies.get(nextAuthSessionCookie)?.value}`
       )
 
       const response = NextResponse.redirect(crossSigninUrl)
