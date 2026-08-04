@@ -21,7 +21,11 @@ function LinkRenderer({ href, ...rest }: any) {
     return <Link href={`/u/${href.slice(1)}`} {...rest} />
   }
   try {
-    return <a rel="noopener" href={href} {...rest} />
+    // react-markdown v9 removed the `linkTarget` prop, so open external links
+    // in a new tab here instead.
+    return (
+      <a target="_blank" rel="noopener noreferrer" href={href} {...rest} />
+    )
   } catch (e) {
     console.error(e)
     return <span href={href} {...rest} />
@@ -118,7 +122,6 @@ export function MarkdownRenderer(props: any) {
         rehypeSlug,
         [rehypeAutolinkHeadings, { behavior: 'wrap' }],
       ]}
-      linkTarget="_blank"
       components={components}
     >
       {children}
