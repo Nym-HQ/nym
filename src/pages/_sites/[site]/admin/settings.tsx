@@ -190,7 +190,7 @@ function AdminSettingsPage(props) {
                 upload_options={{
                   use_filename: 'false',
                   public_id: 'site_logo',
-                  transformation: 'h_150,w_150,c_fit',
+                  transformation: 'h_600,w_600,c_fit',
                 }}
                 onUploadStarted={() => {}}
                 onUploadFailed={() => {}}

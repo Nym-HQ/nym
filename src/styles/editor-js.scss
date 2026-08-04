@@ -390,3 +390,19 @@
     padding: 10px 0;
   }
 }
+
+/* Homepage hero: the bio sits in a flex column next to the profile photo.
+   EditorJS centers each block at max-width: 650px; margin: 0 auto, which would
+   center the bio inside its column; unset it so the text fills the column and
+   stays left-aligned next to the photo. Scoped to the homepage (`.home-hero`)
+   so posts/pages keep their centered reading column. */
+.home-hero .codex-editor .ce-block__content {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Same for a markdown-authored bio. */
+.home-hero .prose {
+  max-width: none;
+}

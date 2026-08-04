@@ -7,6 +7,7 @@ import { Detail } from '~/components/ListDetail/Detail'
 import { PoweredByNym } from '~/components/ListDetail/PoweredByNym'
 import { TitleBar } from '~/components/ListDetail/TitleBar'
 import { MarkdownRenderer } from '~/components/MarkdownRenderer'
+import { ProfileImage } from '~/components/ProfileImage'
 import routes from '~/config/routes'
 import { extendSEO } from '~/config/seo'
 import { getContext } from '~/graphql/context'
@@ -44,32 +45,45 @@ export default function Home(props) {
           />
 
           <div className="flex flex-1 flex-col flex-start justify-start">
-            <Detail.ContentContainer>
-              <div>
-                {data.homepage.publishedAt && (
-                  <span
-                    title={data.homepage.publishedAt.raw}
-                    className="text-tertiary inline-block leading-snug"
-                  >
-                    {data.homepage.publishedAt.formatted}
-                  </span>
-                )}
+            {/* Wider container than the default 768px reading column so the
+                homepage hero can span like cef.im (big photo, roomy heading),
+                with generous side padding so it breathes from the nav and edge. */}
+            <div className="mx-auto w-full max-w-5xl px-6 py-8 pb-10 md:px-10 lg:px-16">
+              {/* cef.im-style hero. Responsive: on narrow screens the photo sits
+                  large on top of the bio; on wider screens it moves alongside the
+                  text on the right, top-aligned. The photo is first in the DOM so
+                  it stacks on top when the row collapses to a column.
+                  Homepage-only — pages/posts don't render the photo. */}
+              <div className="home-hero flex flex-col gap-8 sm:flex-row-reverse sm:items-start sm:gap-10">
+                {/* sm:mt-6 aligns the photo's top with the heading's first line
+                    (the heading box sits ~24px below the flex top). */}
+                <ProfileImage className="w-64 self-center sm:mt-6 sm:w-2/5 sm:max-w-[420px] sm:shrink-0 sm:self-start" />
 
-                {homepage.text && !homepage.data?.blocks ? (
-                  <MarkdownRenderer
-                    children={homepage.text}
-                    className="prose mt-8"
-                  />
-                ) : (
-                  <EditorJSEditor
-                    readOnly={true}
-                    site={null}
-                    value={homepage.data}
-                  />
-                )}
-                {/* <MarkdownRenderer children={homepage.text} className="prose" /> */}
+                <div className="min-w-0 flex-1">
+                  {data.homepage.publishedAt && (
+                    <span
+                      title={data.homepage.publishedAt.raw}
+                      className="text-tertiary inline-block leading-snug"
+                    >
+                      {data.homepage.publishedAt.formatted}
+                    </span>
+                  )}
+
+                  {homepage.text && !homepage.data?.blocks ? (
+                    <MarkdownRenderer
+                      children={homepage.text}
+                      className="prose mt-8"
+                    />
+                  ) : (
+                    <EditorJSEditor
+                      readOnly={true}
+                      site={null}
+                      value={homepage.data}
+                    />
+                  )}
+                </div>
               </div>
-            </Detail.ContentContainer>
+            </div>
           </div>
 
           <PoweredByNym scrollContainerRef={scrollContainerRef} />
