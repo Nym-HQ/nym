@@ -3,7 +3,9 @@ schema: src/graphql/typeDefs/index.ts
 documents: './src/**/*.{tsx,ts}'
 hooks:
   afterOneFileWrite:
-    - eslint --fix
+    # `eslint --fix` removed: it runs during postinstall (via `generate`) and
+    # crashes the install because eslint 8 rejects @next/eslint-plugin-next@16's
+    # flat-config `name` property. The output is generated + `// eslint-disable`.
     - prettier --write
 generates:
   ./src/graphql/types.generated.ts:
