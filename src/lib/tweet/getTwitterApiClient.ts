@@ -1,7 +1,7 @@
 import { Context } from '@apollo/client'
 import { TwitterApi } from 'twitter-api-v2'
 
-import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
+import { getAppProtocol, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 export default async function getTwitterApiClient(
   context: Context
@@ -53,7 +53,7 @@ export default async function getTwitterApiClient(
     } = await twitterClient.loginWithOAuth2({
       code: account.refresh_token,
       codeVerifier: 'refresh_token',
-      redirectUri: `https://${MAIN_APP_DOMAIN}/signin-complete`,
+      redirectUri: `${getAppProtocol()}://${MAIN_APP_DOMAIN}/signin-complete`,
     })
     twitterClient = refreshedClient
   }

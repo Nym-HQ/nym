@@ -16,7 +16,11 @@ import {
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
-import { getSiteDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
+import {
+  getAppProtocol,
+  getSiteDomain,
+  MAIN_APP_DOMAIN,
+} from '~/lib/multitenancy/client'
 import prisma from '~/lib/prisma'
 
 export const config = {
@@ -212,7 +216,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const userSites = await apolloClient.query({ query: GET_USER_SITES })
 
     const resolvedUrl = (ctx as any).resolvedUrl
-    const url = new URL(resolvedUrl, `https://${MAIN_APP_DOMAIN}`)
+    // Derive protocol from the request so cross-site signin redirects stay http
+    // on local dev (no TLS on *.nymhq.local:3000) and https in production.
+    const proto = getAppProtocol(ctx.req?.headers['x-forwarded-proto'])
+    const url = new URL(resolvedUrl, `${proto}://${MAIN_APP_DOMAIN}`)
 
     // Bookmarklet redirect
     if (

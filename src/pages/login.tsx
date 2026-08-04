@@ -7,7 +7,7 @@ import { getContext } from '~/graphql/context'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
 import { getCommonPageProps } from '~/lib/commonProps'
-import { MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
+import { getAppProtocol, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 import prisma from '~/lib/prisma'
 
 export const config = {
@@ -40,7 +40,11 @@ export default function SignInPage(props) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req, res } = ctx
 
-  const url = new URL(req.url, `https://${req.headers.host}`)
+  // Derive the protocol from the request instead of hardcoding https, so the
+  // cross-site signin-complete redirect stays http on local dev (no TLS on
+  // *.nymhq.local:3000) while remaining https in production.
+  const proto = getAppProtocol(req.headers['x-forwarded-proto'])
+  const url = new URL(req.url, `${proto}://${req.headers.host}`)
   const searchParams = new URLSearchParams(url.search)
   const _nextUrl = new URL(searchParams.get('next') || '/', url)
 
