@@ -194,7 +194,8 @@
     "react": "$react",
     "react-dom": "$react-dom",
     "@types/react": "$@types/react",
-    "@types/react-dom": "$@types/react-dom"
+    "@types/react-dom": "$@types/react-dom",
+    "ajv": "^8.17.1"
   },
   "engines": {
     "node": ">=20.9.0"
