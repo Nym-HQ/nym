@@ -1,5 +1,5 @@
 import * as React from 'react'
-import ReactVisibilitySensor from 'react-visibility-sensor'
+import ReactVisibilitySensor from '~/components/VisibilitySensor'
 
 import { LoadingSpinner } from '../LoadingSpinner'
 

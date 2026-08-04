@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Link as LinkIcon } from 'react-feather'
-import ReactVisibilitySensor from 'react-visibility-sensor'
+import ReactVisibilitySensor from '~/components/VisibilitySensor'
 
 import { ListItem } from '~/components/ListDetail/ListItem'
 import { BookmarkListItemFragment } from '~/graphql/types.generated'

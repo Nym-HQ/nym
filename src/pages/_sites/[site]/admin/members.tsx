@@ -8,7 +8,7 @@ import { LayoutGroup, motion } from 'framer-motion'
 import Link from 'next/link'
 import { GetServerSideProps } from 'next/types'
 import * as React from 'react'
-import ReactVisibilitySensor from 'react-visibility-sensor'
+import ReactVisibilitySensor from '~/components/VisibilitySensor'
 
 import Button from '~/components/Button'
 import { DeleteButton } from '~/components/Button'
