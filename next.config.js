@@ -8,6 +8,9 @@ const removeImports = require('next-remove-imports')()
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Next 16 restricts which cross-origin hosts may request /_next/* dev assets.
+  // The multi-tenant local setup is served over *.nymhq.local, so allow it.
+  allowedDevOrigins: ['nymhq.local', 'app.nymhq.local', '*.nymhq.local'],
   webpack: (
     config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
