@@ -1,7 +1,10 @@
 .codex-editor {
-  @media (prefers-color-scheme: dark) {
-    .ce-toolbar__actions .ce-toolbar__plus svg,
-    .ce-toolbar__actions .ce-toolbar__settings-btn svg {
+  /* NOTE: these rules already carry `dark:` variants for dark mode, so they must
+     NOT be wrapped in `@media (prefers-color-scheme: dark)` — doing so left all
+     EditorJS content (heading sizes, link colors, tables) unstyled in light mode
+     (e.g. the homepage headline rendered at body size on light-mode mobile). */
+  .ce-toolbar__actions .ce-toolbar__plus svg,
+  .ce-toolbar__actions .ce-toolbar__settings-btn svg {
       @apply text-gray-700 dark:text-gray-400;
     }
 
@@ -222,7 +225,6 @@
         @apply text-gray-700 dark:text-gray-400;
       }
     }
-  }
 
   .ce-paragraph {
     word-break: break-word;

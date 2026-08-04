@@ -45,12 +45,12 @@ export function PoweredByNym({ scrollContainerRef = null }: Props) {
       >
         <div className="flex flex-none items-center justify-center">
           <span className="flex items-center space-x-3">
-            <h4 className="text-primary transform-gpu text-sm font-normal line-clamp-1">
+            <h4 className="text-primary transform-gpu whitespace-nowrap text-sm font-normal">
               Powered by{' '}
               <Link
                 href="https://nymhq.com"
                 target="_blank"
-                className="inline-flex"
+                className="inline-block"
                 passHref
               >
                 <b>Nym</b>
