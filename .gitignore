@@ -5,6 +5,8 @@ node_modules
 .env.build
 .env.local
 .next
+*.tsbuildinfo
+.claude
 .DS_Store
 .vscode
 yarn-error.log

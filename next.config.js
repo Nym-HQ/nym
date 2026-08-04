@@ -1,13 +1,13 @@
-const removeImports = require('next-remove-imports')({
-  options: {},
-})
+// `next-remove-imports` strips the global CSS/scss imports that `@uiw/react-md-editor`
+// and the `@editorjs/*` plugins pull in from within node_modules (Next forbids global
+// CSS imports from node_modules). Those styles are instead imported globally in _app.tsx.
+// It injects a client-only webpack rule and delegates to the `webpack` fn below, so it
+// requires the `--webpack` build flag (it is a no-op under Turbopack).
+const removeImports = require('next-remove-imports')()
 
-module.exports = removeImports({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-  experimental: {
-    serverActions: true,
-  },
   webpack: (
     config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack }
@@ -68,9 +68,14 @@ module.exports = removeImports({
       },
     ],
   },
-  publicRuntimeConfig: {
+  // `publicRuntimeConfig`/`next/config` were removed in Next 16. The `env`
+  // key inlines these values into the client bundle at build time, preserving
+  // the existing (non-`NEXT_PUBLIC_`) env var names used in deployment.
+  env: {
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_PRESET: process.env.CLOUDINARY_PRESET,
   },
-})
+}
+
+module.exports = removeImports(nextConfig)

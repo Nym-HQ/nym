@@ -1,8 +1,8 @@
-import getConfig from 'next/config'
-
-const { publicRuntimeConfig } = getConfig()
-const { CLOUDINARY_API_KEY, CLOUDINARY_CLOUD_NAME, CLOUDINARY_PRESET } =
-  publicRuntimeConfig
+// `next/config` was removed in Next 16; these values are inlined at build time
+// via the `env` key in next.config.js.
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
+const CLOUDINARY_PRESET = process.env.CLOUDINARY_PRESET
 
 const Cloudinary = {
   getParams: (site, extra_params) => {

@@ -5,7 +5,7 @@ import * as React from 'react'
 
 interface Props {
   content: string
-  placement?: typeof Tippy.defaultProps.placement
+  placement?: React.ComponentProps<typeof Tippy>['placement']
   style?: any
   children: any
 }

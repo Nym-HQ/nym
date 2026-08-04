@@ -34,7 +34,7 @@ export const addPost = async (_, { input }, context) => {
     console.error('Error adding post:', error)
     if (error instanceof z.ZodError) {
       throw new GraphQLError('Invalid input data', {
-        extensions: { code: 'BAD_USER_INPUT', invalidArgs: error.errors },
+        extensions: { code: 'BAD_USER_INPUT', invalidArgs: error.issues },
       })
     }
     throw new GraphQLError('Unable to add post: ' + error.message, {
