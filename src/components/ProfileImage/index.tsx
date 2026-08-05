@@ -45,7 +45,9 @@ export function ProfileImage({ src, alt, className = '' }: ProfileImageProps) {
       src={imageSrc}
       alt={imageAlt}
       onError={() => setFailedCount((n) => n + 1)}
-      className={`aspect-square rounded-2xl object-cover shadow-sm ${className}`}
+      // No fixed aspect ratio: the caller sets the width and the height follows
+      // the image's natural proportions, so portrait photos aren't cropped.
+      className={`h-auto rounded-2xl shadow-sm ${className}`}
     />
   )
 }
