@@ -408,3 +408,45 @@
 .home-hero .prose {
   max-width: none;
 }
+
+/* Accordion / Toggle block (AccordionTool). Native <details> collapsible
+   section: uppercase title row with a rotating caret + divider, markdown body. */
+.accordion-block {
+  @apply border-b border-gray-200 dark:border-gray-800;
+}
+.accordion-block__summary {
+  @apply flex cursor-pointer items-center py-3 text-sm font-semibold uppercase tracking-wide text-gray-900 dark:text-gray-100;
+  list-style: none;
+}
+.accordion-block__summary::-webkit-details-marker {
+  display: none;
+}
+.accordion-block__summary::before {
+  content: '\203A'; /* › */
+  @apply mr-3 inline-block text-gray-400;
+  transition: transform 0.15s ease;
+}
+.accordion-block[open] .accordion-block__summary::before {
+  transform: rotate(90deg);
+}
+.accordion-block__body {
+  @apply pb-4 pl-6 text-gray-700 dark:text-gray-300;
+
+  p {
+    @apply my-2;
+  }
+  ul {
+    @apply my-2 list-disc pl-5;
+  }
+  a {
+    @apply text-blue-600 hover:underline dark:text-blue-500;
+  }
+}
+
+/* Authoring inputs for the toggle block. */
+.accordion-block-editor__title {
+  @apply font-semibold uppercase tracking-wide;
+}
+.accordion-block-editor__body {
+  @apply mt-2 min-h-[3rem] whitespace-pre-wrap;
+}

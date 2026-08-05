@@ -25,6 +25,7 @@ import debounce from 'lodash/debounce'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { Cloudinary, uploadFile } from '../Dropzone/uploadFile'
+import AccordionTool from './AccordionTool'
 import AnyButton from './AnyButtonTool'
 import { CustomLinkTool } from './CustomLinkTool'
 import HeaderExtended from './Header'
@@ -60,6 +61,7 @@ const DEFAULT_EDITOR_JS_TOOLS = {
   inlineCode: InlineCode,
   simpleImage: SimpleImage,
   AnyButton: AnyButton,
+  toggle: AccordionTool,
 }
 
 export default function CustomizedEditorJS({
