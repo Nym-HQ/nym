@@ -36,28 +36,65 @@ function mdInline(escaped: string): string {
     .replace(/`([^`]+)`/g, '<code>$1</code>')
 }
 
+/**
+ * Decode HTML entities (e.g. &nbsp;, &amp;) the contentEditable body may store,
+ * so they don't show up literally after we re-escape. Uses a textarea (RCDATA,
+ * so tags aren't parsed) and we escape again in mdToHtml — safe against XSS.
+ */
+function decodeEntities(s: string): string {
+  if (!s) return ''
+  if (typeof document !== 'undefined') {
+    const ta = document.createElement('textarea')
+    ta.innerHTML = s
+    return ta.value
+  }
+  return s
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+}
+
 /** Minimal markdown → HTML for accordion bodies (paragraphs + unordered lists). */
 function mdToHtml(md: string): string {
   if (!md) return ''
-  return md
-    .replace(/\r\n/g, '\n')
-    .split(/\n{2,}/)
-    .map((block) => {
-      const lines = block.split('\n').filter((l) => l.trim() !== '')
-      if (lines.length && lines.every((l) => /^\s*[-*]\s+/.test(l))) {
-        return (
-          '<ul>' +
-          lines
-            .map(
-              (l) => '<li>' + mdInline(escapeHtml(l.replace(/^\s*[-*]\s+/, ''))) + '</li>'
-            )
-            .join('') +
+  const lines = decodeEntities(md).replace(/\r\n/g, '\n').split('\n')
+  const out: string[] = []
+  let list: string[] = []
+  let para: string[] = []
+  const flushPara = () => {
+    if (para.length) {
+      out.push('<p>' + para.map((l) => mdInline(escapeHtml(l))).join('<br>') + '</p>')
+      para = []
+    }
+  }
+  const flushList = () => {
+    if (list.length) {
+      out.push(
+        '<ul>' +
+          list.map((li) => '<li>' + mdInline(escapeHtml(li)) + '</li>').join('') +
           '</ul>'
-        )
-      }
-      return '<p>' + lines.map((l) => mdInline(escapeHtml(l))).join('<br>') + '</p>'
-    })
-    .join('')
+      )
+      list = []
+    }
+  }
+  for (const line of lines) {
+    if (/^\s*[-*]\s+/.test(line)) {
+      flushPara()
+      list.push(line.replace(/^\s*[-*]\s+/, ''))
+    } else if (line.trim() === '') {
+      flushPara()
+      flushList()
+    } else {
+      flushList()
+      para.push(line)
+    }
+  }
+  flushPara()
+  flushList()
+  return out.join('')
 }
 
 export default class AccordionTool {
