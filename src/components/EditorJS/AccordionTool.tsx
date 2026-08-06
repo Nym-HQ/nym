@@ -110,12 +110,17 @@ export default class AccordionTool {
 
   renderView() {
     const details = this.make('details', 'accordion-block')
-    const summary = this.make('summary', 'accordion-block__summary')
-    summary.textContent = this._data.title || 'Untitled'
-    const body = this.make('div', 'accordion-block__body')
-    body.innerHTML = mdToHtml(this._data.body)
-    details.appendChild(summary)
-    details.appendChild(body)
+    try {
+      const summary = this.make('summary', 'accordion-block__summary')
+      summary.textContent = this._data.title || 'Untitled'
+      const body = this.make('div', 'accordion-block__body')
+      body.innerHTML = mdToHtml(this._data.body)
+      details.appendChild(summary)
+      details.appendChild(body)
+    } catch (e) {
+      // Never let a bad accordion block break rendering of the whole page.
+      details.textContent = this._data.title || ''
+    }
     return details
   }
 
@@ -144,12 +149,16 @@ export default class AccordionTool {
   }
 
   save() {
-    if (this.nodes.titleInput) {
-      this._data = {
-        title: (this.nodes.titleInput.textContent || '').trim(),
-        // innerText preserves the line breaks a contentEditable div creates.
-        body: this.nodes.bodyInput?.innerText ?? this._data.body,
+    try {
+      if (this.nodes.titleInput) {
+        this._data = {
+          title: (this.nodes.titleInput.textContent || '').trim(),
+          // innerText preserves the line breaks a contentEditable div creates.
+          body: this.nodes.bodyInput?.innerText ?? this._data.body,
+        }
       }
+    } catch (e) {
+      // Never reject the whole page save because of one accordion block.
     }
     return this._data
   }
