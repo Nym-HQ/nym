@@ -31,6 +31,9 @@ export default async function handler(req: Request) {
     const site = await getSite(prisma, req)
     const owner = site?.id ? await getSiteOwner(prisma, site.id) : null
     const apiKey = site?.chatbot?.openai_key
+    if (!apiKey) {
+      throw new ApplicationError('Chatbot is not configured')
+    }
     const botAlias = owner?.name || 'AI'
 
     // separate the question and chat history
@@ -40,7 +43,7 @@ export default async function handler(req: Request) {
 
     // create OpenAI client
     const configuration = new Configuration({
-      apiKey: apiKey || process.env.OPENAI_API_KEY,
+      apiKey,
     })
     const openai = new OpenAIApi(configuration)
 

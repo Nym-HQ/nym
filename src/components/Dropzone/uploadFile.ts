@@ -9,17 +9,16 @@ function uploadFile({
 }): Promise<string> {
   return new Promise(async (resolve, reject) => {
     const params = fileProvider.getParams(site, upload_options)
-    const timestamp = Date.now()
     const signData = await fileProvider.sign(params)
 
-    if (!signData) {
+    if (!signData?.signature) {
       console.error('No signed url')
       reject()
     }
 
     const upload = await fileProvider.uploadFile({
       site: site,
-      params,
+      params: signData.params || params,
       file,
       signData,
     })

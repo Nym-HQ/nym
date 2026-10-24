@@ -17,7 +17,7 @@ export default async function getApiViewer(
     const token = authorizationHeader.replaceAll(/Bearer\s+/gi, '')
 
     if (!jwt.verify(token, process.env.JWT_SIGNING_KEY)) {
-      console.warn('API token verification failed', token)
+      console.warn('API token verification failed')
       return null
     }
     const tokenDecoded = jwt.decode(token) as any
@@ -33,8 +33,7 @@ export default async function getApiViewer(
         }
       : null
   } catch (e) {
-    console.error('API token decode failed', e)
-    console.info('API token decode failed', authorizationHeader)
+    console.error('API token decode failed')
     return null
   }
 }

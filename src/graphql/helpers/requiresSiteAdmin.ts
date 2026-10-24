@@ -1,14 +1,11 @@
 import { ApolloServerErrorCode } from '@apollo/server/errors'
-import { SiteRole } from '@prisma/client'
 import { GraphQLError } from 'graphql'
+
+import { isSiteAdmin } from './isSiteAdmin'
 
 export function requiresSiteAdmin(fn) {
   return function resolve(parent, args, context) {
-    if (
-      context?.viewer?.isAdmin ||
-      context?.userSite?.siteRole === SiteRole.ADMIN ||
-      context?.userSite?.siteRole === SiteRole.OWNER
-    ) {
+    if (isSiteAdmin(context)) {
       return fn(parent, args, context)
     }
 

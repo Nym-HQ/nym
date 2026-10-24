@@ -26,10 +26,29 @@ export async function editPage(_, args: MutationEditPageArgs, ctx: Context) {
   } = data
   const { prisma, site } = ctx
 
-  const existing = await prisma.page.findUnique({
+  if (!site?.id) {
+    throw new GraphQLError('Page not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
+  const existing = await prisma.page.findFirst({
+    where: { id, siteId: site.id },
+  })
+  if (!existing) {
+    throw new GraphQLError('Page not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
+  const slugOwner = await prisma.page.findUnique({
     where: { slug_siteId: { slug, siteId: site.id } },
   })
-  if (existing?.id !== id)
+  if (slugOwner && slugOwner.id !== id)
     throw new GraphQLError('Slug already exists', {
       extensions: {
         code: ApolloServerErrorCode.BAD_REQUEST,
@@ -149,9 +168,28 @@ export async function deletePage(
   ctx: Context
 ) {
   const { id } = args
-  const { prisma } = ctx
+  const { prisma, site } = ctx
+
+  if (!site?.id) {
+    throw new GraphQLError('Page not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
+  const existing = await prisma.page.findFirst({
+    where: { id, siteId: site.id },
+  })
+  if (!existing) {
+    throw new GraphQLError('Page not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
 
   return await prisma.page.delete({
-    where: { id },
+    where: { id: existing.id },
   })
 }

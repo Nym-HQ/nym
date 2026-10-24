@@ -141,7 +141,10 @@ export async function getPost(
     return null
   }
 
-  const publishedFilter = !viewer ? { publishedAt: { not: null } } : {}
+  const publishedFilter =
+    !viewer || !viewer.isAdmin
+      ? { publishedAt: { not: null, lt: new Date() } }
+      : {}
 
   let post = await prisma.post.findFirst({
     where: {

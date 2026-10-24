@@ -1,6 +1,16 @@
 // middleware.ts
 import { NextRequest, NextResponse } from 'next/server'
 
+import {
+  consumeCrossSiteLoginTicket,
+  createCrossSiteLoginTicket,
+  hasCrossSiteTicketSecret,
+} from '~/lib/auth/crossSiteLoginTicket'
+import {
+  isTrustedPlatformHost,
+  parseNextParam,
+  safeRelativePathFromAbsolute,
+} from '~/lib/auth/nextTarget'
 import { isMainAppDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 function getCurrentUrl(req: NextRequest) {
@@ -31,7 +41,10 @@ function handleCrossSiteLogin(req: NextRequest) {
 
     // Set the "next" into cookies to redirect after login
     if (searchParams && searchParams.get('next')) {
-      response.cookies.set('next', searchParams.get('next'))
+      const parsed = parseNextParam(searchParams.get('next'))
+      if (parsed.kind !== 'invalid') {
+        response.cookies.set('next', searchParams.get('next'))
+      }
     }
 
     return response
@@ -48,13 +61,34 @@ function handleCrossSiteLogin(req: NextRequest) {
   }
 }
 
+async function isAllowedNextHost(req: NextRequest, host: string) {
+  if (isTrustedPlatformHost(host)) return true
+
+  try {
+    const checkUrl = req.nextUrl.clone()
+    checkUrl.pathname = '/api/auth/registered-host'
+    checkUrl.search = ''
+    checkUrl.searchParams.set('host', host)
+    const result = await fetch(checkUrl)
+    if (!result.ok) return false
+    const data = await result.json()
+    return data?.allowed === true
+  } catch {
+    return false
+  }
+}
+
+function fallbackHome(req: NextRequest) {
+  return NextResponse.redirect(new URL('/', req.nextUrl))
+}
+
 /**
  * Handle pathname='/signin-complete'
  * @param req
  * @returns
  */
-function handleCrossSiteSigninComplete(req: NextRequest) {
-  const { url, host, pathname, isAppDomain } = getCurrentUrl(req)
+async function handleCrossSiteSigninComplete(req: NextRequest) {
+  const { url, host, isAppDomain } = getCurrentUrl(req)
   const searchParams = url.searchParams
 
   const secureCookie = process.env.NODE_ENV === 'production'
@@ -66,45 +100,89 @@ function handleCrossSiteSigninComplete(req: NextRequest) {
     // OAuth happens on main app domain
     // So when auth completes, it will be redirected to /signin-complete
     // Here we check the "next" param and redirect accordingly.
-    const _next =
+    const rawNext =
       searchParams.get('next') || req.cookies.get('next')?.value || '/'
-    req.cookies.delete('next')
+    const parsed = parseNextParam(rawNext)
 
-    if (
-      _next &&
-      !_next.startsWith('/') &&
-      !isMainAppDomain(new URL(_next).host)
-    ) {
-      const nextUrl = new URL(_next)
-      const crossSigninUrl = new URL(
-        `${nextUrl.protocol}//${
-          nextUrl.host
-        }/signin-complete?next=${encodeURIComponent(
-          nextUrl.toString()
-        )}&session-token=${req.cookies.get(nextAuthSessionCookie)?.value}`
-      )
-
-      const response = NextResponse.redirect(crossSigninUrl)
+    if (parsed.kind === 'invalid') {
+      const response = fallbackHome(req)
       response.cookies.delete('next')
       return response
-    } else {
-      return NextResponse.redirect(new URL(_next, req.nextUrl))
     }
-  } else {
-    const sessionToken = searchParams.get('session-token')
-    const nextUrl = new URL(searchParams.get('next') || '/', req.nextUrl)
 
-    const response = NextResponse.redirect(nextUrl)
-    console.info(
-      `Setting authentication cookies to the host: ${host}, secure: ${secureCookie}`
+    if (parsed.kind === 'relative') {
+      const response = NextResponse.redirect(new URL(parsed.path, req.nextUrl))
+      response.cookies.delete('next')
+      return response
+    }
+
+    if (isMainAppDomain(parsed.url.host)) {
+      const response = NextResponse.redirect(parsed.url)
+      response.cookies.delete('next')
+      return response
+    }
+
+    const allowed = await isAllowedNextHost(req, parsed.url.host)
+    if (!allowed) {
+      const response = fallbackHome(req)
+      response.cookies.delete('next')
+      return response
+    }
+
+    const sessionToken = req.cookies.get(nextAuthSessionCookie)?.value
+    if (!sessionToken || !hasCrossSiteTicketSecret()) {
+      const response = fallbackHome(req)
+      response.cookies.delete('next')
+      return response
+    }
+
+    const loginCode = await createCrossSiteLoginTicket(
+      sessionToken,
+      parsed.url.host
     )
-    response.cookies.set(nextAuthSessionCookie, sessionToken, {
-      secure: secureCookie,
-      domain: host.split(':')[0],
-      httpOnly: true,
-    })
+    if (!loginCode) {
+      const response = fallbackHome(req)
+      response.cookies.delete('next')
+      return response
+    }
+
+    const crossSigninUrl = new URL(
+      `${parsed.url.protocol}//${parsed.url.host}/signin-complete`
+    )
+    crossSigninUrl.searchParams.set('next', parsed.url.toString())
+    crossSigninUrl.searchParams.set('login-code', loginCode)
+
+    const response = NextResponse.redirect(crossSigninUrl)
+    response.cookies.delete('next')
     return response
   }
+
+  const sessionToken = await consumeCrossSiteLoginTicket(
+    searchParams.get('login-code'),
+    host
+  )
+  const parsedNext = parseNextParam(searchParams.get('next'))
+  const destPath =
+    parsedNext.kind === 'relative'
+      ? parsedNext.path
+      : parsedNext.kind === 'absolute'
+      ? safeRelativePathFromAbsolute(parsedNext.url, host)
+      : '/'
+
+  if (!sessionToken) {
+    return NextResponse.redirect(new URL('/login', req.nextUrl))
+  }
+
+  const response = NextResponse.redirect(new URL(destPath, req.nextUrl))
+  console.info(
+    `Setting authentication cookies to the host: ${host}, secure: ${secureCookie}`
+  )
+  response.cookies.set(nextAuthSessionCookie, sessionToken, {
+    secure: secureCookie,
+    domain: host.split(':')[0],
+    httpOnly: true,
+  })
+  return response
 }
 
 /**

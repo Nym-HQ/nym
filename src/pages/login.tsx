@@ -6,6 +6,7 @@ import { SignIn } from '~/components/SignIn'
 import { getContext } from '~/graphql/context'
 import { addApolloState, initApolloClient } from '~/lib/apollo'
 import { getCommonQueries } from '~/lib/apollo/common'
+import { isRegisteredSiteHost, parseNextParam } from '~/lib/auth/nextTarget'
 import { getCommonPageProps } from '~/lib/commonProps'
 import { getAppProtocol, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 import prisma from '~/lib/prisma'
@@ -46,7 +47,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const proto = getAppProtocol(req.headers['x-forwarded-proto'])
   const url = new URL(req.url, `${proto}://${req.headers.host}`)
   const searchParams = new URLSearchParams(url.search)
-  const _nextUrl = new URL(searchParams.get('next') || '/', url)
+  const parsedNext = parseNextParam(searchParams.get('next'))
+  let _nextUrl = new URL('/', url)
+  if (parsedNext.kind === 'relative') {
+    _nextUrl = new URL(parsedNext.path, url)
+  } else if (
+    parsedNext.kind === 'absolute' &&
+    (await isRegisteredSiteHost(prisma, parsedNext.url.host))
+  ) {
+    _nextUrl = parsedNext.url
+  }
 
   // check if user has already signed-in, and if he did, process cross-signin automatically
   const context = await getContext(ctx, prisma)
