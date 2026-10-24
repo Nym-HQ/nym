@@ -1,6 +1,7 @@
 import { SiteRole } from '@prisma/client'
 
 import { Context } from '~/graphql/context'
+import { canViewSiteSecrets } from '~/graphql/helpers/isSiteAdmin'
 import Mutation from '~/graphql/resolvers/mutations'
 import Query from '~/graphql/resolvers/queries'
 import { getCommentAuthor } from '~/graphql/resolvers/queries/comment'
@@ -91,6 +92,18 @@ const resolvers = {
       return false
     },
   },
+  Site: {
+    newsletter_setting1: ({ newsletter_setting1, id }, _, ctx: Context) =>
+      canViewSiteSecrets(ctx, id) ? newsletter_setting1 : null,
+    newsletter_setting2: ({ newsletter_setting2, id }, _, ctx: Context) =>
+      canViewSiteSecrets(ctx, id) ? newsletter_setting2 : null,
+    newsletter_setting3: ({ newsletter_setting3, id }, _, ctx: Context) =>
+      canViewSiteSecrets(ctx, id) ? newsletter_setting3 : null,
+  },
+  SiteChatBot: {
+    openai_key: ({ openai_key, siteId }, _, ctx: Context) =>
+      canViewSiteSecrets(ctx, siteId) ? openai_key : null,
+  },
   User: {
     isAdmin: ({ role }, _, { viewer, userSite }) => {
       return (
@@ -98,6 +111,9 @@ const resolvers = {
         userSite?.siteRole === SiteRole.ADMIN ||
         userSite?.siteRole === SiteRole.OWNER
       )
+    },
+    api_key: ({ id, api_key }, _, { viewer }: Context) => {
+      return viewer && viewer.id === id ? api_key : null
     },
     email: ({ id }, _, { viewer }: Context) => {
       return viewer && viewer.id === id ? viewer.email : null

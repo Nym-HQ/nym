@@ -115,7 +115,10 @@ export async function getPage(
     return null
   }
 
-  const publishedFilter = !viewer ? { publishedAt: { not: null } } : {}
+  const publishedFilter =
+    !viewer || !viewer.isAdmin
+      ? { publishedAt: { not: null, lt: new Date() } }
+      : {}
 
   let page = await prisma.page.findFirst({
     where: {
@@ -131,6 +134,7 @@ export async function getPage(
       where: {
         id: slug,
         siteId: site.id,
+        ...publishedFilter,
       },
     })
   }
@@ -146,7 +150,7 @@ export async function getPage(
  * @returns
  */
 export async function getHomePage(_, __, ctx: Context) {
-  const { prisma, viewer, site } = ctx
+  const { prisma, viewer, site, userSite } = ctx
 
   if (!isUserSite(site)) {
     return null
@@ -155,10 +159,12 @@ export async function getHomePage(_, __, ctx: Context) {
   const page = await prisma.page.findFirst({
     where: {
       path: '/',
-      publishedAt: { not: null },
+      publishedAt: { not: null, lt: new Date() },
       siteId: site.id,
     },
   })
 
-  return page
+  if (!page) return null
+
+  return filterContentByAccessPerm(viewer, userSite, page)
 }

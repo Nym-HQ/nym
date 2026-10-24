@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
+import { isSiteAdmin } from '~/graphql/helpers/isSiteAdmin'
 import {
   createOrUpdateIndex,
   getIndexName,
@@ -19,6 +20,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const context = await getContext({ req, res }, prisma)
+    if (!isSiteAdmin(context)) {
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized',
+      })
+    }
 
     const { docs, ids } = await getTrainData(context)
     if (docs.length > 0) {
@@ -34,8 +41,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     console.error('Error generating response', err)
     res.status(400).json({
       success: false,
-      error: err.message,
-      data: err.data,
+      error: 'Unable to train chatbot',
     })
   }
 }

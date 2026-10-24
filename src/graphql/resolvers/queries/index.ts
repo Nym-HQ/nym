@@ -30,5 +30,5 @@ export default {
   comment: getComment,
   comments: getComments,
   tags: getTags,
-  emailSubscriptions: getEmailSubscriptions,
+  emailSubscriptions: requiresSiteAdmin(getEmailSubscriptions),
 }

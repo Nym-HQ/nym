@@ -30,9 +30,28 @@ export async function editBookmark(
       },
     })
 
+  if (!site?.id) {
+    throw new GraphQLError('Bookmark not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
+  const existing = await prisma.bookmark.findFirst({
+    where: { id, siteId: site.id },
+  })
+  if (!existing) {
+    throw new GraphQLError('Bookmark not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
   // reset tags
   await prisma.bookmark.update({
-    where: { id },
+    where: { id: existing.id },
     data: {
       tags: {
         set: [],
@@ -43,7 +62,7 @@ export async function editBookmark(
 
   return await prisma.bookmark
     .update({
-      where: { id },
+      where: { id: existing.id },
       data: {
         title,
         description,
@@ -181,11 +200,30 @@ export async function deleteBookmark(
   ctx: Context
 ) {
   const { id } = args
-  const { prisma } = ctx
+  const { prisma, site } = ctx
+
+  if (!site?.id) {
+    throw new GraphQLError('Bookmark not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
+  const existing = await prisma.bookmark.findFirst({
+    where: { id, siteId: site.id },
+  })
+  if (!existing) {
+    throw new GraphQLError('Bookmark not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
 
   return await prisma.bookmark
     .delete({
-      where: { id },
+      where: { id: existing.id },
     })
     .then(() => {
       graphcdn.purgeList('bookmarks')

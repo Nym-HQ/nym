@@ -182,9 +182,28 @@ export async function deletePost(
   ctx: Context
 ) {
   const { id } = args
-  const { prisma } = ctx
+  const { prisma, site } = ctx
+
+  if (!site?.id) {
+    throw new GraphQLError('Post not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
+  const existing = await prisma.post.findFirst({
+    where: { id, siteId: site.id },
+  })
+  if (!existing) {
+    throw new GraphQLError('Post not found!', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
 
   return await prisma.post.delete({
-    where: { id },
+    where: { id: existing.id },
   })
 }

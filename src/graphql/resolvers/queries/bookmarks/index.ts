@@ -96,11 +96,13 @@ export async function getBookmarks(
 }
 
 export async function getBookmark(_, { id }, ctx: Context) {
-  const { prisma } = ctx
+  const { prisma, site } = ctx
+
+  if (!site?.id) return null
 
   try {
-    return await prisma.bookmark.findUnique({
-      where: { id },
+    return await prisma.bookmark.findFirst({
+      where: { id, siteId: site.id },
       include: {
         tags: true,
         _count: {

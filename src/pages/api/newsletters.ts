@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import { getContext } from '~/graphql/context'
+import { isSiteAdmin } from '~/graphql/helpers/isSiteAdmin'
 import { getNewsletterProvider } from '~/lib/newsletter'
 import prisma from '~/lib/prisma'
 
@@ -12,6 +13,21 @@ export const config = {
  * Send the newsletter
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      success: false,
+      message: 'Method not allowed',
+    })
+  }
+
+  const context = await getContext({ req, res }, prisma)
+  if (!isSiteAdmin(context)) {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized',
+    })
+  }
+
   const { subject, html, text } = req.body
   if (!subject || !html || !text) {
     return res.status(400).json({
@@ -20,7 +36,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   }
 
-  const context = await getContext({ req, res }, prisma)
   const newsletterProvider = await getNewsletterProvider(context)
 
   if (newsletterProvider) {

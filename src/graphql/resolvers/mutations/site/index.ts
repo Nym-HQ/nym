@@ -3,6 +3,7 @@ import { SiteRole } from '@prisma/client'
 import { GraphQLError } from 'graphql'
 
 import { Context } from '~/graphql/context'
+import { canViewerDeleteSite } from '~/graphql/helpers/isSiteAdmin'
 import {
   MutationAddSiteArgs,
   MutationDeleteSiteArgs,
@@ -221,26 +222,43 @@ export async function deleteSite(
   const { subdomain } = args
   const { prisma, viewer, site, userSite } = ctx
 
-  let canDelete = false
+  const existing =
+    site?.subdomain === subdomain
+      ? site.id && site.id !== '0'
+        ? site
+        : await prisma.site.findUnique({ where: { subdomain } })
+      : await prisma.site.findUnique({ where: { subdomain } })
 
-  if (subdomain == site.subdomain) {
-    canDelete = userSite?.siteRole === SiteRole.OWNER
-  } else {
-    const existing = await prisma.site.findUnique({ where: { subdomain } })
-    if (existing) {
-      const userSite = await prisma.userSite.findFirst({
-        where: {
-          userId: viewer.id,
-          siteId: existing.id,
-        },
-      })
-      canDelete = userSite?.siteRole === SiteRole.OWNER
-    }
+  if (!existing?.id) {
+    throw new GraphQLError('Site not found', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
+  }
+
+  let targetRole = userSite?.siteRole
+  if (existing.id !== site?.id) {
+    const targetUserSite = await prisma.userSite.findFirst({
+      where: {
+        userId: viewer.id,
+        siteId: existing.id,
+      },
+    })
+    targetRole = targetUserSite?.siteRole
+  }
+
+  if (!canViewerDeleteSite(targetRole)) {
+    throw new GraphQLError('You are not authorized to delete this site', {
+      extensions: {
+        code: ApolloServerErrorCode.BAD_REQUEST,
+      },
+    })
   }
 
   return await prisma.site.delete({
     where: {
-      subdomain,
+      id: existing.id,
     },
   })
 }
