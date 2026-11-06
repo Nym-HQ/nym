@@ -212,7 +212,9 @@
     },
     "typescript-estree": {
       "semver": "^5.7.2"
-    }
+    },
+    "trim": "0.0.3",
+    "decode-uri-component": "0.5.1"
   },
   "engines": {
     "node": ">=20.9.0"
