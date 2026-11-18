@@ -2,6 +2,8 @@ import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import * as React from 'react'
 
+import { getSignInErrorMessage } from '~/lib/auth/signInErrors'
+
 import { Button, GoogleButton, TwitterButton } from '../Button'
 import { GoogleIcon, TwitterIcon } from '../Icon'
 import { Detail } from '../ListDetail/Detail'
@@ -49,7 +51,6 @@ export function SignIn({
                 callbackUrl: `/signin-complete`,
                 redirect: true,
                 screen_hint: 'signin',
-                allowDangerousEmailAccountLinking: true,
               })
             }
           >
@@ -74,14 +75,8 @@ export function SignIn({
         )}
 
         {error && (
-          <p className="text-sm text-rose-500 mt-3">
-            {error == 'OAuthAccountNotLinked'
-              ? 'Another account with the same email address exists already!'
-              : error == 'OAuthCreateAccount'
-              ? 'We were not able to create your account!'
-              : error == 'Callback'
-              ? "We've got invalid callback from the authentication provider!"
-              : 'Unknown error!'}
+          <p className="text-sm text-rose-500 mt-3 max-w-sm text-center">
+            {getSignInErrorMessage(error)}
           </p>
         )}
       </div>

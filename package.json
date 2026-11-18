@@ -6,7 +6,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint ./src/*.ts ./src/config/* ./src/pages/* ./src/components/* ./src/pages/api/* ./src/graphql/* ./src/lib/* -c .eslintrc.json --fix --ext ts,tsx",
-    "test": "tsx --tsconfig tsconfig.json --test src/graphql/helpers/isSiteAdmin.test.ts src/lib/auth/nextTarget.test.ts src/lib/auth/crossSiteLoginCode.test.ts src/lib/images/cloudinarySignParams.test.ts",
+    "test": "tsx --tsconfig tsconfig.json --test src/graphql/helpers/isSiteAdmin.test.ts src/lib/auth/nextTarget.test.ts src/lib/auth/crossSiteLoginCode.test.ts src/lib/images/cloudinarySignParams.test.ts src/lib/auth/accountLinking.test.ts",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "generate": "graphql-codegen",

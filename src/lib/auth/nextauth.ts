@@ -15,6 +15,14 @@ import {
 } from '~/lib/auth/sessionCookie'
 import prisma from '~/lib/prisma'
 
+// Security: no provider may set allowDangerousEmailAccountLinking.
+// Linking by matching email lets anyone who controls that email address on
+// one provider (or a provider that returns unverified emails) take over the
+// account created through another provider. next-auth then throws
+// OAuthAccountNotLinked and redirects to pages.error (/login?error=...),
+// where SignIn shows a "use your original sign-in method" message.
+// A signed-in user can still link a new provider by signing in with it while
+// their session is active (next-auth v4 links to the session user).
 const providers = []
 
 if (process.env.GITHUB_ID && process.env.GITHUB_SECRET) {
@@ -35,8 +43,6 @@ if (
     Auth0Provider({
       clientId: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
-      // allow multiple providers for a single account
-      allowDangerousEmailAccountLinking: true,
       issuer: process.env.AUTH0_ISSUER_BASE_URL,
 
       profile: async (profile: Auth0Profile) => {
@@ -77,9 +83,6 @@ if (
             clientSecret: process.env.TWITTER_API_SECRET,
           }),
 
-      // allow multiple providers for a single account
-      allowDangerousEmailAccountLinking: true,
-
       profile: async (profile: Auth0Profile) => {
         let user: any = {
           id: profile.sub,
@@ -99,9 +102,6 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-
-      // allow multiple providers for a single account
-      allowDangerousEmailAccountLinking: true,
 
       profile: async (profile: GoogleProfile) => {
         let user: any = {
