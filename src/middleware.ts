@@ -1,16 +1,7 @@
 // middleware.ts
 import { NextRequest, NextResponse } from 'next/server'
 
-import {
-  consumeCrossSiteLoginTicket,
-  createCrossSiteLoginTicket,
-  hasCrossSiteTicketSecret,
-} from '~/lib/auth/crossSiteLoginTicket'
-import {
-  isTrustedPlatformHost,
-  parseNextParam,
-  safeRelativePathFromAbsolute,
-} from '~/lib/auth/nextTarget'
+import { isTrustedPlatformHost, parseNextParam } from '~/lib/auth/nextTarget'
 import { isMainAppDomain, MAIN_APP_DOMAIN } from '~/lib/multitenancy/client'
 
 function getCurrentUrl(req: NextRequest) {
@@ -91,11 +82,6 @@ async function handleCrossSiteSigninComplete(req: NextRequest) {
   const { url, host, isAppDomain } = getCurrentUrl(req)
   const searchParams = url.searchParams
 
-  const secureCookie = process.env.NODE_ENV === 'production'
-  const nextAuthSessionCookie = secureCookie
-    ? '__Secure-next-auth.session-token'
-    : 'next-auth.session-token'
-
   if (isAppDomain) {
     // OAuth happens on main app domain
     // So when auth completes, it will be redirected to /signin-complete
@@ -129,59 +115,25 @@ async function handleCrossSiteSigninComplete(req: NextRequest) {
       return response
     }
 
-    const sessionToken = req.cookies.get(nextAuthSessionCookie)?.value
-    if (!sessionToken || !hasCrossSiteTicketSecret()) {
-      const response = fallbackHome(req)
-      response.cookies.delete('next')
-      return response
-    }
+    // The login code is issued by a Node API route (DB-backed, single use,
+    // 60 s). The main-domain session token never goes into the URL.
+    // Built from the request Host header so the
+    // main-domain session cookie is sent to the issue route.
+    const issueUrl = new URL('/api/auth/cross-site/issue', url)
+    issueUrl.searchParams.set('next', parsed.url.toString())
 
-    const loginCode = await createCrossSiteLoginTicket(
-      sessionToken,
-      parsed.url.host
-    )
-    if (!loginCode) {
-      const response = fallbackHome(req)
-      response.cookies.delete('next')
-      return response
-    }
-
-    const crossSigninUrl = new URL(
-      `${parsed.url.protocol}//${parsed.url.host}/signin-complete`
-    )
-    crossSigninUrl.searchParams.set('next', parsed.url.toString())
-    crossSigninUrl.searchParams.set('login-code', loginCode)
-
-    const response = NextResponse.redirect(crossSigninUrl)
+    const response = NextResponse.redirect(issueUrl)
     response.cookies.delete('next')
     return response
   }
 
-  const sessionToken = await consumeCrossSiteLoginTicket(
-    searchParams.get('login-code'),
-    host
-  )
-  const parsedNext = parseNextParam(searchParams.get('next'))
-  const destPath =
-    parsedNext.kind === 'relative'
-      ? parsedNext.path
-      : parsedNext.kind === 'absolute'
-      ? safeRelativePathFromAbsolute(parsedNext.url, host)
-      : '/'
-
-  if (!sessionToken) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl))
-  }
-
-  const response = NextResponse.redirect(new URL(destPath, req.nextUrl))
-  console.info(
-    `Setting authentication cookies to the host: ${host}, secure: ${secureCookie}`
-  )
-  response.cookies.set(nextAuthSessionCookie, sessionToken, {
-    secure: secureCookie,
-    domain: host.split(':')[0],
-    httpOnly: true,
-  })
+  // Tenant host: hand the code to the Node API route that redeems it
+  // server-side and sets this host's own session cookie.
+  const redeemUrl = new URL(url.toString())
+  redeemUrl.pathname = '/api/auth/cross-site/redeem'
+  const response = NextResponse.redirect(redeemUrl)
+  response.headers.set('Referrer-Policy', 'no-referrer')
+  response.headers.set('Cache-Control', 'no-store')
   return response
 }
 
