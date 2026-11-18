@@ -9,9 +9,11 @@ import TwitterProvider, {
   TwitterProfile,
 } from 'next-auth/providers/twitter'
 
+import {
+  SESSION_COOKIE_NAME,
+  SESSION_COOKIE_SECURE,
+} from '~/lib/auth/sessionCookie'
 import prisma from '~/lib/prisma'
-
-const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL
 
 const providers = []
 
@@ -38,7 +40,6 @@ if (
       issuer: process.env.AUTH0_ISSUER_BASE_URL,
 
       profile: async (profile: Auth0Profile) => {
-        console.debug('Got oAuth profile data', profile)
         let user: any = {
           id: profile.sub,
           name: profile.name,
@@ -80,7 +81,6 @@ if (
       allowDangerousEmailAccountLinking: true,
 
       profile: async (profile: Auth0Profile) => {
-        console.debug('Got auth0 profile data', profile)
         let user: any = {
           id: profile.sub,
           name: profile.name,
@@ -104,7 +104,6 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       allowDangerousEmailAccountLinking: true,
 
       profile: async (profile: GoogleProfile) => {
-        console.debug('Got google profile data', profile)
         let user: any = {
           id: profile.sub,
           name: profile.name,
@@ -136,12 +135,12 @@ const authOptions = {
   providers: providers,
   cookies: {
     sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? '__Secure-' : ''}next-auth.session-token`,
+      name: SESSION_COOKIE_NAME,
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: VERCEL_DEPLOYMENT,
+        secure: SESSION_COOKIE_SECURE,
       },
     },
   },

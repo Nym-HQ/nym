@@ -4,14 +4,6 @@ import NextAuth from 'next-auth'
 import { authOptions } from '~/lib/auth/nextauth'
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
-  if (req.query.nextauth.includes('callback')) {
-    console.info(
-      'Handling callback request from my Identity Provider',
-      req.body,
-      req.query
-    )
-  }
-
   if (req.query.nextauth.includes('signin')) {
     // A little hack around the next-auth bug, to attach "force_login" paramter for Twitter Oauth
     // https://developer.twitter.com/en/docs/authentication/api-reference/authenticate
