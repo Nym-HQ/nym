@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { NextApiRequest } from 'next'
 import { NextRequest } from 'next/server'
 
 import { Site } from '~/graphql/types.generated'
@@ -9,7 +10,7 @@ import { NYM_APP_SITE } from '../constants'
 
 export default async function getSite(
   prisma: PrismaClient,
-  req: NextRequest | Request
+  req: NextRequest | NextApiRequest | Request
 ) {
   const host =
     typeof req.headers.get === 'function'
