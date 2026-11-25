@@ -1,5 +1,6 @@
-import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { OpenAIStream, streamToResponse } from 'ai'
 import { PromptTemplate } from 'langchain/prompts'
+import { NextApiRequest, NextApiResponse } from 'next'
 import {
   ChatCompletionRequestMessage,
   Configuration,
@@ -13,19 +14,18 @@ import getDefaultPromptTemplate from '~/lib/chatbot/getDefaultPromptTemplate'
 import { getTrainedIndex } from '~/lib/chatbot/train'
 import { ApplicationError, UserError } from '~/lib/errors'
 import { getSiteOwner } from '~/lib/multitenancy/server'
-import prisma from '~/lib/prisma-edge'
+import prisma from '~/lib/prisma'
 
 export const config = {
-  api: {},
-  runtime: 'edge',
+  runtime: 'nodejs',
 }
 
-export default async function handler(req: Request) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
-    const json =
-      typeof req.json === 'function'
-        ? await req.json()
-        : JSON.parse((req as any).body)
+    const json = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
     const { messages, user } = json
 
     const site = await getSite(prisma, req)
@@ -98,21 +98,19 @@ export default async function handler(req: Request) {
       })
     }
 
-    // Return the response as a stream
+    // Return the response as a stream (Node pages API cannot return a Web Response)
     const stream = OpenAIStream(completion)
-    return new StreamingTextResponse(stream)
+    return streamToResponse(stream, res)
   } catch (err) {
     console.error('Error generating response', err)
-    return new Response(
-      JSON.stringify({
-        error: err.message,
-        data: err.data,
-      }),
-      {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
+    if (res.headersSent) {
+      res.end()
+      return
+    }
+    res.status(400).json({
+      error: err.message,
+      data: err.data,
+    })
   }
 }
 
